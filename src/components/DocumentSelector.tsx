@@ -57,12 +57,32 @@ export default function DocumentSelector(): React.ReactElement {
   const [docQuantities, setDocQuantities] = useState<Record<string, number>>({});
   const [selectedAbnLocation, setSelectedAbnLocation] = useState<string>('');
   const [selectedInvoiceType, setSelectedInvoiceType] = useState<string>('');
-  const [showOtherForms, setShowOtherForms] = useState(false);
   const [isBulkMode, setIsBulkMode] = useState(false);
   const [bulkQuantity, setBulkQuantity] = useState(1);
   const [showQueueDetails, setShowQueueDetails] = useState(false);
+  const [visibleSections, setVisibleSections] = useState({
+    MRI: true,
+    CT: true,
+    PET: true,
+    US: true,
+    DEXA: true,
+    Breast: true,
+    'X-Ray': true,
+    Financial: true,
+    Other: false
+  });
+  const [searchTerm, setSearchTerm] = useState('');
+  const [viewMode, setViewMode] = useState<'grouped' | 'list'>('grouped');
 
   const allForms = [...SCREENING_FORMS, ...BREAST_FORMS, ...QUICK_ADD_FORMS, ...OTHER_FORMS];
+
+  const toggleSection = (section: string) => {
+    setVisibleSections(prev => ({ ...prev, [section]: !prev[section] }));
+  };
+
+  const filteredForms = allForms.filter(form => 
+    form.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const toggleDocument = (path: string): void => {
     setSelectedDocs(prev => {
@@ -145,87 +165,106 @@ export default function DocumentSelector(): React.ReactElement {
   const renderFormCheckbox = (form: Document) => (
     <div 
       key={form.path}
-      className={`alert ${selectedDocs.includes(form.path) ? 'alert--info' : 'alert--secondary'}`}
       style={{ 
-        cursor: 'pointer', 
-        marginBottom: '0.5rem',
-        borderLeft: form.color ? `4px solid ${form.color}` : undefined
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.5rem',
+        padding: '0.375rem',
+        marginBottom: '0.25rem',
+        backgroundColor: selectedDocs.includes(form.path) ? '#e7f3ff' : '#f8f9fa',
+        borderRadius: '4px',
+        borderLeft: form.color ? `3px solid ${form.color}` : '3px solid transparent',
+        cursor: 'pointer',
+        fontSize: '0.9em',
+        transition: 'all 0.15s ease'
       }}
       onClick={() => toggleDocument(form.path)}
     >
-      <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-        <input
-          type="checkbox"
-          checked={selectedDocs.includes(form.path)}
-          onChange={() => toggleDocument(form.path)}
-        />
-        {form.name}
-      </label>
+      <input
+        type="checkbox"
+        checked={selectedDocs.includes(form.path)}
+        onChange={() => toggleDocument(form.path)}
+        style={{ margin: 0 }}
+      />
+      <span>{form.name}</span>
     </div>
   );
 
   return (
     <div>
-      {/* Floating Print Bar */}
+      {/* Compact Header Bar */}
       <div style={{ 
         position: 'sticky', 
         top: 0, 
         zIndex: 100, 
         backgroundColor: selectedDocs.length > 0 ? '#e7f3ff' : '#f8f9fa',
         border: '1px solid #dee2e6',
-        borderRadius: '8px',
-        padding: '1rem',
+        borderRadius: '6px',
+        padding: '0.75rem',
         marginBottom: '1rem',
         boxShadow: selectedDocs.length > 0 ? '0 2px 8px rgba(0,0,0,0.1)' : 'none',
         transition: 'all 0.2s ease'
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <span style={{ fontWeight: 'bold', fontSize: '1.1em' }}>
-              🛒 Print Queue: {selectedDocs.length} {selectedDocs.length === 1 ? 'item' : 'items'}
+            <span style={{ fontWeight: 'bold' }}>
+              🛒 {selectedDocs.length} items, {getTotalCopies()} copies
             </span>
             {selectedDocs.length > 0 && (
-              <>
-                <button
-                  className={`button button--sm ${isBulkMode ? 'button--primary' : 'button--outline'}`}
-                  onClick={() => setIsBulkMode(!isBulkMode)}
-                >
-                  {isBulkMode ? 'Bulk Mode' : 'Individual Mode'}
-                </button>
-                {isBulkMode && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <span>All:</span>
-                    <select
-                      value={bulkQuantity}
-                      onChange={(e) => setBulkQuantity(Number(e.target.value))}
-                      style={{ padding: '0.25rem' }}
-                    >
-                      {[1,2,3,4,5,10,15,20,25,50].map(n => (
-                        <option key={n} value={n}>{n}</option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-                <button
-                  className="button button--outline button--sm"
-                  onClick={() => setShowQueueDetails(!showQueueDetails)}
-                >
-                  {showQueueDetails ? 'Hide Details' : 'Show Details'}
-                </button>
-              </>
+              <button
+                className="button button--outline button--sm"
+                onClick={() => setShowQueueDetails(!showQueueDetails)}
+                style={{ padding: '0.25rem 0.5rem' }}
+              >
+                Details {showQueueDetails ? '▲' : '▼'}
+              </button>
             )}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             {selectedDocs.length > 0 && (
-              <span style={{ fontSize: '0.9em', color: '#666' }}>
-                Total: {getTotalCopies()} copies
-              </span>
+              <>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9em' }}>
+                  <div style={{ 
+                    width: '36px', 
+                    height: '20px', 
+                    backgroundColor: isBulkMode ? '#0d6efd' : '#dee2e6',
+                    borderRadius: '10px',
+                    position: 'relative',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }} onClick={() => setIsBulkMode(!isBulkMode)}>
+                    <div style={{
+                      width: '16px',
+                      height: '16px',
+                      backgroundColor: 'white',
+                      borderRadius: '50%',
+                      position: 'absolute',
+                      top: '2px',
+                      left: isBulkMode ? '18px' : '2px',
+                      transition: 'all 0.2s ease',
+                      boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                    }} />
+                  </div>
+                  Bulk
+                </label>
+                {isBulkMode && (
+                  <select
+                    value={bulkQuantity}
+                    onChange={(e) => setBulkQuantity(Number(e.target.value))}
+                    style={{ padding: '0.25rem', fontSize: '0.9em' }}
+                  >
+                    {[1,2,3,4,5,10,15,20,25,50].map(n => (
+                      <option key={n} value={n}>{n}</option>
+                    ))}
+                  </select>
+                )}
+              </>
             )}
             <button
               className="button button--primary"
               onClick={handlePrint}
               disabled={selectedDocs.length === 0}
-              style={{ fontWeight: 'bold' }}
+              style={{ fontWeight: 'bold', padding: '0.5rem 1rem' }}
             >
               PRINT {selectedDocs.length > 0 ? getTotalCopies() : ''} ↗
             </button>
@@ -235,17 +274,18 @@ export default function DocumentSelector(): React.ReactElement {
         {/* Queue Details */}
         {showQueueDetails && selectedDocs.length > 0 && (
           <div style={{ 
-            marginTop: '1rem', 
-            padding: '1rem', 
+            marginTop: '0.75rem', 
+            padding: '0.75rem', 
             backgroundColor: '#fff', 
             borderRadius: '4px',
             border: '1px solid #e9ecef'
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-              <h4 style={{ margin: 0 }}>Selected Documents</h4>
+              <span style={{ fontWeight: 'bold', fontSize: '0.9em' }}>Selected Documents</span>
               <button
                 className="button button--outline button--sm"
                 onClick={clearAll}
+                style={{ padding: '0.25rem 0.5rem', fontSize: '0.8em' }}
               >
                 Clear All
               </button>
@@ -255,28 +295,31 @@ export default function DocumentSelector(): React.ReactElement {
                 display: 'flex', 
                 justifyContent: 'space-between', 
                 alignItems: 'center',
-                padding: '0.5rem',
+                padding: '0.375rem',
                 backgroundColor: '#f8f9fa',
-                borderRadius: '4px',
-                marginBottom: '0.5rem'
+                borderRadius: '3px',
+                marginBottom: '0.25rem',
+                fontSize: '0.9em'
               }}>
                 <span style={{ flex: 1 }}>{getDocumentName(path)}</span>
                 {!isBulkMode && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                     <button
                       className="button button--outline button--sm"
                       onClick={() => updateQuantity(path, (docQuantities[path] || 1) - 1)}
                       disabled={(docQuantities[path] || 1) <= 1}
+                      style={{ padding: '0.125rem 0.375rem', fontSize: '0.8em' }}
                     >
                       -
                     </button>
-                    <span style={{ minWidth: '2rem', textAlign: 'center' }}>
+                    <span style={{ minWidth: '1.5rem', textAlign: 'center', fontSize: '0.8em' }}>
                       {docQuantities[path] || 1}
                     </span>
                     <button
                       className="button button--outline button--sm"
                       onClick={() => updateQuantity(path, (docQuantities[path] || 1) + 1)}
                       disabled={(docQuantities[path] || 1) >= 99}
+                      style={{ padding: '0.125rem 0.375rem', fontSize: '0.8em' }}
                     >
                       +
                     </button>
@@ -285,7 +328,7 @@ export default function DocumentSelector(): React.ReactElement {
                 <button
                   className="button button--outline button--sm"
                   onClick={() => removeDocument(path)}
-                  style={{ marginLeft: '0.5rem', color: '#dc3545' }}
+                  style={{ marginLeft: '0.5rem', color: '#dc3545', padding: '0.125rem 0.375rem', fontSize: '0.8em' }}
                 >
                   ×
                 </button>
@@ -295,138 +338,213 @@ export default function DocumentSelector(): React.ReactElement {
         )}
       </div>
 
-      <div>
-      {/* Screening Forms */}
-      <div className="card margin-bottom--md">
-        <div className="card__header">
-          <h3>Screening Forms</h3>
-        </div>
-        <div className="card__body">
-          {SCREENING_FORMS.map(renderFormCheckbox)}
-        </div>
-      </div>
-
-      {/* Breast Imaging Forms */}
-      <div className="card margin-bottom--md">
-        <div className="card__header">
-          <h3>Breast Imaging Forms</h3>
-        </div>
-        <div className="card__body">
-          {BREAST_FORMS.map(renderFormCheckbox)}
-        </div>
-      </div>
-
       {/* Quick Add */}
-      <div className="card margin-bottom--md">
-        <div className="card__header">
-          <h3>Quick Add</h3>
-        </div>
-        <div className="card__body">
-          {QUICK_ADD_FORMS.map(renderFormCheckbox)}
-        </div>
+      <div style={{ marginBottom: '0.75rem' }}>
+        <span style={{ fontWeight: 'bold', marginRight: '1rem' }}>Quick:</span>
+        {QUICK_ADD_FORMS.map(form => (
+          <label key={form.path} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', marginRight: '1rem', fontSize: '0.9em' }}>
+            <input
+              type="checkbox"
+              checked={selectedDocs.includes(form.path)}
+              onChange={() => toggleDocument(form.path)}
+            />
+            {form.name.replace(' Form', '')}
+          </label>
+        ))}
       </div>
 
-      {/* Financial Forms */}
-      <div className="card margin-bottom--md">
-        <div className="card__header">
-          <h3>Financial Forms</h3>
-        </div>
-        <div className="card__body">
-          {/* Insurance Off-Hours Waiver */}
-          <div 
-            className={`alert ${selectedDocs.includes('/documents/Waiver of Liability Form- Insurance Off-Hours.pdf') ? 'alert--info' : 'alert--secondary'}`}
-            style={{ cursor: 'pointer', marginBottom: '0.5rem' }}
-            onClick={() => toggleDocument('/documents/Waiver of Liability Form- Insurance Off-Hours.pdf')}
-          >
-            <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <input
-                type="checkbox"
-                checked={selectedDocs.includes('/documents/Waiver of Liability Form- Insurance Off-Hours.pdf')}
-                onChange={() => toggleDocument('/documents/Waiver of Liability Form- Insurance Off-Hours.pdf')}
-              />
-              Insurance Off-Hours Waiver
-            </label>
-          </div>
-
-          {/* Self-Pay Waiver */}
-          <div 
-            className={`alert ${selectedDocs.includes('/documents/Waiver of Liability Form - Self Pay.pdf') ? 'alert--info' : 'alert--secondary'}`}
-            style={{ cursor: 'pointer', marginBottom: '0.5rem' }}
-            onClick={() => toggleDocument('/documents/Waiver of Liability Form - Self Pay.pdf')}
-          >
-            <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <input
-                type="checkbox"
-                checked={selectedDocs.includes('/documents/Waiver of Liability Form - Self Pay.pdf')}
-                onChange={() => toggleDocument('/documents/Waiver of Liability Form - Self Pay.pdf')}
-              />
-              Self-Pay Waiver
-            </label>
-          </div>
-
-          {/* Invoice */}
-          <div className="alert alert--secondary" style={{ marginBottom: '0.5rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span>Invoice:</span>
-              <select 
-                value={selectedInvoiceType} 
-                onChange={(e) => setSelectedInvoiceType(e.target.value)}
-                style={{ padding: '0.25rem', marginRight: '0.5rem' }}
+      {/* View Controls */}
+      <div style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+          {Object.entries(visibleSections).map(([section, isVisible]) => {
+            const colors = {
+              MRI: '#22c55e',
+              CT: '#3b82f6', 
+              PET: '#8b5cf6',
+              US: '#f97316',
+              DEXA: '#6b7280',
+              Breast: '#ec4899',
+              'X-Ray': '#ef4444',
+              Financial: '#06b6d4',
+              Other: '#64748b'
+            };
+            return (
+              <button
+                key={section}
+                onClick={() => toggleSection(section)}
+                style={{
+                  padding: '0.375rem 0.75rem',
+                  border: `2px solid ${isVisible ? colors[section] : '#d1d5db'}`,
+                  backgroundColor: 'transparent',
+                  color: isVisible ? colors[section] : '#9ca3af',
+                  borderRadius: '20px',
+                  fontSize: '0.8em',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
               >
-                <option value="">Select Type</option>
-                {INVOICE_TYPES.map(type => (
-                  <option key={type} value={type}>{type}</option>
-                ))}
-              </select>
-              <button 
-                className="button button--outline button--primary button--sm"
-                onClick={addInvoice}
-                disabled={!selectedInvoiceType}
-              >
-                Add
+                {section}
               </button>
-            </div>
-          </div>
-
-          {/* ABN */}
-          <div className="alert alert--secondary" style={{ marginBottom: '0.5rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span>ABN:</span>
-              <select 
-                value={selectedAbnLocation} 
-                onChange={(e) => setSelectedAbnLocation(e.target.value)}
-                style={{ padding: '0.25rem', marginRight: '0.5rem' }}
-              >
-                <option value="">Select Location</option>
-                {LOCATIONS.map(location => (
-                  <option key={location} value={location}>{location}</option>
-                ))}
-              </select>
-              <button 
-                className="button button--outline button--primary button--sm"
-                onClick={addAbn}
-                disabled={!selectedAbnLocation}
-              >
-                Add
-              </button>
-            </div>
-          </div>
+            );
+          })}
         </div>
-      </div>
-
-      {/* Other Forms */}
-      <div className="card margin-bottom--md">
-        <div className="card__header" onClick={() => setShowOtherForms(!showOtherForms)} style={{ cursor: 'pointer' }}>
-          <h3>Other Forms {showOtherForms ? '▼' : '▶'}</h3>
-        </div>
-        {showOtherForms && (
-          <div className="card__body">
-            {OTHER_FORMS.map(renderFormCheckbox)}
+        {isBulkMode && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <input
+              type="text"
+              placeholder="Search forms..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{ 
+                padding: '0.375rem 0.75rem', 
+                border: '1px solid #d1d5db', 
+                borderRadius: '20px',
+                fontSize: '0.9em',
+                width: '200px'
+              }}
+            />
           </div>
         )}
       </div>
+
+      <div>
+        {/* List View for Bulk Mode */}
+        {isBulkMode && searchTerm ? (
+          <div style={{ marginBottom: '0.75rem' }}>
+            <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1rem' }}>Search Results ({filteredForms.length})</h4>
+            {filteredForms.map(renderFormCheckbox)}
+          </div>
+        ) : (
+          <>
+            {/* Screening Forms by Modality */}
+            {visibleSections.MRI && (
+              <div style={{ marginBottom: '0.75rem' }}>
+                <h4 style={{ margin: '0 0 0.5rem 0', color: '#22c55e', fontSize: '1rem' }}>MRI Forms</h4>
+                {SCREENING_FORMS.filter(f => f.modality === 'MRI').map(renderFormCheckbox)}
+              </div>
+            )}
+            
+            {visibleSections.CT && (
+              <div style={{ marginBottom: '0.75rem' }}>
+                <h4 style={{ margin: '0 0 0.5rem 0', color: '#3b82f6', fontSize: '1rem' }}>CT Forms</h4>
+                {SCREENING_FORMS.filter(f => f.modality === 'CT').map(renderFormCheckbox)}
+              </div>
+            )}
+            
+            {visibleSections.PET && (
+              <div style={{ marginBottom: '0.75rem' }}>
+                <h4 style={{ margin: '0 0 0.5rem 0', color: '#8b5cf6', fontSize: '1rem' }}>PET Forms</h4>
+                {SCREENING_FORMS.filter(f => f.modality === 'PET').map(renderFormCheckbox)}
+              </div>
+            )}
+            
+            {visibleSections.US && (
+              <div style={{ marginBottom: '0.75rem' }}>
+                <h4 style={{ margin: '0 0 0.5rem 0', color: '#f97316', fontSize: '1rem' }}>Ultrasound Forms</h4>
+                {SCREENING_FORMS.filter(f => f.modality === 'US').map(renderFormCheckbox)}
+              </div>
+            )}
+            
+            {visibleSections.DEXA && (
+              <div style={{ marginBottom: '0.75rem' }}>
+                <h4 style={{ margin: '0 0 0.5rem 0', color: '#6b7280', fontSize: '1rem' }}>DEXA Forms</h4>
+                {SCREENING_FORMS.filter(f => f.modality === 'DEXA').map(renderFormCheckbox)}
+              </div>
+            )}
+            
+            {visibleSections.Breast && (
+              <div style={{ marginBottom: '0.75rem' }}>
+                <h4 style={{ margin: '0 0 0.5rem 0', color: '#ec4899', fontSize: '1rem' }}>Breast Imaging Forms</h4>
+                {BREAST_FORMS.map(renderFormCheckbox)}
+              </div>
+            )}
+            
+            {visibleSections['X-Ray'] && (
+              <div style={{ marginBottom: '0.75rem' }}>
+                <h4 style={{ margin: '0 0 0.5rem 0', color: '#ef4444', fontSize: '1rem' }}>X-Ray Forms</h4>
+                {SCREENING_FORMS.filter(f => f.modality === 'XRAY').map(renderFormCheckbox)}
+              </div>
+            )}
+
+            {/* Financial Forms */}
+            {visibleSections.Financial && (
+              <div style={{ marginBottom: '0.75rem' }}>
+                <h4 style={{ margin: '0 0 0.5rem 0', color: '#06b6d4', fontSize: '1rem' }}>Financial Forms</h4>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center', fontSize: '0.9em' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                    <input
+                      type="checkbox"
+                      checked={selectedDocs.includes('/documents/Waiver of Liability Form- Insurance Off-Hours.pdf')}
+                      onChange={() => toggleDocument('/documents/Waiver of Liability Form- Insurance Off-Hours.pdf')}
+                    />
+                    Off-Hours Waiver
+                  </label>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                    <input
+                      type="checkbox"
+                      checked={selectedDocs.includes('/documents/Waiver of Liability Form - Self Pay.pdf')}
+                      onChange={() => toggleDocument('/documents/Waiver of Liability Form - Self Pay.pdf')}
+                    />
+                    Self-Pay Waiver
+                  </label>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <span>Invoice:</span>
+                    <select 
+                      value={selectedInvoiceType} 
+                      onChange={(e) => setSelectedInvoiceType(e.target.value)}
+                      style={{ padding: '0.25rem', fontSize: '0.8em' }}
+                    >
+                      <option value="">Type</option>
+                      {INVOICE_TYPES.map(type => (
+                        <option key={type} value={type}>{type}</option>
+                      ))}
+                    </select>
+                    <button 
+                      className="button button--outline button--primary button--sm"
+                      onClick={addInvoice}
+                      disabled={!selectedInvoiceType}
+                      style={{ padding: '0.25rem 0.5rem', fontSize: '0.8em' }}
+                    >
+                      Add
+                    </button>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <span>ABN:</span>
+                    <select 
+                      value={selectedAbnLocation} 
+                      onChange={(e) => setSelectedAbnLocation(e.target.value)}
+                      style={{ padding: '0.25rem', fontSize: '0.8em' }}
+                    >
+                      <option value="">Location</option>
+                      {LOCATIONS.map(location => (
+                        <option key={location} value={location}>{location}</option>
+                      ))}
+                    </select>
+                    <button 
+                      className="button button--outline button--primary button--sm"
+                      onClick={addAbn}
+                      disabled={!selectedAbnLocation}
+                      style={{ padding: '0.25rem 0.5rem', fontSize: '0.8em' }}
+                    >
+                      Add
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Other Forms */}
+            {visibleSections.Other && (
+              <div style={{ marginBottom: '0.75rem' }}>
+                <h4 style={{ margin: '0 0 0.5rem 0', color: '#64748b', fontSize: '1rem' }}>Other Forms</h4>
+                {OTHER_FORMS.map(renderFormCheckbox)}
+              </div>
+            )}
+          </>
+        )}
+      </div>
       
-    </div>
     </div>
   );
 }
