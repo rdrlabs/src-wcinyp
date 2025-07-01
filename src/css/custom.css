@@ -28,3 +28,38 @@
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+/* Prevent layout shifts and twitching */
+html {
+  scroll-behavior: smooth;
+}
+
+.main-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+/* Stabilize content during navigation */
+.container {
+  min-height: 50vh;
+}
+
+/* Smooth transitions */
+* {
+  transition: none !important;
+}
+
+/* Prevent flash of unstyled content */
+.navbar {
+  transition: none;
+}
+
+/* Fix any jumping content */
+article, main, .container {
+  will-change: auto;
+}

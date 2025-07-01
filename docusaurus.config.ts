@@ -5,8 +5,8 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'WCINYP Resource Hub',
-  tagline: 'Weill Cornell Imaging at NewYork-Presbyterian Resources',
+  title: 'My Site',
+  tagline: 'Dinosaurs are cool',
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -36,6 +36,7 @@ const config: Config = {
     locales: ['en'],
   },
 
+  plugins: [],
   presets: [
     [
       'classic',
@@ -59,9 +60,9 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
-      title: 'WCINYP Resources',
+      title: 'My Site',
       logo: {
-        alt: 'WCINYP Logo',
+        alt: 'My Site Logo',
         src: 'img/logo.svg',
       },
       items: [
@@ -69,13 +70,22 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
-          label: 'Resources',
+          label: 'Knowledge Base',
         },
         {
-          href: '/docs/emergency',
+          to: '/providers',
           position: 'left',
-          label: '🚨 Emergency',
-          className: 'navbar-emergency-link',
+          label: 'Providers',
+        },
+        {
+          to: '/document-hub',
+          position: 'left',
+          label: 'Document Hub',
+        },
+        {
+          to: '/form-generator',
+          position: 'left',
+          label: 'Form Generator',
         },
         {
           href: 'https://github.com/rdrlabs/src-wcinyp',
@@ -83,59 +93,6 @@ const config: Config = {
           position: 'right',
         },
       ],
-    },
-    footer: {
-      style: 'dark',
-      links: [
-        {
-          title: 'Quick Links',
-          items: [
-            {
-              label: 'MRI Manual',
-              to: '/docs/mri-manual',
-            },
-            {
-              label: 'Contact Directory',
-              to: '/docs/contacts',
-            },
-            {
-              label: 'Emergency Procedures',
-              to: '/docs/emergency',
-            },
-          ],
-        },
-        {
-          title: 'Departments',
-          items: [
-            {
-              label: 'Radiology',
-              href: '#',
-            },
-            {
-              label: 'Breast Imaging',
-              href: '#',
-            },
-            {
-              label: 'Administration',
-              href: '#',
-            },
-          ],
-        },
-        {
-          title: 'Resources',
-          items: [
-            {
-              label: 'Scheduling Guidelines',
-              to: '/docs/scheduling',
-            },
-            {
-              label: 'Safety Protocols',
-              to: '/docs/safety',
-            },
-          ],
-        },
-      ],
-      copyright: `Copyright © ${new Date().getFullYear()} Weill Cornell Imaging at NewYork-Presbyterian.`,
     },
     prism: {
       theme: prismThemes.github,
