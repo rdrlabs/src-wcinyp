@@ -573,65 +573,89 @@ export default function DocumentSelector(): React.ReactElement {
       </div>
 
       {/* Section Controls */}
-      <div style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <span style={{ fontWeight: 'bold', fontSize: '0.9em' }}>Sections:</span>
-          <div style={{ display: 'flex', gap: '0.25rem' }}>
-            <button
-              onClick={selectAllSections}
-              style={{ 
-                padding: '0.25rem 0.5rem',
-                fontSize: '0.75em',
-                fontWeight: '500',
-                backgroundColor: '#22c55e',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#16a34a';
-                e.currentTarget.style.transform = 'scale(1.05)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#22c55e';
-                e.currentTarget.style.transform = 'scale(1)';
-              }}
-            >
-              All
-            </button>
-            <button
-              onClick={unselectAllSections}
-              style={{ 
-                padding: '0.25rem 0.5rem',
-                fontSize: '0.75em',
-                fontWeight: '500',
-                backgroundColor: '#dc3545',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#c82333';
-                e.currentTarget.style.transform = 'scale(1.05)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#dc3545';
-                e.currentTarget.style.transform = 'scale(1)';
-              }}
-            >
-              None
-            </button>
-          </div>
-        </div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-          {Object.entries(visibleSections).map(([section, isVisible]) => 
-            renderSectionButton(section, isVisible)
-          )}
-        </div>
+      <div style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+        {(() => {
+          const totalSections = Object.keys(visibleSections).length;
+          const visibleCount = Object.values(visibleSections).filter(Boolean).length;
+          const hiddenCount = totalSections - visibleCount;
+          
+          // Show "Expand All" when majority are hidden (60% or more)
+          const shouldShowExpandAll = hiddenCount >= Math.ceil(totalSections * 0.6);
+          // Show "Collapse All" when most are visible (75% or more) 
+          const shouldShowCollapseAll = visibleCount >= Math.ceil(totalSections * 0.75);
+          
+          return (
+            <>
+              {shouldShowExpandAll && (
+                <button
+                  onClick={selectAllSections}
+                  style={{ 
+                    padding: '0.375rem 0.75rem',
+                    fontSize: '0.8em',
+                    fontWeight: '500',
+                    backgroundColor: '#f8f9fa',
+                    color: '#495057',
+                    border: '1px solid #dee2e6',
+                    borderRadius: '20px',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    marginRight: '0.5rem'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#22c55e';
+                    e.currentTarget.style.color = 'white';
+                    e.currentTarget.style.borderColor = '#22c55e';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#f8f9fa';
+                    e.currentTarget.style.color = '#495057';
+                    e.currentTarget.style.borderColor = '#dee2e6';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
+                >
+                  ↗ Expand All ({hiddenCount} hidden)
+                </button>
+              )}
+              
+              {shouldShowCollapseAll && (
+                <button
+                  onClick={unselectAllSections}
+                  style={{ 
+                    padding: '0.375rem 0.75rem',
+                    fontSize: '0.8em',
+                    fontWeight: '500',
+                    backgroundColor: '#f8f9fa',
+                    color: '#495057',
+                    border: '1px solid #dee2e6',
+                    borderRadius: '20px',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    marginRight: '0.5rem'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#6c757d';
+                    e.currentTarget.style.color = 'white';
+                    e.currentTarget.style.borderColor = '#6c757d';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#f8f9fa';
+                    e.currentTarget.style.color = '#495057';
+                    e.currentTarget.style.borderColor = '#dee2e6';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
+                >
+                  ↙ Collapse All
+                </button>
+              )}
+            </>
+          );
+        })()}
+        
+        {Object.entries(visibleSections).map(([section, isVisible]) => 
+          renderSectionButton(section, isVisible)
+        )}
       </div>
 
       <div>
