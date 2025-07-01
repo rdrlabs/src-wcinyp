@@ -297,24 +297,37 @@ export default function DocumentSelector(): React.ReactElement {
         display: 'flex',
         alignItems: 'center',
         gap: '0.5rem',
-        padding: '0.375rem',
+        padding: '0.5rem',
         marginBottom: '0.25rem',
         backgroundColor: selectedDocs.includes(form.path) ? '#e7f3ff' : '#f8f9fa',
-        borderRadius: '4px',
-        borderLeft: form.color ? `3px solid ${form.color}` : '3px solid transparent',
+        borderRadius: '6px',
+        borderLeft: form.color ? `4px solid ${form.color}` : '4px solid transparent',
         cursor: 'pointer',
         fontSize: '0.9em',
-        transition: 'all 0.15s ease'
+        transition: 'all 0.2s ease',
+        boxShadow: selectedDocs.includes(form.path) ? '0 2px 4px rgba(0,0,0,0.1)' : 'none'
       }}
       onClick={() => toggleDocument(form.path)}
+      onMouseEnter={(e) => {
+        if (!selectedDocs.includes(form.path)) {
+          e.currentTarget.style.backgroundColor = '#f1f5f9';
+          e.currentTarget.style.transform = 'translateX(2px)';
+        }
+      }}
+      onMouseLeave={(e) => {
+        if (!selectedDocs.includes(form.path)) {
+          e.currentTarget.style.backgroundColor = '#f8f9fa';
+          e.currentTarget.style.transform = 'translateX(0)';
+        }
+      }}
     >
       <input
         type="checkbox"
         checked={selectedDocs.includes(form.path)}
         onChange={() => toggleDocument(form.path)}
-        style={{ margin: 0 }}
+        style={{ margin: 0, transform: 'scale(1.1)' }}
       />
-      <span>{form.name}</span>
+      <span style={{ fontWeight: selectedDocs.includes(form.path) ? '500' : '400' }}>{form.name}</span>
     </div>
   );
 
@@ -353,15 +366,30 @@ export default function DocumentSelector(): React.ReactElement {
       key={section}
       onClick={() => toggleSection(section)}
       style={{
-        padding: '0.375rem 0.75rem',
+        padding: '0.5rem 1rem',
         border: `2px solid ${isVisible ? MODALITY_COLORS[section] : '#d1d5db'}`,
-        backgroundColor: 'transparent',
-        color: isVisible ? MODALITY_COLORS[section] : '#9ca3af',
-        borderRadius: '20px',
-        fontSize: '0.8em',
-        fontWeight: '500',
+        backgroundColor: isVisible ? MODALITY_COLORS[section] : 'transparent',
+        color: isVisible ? 'white' : '#9ca3af',
+        borderRadius: '25px',
+        fontSize: '0.85em',
+        fontWeight: '600',
         cursor: 'pointer',
-        transition: 'all 0.2s ease'
+        transition: 'all 0.2s ease',
+        boxShadow: isVisible ? '0 2px 4px rgba(0,0,0,0.1)' : 'none'
+      }}
+      onMouseEnter={(e) => {
+        if (!isVisible) {
+          e.currentTarget.style.backgroundColor = MODALITY_COLORS[section];
+          e.currentTarget.style.color = 'white';
+          e.currentTarget.style.transform = 'translateY(-1px)';
+        }
+      }}
+      onMouseLeave={(e) => {
+        if (!isVisible) {
+          e.currentTarget.style.backgroundColor = 'transparent';
+          e.currentTarget.style.color = '#9ca3af';
+          e.currentTarget.style.transform = 'translateY(0)';
+        }
       }}
     >
       {section}
@@ -375,13 +403,13 @@ export default function DocumentSelector(): React.ReactElement {
         position: 'sticky', 
         top: 0, 
         zIndex: 100, 
-        backgroundColor: selectedDocs.length > 0 ? '#e7f3ff' : '#f8f9fa',
-        border: '1px solid #dee2e6',
-        borderRadius: '6px',
-        padding: '0.75rem',
-        marginBottom: '1rem',
-        boxShadow: selectedDocs.length > 0 ? '0 2px 8px rgba(0,0,0,0.1)' : 'none',
-        transition: 'all 0.2s ease'
+        backgroundColor: selectedDocs.length > 0 ? '#e7f3ff' : '#ffffff',
+        border: selectedDocs.length > 0 ? '2px solid #0d6efd' : '1px solid #dee2e6',
+        borderRadius: '12px',
+        padding: '1rem',
+        marginBottom: '1.5rem',
+        boxShadow: selectedDocs.length > 0 ? '0 4px 12px rgba(13,110,253,0.15)' : '0 1px 3px rgba(0,0,0,0.1)',
+        transition: 'all 0.3s ease'
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
           {/* Left: Cart Info */}
@@ -428,28 +456,7 @@ export default function DocumentSelector(): React.ReactElement {
 
           {/* Right: Quick Add + Controls + Print */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            {/* Quick Add */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85em' }}>
-              <span style={{ fontWeight: '500' }}>Quick:</span>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                <input
-                  type="checkbox"
-                  checked={selectedDocs.includes(QUICK_ADD_PATHS.CHAPERONE)}
-                  onChange={() => toggleDocument(QUICK_ADD_PATHS.CHAPERONE)}
-                  style={{ margin: 0 }}
-                />
-                Chap
-              </label>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                <input
-                  type="checkbox"
-                  checked={selectedDocs.includes(QUICK_ADD_PATHS.MINOR_AUTH)}
-                  onChange={() => toggleDocument(QUICK_ADD_PATHS.MINOR_AUTH)}
-                  style={{ margin: 0 }}
-                />
-                Minor
-              </label>
-            </div>
+            {/* Quick Add removed - moved to Other Forms section */}
 
             {/* Bulk Toggle */}
             {selectedDocs.length > 0 && (
@@ -481,8 +488,8 @@ export default function DocumentSelector(): React.ReactElement {
           </div>
         </div>
 
-        {/* Queue Details */}
-        {showQueueDetails && selectedDocs.length > 0 && (
+        {/* Selected Documents - Always Show When Items in Cart */}
+        {selectedDocs.length > 0 && (
           <div style={{ 
             marginTop: '0.75rem', 
             padding: '0.75rem', 
@@ -492,58 +499,76 @@ export default function DocumentSelector(): React.ReactElement {
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
               <span style={{ fontWeight: 'bold', fontSize: '0.9em' }}>Selected Documents</span>
-              <button
-                className="button button--outline button--sm"
-                onClick={clearSelectedDocs}
-                style={{ padding: '0.25rem 0.5rem', fontSize: '0.8em' }}
-              >
-                Clear All
-              </button>
-            </div>
-            {selectedDocs.map(path => (
-              <div key={path} style={{ 
-                display: 'flex', 
-                justifyContent: 'space-between', 
-                alignItems: 'center',
-                padding: '0.375rem',
-                backgroundColor: '#f8f9fa',
-                borderRadius: '3px',
-                marginBottom: '0.25rem',
-                fontSize: '0.9em'
-              }}>
-                <span style={{ flex: 1 }}>{getDocumentName(path)}</span>
-                {!isBulkMode && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                    <button
-                      className="button button--outline button--sm"
-                      onClick={() => updateQuantity(path, (docQuantities[path] || 1) - 1)}
-                      disabled={(docQuantities[path] || 1) <= 1}
-                      style={{ padding: '0.125rem 0.375rem', fontSize: '0.8em' }}
-                    >
-                      -
-                    </button>
-                    <span style={{ minWidth: '1.5rem', textAlign: 'center', fontSize: '0.8em' }}>
-                      {docQuantities[path] || 1}
-                    </span>
-                    <button
-                      className="button button--outline button--sm"
-                      onClick={() => updateQuantity(path, (docQuantities[path] || 1) + 1)}
-                      disabled={(docQuantities[path] || 1) >= 99}
-                      style={{ padding: '0.125rem 0.375rem', fontSize: '0.8em' }}
-                    >
-                      +
-                    </button>
-                  </div>
-                )}
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
                 <button
                   className="button button--outline button--sm"
-                  onClick={() => removeDocument(path)}
-                  style={{ marginLeft: '0.5rem', color: '#dc3545', padding: '0.125rem 0.375rem', fontSize: '0.8em' }}
+                  onClick={() => setShowQueueDetails(!showQueueDetails)}
+                  style={{ padding: '0.25rem 0.5rem', fontSize: '0.8em' }}
                 >
-                  ×
+                  {showQueueDetails ? 'Hide Details' : 'Show Details'}
+                </button>
+                <button
+                  className="button button--outline button--sm"
+                  onClick={clearSelectedDocs}
+                  style={{ padding: '0.25rem 0.5rem', fontSize: '0.8em' }}
+                >
+                  Clear All
                 </button>
               </div>
-            ))}
+            </div>
+            {/* Compact view - just document count and names */}
+            {!showQueueDetails ? (
+              <div style={{ fontSize: '0.85em', color: '#666' }}>
+                {selectedDocs.slice(0, 3).map(path => getDocumentName(path)).join(', ')}
+                {selectedDocs.length > 3 && ` +${selectedDocs.length - 3} more`}
+              </div>
+            ) : (
+              /* Detailed view with quantity controls */
+              selectedDocs.map(path => (
+                <div key={path} style={{ 
+                  display: 'flex', 
+                  justifyContent: 'space-between', 
+                  alignItems: 'center',
+                  padding: '0.375rem',
+                  backgroundColor: '#f8f9fa',
+                  borderRadius: '3px',
+                  marginBottom: '0.25rem',
+                  fontSize: '0.9em'
+                }}>
+                  <span style={{ flex: 1 }}>{getDocumentName(path)}</span>
+                  {!isBulkMode && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                      <button
+                        className="button button--outline button--sm"
+                        onClick={() => updateQuantity(path, (docQuantities[path] || 1) - 1)}
+                        disabled={(docQuantities[path] || 1) <= 1}
+                        style={{ padding: '0.125rem 0.375rem', fontSize: '0.8em' }}
+                      >
+                        -
+                      </button>
+                      <span style={{ minWidth: '1.5rem', textAlign: 'center', fontSize: '0.8em' }}>
+                        {docQuantities[path] || 1}
+                      </span>
+                      <button
+                        className="button button--outline button--sm"
+                        onClick={() => updateQuantity(path, (docQuantities[path] || 1) + 1)}
+                        disabled={(docQuantities[path] || 1) >= 99}
+                        style={{ padding: '0.125rem 0.375rem', fontSize: '0.8em' }}
+                      >
+                        +
+                      </button>
+                    </div>
+                  )}
+                  <button
+                    className="button button--outline button--sm"
+                    onClick={() => removeDocument(path)}
+                    style={{ marginLeft: '0.5rem', color: '#dc3545', padding: '0.125rem 0.375rem', fontSize: '0.8em' }}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))
+            )}
           </div>
         )}
       </div>
@@ -555,14 +580,42 @@ export default function DocumentSelector(): React.ReactElement {
           <button
             className="button button--outline button--sm"
             onClick={unselectAllSections}
-            style={{ padding: '0.25rem 0.5rem', fontSize: '0.8em' }}
+            style={{ 
+              padding: '0.25rem 0.5rem', 
+              fontSize: '0.8em',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#dc3545';
+              e.currentTarget.style.color = 'white';
+              e.currentTarget.style.borderColor = '#dc3545';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'transparent';
+              e.currentTarget.style.color = '';
+              e.currentTarget.style.borderColor = '';
+            }}
           >
             Unselect All
           </button>
           <button
             className="button button--outline button--sm"
             onClick={selectAllSections}
-            style={{ padding: '0.25rem 0.5rem', fontSize: '0.8em' }}
+            style={{ 
+              padding: '0.25rem 0.5rem', 
+              fontSize: '0.8em',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#22c55e';
+              e.currentTarget.style.color = 'white';
+              e.currentTarget.style.borderColor = '#22c55e';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'transparent';
+              e.currentTarget.style.color = '';
+              e.currentTarget.style.borderColor = '';
+            }}
           >
             Select All
           </button>
@@ -750,6 +803,32 @@ export default function DocumentSelector(): React.ReactElement {
             {visibleSections.Other && (
               <div style={{ marginBottom: '0.75rem' }}>
                 <h4 style={{ margin: '0 0 0.5rem 0', color: MODALITY_COLORS.Other, fontSize: '1rem' }}>Other Forms</h4>
+                
+                {/* Quick Add Forms */}
+                <div style={{ marginBottom: '0.75rem', padding: '0.75rem', backgroundColor: '#f8f9fa', borderRadius: '6px', border: '1px solid #e9ecef' }}>
+                  <h5 style={{ margin: '0 0 0.5rem 0', fontSize: '0.9em', fontWeight: 'bold', color: '#666' }}>Quick Add</h5>
+                  <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9em' }}>
+                      <input
+                        type="checkbox"
+                        checked={selectedDocs.includes(QUICK_ADD_PATHS.CHAPERONE)}
+                        onChange={() => toggleDocument(QUICK_ADD_PATHS.CHAPERONE)}
+                        style={{ margin: 0 }}
+                      />
+                      Medical Chaperone Form
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9em' }}>
+                      <input
+                        type="checkbox"
+                        checked={selectedDocs.includes(QUICK_ADD_PATHS.MINOR_AUTH)}
+                        onChange={() => toggleDocument(QUICK_ADD_PATHS.MINOR_AUTH)}
+                        style={{ margin: 0 }}
+                      />
+                      Minor Authorization Form
+                    </label>
+                  </div>
+                </div>
+
                 {OTHER_FORMS.map(renderFormCheckbox)}
               </div>
             )}
