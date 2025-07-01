@@ -422,6 +422,117 @@ export default function DocumentSelector(): React.ReactElement {
 
   return (
     <div style={{ scrollBehavior: 'smooth' }}>
+      {/* Section Controls */}
+      <div style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+        {/* Search */}
+        <div style={{ marginRight: '1rem', flex: '0 0 300px' }}>
+          <input
+            type="text"
+            placeholder="🔍 Search forms..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{ 
+              width: '100%',
+              padding: '0.375rem 0.75rem', 
+              border: '1px solid #d1d5db', 
+              borderRadius: '20px',
+              fontSize: '0.9em'
+            }}
+          />
+        </div>
+
+        {(() => {
+          const totalSections = Object.keys(visibleSections).length;
+          const visibleCount = Object.values(visibleSections).filter(Boolean).length;
+          const hiddenCount = totalSections - visibleCount;
+          
+          // Show "Expand All" when majority are hidden (60% or more)
+          const shouldEnableExpandAll = hiddenCount >= Math.ceil(totalSections * 0.6);
+          // Show "Collapse All" when most are visible (75% or more) 
+          const shouldEnableCollapseAll = visibleCount >= Math.ceil(totalSections * 0.75);
+          
+          return (
+            <div style={{ display: 'flex', gap: '0.5rem', marginRight: '0.5rem' }}>
+              <button
+                onClick={selectAllSections}
+                disabled={!shouldEnableExpandAll}
+                style={{ 
+                  padding: '0.375rem 0.75rem',
+                  fontSize: '0.8em',
+                  fontWeight: '500',
+                  backgroundColor: shouldEnableExpandAll ? '#f8f9fa' : '#f8f9fa',
+                  color: shouldEnableExpandAll ? '#495057' : '#dee2e6',
+                  border: `1px solid ${shouldEnableExpandAll ? '#dee2e6' : '#f1f3f5'}`,
+                  borderRadius: '20px',
+                  cursor: shouldEnableExpandAll ? 'pointer' : 'not-allowed',
+                  transition: 'all 0.2s ease',
+                  opacity: shouldEnableExpandAll ? 1 : 0.5,
+                  minWidth: '115px'
+                }}
+                onMouseEnter={(e) => {
+                  if (shouldEnableExpandAll) {
+                    e.currentTarget.style.backgroundColor = '#22c55e';
+                    e.currentTarget.style.color = 'white';
+                    e.currentTarget.style.borderColor = '#22c55e';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (shouldEnableExpandAll) {
+                    e.currentTarget.style.backgroundColor = '#f8f9fa';
+                    e.currentTarget.style.color = '#495057';
+                    e.currentTarget.style.borderColor = '#dee2e6';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }
+                }}
+              >
+                ↗ Expand All {shouldEnableExpandAll && hiddenCount > 0 ? `(${hiddenCount})` : ''}
+              </button>
+              
+              <button
+                onClick={unselectAllSections}
+                disabled={!shouldEnableCollapseAll}
+                style={{ 
+                  padding: '0.375rem 0.75rem',
+                  fontSize: '0.8em',
+                  fontWeight: '500',
+                  backgroundColor: shouldEnableCollapseAll ? '#f8f9fa' : '#f8f9fa',
+                  color: shouldEnableCollapseAll ? '#495057' : '#dee2e6',
+                  border: `1px solid ${shouldEnableCollapseAll ? '#dee2e6' : '#f1f3f5'}`,
+                  borderRadius: '20px',
+                  cursor: shouldEnableCollapseAll ? 'pointer' : 'not-allowed',
+                  transition: 'all 0.2s ease',
+                  opacity: shouldEnableCollapseAll ? 1 : 0.5,
+                  minWidth: '115px'
+                }}
+                onMouseEnter={(e) => {
+                  if (shouldEnableCollapseAll) {
+                    e.currentTarget.style.backgroundColor = '#6c757d';
+                    e.currentTarget.style.color = 'white';
+                    e.currentTarget.style.borderColor = '#6c757d';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (shouldEnableCollapseAll) {
+                    e.currentTarget.style.backgroundColor = '#f8f9fa';
+                    e.currentTarget.style.color = '#495057';
+                    e.currentTarget.style.borderColor = '#dee2e6';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }
+                }}
+              >
+                ↙ Collapse All
+              </button>
+            </div>
+          );
+        })()}
+        
+        {Object.entries(visibleSections).map(([section, isVisible]) => 
+          renderSectionButton(section, isVisible)
+        )}
+      </div>
+
       {/* Comprehensive Header Bar */}
       <div style={{ 
         position: 'sticky', 
@@ -597,115 +708,6 @@ export default function DocumentSelector(): React.ReactElement {
             </div>
           )}
         </div>
-      </div>
-
-      {/* Section Controls */}
-      <div style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
-        {/* Search */}
-        <div style={{ marginRight: '1rem' }}>
-          <input
-            type="text"
-            placeholder="🔍 Search forms..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{ 
-              width: '200px',
-              padding: '0.375rem 0.75rem', 
-              border: '1px solid #d1d5db', 
-              borderRadius: '20px',
-              fontSize: '0.9em'
-            }}
-          />
-        </div>
-
-        {(() => {
-          const totalSections = Object.keys(visibleSections).length;
-          const visibleCount = Object.values(visibleSections).filter(Boolean).length;
-          const hiddenCount = totalSections - visibleCount;
-          
-          // Show "Expand All" when majority are hidden (60% or more)
-          const shouldEnableExpandAll = hiddenCount >= Math.ceil(totalSections * 0.6);
-          // Show "Collapse All" when most are visible (75% or more) 
-          const shouldEnableCollapseAll = visibleCount >= Math.ceil(totalSections * 0.75);
-          
-          return (
-            <div style={{ display: 'flex', gap: '0.5rem', marginRight: '0.5rem' }}>
-              <button
-                onClick={selectAllSections}
-                disabled={!shouldEnableExpandAll}
-                style={{ 
-                  padding: '0.375rem 0.75rem',
-                  fontSize: '0.8em',
-                  fontWeight: '500',
-                  backgroundColor: shouldEnableExpandAll ? '#f8f9fa' : '#f8f9fa',
-                  color: shouldEnableExpandAll ? '#495057' : '#dee2e6',
-                  border: `1px solid ${shouldEnableExpandAll ? '#dee2e6' : '#f1f3f5'}`,
-                  borderRadius: '20px',
-                  cursor: shouldEnableExpandAll ? 'pointer' : 'not-allowed',
-                  transition: 'all 0.2s ease',
-                  opacity: shouldEnableExpandAll ? 1 : 0.5
-                }}
-                onMouseEnter={(e) => {
-                  if (shouldEnableExpandAll) {
-                    e.currentTarget.style.backgroundColor = '#22c55e';
-                    e.currentTarget.style.color = 'white';
-                    e.currentTarget.style.borderColor = '#22c55e';
-                    e.currentTarget.style.transform = 'translateY(-1px)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (shouldEnableExpandAll) {
-                    e.currentTarget.style.backgroundColor = '#f8f9fa';
-                    e.currentTarget.style.color = '#495057';
-                    e.currentTarget.style.borderColor = '#dee2e6';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }
-                }}
-              >
-                ↗ Expand All {shouldEnableExpandAll && `(${hiddenCount} hidden)`}
-              </button>
-              
-              <button
-                onClick={unselectAllSections}
-                disabled={!shouldEnableCollapseAll}
-                style={{ 
-                  padding: '0.375rem 0.75rem',
-                  fontSize: '0.8em',
-                  fontWeight: '500',
-                  backgroundColor: shouldEnableCollapseAll ? '#f8f9fa' : '#f8f9fa',
-                  color: shouldEnableCollapseAll ? '#495057' : '#dee2e6',
-                  border: `1px solid ${shouldEnableCollapseAll ? '#dee2e6' : '#f1f3f5'}`,
-                  borderRadius: '20px',
-                  cursor: shouldEnableCollapseAll ? 'pointer' : 'not-allowed',
-                  transition: 'all 0.2s ease',
-                  opacity: shouldEnableCollapseAll ? 1 : 0.5
-                }}
-                onMouseEnter={(e) => {
-                  if (shouldEnableCollapseAll) {
-                    e.currentTarget.style.backgroundColor = '#6c757d';
-                    e.currentTarget.style.color = 'white';
-                    e.currentTarget.style.borderColor = '#6c757d';
-                    e.currentTarget.style.transform = 'translateY(-1px)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (shouldEnableCollapseAll) {
-                    e.currentTarget.style.backgroundColor = '#f8f9fa';
-                    e.currentTarget.style.color = '#495057';
-                    e.currentTarget.style.borderColor = '#dee2e6';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }
-                }}
-              >
-                ↙ Collapse All
-              </button>
-            </div>
-          );
-        })()}
-        
-        {Object.entries(visibleSections).map(([section, isVisible]) => 
-          renderSectionButton(section, isVisible)
-        )}
       </div>
 
       <div>
