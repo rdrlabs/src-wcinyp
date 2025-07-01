@@ -73,6 +73,7 @@ export default function DocumentSelector(): React.ReactElement {
   });
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'grouped' | 'list'>('grouped');
+  const [isPrinting, setIsPrinting] = useState(false);
 
   const allForms = [...SCREENING_FORMS, ...BREAST_FORMS, ...QUICK_ADD_FORMS, ...OTHER_FORMS];
 
@@ -148,18 +149,107 @@ export default function DocumentSelector(): React.ReactElement {
     return doc ? doc.name : path.split('/').pop() || path;
   };
 
-  const handlePrint = (): void => {
+  // Lazy load PDF-lib only when needed
+  const loadPDFLib = async () => {
+    const { PDFDocument } = await import('pdf-lib');
+    return { PDFDocument };
+  };
+
+  // Fetch PDFs in parallel for efficiency
+  const fetchPDFs = async (paths: string[]) => {
+    try {
+      const responses = await Promise.all(
+        paths.map(path => fetch(path).then(response => {
+          if (!response.ok) throw new Error(`Failed to fetch ${path}`);
+          return response.arrayBuffer();
+        }))
+      );
+      return responses;
+    } catch (error) {
+      console.error('Failed to fetch PDFs:', error);
+      throw error;
+    }
+  };
+
+  // Efficient PDF merging with memory management
+  const mergePDFs = async (pdfBuffers: ArrayBuffer[], documentPaths: string[]) => {
+    const { PDFDocument } = await loadPDFLib();
+    const mergedPdf = await PDFDocument.create();
+    
+    // In individual mode, add each document the specified number of times
+    // In bulk mode, add all documents once, then user prints the specified bulk quantity
+    if (isBulkMode) {
+      // Bulk mode: add each document once, user will print bulkQuantity copies
+      for (const buffer of pdfBuffers) {
+        const pdf = await PDFDocument.load(buffer);
+        const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+        pages.forEach(page => mergedPdf.addPage(page));
+      }
+    } else {
+      // Individual mode: add each document the specified number of times
+      for (let i = 0; i < documentPaths.length; i++) {
+        const buffer = pdfBuffers[i];
+        const path = documentPaths[i];
+        const copies = docQuantities[path] || 1;
+        
+        for (let copy = 0; copy < copies; copy++) {
+          const pdf = await PDFDocument.load(buffer);
+          const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+          pages.forEach(page => mergedPdf.addPage(page));
+        }
+      }
+    }
+    
+    return mergedPdf.save();
+  };
+
+  // Create blob URL and trigger print
+  const openPrintDialog = (pdfBytes: Uint8Array) => {
+    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+    
+    // Open in new window and trigger print dialog
+    const printWindow = window.open(url, '_blank');
+    if (printWindow) {
+      printWindow.onload = () => {
+        printWindow.print();
+        // Clean up blob URL after a delay
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      };
+    } else {
+      // Fallback if popup blocked
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'selected-documents.pdf';
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+  };
+
+  const handlePrint = async (): Promise<void> => {
     if (selectedDocs.length === 0) {
       alert('Please select at least one document to print');
       return;
     }
     
-    selectedDocs.forEach(path => {
-      const copies = isBulkMode ? bulkQuantity : (docQuantities[path] || 1);
-      for (let i = 0; i < copies; i++) {
-        window.open(path, '_blank');
-      }
-    });
+    setIsPrinting(true);
+    
+    try {
+      // Fetch all PDFs in parallel
+      const pdfBuffers = await fetchPDFs(selectedDocs);
+      
+      // Merge PDFs efficiently
+      const mergedPdfBytes = await mergePDFs(pdfBuffers, selectedDocs);
+      
+      // Open print dialog
+      openPrintDialog(mergedPdfBytes);
+      
+    } catch (error) {
+      console.error('Print failed:', error);
+      alert('Failed to prepare documents for printing. Please try again.');
+    } finally {
+      setIsPrinting(false);
+    }
   };
 
   const renderFormCheckbox = (form: Document) => (
@@ -263,10 +353,10 @@ export default function DocumentSelector(): React.ReactElement {
             <button
               className="button button--primary"
               onClick={handlePrint}
-              disabled={selectedDocs.length === 0}
+              disabled={selectedDocs.length === 0 || isPrinting}
               style={{ fontWeight: 'bold', padding: '0.5rem 1rem' }}
             >
-              PRINT {selectedDocs.length > 0 ? getTotalCopies() : ''} ↗
+              {isPrinting ? 'Preparing...' : `PRINT ${selectedDocs.length > 0 ? getTotalCopies() : ''} ↗`}
             </button>
           </div>
         </div>
