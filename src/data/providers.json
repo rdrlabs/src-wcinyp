@@ -1,0 +1,186 @@
+{
+  "providers": [
+    {
+      "id": "brian-apatoff",
+      "name": "Brian Apatoff, MD",
+      "credentials": "MD",
+      "specialty": "Psychiatry & Neurology",
+      "department": "Neurology",
+      "npi": "1234567890",
+      "phone": "(212) 746-2309",
+      "email": "bap9001@med.cornell.edu",
+      "location": "1305 York Ave",
+      "epic_chat": ["bapatoff"],
+      "tags": ["3T-required", "PTHS-only", "no-direct-contact"],
+      "associated_providers": [],
+      "priority_notes": [
+        {
+          "type": "critical",
+          "icon": "🛑",
+          "text": "ALL scans MUST be done on 3T"
+        },
+        {
+          "type": "contact",
+          "icon": "📞",
+          "text": "Contact office as last resort only"
+        },
+        {
+          "type": "info",
+          "icon": "📋",
+          "text": "Patients always PTHS"
+        }
+      ],
+      "last_updated": "2024-01-15",
+      "updated_by": "bernie",
+      "status": "critical"
+    },
+    {
+      "id": "anne-moore",
+      "name": "Anne Moore, MD",
+      "credentials": "MD",
+      "specialty": "Hematology / Medical Oncology",
+      "department": "Oncology",
+      "npi": "2345678901",
+      "phone": "(212) 746-4444",
+      "email": "anm9001@med.cornell.edu",
+      "location": "525 E 68th St",
+      "epic_chat": ["amoore"],
+      "tags": ["contact-np", "oncology"],
+      "associated_providers": ["alyson-goldenberg-np"],
+      "priority_notes": [
+        {
+          "type": "contact",
+          "icon": "💬",
+          "text": "Dr. Moore rarely responds to Epic chats"
+        },
+        {
+          "type": "info",
+          "icon": "✅",
+          "text": "NP places signed orders for OP"
+        }
+      ],
+      "last_updated": "2024-01-10",
+      "updated_by": "admin",
+      "status": "warning"
+    },
+    {
+      "id": "david-blumenthal",
+      "name": "David S. Blumenthal, MD",
+      "credentials": "MD",
+      "specialty": "Cardiovascular Disease",
+      "department": "Cardiology",
+      "npi": "3456789012",
+      "phone": "(212) 746-5555",
+      "email": "dab9001@med.cornell.edu",
+      "location": "520 E 70th St",
+      "epic_chat": ["dblumenthal"],
+      "tags": ["cardiology", "email-rx"],
+      "associated_providers": [],
+      "priority_notes": [
+        {
+          "type": "info",
+          "icon": "📧",
+          "text": "Office emails rx to pre-registration"
+        }
+      ],
+      "last_updated": "2024-01-08",
+      "updated_by": "staff",
+      "status": "ok"
+    },
+    {
+      "id": "srinivas-kesanakurthy",
+      "name": "Srinivas Kesanakurthy, MD",
+      "credentials": "MD",
+      "specialty": "Cardiovascular Disease",
+      "department": "Cardiology",
+      "npi": "4567890123",
+      "phone": "(212) 746-6666",
+      "email": "srk9001@med.cornell.edu",
+      "location": "520 E 70th St",
+      "epic_chat": [],
+      "tags": ["no-direct-contact", "special-protocol"],
+      "associated_providers": ["yasuri-jimenez"],
+      "priority_notes": [
+        {
+          "type": "critical",
+          "icon": "🛑",
+          "text": "DO NOT CONTACT OFFICE DIRECTLY"
+        },
+        {
+          "type": "contact",
+          "icon": "📧",
+          "text": "Scripts sent by Yasuri Jimenez"
+        },
+        {
+          "type": "info",
+          "icon": "✅",
+          "text": "C-MRI approved by Dr. Hentel"
+        }
+      ],
+      "last_updated": "2024-01-12",
+      "updated_by": "bernie",
+      "status": "critical"
+    },
+    {
+      "id": "thomas-lallas",
+      "name": "Thomas A. Lallas, MD",
+      "credentials": "MD",
+      "specialty": "General Practice",
+      "department": "Internal Medicine",
+      "npi": "5678901234",
+      "phone": "(212) 746-7777",
+      "email": "tal9001@med.cornell.edu",
+      "location": "1305 York Ave",
+      "epic_chat": ["tlallas"],
+      "tags": ["limited-hours"],
+      "associated_providers": [],
+      "priority_notes": [
+        {
+          "type": "info",
+          "icon": "📅",
+          "text": "Office not open Fridays"
+        }
+      ],
+      "last_updated": "2024-01-05",
+      "updated_by": "staff",
+      "status": "warning"
+    },
+    {
+      "id": "brain-tumor-center",
+      "name": "Brain Tumor Center",
+      "credentials": "Multi-disciplinary Team",
+      "specialty": "Neurology / Oncology",
+      "department": "Neurology",
+      "npi": "6789012345",
+      "phone": "(212) 746-8888",
+      "email": "btc@med.cornell.edu",
+      "location": "525 E 68th St",
+      "epic_chat": ["btcenter"],
+      "tags": ["team-practice", "np-orders-ok"],
+      "associated_providers": ["lauren-costello-fnp", "kris-abiola-np"],
+      "priority_notes": [
+        {
+          "type": "info",
+          "icon": "✅",
+          "text": "NPs can sign orders"
+        },
+        {
+          "type": "info",
+          "icon": "📋",
+          "text": "Can use MR brain for tumor adv"
+        }
+      ],
+      "last_updated": "2024-01-14",
+      "updated_by": "admin",
+      "status": "warning"
+    }
+  ],
+  "metadata": {
+    "last_export": "2024-01-15T10:30:00Z",
+    "total_providers": 6,
+    "critical_count": 2,
+    "warning_count": 3,
+    "ok_count": 1,
+    "version": "1.0.0"
+  }
+}
