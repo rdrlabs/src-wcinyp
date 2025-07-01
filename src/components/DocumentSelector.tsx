@@ -47,16 +47,17 @@ const SCREENING_FORMS: Document[] = [
   { name: 'Ultrasound Gynecologic Questionnaire', path: '/documents/Ultrasound Gynecologic Questionnaire.pdf', category: 'screening', modality: 'US', color: MODALITY_COLORS.US },
   { name: 'Ultrasound Soft Tissue Questionnaire', path: '/documents/Ultrasound Soft Tissue Questionnaire.pdf', category: 'screening', modality: 'US', color: MODALITY_COLORS.US },
   
-  { name: 'Dexa Questionnaire', path: '/documents/Dexa Questionnaire.pdf', category: 'screening', modality: 'DEXA', color: MODALITY_COLORS.DEXA },
+  { name: 'Dexa Questionnaire', path: '/documents/Dexa Questionnaire.pdf', category: 'screening', modality: 'DEXA', color: MODALITY_COLORS['X-Ray'] },
   
   { name: 'X-Ray Questionnaire', path: '/documents/X-Ray Questionnaire.pdf', category: 'screening', modality: 'XRAY', color: MODALITY_COLORS['X-Ray'] },
   { name: 'Fluoro Questionnaire', path: '/documents/Fluoro Questionnaire.pdf', category: 'screening', modality: 'XRAY', color: MODALITY_COLORS['X-Ray'] },
 ];
 
 const BREAST_FORMS: Document[] = [
-  { name: 'Mammogram Visit Confirmation Form', path: '/documents/Mammogram Visit Confirmation Form.pdf', category: 'breast', color: MODALITY_COLORS.Breast },
   { name: 'Mammography History Sheet', path: '/documents/Mammography History Sheet.pdf', category: 'breast', color: MODALITY_COLORS.Breast },
+  { name: 'Biopsy Questionnaire', path: '/documents/Biopsy Questionnaire.pdf', category: 'breast', color: MODALITY_COLORS.Breast },
   { name: 'Mammography Recall Form', path: '/documents/AOB Recalled Diag Mammo and Ultrasound Breast -2025.pdf', category: 'breast', color: MODALITY_COLORS.Breast },
+  { name: 'Mam/US Recall Form', path: '/documents/Mammogram Visit Confirmation Form.pdf', category: 'breast', color: MODALITY_COLORS.Breast },
 ];
 
 const QUICK_ADD_FORMS: Document[] = [
@@ -424,13 +425,14 @@ export default function DocumentSelector(): React.ReactElement {
       {/* Comprehensive Header Bar */}
       <div style={{ 
         position: 'sticky', 
-        top: 0, 
+        top: '1rem', 
         zIndex: 100, 
         backgroundColor: '#ffffff',
         border: '1px solid #dee2e6',
         borderRadius: '12px',
         padding: '1rem',
         marginBottom: '1.5rem',
+        marginTop: '1rem',
         boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
         transition: 'box-shadow 0.2s ease, border-color 0.2s ease',
         ...(selectedDocs.length > 0 && {
@@ -522,10 +524,12 @@ export default function DocumentSelector(): React.ReactElement {
         {/* Selected Documents - Always Show When Items in Cart */}
         <div style={{ 
           marginTop: '0.75rem',
-          maxHeight: selectedDocs.length > 0 ? '200px' : '0',
-          overflow: 'hidden',
+          maxHeight: selectedDocs.length > 0 ? '150px' : '0',
+          overflow: selectedDocs.length > 0 ? 'auto' : 'hidden',
           transition: 'max-height 0.3s ease, opacity 0.2s ease',
-          opacity: selectedDocs.length > 0 ? 1 : 0
+          opacity: selectedDocs.length > 0 ? 1 : 0,
+          position: 'relative',
+          zIndex: 50
         }}>
           {selectedDocs.length > 0 && (
             <div style={{ 
