@@ -580,65 +580,111 @@ export default function DocumentSelector(): React.ReactElement {
             {visibleSections.Financial && (
               <div style={{ marginBottom: '0.75rem' }}>
                 <h4 style={{ margin: '0 0 0.5rem 0', color: MODALITY_COLORS.Financial, fontSize: '1rem' }}>Financial Forms</h4>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center', fontSize: '0.9em' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                    <input
-                      type="checkbox"
-                      checked={selectedDocs.includes(FINANCIAL_FORMS.OFF_HOURS_WAIVER)}
-                      onChange={() => toggleDocument(FINANCIAL_FORMS.OFF_HOURS_WAIVER)}
-                    />
-                    Off-Hours Waiver
-                  </label>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                    <input
-                      type="checkbox"
-                      checked={selectedDocs.includes(FINANCIAL_FORMS.SELF_PAY_WAIVER)}
-                      onChange={() => toggleDocument(FINANCIAL_FORMS.SELF_PAY_WAIVER)}
-                    />
-                    Self-Pay Waiver
-                  </label>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <span>Invoice:</span>
-                    <select 
-                      value={selectedInvoiceType} 
-                      onChange={(e) => setSelectedInvoiceType(e.target.value)}
-                      style={{ padding: '0.25rem', fontSize: '0.8em' }}
-                    >
-                      <option value="">Type</option>
-                      {INVOICE_TYPES.map(type => (
-                        <option key={type} value={type}>{type}</option>
-                      ))}
-                    </select>
-                    <button 
-                      className="button button--outline button--primary button--sm"
-                      onClick={addInvoice}
-                      disabled={!selectedInvoiceType}
-                      style={{ padding: '0.25rem 0.5rem', fontSize: '0.8em' }}
-                    >
-                      Add
-                    </button>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <span>ABN:</span>
-                    <select 
-                      value={selectedAbnLocation} 
-                      onChange={(e) => setSelectedAbnLocation(e.target.value)}
-                      style={{ padding: '0.25rem', fontSize: '0.8em' }}
-                    >
-                      <option value="">Location</option>
-                      {LOCATIONS.map(location => (
-                        <option key={location} value={location}>{location}</option>
-                      ))}
-                    </select>
-                    <button 
-                      className="button button--outline button--primary button--sm"
-                      onClick={addAbn}
-                      disabled={!selectedAbnLocation}
-                      style={{ padding: '0.25rem 0.5rem', fontSize: '0.8em' }}
-                    >
-                      Add
-                    </button>
-                  </div>
+                
+                <div style={{ 
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  padding: '0.375rem',
+                  marginBottom: '0.25rem',
+                  backgroundColor: selectedDocs.includes(FINANCIAL_FORMS.OFF_HOURS_WAIVER) ? '#e7f3ff' : '#f8f9fa',
+                  borderRadius: '4px',
+                  borderLeft: '3px solid #06b6d4',
+                  cursor: 'pointer',
+                  fontSize: '0.9em'
+                }} onClick={() => toggleDocument(FINANCIAL_FORMS.OFF_HOURS_WAIVER)}>
+                  <input
+                    type="checkbox"
+                    checked={selectedDocs.includes(FINANCIAL_FORMS.OFF_HOURS_WAIVER)}
+                    onChange={() => toggleDocument(FINANCIAL_FORMS.OFF_HOURS_WAIVER)}
+                    style={{ margin: 0 }}
+                  />
+                  <span>Insurance Off-Hours Waiver</span>
+                </div>
+
+                <div style={{ 
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  padding: '0.375rem',
+                  marginBottom: '0.25rem',
+                  backgroundColor: selectedDocs.includes(FINANCIAL_FORMS.SELF_PAY_WAIVER) ? '#e7f3ff' : '#f8f9fa',
+                  borderRadius: '4px',
+                  borderLeft: '3px solid #06b6d4',
+                  cursor: 'pointer',
+                  fontSize: '0.9em'
+                }} onClick={() => toggleDocument(FINANCIAL_FORMS.SELF_PAY_WAIVER)}>
+                  <input
+                    type="checkbox"
+                    checked={selectedDocs.includes(FINANCIAL_FORMS.SELF_PAY_WAIVER)}
+                    onChange={() => toggleDocument(FINANCIAL_FORMS.SELF_PAY_WAIVER)}
+                    style={{ margin: 0 }}
+                  />
+                  <span>Self-Pay Waiver</span>
+                </div>
+
+                <div style={{ 
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  padding: '0.375rem',
+                  marginBottom: '0.25rem',
+                  backgroundColor: '#f8f9fa',
+                  borderRadius: '4px',
+                  borderLeft: '3px solid #06b6d4',
+                  fontSize: '0.9em'
+                }}>
+                  <span>Invoice:</span>
+                  <select 
+                    value={selectedInvoiceType} 
+                    onChange={(e) => setSelectedInvoiceType(e.target.value)}
+                    style={{ padding: '0.25rem', fontSize: '0.9em', marginRight: '0.5rem' }}
+                  >
+                    <option value="">Select Type</option>
+                    {INVOICE_TYPES.map(type => (
+                      <option key={type} value={type}>{type}</option>
+                    ))}
+                  </select>
+                  <button 
+                    className="button button--outline button--primary button--sm"
+                    onClick={addInvoice}
+                    disabled={!selectedInvoiceType}
+                    style={{ padding: '0.25rem 0.5rem', fontSize: '0.8em' }}
+                  >
+                    Add
+                  </button>
+                </div>
+
+                <div style={{ 
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  padding: '0.375rem',
+                  marginBottom: '0.25rem',
+                  backgroundColor: '#f8f9fa',
+                  borderRadius: '4px',
+                  borderLeft: '3px solid #06b6d4',
+                  fontSize: '0.9em'
+                }}>
+                  <span>ABN:</span>
+                  <select 
+                    value={selectedAbnLocation} 
+                    onChange={(e) => setSelectedAbnLocation(e.target.value)}
+                    style={{ padding: '0.25rem', fontSize: '0.9em', marginRight: '0.5rem' }}
+                  >
+                    <option value="">Select Location</option>
+                    {LOCATIONS.map(location => (
+                      <option key={location} value={location}>{location}</option>
+                    ))}
+                  </select>
+                  <button 
+                    className="button button--outline button--primary button--sm"
+                    onClick={addAbn}
+                    disabled={!selectedAbnLocation}
+                    style={{ padding: '0.25rem 0.5rem', fontSize: '0.8em' }}
+                  >
+                    Add
+                  </button>
                 </div>
               </div>
             )}
