@@ -93,7 +93,6 @@ export default function DocumentSelector(): React.ReactElement {
     CT: true,
     PET: true,
     US: true,
-    DEXA: true,
     Breast: true,
     'X-Ray': true,
     Financial: true,
@@ -576,49 +575,57 @@ export default function DocumentSelector(): React.ReactElement {
       {/* Section Controls */}
       <div style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <span style={{ fontWeight: 'bold', fontSize: '0.9em' }}>Show:</span>
-          <button
-            className="button button--outline button--sm"
-            onClick={unselectAllSections}
-            style={{ 
-              padding: '0.25rem 0.5rem', 
-              fontSize: '0.8em',
-              transition: 'all 0.2s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#dc3545';
-              e.currentTarget.style.color = 'white';
-              e.currentTarget.style.borderColor = '#dc3545';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'transparent';
-              e.currentTarget.style.color = '';
-              e.currentTarget.style.borderColor = '';
-            }}
-          >
-            Unselect All
-          </button>
-          <button
-            className="button button--outline button--sm"
-            onClick={selectAllSections}
-            style={{ 
-              padding: '0.25rem 0.5rem', 
-              fontSize: '0.8em',
-              transition: 'all 0.2s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#22c55e';
-              e.currentTarget.style.color = 'white';
-              e.currentTarget.style.borderColor = '#22c55e';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'transparent';
-              e.currentTarget.style.color = '';
-              e.currentTarget.style.borderColor = '';
-            }}
-          >
-            Select All
-          </button>
+          <span style={{ fontWeight: 'bold', fontSize: '0.9em' }}>Sections:</span>
+          <div style={{ display: 'flex', gap: '0.25rem' }}>
+            <button
+              onClick={selectAllSections}
+              style={{ 
+                padding: '0.25rem 0.5rem',
+                fontSize: '0.75em',
+                fontWeight: '500',
+                backgroundColor: '#22c55e',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#16a34a';
+                e.currentTarget.style.transform = 'scale(1.05)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#22c55e';
+                e.currentTarget.style.transform = 'scale(1)';
+              }}
+            >
+              All
+            </button>
+            <button
+              onClick={unselectAllSections}
+              style={{ 
+                padding: '0.25rem 0.5rem',
+                fontSize: '0.75em',
+                fontWeight: '500',
+                backgroundColor: '#dc3545',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#c82333';
+                e.currentTarget.style.transform = 'scale(1.05)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#dc3545';
+                e.currentTarget.style.transform = 'scale(1)';
+              }}
+            >
+              None
+            </button>
+          </div>
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
           {Object.entries(visibleSections).map(([section, isVisible]) => 
@@ -628,6 +635,33 @@ export default function DocumentSelector(): React.ReactElement {
       </div>
 
       <div>
+        {/* Quick Add Forms - Always at Top */}
+        {!searchTerm && (
+          <div style={{ marginBottom: '1rem', padding: '0.75rem', backgroundColor: '#f8f9fa', borderRadius: '8px', border: '1px solid #e9ecef' }}>
+            <h4 style={{ margin: '0 0 0.75rem 0', fontSize: '1rem', color: '#495057' }}>Quick Add</h4>
+            <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.95em', fontWeight: '500' }}>
+                <input
+                  type="checkbox"
+                  checked={selectedDocs.includes(QUICK_ADD_PATHS.CHAPERONE)}
+                  onChange={() => toggleDocument(QUICK_ADD_PATHS.CHAPERONE)}
+                  style={{ margin: 0, transform: 'scale(1.1)' }}
+                />
+                Medical Chaperone Form
+              </label>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.95em', fontWeight: '500' }}>
+                <input
+                  type="checkbox"
+                  checked={selectedDocs.includes(QUICK_ADD_PATHS.MINOR_AUTH)}
+                  onChange={() => toggleDocument(QUICK_ADD_PATHS.MINOR_AUTH)}
+                  style={{ margin: 0, transform: 'scale(1.1)' }}
+                />
+                Minor Authorization Form
+              </label>
+            </div>
+          </div>
+        )}
+
         {/* Search Results */}
         {searchTerm ? (
           <div style={{ marginBottom: '0.75rem' }}>
@@ -665,12 +699,6 @@ export default function DocumentSelector(): React.ReactElement {
               </div>
             )}
             
-            {visibleSections.DEXA && (
-              <div style={{ marginBottom: '0.75rem' }}>
-                <h4 style={{ margin: '0 0 0.5rem 0', color: MODALITY_COLORS.DEXA, fontSize: '1rem' }}>DEXA Forms</h4>
-                {SCREENING_FORMS.filter(f => f.modality === 'DEXA').map(renderFormCheckbox)}
-              </div>
-            )}
             
             {visibleSections.Breast && (
               <div style={{ marginBottom: '0.75rem' }}>
@@ -681,7 +709,8 @@ export default function DocumentSelector(): React.ReactElement {
             
             {visibleSections['X-Ray'] && (
               <div style={{ marginBottom: '0.75rem' }}>
-                <h4 style={{ margin: '0 0 0.5rem 0', color: MODALITY_COLORS['X-Ray'], fontSize: '1rem' }}>X-Ray Forms</h4>
+                <h4 style={{ margin: '0 0 0.5rem 0', color: MODALITY_COLORS['X-Ray'], fontSize: '1rem' }}>X-Ray & DEXA Forms</h4>
+                {SCREENING_FORMS.filter(f => f.modality === 'DEXA').map(renderFormCheckbox)}
                 {SCREENING_FORMS.filter(f => f.modality === 'XRAY').map(renderFormCheckbox)}
               </div>
             )}
@@ -803,32 +832,6 @@ export default function DocumentSelector(): React.ReactElement {
             {visibleSections.Other && (
               <div style={{ marginBottom: '0.75rem' }}>
                 <h4 style={{ margin: '0 0 0.5rem 0', color: MODALITY_COLORS.Other, fontSize: '1rem' }}>Other Forms</h4>
-                
-                {/* Quick Add Forms */}
-                <div style={{ marginBottom: '0.75rem', padding: '0.75rem', backgroundColor: '#f8f9fa', borderRadius: '6px', border: '1px solid #e9ecef' }}>
-                  <h5 style={{ margin: '0 0 0.5rem 0', fontSize: '0.9em', fontWeight: 'bold', color: '#666' }}>Quick Add</h5>
-                  <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9em' }}>
-                      <input
-                        type="checkbox"
-                        checked={selectedDocs.includes(QUICK_ADD_PATHS.CHAPERONE)}
-                        onChange={() => toggleDocument(QUICK_ADD_PATHS.CHAPERONE)}
-                        style={{ margin: 0 }}
-                      />
-                      Medical Chaperone Form
-                    </label>
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9em' }}>
-                      <input
-                        type="checkbox"
-                        checked={selectedDocs.includes(QUICK_ADD_PATHS.MINOR_AUTH)}
-                        onChange={() => toggleDocument(QUICK_ADD_PATHS.MINOR_AUTH)}
-                        style={{ margin: 0 }}
-                      />
-                      Minor Authorization Form
-                    </label>
-                  </div>
-                </div>
-
                 {OTHER_FORMS.map(renderFormCheckbox)}
               </div>
             )}
