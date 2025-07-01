@@ -63,3 +63,20 @@ main {
 article, main, .container {
   will-change: auto;
 }
+
+/* Simple clean logo styling */
+.navbar__logo img {
+  height: 40px;
+  width: auto;
+  margin: 0 1rem 0 0;
+}
+
+/* Hide the title text, keep only logo */
+.navbar__title {
+  display: none;
+}
+
+/* Add some padding to navbar */
+.navbar {
+  padding: 0 1rem;
+}

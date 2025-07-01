@@ -14,16 +14,8 @@ function HomepageHeader() {
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
         <Heading as="h1" className="hero__title">
-          {siteConfig.title}
+          Welcome
         </Heading>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
-        <div className={styles.buttons}>
-          <Link
-            className="button button--secondary button--lg"
-            to="/docs/intro">
-            Get Started
-          </Link>
-        </div>
       </div>
     </header>
   );
@@ -36,9 +28,6 @@ export default function Home(): ReactNode {
       title={`${siteConfig.title} - Medical Imaging Resources`}
       description="Comprehensive medical imaging resources and protocols for Weill Cornell Imaging at NewYork-Presbyterian">
       <HomepageHeader />
-      <main>
-        <HomepageFeatures />
-      </main>
     </Layout>
   );
 }
