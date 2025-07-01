@@ -54,18 +54,48 @@ const OTHER_FORMS: Document[] = [
 
 export default function DocumentSelector(): React.ReactElement {
   const [selectedDocs, setSelectedDocs] = useState<string[]>([]);
+  const [docQuantities, setDocQuantities] = useState<Record<string, number>>({});
   const [selectedAbnLocation, setSelectedAbnLocation] = useState<string>('');
   const [selectedInvoiceType, setSelectedInvoiceType] = useState<string>('');
   const [showOtherForms, setShowOtherForms] = useState(false);
+  const [isBulkMode, setIsBulkMode] = useState(false);
+  const [bulkQuantity, setBulkQuantity] = useState(1);
+  const [showQueueDetails, setShowQueueDetails] = useState(false);
 
   const allForms = [...SCREENING_FORMS, ...BREAST_FORMS, ...QUICK_ADD_FORMS, ...OTHER_FORMS];
 
   const toggleDocument = (path: string): void => {
-    setSelectedDocs(prev => 
-      prev.includes(path) 
-        ? prev.filter(p => p !== path)
-        : [...prev, path]
-    );
+    setSelectedDocs(prev => {
+      if (prev.includes(path)) {
+        // Remove document and its quantity
+        const newQuantities = { ...docQuantities };
+        delete newQuantities[path];
+        setDocQuantities(newQuantities);
+        return prev.filter(p => p !== path);
+      } else {
+        // Add document with default quantity
+        setDocQuantities(prev => ({ ...prev, [path]: 1 }));
+        return [...prev, path];
+      }
+    });
+  };
+
+  const updateQuantity = (path: string, quantity: number): void => {
+    setDocQuantities(prev => ({ ...prev, [path]: Math.max(1, Math.min(99, quantity)) }));
+  };
+
+  const removeDocument = (path: string): void => {
+    setSelectedDocs(prev => prev.filter(p => p !== path));
+    setDocQuantities(prev => {
+      const newQuantities = { ...prev };
+      delete newQuantities[path];
+      return newQuantities;
+    });
+  };
+
+  const clearAll = (): void => {
+    setSelectedDocs([]);
+    setDocQuantities({});
   };
 
   const addAbn = (): void => {
@@ -86,6 +116,18 @@ export default function DocumentSelector(): React.ReactElement {
     }
   };
 
+  const getTotalCopies = (): number => {
+    if (isBulkMode) {
+      return selectedDocs.length * bulkQuantity;
+    }
+    return selectedDocs.reduce((total, path) => total + (docQuantities[path] || 1), 0);
+  };
+
+  const getDocumentName = (path: string): string => {
+    const doc = allForms.find(f => f.path === path);
+    return doc ? doc.name : path.split('/').pop() || path;
+  };
+
   const handlePrint = (): void => {
     if (selectedDocs.length === 0) {
       alert('Please select at least one document to print');
@@ -93,7 +135,10 @@ export default function DocumentSelector(): React.ReactElement {
     }
     
     selectedDocs.forEach(path => {
-      window.open(path, '_blank');
+      const copies = isBulkMode ? bulkQuantity : (docQuantities[path] || 1);
+      for (let i = 0; i < copies; i++) {
+        window.open(path, '_blank');
+      }
     });
   };
 
@@ -121,6 +166,136 @@ export default function DocumentSelector(): React.ReactElement {
 
   return (
     <div>
+      {/* Floating Print Bar */}
+      <div style={{ 
+        position: 'sticky', 
+        top: 0, 
+        zIndex: 100, 
+        backgroundColor: selectedDocs.length > 0 ? '#e7f3ff' : '#f8f9fa',
+        border: '1px solid #dee2e6',
+        borderRadius: '8px',
+        padding: '1rem',
+        marginBottom: '1rem',
+        boxShadow: selectedDocs.length > 0 ? '0 2px 8px rgba(0,0,0,0.1)' : 'none',
+        transition: 'all 0.2s ease'
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <span style={{ fontWeight: 'bold', fontSize: '1.1em' }}>
+              🛒 Print Queue: {selectedDocs.length} {selectedDocs.length === 1 ? 'item' : 'items'}
+            </span>
+            {selectedDocs.length > 0 && (
+              <>
+                <button
+                  className={`button button--sm ${isBulkMode ? 'button--primary' : 'button--outline'}`}
+                  onClick={() => setIsBulkMode(!isBulkMode)}
+                >
+                  {isBulkMode ? 'Bulk Mode' : 'Individual Mode'}
+                </button>
+                {isBulkMode && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <span>All:</span>
+                    <select
+                      value={bulkQuantity}
+                      onChange={(e) => setBulkQuantity(Number(e.target.value))}
+                      style={{ padding: '0.25rem' }}
+                    >
+                      {[1,2,3,4,5,10,15,20,25,50].map(n => (
+                        <option key={n} value={n}>{n}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+                <button
+                  className="button button--outline button--sm"
+                  onClick={() => setShowQueueDetails(!showQueueDetails)}
+                >
+                  {showQueueDetails ? 'Hide Details' : 'Show Details'}
+                </button>
+              </>
+            )}
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            {selectedDocs.length > 0 && (
+              <span style={{ fontSize: '0.9em', color: '#666' }}>
+                Total: {getTotalCopies()} copies
+              </span>
+            )}
+            <button
+              className="button button--primary"
+              onClick={handlePrint}
+              disabled={selectedDocs.length === 0}
+              style={{ fontWeight: 'bold' }}
+            >
+              PRINT {selectedDocs.length > 0 ? getTotalCopies() : ''} ↗
+            </button>
+          </div>
+        </div>
+
+        {/* Queue Details */}
+        {showQueueDetails && selectedDocs.length > 0 && (
+          <div style={{ 
+            marginTop: '1rem', 
+            padding: '1rem', 
+            backgroundColor: '#fff', 
+            borderRadius: '4px',
+            border: '1px solid #e9ecef'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+              <h4 style={{ margin: 0 }}>Selected Documents</h4>
+              <button
+                className="button button--outline button--sm"
+                onClick={clearAll}
+              >
+                Clear All
+              </button>
+            </div>
+            {selectedDocs.map(path => (
+              <div key={path} style={{ 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                alignItems: 'center',
+                padding: '0.5rem',
+                backgroundColor: '#f8f9fa',
+                borderRadius: '4px',
+                marginBottom: '0.5rem'
+              }}>
+                <span style={{ flex: 1 }}>{getDocumentName(path)}</span>
+                {!isBulkMode && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <button
+                      className="button button--outline button--sm"
+                      onClick={() => updateQuantity(path, (docQuantities[path] || 1) - 1)}
+                      disabled={(docQuantities[path] || 1) <= 1}
+                    >
+                      -
+                    </button>
+                    <span style={{ minWidth: '2rem', textAlign: 'center' }}>
+                      {docQuantities[path] || 1}
+                    </span>
+                    <button
+                      className="button button--outline button--sm"
+                      onClick={() => updateQuantity(path, (docQuantities[path] || 1) + 1)}
+                      disabled={(docQuantities[path] || 1) >= 99}
+                    >
+                      +
+                    </button>
+                  </div>
+                )}
+                <button
+                  className="button button--outline button--sm"
+                  onClick={() => removeDocument(path)}
+                  style={{ marginLeft: '0.5rem', color: '#dc3545' }}
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div>
       {/* Screening Forms */}
       <div className="card margin-bottom--md">
         <div className="card__header">
@@ -251,18 +426,7 @@ export default function DocumentSelector(): React.ReactElement {
         )}
       </div>
       
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span>
-          {selectedDocs.length} document{selectedDocs.length !== 1 ? 's' : ''} selected
-        </span>
-        <button 
-          className="button button--primary"
-          onClick={handlePrint}
-          disabled={selectedDocs.length === 0}
-        >
-          Print Selected Documents
-        </button>
-      </div>
+    </div>
     </div>
   );
 }
