@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 interface Document {
   name: string;
@@ -8,37 +8,55 @@ interface Document {
   color?: string;
 }
 
-const LOCATIONS = ['55th Street', '61st Street', 'Beekman', 'Broadway', 'DHK', 'LIC', 'Spiral', 'York'];
-const INVOICE_TYPES = ['CT', 'MRI', 'PET (FDG)', 'PET', 'US', 'Mammo', 'Xray'];
+type SectionVisibility = Record<string, boolean>;
+type ModalityColors = Record<string, string>;
 
+// Constants
+const LOCATIONS = ['55th Street', '61st Street', 'Beekman', 'Broadway', 'DHK', 'LIC', 'Spiral', 'York'] as const;
+const INVOICE_TYPES = ['CT', 'MRI', 'PET (FDG)', 'PET', 'US', 'Mammo', 'Xray'] as const;
+const BULK_QUANTITIES = [1, 2, 3, 4, 5, 10, 15, 20, 25, 50] as const;
+
+const MODALITY_COLORS: ModalityColors = {
+  MRI: '#22c55e',
+  CT: '#3b82f6', 
+  PET: '#8b5cf6',
+  US: '#f97316',
+  DEXA: '#6b7280',
+  Breast: '#ec4899',
+  'X-Ray': '#ef4444',
+  Financial: '#06b6d4',
+  Other: '#64748b'
+};
+
+// Form data
 const SCREENING_FORMS: Document[] = [
-  { name: 'MRI Questionnaire', path: '/documents/MRI Questionnaire.pdf', category: 'screening', modality: 'MRI', color: '#22c55e' },
-  { name: 'MRI Cardiovascular Form', path: '/documents/MRI Cardiovascular Form.pdf', category: 'screening', modality: 'MRI', color: '#22c55e' },
-  { name: 'MRI Gynecologic Questionnaire', path: '/documents/MRI Gynecologic Questionnaire.pdf', category: 'screening', modality: 'MRI', color: '#22c55e' },
-  { name: 'MRI Prostate Questionnaire', path: '/documents/MRI Prostate Questionnaire.pdf', category: 'screening', modality: 'MRI', color: '#22c55e' },
-  { name: 'MRI Screening Non-Patient', path: '/documents/MRI Screening Non-Patient.pdf', category: 'screening', modality: 'MRI', color: '#22c55e' },
+  { name: 'MRI Questionnaire', path: '/documents/MRI Questionnaire.pdf', category: 'screening', modality: 'MRI', color: MODALITY_COLORS.MRI },
+  { name: 'MRI Cardiovascular Form', path: '/documents/MRI Cardiovascular Form.pdf', category: 'screening', modality: 'MRI', color: MODALITY_COLORS.MRI },
+  { name: 'MRI Gynecologic Questionnaire', path: '/documents/MRI Gynecologic Questionnaire.pdf', category: 'screening', modality: 'MRI', color: MODALITY_COLORS.MRI },
+  { name: 'MRI Prostate Questionnaire', path: '/documents/MRI Prostate Questionnaire.pdf', category: 'screening', modality: 'MRI', color: MODALITY_COLORS.MRI },
+  { name: 'MRI Screening Non-Patient', path: '/documents/MRI Screening Non-Patient.pdf', category: 'screening', modality: 'MRI', color: MODALITY_COLORS.MRI },
   
-  { name: 'CT Questionnaire', path: '/documents/CT Questionnaire.pdf', category: 'screening', modality: 'CT', color: '#3b82f6' },
-  { name: 'CT Disease Definitions', path: '/documents/CT Questionnaire Disease Definitions.pdf', category: 'screening', modality: 'CT', color: '#3b82f6' },
-  { name: 'Cardiac Questionnaire', path: '/documents/Cardiac Questionnaire.pdf', category: 'screening', modality: 'CT', color: '#3b82f6' },
+  { name: 'CT Questionnaire', path: '/documents/CT Questionnaire.pdf', category: 'screening', modality: 'CT', color: MODALITY_COLORS.CT },
+  { name: 'CT Disease Definitions', path: '/documents/CT Questionnaire Disease Definitions.pdf', category: 'screening', modality: 'CT', color: MODALITY_COLORS.CT },
+  { name: 'Cardiac Questionnaire', path: '/documents/Cardiac Questionnaire.pdf', category: 'screening', modality: 'CT', color: MODALITY_COLORS.CT },
   
-  { name: 'PETCT Questionnaire', path: '/documents/PETCT Questionnaire.pdf', category: 'screening', modality: 'PET', color: '#8b5cf6' },
-  { name: 'PETMRI Questionnaire', path: '/documents/PETMRI Questionnaire.pdf', category: 'screening', modality: 'PET', color: '#8b5cf6' },
+  { name: 'PETCT Questionnaire', path: '/documents/PETCT Questionnaire.pdf', category: 'screening', modality: 'PET', color: MODALITY_COLORS.PET },
+  { name: 'PETMRI Questionnaire', path: '/documents/PETMRI Questionnaire.pdf', category: 'screening', modality: 'PET', color: MODALITY_COLORS.PET },
   
-  { name: 'Ultrasound General Questionnaire', path: '/documents/Ultrasound General Questionnaire.pdf', category: 'screening', modality: 'US', color: '#f97316' },
-  { name: 'Ultrasound Gynecologic Questionnaire', path: '/documents/Ultrasound Gynecologic Questionnaire.pdf', category: 'screening', modality: 'US', color: '#f97316' },
-  { name: 'Ultrasound Soft Tissue Questionnaire', path: '/documents/Ultrasound Soft Tissue Questionnaire.pdf', category: 'screening', modality: 'US', color: '#f97316' },
+  { name: 'Ultrasound General Questionnaire', path: '/documents/Ultrasound General Questionnaire.pdf', category: 'screening', modality: 'US', color: MODALITY_COLORS.US },
+  { name: 'Ultrasound Gynecologic Questionnaire', path: '/documents/Ultrasound Gynecologic Questionnaire.pdf', category: 'screening', modality: 'US', color: MODALITY_COLORS.US },
+  { name: 'Ultrasound Soft Tissue Questionnaire', path: '/documents/Ultrasound Soft Tissue Questionnaire.pdf', category: 'screening', modality: 'US', color: MODALITY_COLORS.US },
   
-  { name: 'Dexa Questionnaire', path: '/documents/Dexa Questionnaire.pdf', category: 'screening', modality: 'DEXA', color: '#6b7280' },
+  { name: 'Dexa Questionnaire', path: '/documents/Dexa Questionnaire.pdf', category: 'screening', modality: 'DEXA', color: MODALITY_COLORS.DEXA },
   
-  { name: 'X-Ray Questionnaire', path: '/documents/X-Ray Questionnaire.pdf', category: 'screening', modality: 'XRAY', color: '#ef4444' },
-  { name: 'Fluoro Questionnaire', path: '/documents/Fluoro Questionnaire.pdf', category: 'screening', modality: 'XRAY', color: '#ef4444' },
+  { name: 'X-Ray Questionnaire', path: '/documents/X-Ray Questionnaire.pdf', category: 'screening', modality: 'XRAY', color: MODALITY_COLORS['X-Ray'] },
+  { name: 'Fluoro Questionnaire', path: '/documents/Fluoro Questionnaire.pdf', category: 'screening', modality: 'XRAY', color: MODALITY_COLORS['X-Ray'] },
 ];
 
 const BREAST_FORMS: Document[] = [
-  { name: 'Mammogram Visit Confirmation Form', path: '/documents/Mammogram Visit Confirmation Form.pdf', category: 'breast', color: '#ec4899' },
-  { name: 'Mammography History Sheet', path: '/documents/Mammography History Sheet.pdf', category: 'breast', color: '#ec4899' },
-  { name: 'Mammography Recall Form', path: '/documents/AOB Recalled Diag Mammo and Ultrasound Breast -2025.pdf', category: 'breast', color: '#ec4899' },
+  { name: 'Mammogram Visit Confirmation Form', path: '/documents/Mammogram Visit Confirmation Form.pdf', category: 'breast', color: MODALITY_COLORS.Breast },
+  { name: 'Mammography History Sheet', path: '/documents/Mammography History Sheet.pdf', category: 'breast', color: MODALITY_COLORS.Breast },
+  { name: 'Mammography Recall Form', path: '/documents/AOB Recalled Diag Mammo and Ultrasound Breast -2025.pdf', category: 'breast', color: MODALITY_COLORS.Breast },
 ];
 
 const QUICK_ADD_FORMS: Document[] = [
@@ -52,6 +70,11 @@ const OTHER_FORMS: Document[] = [
   { name: 'General Medical Records Release Form', path: '/documents/General Medical Records Release Form.pdf', category: 'other' },
 ];
 
+const FINANCIAL_FORMS = {
+  OFF_HOURS_WAIVER: '/documents/Waiver of Liability Form- Insurance Off-Hours.pdf',
+  SELF_PAY_WAIVER: '/documents/Waiver of Liability Form - Self Pay.pdf',
+} as const;
+
 export default function DocumentSelector(): React.ReactElement {
   const [selectedDocs, setSelectedDocs] = useState<string[]>([]);
   const [docQuantities, setDocQuantities] = useState<Record<string, number>>({});
@@ -60,7 +83,7 @@ export default function DocumentSelector(): React.ReactElement {
   const [isBulkMode, setIsBulkMode] = useState(false);
   const [bulkQuantity, setBulkQuantity] = useState(1);
   const [showQueueDetails, setShowQueueDetails] = useState(false);
-  const [visibleSections, setVisibleSections] = useState({
+  const [visibleSections, setVisibleSections] = useState<SectionVisibility>({
     MRI: true,
     CT: true,
     PET: true,
@@ -72,12 +95,11 @@ export default function DocumentSelector(): React.ReactElement {
     Other: false
   });
   const [searchTerm, setSearchTerm] = useState('');
-  const [viewMode, setViewMode] = useState<'grouped' | 'list'>('grouped');
   const [isPrinting, setIsPrinting] = useState(false);
 
   const allForms = [...SCREENING_FORMS, ...BREAST_FORMS, ...QUICK_ADD_FORMS, ...OTHER_FORMS];
 
-  const toggleSection = (section: string) => {
+  const toggleSection = (section: string): void => {
     setVisibleSections(prev => ({ ...prev, [section]: !prev[section] }));
   };
 
@@ -88,29 +110,30 @@ export default function DocumentSelector(): React.ReactElement {
   const toggleDocument = (path: string): void => {
     setSelectedDocs(prev => {
       if (prev.includes(path)) {
-        // Remove document and its quantity
-        const newQuantities = { ...docQuantities };
-        delete newQuantities[path];
-        setDocQuantities(newQuantities);
+        setDocQuantities(current => {
+          const updated = { ...current };
+          delete updated[path];
+          return updated;
+        });
         return prev.filter(p => p !== path);
       } else {
-        // Add document with default quantity
-        setDocQuantities(prev => ({ ...prev, [path]: 1 }));
+        setDocQuantities(current => ({ ...current, [path]: 1 }));
         return [...prev, path];
       }
     });
   };
 
   const updateQuantity = (path: string, quantity: number): void => {
-    setDocQuantities(prev => ({ ...prev, [path]: Math.max(1, Math.min(99, quantity)) }));
+    const clampedQuantity = Math.max(1, Math.min(99, quantity));
+    setDocQuantities(prev => ({ ...prev, [path]: clampedQuantity }));
   };
 
   const removeDocument = (path: string): void => {
     setSelectedDocs(prev => prev.filter(p => p !== path));
     setDocQuantities(prev => {
-      const newQuantities = { ...prev };
-      delete newQuantities[path];
-      return newQuantities;
+      const updated = { ...prev };
+      delete updated[path];
+      return updated;
     });
   };
 
@@ -119,21 +142,22 @@ export default function DocumentSelector(): React.ReactElement {
     setDocQuantities({});
   };
 
+  const addFormByPath = (path: string): void => {
+    if (!selectedDocs.includes(path)) {
+      setSelectedDocs(prev => [...prev, path]);
+      setDocQuantities(prev => ({ ...prev, [path]: 1 }));
+    }
+  };
+
   const addAbn = (): void => {
     if (selectedAbnLocation) {
-      const abnPath = `/documents/ABN/ABN - ${selectedAbnLocation}.pdf`;
-      if (!selectedDocs.includes(abnPath)) {
-        setSelectedDocs(prev => [...prev, abnPath]);
-      }
+      addFormByPath(`/documents/ABN/ABN - ${selectedAbnLocation}.pdf`);
     }
   };
 
   const addInvoice = (): void => {
     if (selectedInvoiceType) {
-      const invoicePath = `/documents/Invoices/Invoice Form - ${selectedInvoiceType}.pdf`;
-      if (!selectedDocs.includes(invoicePath)) {
-        setSelectedDocs(prev => [...prev, invoicePath]);
-      }
+      addFormByPath(`/documents/Invoices/Invoice Form - ${selectedInvoiceType}.pdf`);
     }
   };
 
@@ -146,40 +170,45 @@ export default function DocumentSelector(): React.ReactElement {
 
   const getDocumentName = (path: string): string => {
     const doc = allForms.find(f => f.path === path);
-    return doc ? doc.name : path.split('/').pop() || path;
+    return doc?.name || path.split('/').pop() || path;
   };
 
-  // Lazy load PDF-lib only when needed
+  // PDF processing functions
   const loadPDFLib = async () => {
-    const { PDFDocument } = await import('pdf-lib');
-    return { PDFDocument };
-  };
-
-  // Fetch PDFs in parallel for efficiency
-  const fetchPDFs = async (paths: string[]) => {
     try {
-      const responses = await Promise.all(
-        paths.map(path => fetch(path).then(response => {
-          if (!response.ok) throw new Error(`Failed to fetch ${path}`);
-          return response.arrayBuffer();
-        }))
-      );
-      return responses;
+      const { PDFDocument } = await import('pdf-lib');
+      return { PDFDocument };
     } catch (error) {
-      console.error('Failed to fetch PDFs:', error);
-      throw error;
+      throw new Error('Failed to load PDF processing library');
     }
   };
 
-  // Efficient PDF merging with memory management
-  const mergePDFs = async (pdfBuffers: ArrayBuffer[], documentPaths: string[]) => {
+  const fetchPDFs = async (paths: string[]): Promise<ArrayBuffer[]> => {
+    const responses = await Promise.allSettled(
+      paths.map(path => 
+        fetch(path).then(response => {
+          if (!response.ok) {
+            throw new Error(`Failed to fetch ${path.split('/').pop()}: ${response.status}`);
+          }
+          return response.arrayBuffer();
+        })
+      )
+    );
+
+    const failed = responses.filter(r => r.status === 'rejected') as PromiseRejectedResult[];
+    if (failed.length > 0) {
+      throw new Error(`Failed to load ${failed.length} document(s)`);
+    }
+
+    return responses.map(r => (r as PromiseFulfilledResult<ArrayBuffer>).value);
+  };
+
+  const mergePDFs = async (pdfBuffers: ArrayBuffer[], documentPaths: string[]): Promise<Uint8Array> => {
     const { PDFDocument } = await loadPDFLib();
     const mergedPdf = await PDFDocument.create();
     
-    // In individual mode, add each document the specified number of times
-    // In bulk mode, add all documents once, then user prints the specified bulk quantity
     if (isBulkMode) {
-      // Bulk mode: add each document once, user will print bulkQuantity copies
+      // Bulk mode: add each document once
       for (const buffer of pdfBuffers) {
         const pdf = await PDFDocument.load(buffer);
         const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
@@ -203,21 +232,18 @@ export default function DocumentSelector(): React.ReactElement {
     return mergedPdf.save();
   };
 
-  // Create blob URL and trigger print
-  const openPrintDialog = (pdfBytes: Uint8Array) => {
+  const openPrintDialog = (pdfBytes: Uint8Array): void => {
     const blob = new Blob([pdfBytes], { type: 'application/pdf' });
     const url = URL.createObjectURL(blob);
     
-    // Open in new window and trigger print dialog
     const printWindow = window.open(url, '_blank');
     if (printWindow) {
-      printWindow.onload = () => {
+      printWindow.addEventListener('load', () => {
         printWindow.print();
-        // Clean up blob URL after a delay
         setTimeout(() => URL.revokeObjectURL(url), 1000);
-      };
+      });
     } else {
-      // Fallback if popup blocked
+      // Fallback for popup blockers
       const link = document.createElement('a');
       link.href = url;
       link.download = 'selected-documents.pdf';
@@ -235,18 +261,13 @@ export default function DocumentSelector(): React.ReactElement {
     setIsPrinting(true);
     
     try {
-      // Fetch all PDFs in parallel
       const pdfBuffers = await fetchPDFs(selectedDocs);
-      
-      // Merge PDFs efficiently
       const mergedPdfBytes = await mergePDFs(pdfBuffers, selectedDocs);
-      
-      // Open print dialog
       openPrintDialog(mergedPdfBytes);
-      
     } catch (error) {
       console.error('Print failed:', error);
-      alert('Failed to prepare documents for printing. Please try again.');
+      const message = error instanceof Error ? error.message : 'Failed to prepare documents for printing';
+      alert(message + '. Please try again.');
     } finally {
       setIsPrinting(false);
     }
@@ -278,6 +299,56 @@ export default function DocumentSelector(): React.ReactElement {
       />
       <span>{form.name}</span>
     </div>
+  );
+
+  const renderToggleSwitch = () => (
+    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9em' }}>
+      <div 
+        style={{ 
+          width: '36px', 
+          height: '20px', 
+          backgroundColor: isBulkMode ? '#0d6efd' : '#dee2e6',
+          borderRadius: '10px',
+          position: 'relative',
+          cursor: 'pointer',
+          transition: 'all 0.2s ease'
+        }} 
+        onClick={() => setIsBulkMode(!isBulkMode)}
+      >
+        <div style={{
+          width: '16px',
+          height: '16px',
+          backgroundColor: 'white',
+          borderRadius: '50%',
+          position: 'absolute',
+          top: '2px',
+          left: isBulkMode ? '18px' : '2px',
+          transition: 'all 0.2s ease',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+        }} />
+      </div>
+      Bulk
+    </label>
+  );
+
+  const renderSectionButton = (section: string, isVisible: boolean) => (
+    <button
+      key={section}
+      onClick={() => toggleSection(section)}
+      style={{
+        padding: '0.375rem 0.75rem',
+        border: `2px solid ${isVisible ? MODALITY_COLORS[section] : '#d1d5db'}`,
+        backgroundColor: 'transparent',
+        color: isVisible ? MODALITY_COLORS[section] : '#9ca3af',
+        borderRadius: '20px',
+        fontSize: '0.8em',
+        fontWeight: '500',
+        cursor: 'pointer',
+        transition: 'all 0.2s ease'
+      }}
+    >
+      {section}
+    </button>
   );
 
   return (
@@ -313,37 +384,14 @@ export default function DocumentSelector(): React.ReactElement {
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             {selectedDocs.length > 0 && (
               <>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9em' }}>
-                  <div style={{ 
-                    width: '36px', 
-                    height: '20px', 
-                    backgroundColor: isBulkMode ? '#0d6efd' : '#dee2e6',
-                    borderRadius: '10px',
-                    position: 'relative',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease'
-                  }} onClick={() => setIsBulkMode(!isBulkMode)}>
-                    <div style={{
-                      width: '16px',
-                      height: '16px',
-                      backgroundColor: 'white',
-                      borderRadius: '50%',
-                      position: 'absolute',
-                      top: '2px',
-                      left: isBulkMode ? '18px' : '2px',
-                      transition: 'all 0.2s ease',
-                      boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-                    }} />
-                  </div>
-                  Bulk
-                </label>
+                {renderToggleSwitch()}
                 {isBulkMode && (
                   <select
                     value={bulkQuantity}
                     onChange={(e) => setBulkQuantity(Number(e.target.value))}
                     style={{ padding: '0.25rem', fontSize: '0.9em' }}
                   >
-                    {[1,2,3,4,5,10,15,20,25,50].map(n => (
+                    {BULK_QUANTITIES.map(n => (
                       <option key={n} value={n}>{n}</option>
                     ))}
                   </select>
@@ -446,38 +494,9 @@ export default function DocumentSelector(): React.ReactElement {
       {/* View Controls */}
       <div style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-          {Object.entries(visibleSections).map(([section, isVisible]) => {
-            const colors = {
-              MRI: '#22c55e',
-              CT: '#3b82f6', 
-              PET: '#8b5cf6',
-              US: '#f97316',
-              DEXA: '#6b7280',
-              Breast: '#ec4899',
-              'X-Ray': '#ef4444',
-              Financial: '#06b6d4',
-              Other: '#64748b'
-            };
-            return (
-              <button
-                key={section}
-                onClick={() => toggleSection(section)}
-                style={{
-                  padding: '0.375rem 0.75rem',
-                  border: `2px solid ${isVisible ? colors[section] : '#d1d5db'}`,
-                  backgroundColor: 'transparent',
-                  color: isVisible ? colors[section] : '#9ca3af',
-                  borderRadius: '20px',
-                  fontSize: '0.8em',
-                  fontWeight: '500',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease'
-                }}
-              >
-                {section}
-              </button>
-            );
-          })}
+          {Object.entries(visibleSections).map(([section, isVisible]) => 
+            renderSectionButton(section, isVisible)
+          )}
         </div>
         {isBulkMode && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -510,49 +529,49 @@ export default function DocumentSelector(): React.ReactElement {
             {/* Screening Forms by Modality */}
             {visibleSections.MRI && (
               <div style={{ marginBottom: '0.75rem' }}>
-                <h4 style={{ margin: '0 0 0.5rem 0', color: '#22c55e', fontSize: '1rem' }}>MRI Forms</h4>
+                <h4 style={{ margin: '0 0 0.5rem 0', color: MODALITY_COLORS.MRI, fontSize: '1rem' }}>MRI Forms</h4>
                 {SCREENING_FORMS.filter(f => f.modality === 'MRI').map(renderFormCheckbox)}
               </div>
             )}
             
             {visibleSections.CT && (
               <div style={{ marginBottom: '0.75rem' }}>
-                <h4 style={{ margin: '0 0 0.5rem 0', color: '#3b82f6', fontSize: '1rem' }}>CT Forms</h4>
+                <h4 style={{ margin: '0 0 0.5rem 0', color: MODALITY_COLORS.CT, fontSize: '1rem' }}>CT Forms</h4>
                 {SCREENING_FORMS.filter(f => f.modality === 'CT').map(renderFormCheckbox)}
               </div>
             )}
             
             {visibleSections.PET && (
               <div style={{ marginBottom: '0.75rem' }}>
-                <h4 style={{ margin: '0 0 0.5rem 0', color: '#8b5cf6', fontSize: '1rem' }}>PET Forms</h4>
+                <h4 style={{ margin: '0 0 0.5rem 0', color: MODALITY_COLORS.PET, fontSize: '1rem' }}>PET Forms</h4>
                 {SCREENING_FORMS.filter(f => f.modality === 'PET').map(renderFormCheckbox)}
               </div>
             )}
             
             {visibleSections.US && (
               <div style={{ marginBottom: '0.75rem' }}>
-                <h4 style={{ margin: '0 0 0.5rem 0', color: '#f97316', fontSize: '1rem' }}>Ultrasound Forms</h4>
+                <h4 style={{ margin: '0 0 0.5rem 0', color: MODALITY_COLORS.US, fontSize: '1rem' }}>Ultrasound Forms</h4>
                 {SCREENING_FORMS.filter(f => f.modality === 'US').map(renderFormCheckbox)}
               </div>
             )}
             
             {visibleSections.DEXA && (
               <div style={{ marginBottom: '0.75rem' }}>
-                <h4 style={{ margin: '0 0 0.5rem 0', color: '#6b7280', fontSize: '1rem' }}>DEXA Forms</h4>
+                <h4 style={{ margin: '0 0 0.5rem 0', color: MODALITY_COLORS.DEXA, fontSize: '1rem' }}>DEXA Forms</h4>
                 {SCREENING_FORMS.filter(f => f.modality === 'DEXA').map(renderFormCheckbox)}
               </div>
             )}
             
             {visibleSections.Breast && (
               <div style={{ marginBottom: '0.75rem' }}>
-                <h4 style={{ margin: '0 0 0.5rem 0', color: '#ec4899', fontSize: '1rem' }}>Breast Imaging Forms</h4>
+                <h4 style={{ margin: '0 0 0.5rem 0', color: MODALITY_COLORS.Breast, fontSize: '1rem' }}>Breast Imaging Forms</h4>
                 {BREAST_FORMS.map(renderFormCheckbox)}
               </div>
             )}
             
             {visibleSections['X-Ray'] && (
               <div style={{ marginBottom: '0.75rem' }}>
-                <h4 style={{ margin: '0 0 0.5rem 0', color: '#ef4444', fontSize: '1rem' }}>X-Ray Forms</h4>
+                <h4 style={{ margin: '0 0 0.5rem 0', color: MODALITY_COLORS['X-Ray'], fontSize: '1rem' }}>X-Ray Forms</h4>
                 {SCREENING_FORMS.filter(f => f.modality === 'XRAY').map(renderFormCheckbox)}
               </div>
             )}
@@ -560,21 +579,21 @@ export default function DocumentSelector(): React.ReactElement {
             {/* Financial Forms */}
             {visibleSections.Financial && (
               <div style={{ marginBottom: '0.75rem' }}>
-                <h4 style={{ margin: '0 0 0.5rem 0', color: '#06b6d4', fontSize: '1rem' }}>Financial Forms</h4>
+                <h4 style={{ margin: '0 0 0.5rem 0', color: MODALITY_COLORS.Financial, fontSize: '1rem' }}>Financial Forms</h4>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center', fontSize: '0.9em' }}>
                   <label style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                     <input
                       type="checkbox"
-                      checked={selectedDocs.includes('/documents/Waiver of Liability Form- Insurance Off-Hours.pdf')}
-                      onChange={() => toggleDocument('/documents/Waiver of Liability Form- Insurance Off-Hours.pdf')}
+                      checked={selectedDocs.includes(FINANCIAL_FORMS.OFF_HOURS_WAIVER)}
+                      onChange={() => toggleDocument(FINANCIAL_FORMS.OFF_HOURS_WAIVER)}
                     />
                     Off-Hours Waiver
                   </label>
                   <label style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                     <input
                       type="checkbox"
-                      checked={selectedDocs.includes('/documents/Waiver of Liability Form - Self Pay.pdf')}
-                      onChange={() => toggleDocument('/documents/Waiver of Liability Form - Self Pay.pdf')}
+                      checked={selectedDocs.includes(FINANCIAL_FORMS.SELF_PAY_WAIVER)}
+                      onChange={() => toggleDocument(FINANCIAL_FORMS.SELF_PAY_WAIVER)}
                     />
                     Self-Pay Waiver
                   </label>
@@ -627,7 +646,7 @@ export default function DocumentSelector(): React.ReactElement {
             {/* Other Forms */}
             {visibleSections.Other && (
               <div style={{ marginBottom: '0.75rem' }}>
-                <h4 style={{ margin: '0 0 0.5rem 0', color: '#64748b', fontSize: '1rem' }}>Other Forms</h4>
+                <h4 style={{ margin: '0 0 0.5rem 0', color: MODALITY_COLORS.Other, fontSize: '1rem' }}>Other Forms</h4>
                 {OTHER_FORMS.map(renderFormCheckbox)}
               </div>
             )}
