@@ -421,11 +421,30 @@ export default function DocumentSelector(): React.ReactElement {
   );
 
   return (
-    <div style={{ scrollBehavior: 'smooth' }}>
-      {/* Section Controls */}
-      <div style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+    <div style={{ 
+      display: 'flex',
+      minHeight: '100vh',
+      backgroundColor: '#f8f9fa'
+    }}>
+      {/* Sidebar */}
+      <div style={{
+        width: '280px',
+        backgroundColor: '#ffffff',
+        borderRight: '1px solid #dee2e6',
+        position: 'fixed',
+        height: '100vh',
+        overflowY: 'auto',
+        zIndex: 100,
+        padding: '1.5rem 1rem',
+        boxShadow: '2px 0 8px rgba(0,0,0,0.1)',
+        '@media (max-width: 768px)': {
+          transform: 'translateX(-100%)',
+          transition: 'transform 0.3s ease'
+        }
+      }}>
         {/* Search */}
-        <div style={{ marginRight: '1rem', flex: '0 0 300px' }}>
+        <div style={{ marginBottom: '1.5rem' }}>
+          <h3 style={{ margin: '0 0 0.75rem 0', fontSize: '1.1rem', fontWeight: '600', color: '#374151' }}>Search Documents</h3>
           <input
             type="text"
             placeholder="🔍 Search forms..."
@@ -433,310 +452,228 @@ export default function DocumentSelector(): React.ReactElement {
             onChange={(e) => setSearchTerm(e.target.value)}
             style={{ 
               width: '100%',
-              padding: '0.375rem 0.75rem', 
-              border: '1px solid #d1d5db', 
-              borderRadius: '20px',
-              fontSize: '0.9em'
+              padding: '0.75rem', 
+              border: '2px solid #e5e7eb', 
+              borderRadius: '8px',
+              fontSize: '0.9em',
+              transition: 'border-color 0.2s ease'
             }}
+            onFocus={(e) => e.target.style.borderColor = '#3b82f6'}
+            onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
           />
         </div>
 
-        {(() => {
-          const totalSections = Object.keys(visibleSections).length;
-          const visibleCount = Object.values(visibleSections).filter(Boolean).length;
-          const hiddenCount = totalSections - visibleCount;
+        {/* Cart Summary */}
+        <div style={{ 
+          marginBottom: '1.5rem',
+          padding: '1rem',
+          backgroundColor: selectedDocs.length > 0 ? '#eff6ff' : '#f9fafb',
+          borderRadius: '8px',
+          border: selectedDocs.length > 0 ? '2px solid #3b82f6' : '1px solid #e5e7eb',
+          transition: 'all 0.2s ease'
+        }}>
+          <h3 style={{ margin: '0 0 0.75rem 0', fontSize: '1.1rem', fontWeight: '600', color: '#374151' }}>
+            Print Queue ({selectedDocs.length})
+          </h3>
           
-          // Show "Expand All" when majority are hidden (60% or more)
-          const shouldEnableExpandAll = hiddenCount >= Math.ceil(totalSections * 0.6);
-          // Show "Collapse All" when most are visible (75% or more) 
-          const shouldEnableCollapseAll = visibleCount >= Math.ceil(totalSections * 0.75);
-          
-          return (
-            <div style={{ display: 'flex', gap: '0.5rem', marginRight: '0.5rem' }}>
-              <button
-                onClick={selectAllSections}
-                disabled={!shouldEnableExpandAll}
-                style={{ 
-                  padding: '0.375rem 0.75rem',
-                  fontSize: '0.8em',
-                  fontWeight: '500',
-                  backgroundColor: shouldEnableExpandAll ? '#f8f9fa' : '#f8f9fa',
-                  color: shouldEnableExpandAll ? '#495057' : '#dee2e6',
-                  border: `1px solid ${shouldEnableExpandAll ? '#dee2e6' : '#f1f3f5'}`,
-                  borderRadius: '20px',
-                  cursor: shouldEnableExpandAll ? 'pointer' : 'not-allowed',
-                  transition: 'all 0.2s ease',
-                  opacity: shouldEnableExpandAll ? 1 : 0.5,
-                  minWidth: '115px'
-                }}
-                onMouseEnter={(e) => {
-                  if (shouldEnableExpandAll) {
-                    e.currentTarget.style.backgroundColor = '#22c55e';
-                    e.currentTarget.style.color = 'white';
-                    e.currentTarget.style.borderColor = '#22c55e';
-                    e.currentTarget.style.transform = 'translateY(-1px)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (shouldEnableExpandAll) {
-                    e.currentTarget.style.backgroundColor = '#f8f9fa';
-                    e.currentTarget.style.color = '#495057';
-                    e.currentTarget.style.borderColor = '#dee2e6';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }
-                }}
-              >
-                ↗ Expand All {shouldEnableExpandAll && hiddenCount > 0 ? `(${hiddenCount})` : ''}
-              </button>
-              
-              <button
-                onClick={unselectAllSections}
-                disabled={!shouldEnableCollapseAll}
-                style={{ 
-                  padding: '0.375rem 0.75rem',
-                  fontSize: '0.8em',
-                  fontWeight: '500',
-                  backgroundColor: shouldEnableCollapseAll ? '#f8f9fa' : '#f8f9fa',
-                  color: shouldEnableCollapseAll ? '#495057' : '#dee2e6',
-                  border: `1px solid ${shouldEnableCollapseAll ? '#dee2e6' : '#f1f3f5'}`,
-                  borderRadius: '20px',
-                  cursor: shouldEnableCollapseAll ? 'pointer' : 'not-allowed',
-                  transition: 'all 0.2s ease',
-                  opacity: shouldEnableCollapseAll ? 1 : 0.5,
-                  minWidth: '115px'
-                }}
-                onMouseEnter={(e) => {
-                  if (shouldEnableCollapseAll) {
-                    e.currentTarget.style.backgroundColor = '#6c757d';
-                    e.currentTarget.style.color = 'white';
-                    e.currentTarget.style.borderColor = '#6c757d';
-                    e.currentTarget.style.transform = 'translateY(-1px)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (shouldEnableCollapseAll) {
-                    e.currentTarget.style.backgroundColor = '#f8f9fa';
-                    e.currentTarget.style.color = '#495057';
-                    e.currentTarget.style.borderColor = '#dee2e6';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }
-                }}
-              >
-                ↙ Collapse All
-              </button>
-            </div>
-          );
-        })()}
-        
-        {Object.entries(visibleSections).map(([section, isVisible]) => 
-          renderSectionButton(section, isVisible)
-        )}
-      </div>
-
-      {/* Comprehensive Header Bar */}
-      <div style={{ 
-        position: 'sticky', 
-        top: '1rem', 
-        zIndex: 100, 
-        backgroundColor: '#ffffff',
-        border: '1px solid #dee2e6',
-        borderRadius: '12px',
-        padding: '1rem',
-        marginBottom: '1.5rem',
-        marginTop: '1rem',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-        transition: 'box-shadow 0.2s ease, border-color 0.2s ease',
-        ...(selectedDocs.length > 0 && {
-          borderColor: '#0d6efd',
-          boxShadow: '0 4px 12px rgba(13,110,253,0.15)'
-        })
-      }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-          {/* Left: Cart Info */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minHeight: '2rem' }}>
+          <div style={{ marginBottom: '0.75rem' }}>
             <span style={{ 
-              fontWeight: 'bold',
-              color: selectedDocs.length > 0 ? '#0d6efd' : '#6c757d',
-              transition: 'color 0.2s ease'
+              fontSize: '0.9em',
+              color: selectedDocs.length > 0 ? '#1d4ed8' : '#6b7280',
+              fontWeight: '500'
             }}>
-              🛒 {selectedDocs.length} items{selectedDocs.length > 0 ? `, ${getTotalCopies()} copies` : ''}
+              {selectedDocs.length} items, {getTotalCopies()} copies
             </span>
-            {selectedDocs.length > 0 && (
-              <button
-                className="button button--outline button--sm"
-                onClick={clearSelectedDocs}
-                style={{ padding: '0.25rem 0.5rem', fontSize: '0.8em', color: '#dc3545' }}
-              >
-                Clear Cart
-              </button>
-            )}
-            {selectedDocs.length > 0 && (
-              <button
-                className="button button--outline button--sm"
-                onClick={() => setShowQueueDetails(!showQueueDetails)}
-                style={{ padding: '0.25rem 0.5rem' }}
-              >
-                Details {showQueueDetails ? '▲' : '▼'}
-              </button>
-            )}
           </div>
 
-
-          {/* Right: Quick Add + Controls + Print */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            {/* Quick Add removed - moved to Other Forms section */}
-
-            {/* Bulk Toggle */}
-            {selectedDocs.length > 0 && (
-              <>
+          {selectedDocs.length > 0 && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              {/* Bulk Toggle */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 {renderToggleSwitch()}
                 {isBulkMode && (
                   <select
                     value={bulkQuantity}
                     onChange={(e) => setBulkQuantity(Number(e.target.value))}
-                    style={{ padding: '0.25rem', fontSize: '0.9em' }}
+                    style={{ 
+                      padding: '0.25rem', 
+                      fontSize: '0.85em',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '4px'
+                    }}
                   >
                     {BULK_QUANTITIES.map(n => (
                       <option key={n} value={n}>{n}</option>
                     ))}
                   </select>
                 )}
-              </>
-            )}
+              </div>
 
-            {/* Print Button */}
-            <button
-              className="button button--primary"
-              onClick={handlePrint}
-              disabled={selectedDocs.length === 0 || isPrinting}
-              style={{ fontWeight: 'bold', padding: '0.5rem 1rem' }}
-            >
-              {isPrinting ? 'Preparing...' : `PRINT ${selectedDocs.length > 0 ? getTotalCopies() : ''} ↗`}
-            </button>
-          </div>
-        </div>
-
-        {/* Selected Documents - Always Show When Items in Cart */}
-        <div style={{ 
-          marginTop: '0.75rem',
-          maxHeight: selectedDocs.length > 0 ? '150px' : '0',
-          overflow: selectedDocs.length > 0 ? 'auto' : 'hidden',
-          transition: 'max-height 0.3s ease, opacity 0.2s ease',
-          opacity: selectedDocs.length > 0 ? 1 : 0,
-          position: 'relative',
-          zIndex: 50
-        }}>
-          {selectedDocs.length > 0 && (
-            <div style={{ 
-              padding: '0.75rem', 
-              backgroundColor: '#f8f9fa', 
-              borderRadius: '8px',
-              border: '1px solid #e9ecef'
-            }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-              <span style={{ fontWeight: 'bold', fontSize: '0.9em' }}>Selected Documents</span>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
+              {/* Action Buttons */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 <button
-                  className="button button--outline button--sm"
-                  onClick={() => setShowQueueDetails(!showQueueDetails)}
-                  style={{ padding: '0.25rem 0.5rem', fontSize: '0.8em' }}
+                  className="button button--primary"
+                  onClick={handlePrint}
+                  disabled={isPrinting}
+                  style={{ 
+                    width: '100%',
+                    fontWeight: 'bold', 
+                    padding: '0.75rem'
+                  }}
                 >
-                  {showQueueDetails ? 'Hide Details' : 'Show Details'}
+                  {isPrinting ? 'Preparing...' : `PRINT ${getTotalCopies()} ↗`}
                 </button>
+                
                 <button
-                  className="button button--outline button--sm"
+                  className="button button--outline"
                   onClick={clearSelectedDocs}
-                  style={{ padding: '0.25rem 0.5rem', fontSize: '0.8em' }}
+                  style={{ 
+                    width: '100%',
+                    padding: '0.5rem',
+                    fontSize: '0.85em',
+                    color: '#dc3545',
+                    borderColor: '#dc3545'
+                  }}
                 >
                   Clear All
                 </button>
               </div>
-            </div>
-            {/* Compact view - just document count and names */}
-            {!showQueueDetails ? (
-              <div style={{ fontSize: '0.85em', color: '#666' }}>
-                {selectedDocs.slice(0, 3).map(path => getDocumentName(path)).join(', ')}
-                {selectedDocs.length > 3 && ` +${selectedDocs.length - 3} more`}
-              </div>
-            ) : (
-              /* Detailed view with quantity controls */
-              selectedDocs.map(path => (
-                <div key={path} style={{ 
-                  display: 'flex', 
-                  justifyContent: 'space-between', 
-                  alignItems: 'center',
-                  padding: '0.375rem',
-                  backgroundColor: '#f8f9fa',
-                  borderRadius: '3px',
-                  marginBottom: '0.25rem',
-                  fontSize: '0.9em'
-                }}>
-                  <span style={{ flex: 1 }}>{getDocumentName(path)}</span>
-                  {!isBulkMode && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                      <button
-                        className="button button--outline button--sm"
-                        onClick={() => updateQuantity(path, (docQuantities[path] || 1) - 1)}
-                        disabled={(docQuantities[path] || 1) <= 1}
-                        style={{ padding: '0.125rem 0.375rem', fontSize: '0.8em' }}
-                      >
-                        -
-                      </button>
-                      <span style={{ minWidth: '1.5rem', textAlign: 'center', fontSize: '0.8em' }}>
-                        {docQuantities[path] || 1}
-                      </span>
-                      <button
-                        className="button button--outline button--sm"
-                        onClick={() => updateQuantity(path, (docQuantities[path] || 1) + 1)}
-                        disabled={(docQuantities[path] || 1) >= 99}
-                        style={{ padding: '0.125rem 0.375rem', fontSize: '0.8em' }}
-                      >
-                        +
-                      </button>
-                    </div>
-                  )}
-                  <button
-                    className="button button--outline button--sm"
-                    onClick={() => removeDocument(path)}
-                    style={{ marginLeft: '0.5rem', color: '#dc3545', padding: '0.125rem 0.375rem', fontSize: '0.8em' }}
-                  >
-                    ×
-                  </button>
+
+              {/* Selected Items Preview */}
+              <div style={{ 
+                marginTop: '0.5rem',
+                padding: '0.75rem',
+                backgroundColor: '#ffffff',
+                borderRadius: '6px',
+                border: '1px solid #e5e7eb',
+                maxHeight: '120px',
+                overflowY: 'auto'
+              }}>
+                <div style={{ fontSize: '0.8em', fontWeight: '600', marginBottom: '0.5rem', color: '#374151' }}>
+                  Selected:
                 </div>
-              ))
-            )}
+                {selectedDocs.slice(0, 5).map(path => (
+                  <div key={path} style={{ 
+                    fontSize: '0.75em', 
+                    color: '#6b7280',
+                    marginBottom: '0.25rem',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                  }}>
+                    <span>{getDocumentName(path)}</span>
+                    <span>×{docQuantities[path] || 1}</span>
+                  </div>
+                ))}
+                {selectedDocs.length > 5 && (
+                  <div style={{ fontSize: '0.75em', color: '#9ca3af', fontStyle: 'italic' }}>
+                    +{selectedDocs.length - 5} more items
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>
+
+        {/* Quick Add */}
+        <div style={{ marginBottom: '1.5rem' }}>
+          <h3 style={{ margin: '0 0 0.75rem 0', fontSize: '1.1rem', fontWeight: '600', color: '#374151' }}>Quick Add</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            <label style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '0.5rem', 
+              padding: '0.5rem',
+              backgroundColor: selectedDocs.includes(QUICK_ADD_PATHS.CHAPERONE) ? '#eff6ff' : '#f9fafb',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              transition: 'background-color 0.2s ease'
+            }}>
+              <input
+                type="checkbox"
+                checked={selectedDocs.includes(QUICK_ADD_PATHS.CHAPERONE)}
+                onChange={() => toggleDocument(QUICK_ADD_PATHS.CHAPERONE)}
+                style={{ margin: 0 }}
+              />
+              <span style={{ fontSize: '0.9em', fontWeight: '500' }}>Medical Chaperone</span>
+            </label>
+            <label style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '0.5rem', 
+              padding: '0.5rem',
+              backgroundColor: selectedDocs.includes(QUICK_ADD_PATHS.MINOR_AUTH) ? '#eff6ff' : '#f9fafb',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              transition: 'background-color 0.2s ease'
+            }}>
+              <input
+                type="checkbox"
+                checked={selectedDocs.includes(QUICK_ADD_PATHS.MINOR_AUTH)}
+                onChange={() => toggleDocument(QUICK_ADD_PATHS.MINOR_AUTH)}
+                style={{ margin: 0 }}
+              />
+              <span style={{ fontSize: '0.9em', fontWeight: '500' }}>Minor Authorization</span>
+            </label>
+          </div>
+        </div>
+
+        {/* Section Filters */}
+        <div>
+          <h3 style={{ margin: '0 0 0.75rem 0', fontSize: '1.1rem', fontWeight: '600', color: '#374151' }}>Form Sections</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            {Object.entries(visibleSections).map(([section, isVisible]) => (
+              <button
+                key={section}
+                onClick={() => toggleSection(section)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '0.5rem 0.75rem',
+                  backgroundColor: isVisible ? MODALITY_COLORS[section] : '#f9fafb',
+                  color: isVisible ? 'white' : '#6b7280',
+                  border: 'none',
+                  borderRadius: '6px',
+                  fontSize: '0.85em',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  textAlign: 'left'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isVisible) {
+                    e.currentTarget.style.backgroundColor = '#f3f4f6';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isVisible) {
+                    e.currentTarget.style.backgroundColor = '#f9fafb';
+                  }
+                }}
+              >
+                <span>{section}</span>
+                <span style={{ fontSize: '0.75em' }}>
+                  {isVisible ? '●' : '○'}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
-      <div>
-        {/* Quick Add Forms - Always at Top */}
-        {!searchTerm && (
-          <div style={{ marginBottom: '1rem', padding: '0.75rem', backgroundColor: '#f8f9fa', borderRadius: '8px', border: '1px solid #e9ecef' }}>
-            <h4 style={{ margin: '0 0 0.75rem 0', fontSize: '1rem', color: '#495057' }}>Quick Add</h4>
-            <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.95em', fontWeight: '500' }}>
-                <input
-                  type="checkbox"
-                  checked={selectedDocs.includes(QUICK_ADD_PATHS.CHAPERONE)}
-                  onChange={() => toggleDocument(QUICK_ADD_PATHS.CHAPERONE)}
-                  style={{ margin: 0, transform: 'scale(1.1)' }}
-                />
-                Medical Chaperone Form
-              </label>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.95em', fontWeight: '500' }}>
-                <input
-                  type="checkbox"
-                  checked={selectedDocs.includes(QUICK_ADD_PATHS.MINOR_AUTH)}
-                  onChange={() => toggleDocument(QUICK_ADD_PATHS.MINOR_AUTH)}
-                  style={{ margin: 0, transform: 'scale(1.1)' }}
-                />
-                Minor Authorization Form
-              </label>
-            </div>
-          </div>
-        )}
+      {/* Main Content Area */}
+      <div style={{
+        marginLeft: '280px',
+        padding: '2rem',
+        flex: 1,
+        minHeight: '100vh',
+        '@media (max-width: 768px)': {
+          marginLeft: '0',
+          padding: '1rem'
+        }
+      }}>
+        <div style={{ maxWidth: '1200px' }}>
 
         {/* Search Results */}
         {searchTerm ? (
@@ -913,6 +850,7 @@ export default function DocumentSelector(): React.ReactElement {
             )}
           </>
         )}
+        </div>
       </div>
       
     </div>
