@@ -75,6 +75,11 @@ const FINANCIAL_FORMS = {
   SELF_PAY_WAIVER: '/documents/Waiver of Liability Form - Self Pay.pdf',
 } as const;
 
+const QUICK_ADD_PATHS = {
+  CHAPERONE: '/documents/Outpatient Medical Chaperone Form.pdf',
+  MINOR_AUTH: '/documents/Minor Auth Form.pdf',
+} as const;
+
 export default function DocumentSelector(): React.ReactElement {
   const [selectedDocs, setSelectedDocs] = useState<string[]>([]);
   const [docQuantities, setDocQuantities] = useState<Record<string, number>>({});
@@ -429,8 +434,8 @@ export default function DocumentSelector(): React.ReactElement {
               <label style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                 <input
                   type="checkbox"
-                  checked={selectedDocs.includes('/documents/Outpatient Medical Chaperone Form.pdf')}
-                  onChange={() => toggleDocument('/documents/Outpatient Medical Chaperone Form.pdf')}
+                  checked={selectedDocs.includes(QUICK_ADD_PATHS.CHAPERONE)}
+                  onChange={() => toggleDocument(QUICK_ADD_PATHS.CHAPERONE)}
                   style={{ margin: 0 }}
                 />
                 Chap
@@ -438,8 +443,8 @@ export default function DocumentSelector(): React.ReactElement {
               <label style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                 <input
                   type="checkbox"
-                  checked={selectedDocs.includes('/documents/Minor Auth Form.pdf')}
-                  onChange={() => toggleDocument('/documents/Minor Auth Form.pdf')}
+                  checked={selectedDocs.includes(QUICK_ADD_PATHS.MINOR_AUTH)}
+                  onChange={() => toggleDocument(QUICK_ADD_PATHS.MINOR_AUTH)}
                   style={{ margin: 0 }}
                 />
                 Minor
