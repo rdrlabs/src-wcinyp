@@ -137,9 +137,21 @@ export default function DocumentSelector(): React.ReactElement {
     });
   };
 
-  const clearAll = (): void => {
+  const clearSelectedDocs = (): void => {
     setSelectedDocs([]);
     setDocQuantities({});
+  };
+
+  const unselectAllSections = (): void => {
+    setVisibleSections(prev => 
+      Object.keys(prev).reduce((acc, key) => ({ ...acc, [key]: false }), {})
+    );
+  };
+
+  const selectAllSections = (): void => {
+    setVisibleSections(prev => 
+      Object.keys(prev).reduce((acc, key) => ({ ...acc, [key]: true }), {})
+    );
   };
 
   const addFormByPath = (path: string): void => {
@@ -353,7 +365,7 @@ export default function DocumentSelector(): React.ReactElement {
 
   return (
     <div>
-      {/* Compact Header Bar */}
+      {/* Comprehensive Header Bar */}
       <div style={{ 
         position: 'sticky', 
         top: 0, 
@@ -366,11 +378,21 @@ export default function DocumentSelector(): React.ReactElement {
         boxShadow: selectedDocs.length > 0 ? '0 2px 8px rgba(0,0,0,0.1)' : 'none',
         transition: 'all 0.2s ease'
       }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+          {/* Left: Cart Info */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <span style={{ fontWeight: 'bold' }}>
               🛒 {selectedDocs.length} items, {getTotalCopies()} copies
             </span>
+            {selectedDocs.length > 0 && (
+              <button
+                className="button button--outline button--sm"
+                onClick={clearSelectedDocs}
+                style={{ padding: '0.25rem 0.5rem', fontSize: '0.8em', color: '#dc3545' }}
+              >
+                Clear Cart
+              </button>
+            )}
             {selectedDocs.length > 0 && (
               <button
                 className="button button--outline button--sm"
@@ -381,7 +403,50 @@ export default function DocumentSelector(): React.ReactElement {
               </button>
             )}
           </div>
+
+          {/* Center: Search */}
+          <div style={{ flex: '1', maxWidth: '300px', minWidth: '200px' }}>
+            <input
+              type="text"
+              placeholder="🔍 Search all forms..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{ 
+                width: '100%',
+                padding: '0.375rem 0.75rem', 
+                border: '1px solid #d1d5db', 
+                borderRadius: '20px',
+                fontSize: '0.9em'
+              }}
+            />
+          </div>
+
+          {/* Right: Quick Add + Controls + Print */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            {/* Quick Add */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85em' }}>
+              <span style={{ fontWeight: '500' }}>Quick:</span>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                <input
+                  type="checkbox"
+                  checked={selectedDocs.includes('/documents/Outpatient Medical Chaperone Form.pdf')}
+                  onChange={() => toggleDocument('/documents/Outpatient Medical Chaperone Form.pdf')}
+                  style={{ margin: 0 }}
+                />
+                Chap
+              </label>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                <input
+                  type="checkbox"
+                  checked={selectedDocs.includes('/documents/Minor Auth Form.pdf')}
+                  onChange={() => toggleDocument('/documents/Minor Auth Form.pdf')}
+                  style={{ margin: 0 }}
+                />
+                Minor
+              </label>
+            </div>
+
+            {/* Bulk Toggle */}
             {selectedDocs.length > 0 && (
               <>
                 {renderToggleSwitch()}
@@ -398,6 +463,8 @@ export default function DocumentSelector(): React.ReactElement {
                 )}
               </>
             )}
+
+            {/* Print Button */}
             <button
               className="button button--primary"
               onClick={handlePrint}
@@ -422,7 +489,7 @@ export default function DocumentSelector(): React.ReactElement {
               <span style={{ fontWeight: 'bold', fontSize: '0.9em' }}>Selected Documents</span>
               <button
                 className="button button--outline button--sm"
-                onClick={clearAll}
+                onClick={clearSelectedDocs}
                 style={{ padding: '0.25rem 0.5rem', fontSize: '0.8em' }}
               >
                 Clear All
@@ -476,50 +543,35 @@ export default function DocumentSelector(): React.ReactElement {
         )}
       </div>
 
-      {/* Quick Add */}
-      <div style={{ marginBottom: '0.75rem' }}>
-        <span style={{ fontWeight: 'bold', marginRight: '1rem' }}>Quick:</span>
-        {QUICK_ADD_FORMS.map(form => (
-          <label key={form.path} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', marginRight: '1rem', fontSize: '0.9em' }}>
-            <input
-              type="checkbox"
-              checked={selectedDocs.includes(form.path)}
-              onChange={() => toggleDocument(form.path)}
-            />
-            {form.name.replace(' Form', '')}
-          </label>
-        ))}
-      </div>
-
-      {/* View Controls */}
-      <div style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+      {/* Section Controls */}
+      <div style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <span style={{ fontWeight: 'bold', fontSize: '0.9em' }}>Show:</span>
+          <button
+            className="button button--outline button--sm"
+            onClick={unselectAllSections}
+            style={{ padding: '0.25rem 0.5rem', fontSize: '0.8em' }}
+          >
+            Unselect All
+          </button>
+          <button
+            className="button button--outline button--sm"
+            onClick={selectAllSections}
+            style={{ padding: '0.25rem 0.5rem', fontSize: '0.8em' }}
+          >
+            Select All
+          </button>
+        </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
           {Object.entries(visibleSections).map(([section, isVisible]) => 
             renderSectionButton(section, isVisible)
           )}
         </div>
-        {isBulkMode && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <input
-              type="text"
-              placeholder="Search forms..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              style={{ 
-                padding: '0.375rem 0.75rem', 
-                border: '1px solid #d1d5db', 
-                borderRadius: '20px',
-                fontSize: '0.9em',
-                width: '200px'
-              }}
-            />
-          </div>
-        )}
       </div>
 
       <div>
-        {/* List View for Bulk Mode */}
-        {isBulkMode && searchTerm ? (
+        {/* Search Results */}
+        {searchTerm ? (
           <div style={{ marginBottom: '0.75rem' }}>
             <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1rem' }}>Search Results ({filteredForms.length})</h4>
             {filteredForms.map(renderFormCheckbox)}
