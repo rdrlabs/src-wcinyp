@@ -289,46 +289,68 @@ export default function DocumentSelector(): React.ReactElement {
     }
   };
 
-  const renderFormCheckbox = (form: Document) => (
-    <div 
-      key={form.path}
-      style={{ 
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.5rem',
-        padding: '0.5rem',
-        marginBottom: '0.25rem',
-        backgroundColor: selectedDocs.includes(form.path) ? '#e7f3ff' : '#f8f9fa',
-        borderRadius: '6px',
-        borderLeft: form.color ? `4px solid ${form.color}` : '4px solid transparent',
-        cursor: 'pointer',
-        fontSize: '0.9em',
-        transition: 'all 0.2s ease',
-        boxShadow: selectedDocs.includes(form.path) ? '0 2px 4px rgba(0,0,0,0.1)' : 'none'
-      }}
-      onClick={() => toggleDocument(form.path)}
-      onMouseEnter={(e) => {
-        if (!selectedDocs.includes(form.path)) {
-          e.currentTarget.style.backgroundColor = '#f1f5f9';
-          e.currentTarget.style.transform = 'translateX(2px)';
-        }
-      }}
-      onMouseLeave={(e) => {
-        if (!selectedDocs.includes(form.path)) {
-          e.currentTarget.style.backgroundColor = '#f8f9fa';
-          e.currentTarget.style.transform = 'translateX(0)';
-        }
-      }}
-    >
-      <input
-        type="checkbox"
-        checked={selectedDocs.includes(form.path)}
-        onChange={() => toggleDocument(form.path)}
-        style={{ margin: 0, transform: 'scale(1.1)' }}
-      />
-      <span style={{ fontWeight: selectedDocs.includes(form.path) ? '500' : '400' }}>{form.name}</span>
-    </div>
-  );
+  const renderFormCheckbox = (form: Document) => {
+    const isSelected = selectedDocs.includes(form.path);
+    
+    return (
+      <div 
+        key={form.path}
+        style={{ 
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.5rem',
+          padding: '0.5rem',
+          marginBottom: '0.25rem',
+          backgroundColor: isSelected ? '#e7f3ff' : '#f8f9fa',
+          borderRadius: '6px',
+          borderLeft: form.color ? `4px solid ${form.color}` : '4px solid transparent',
+          cursor: 'pointer',
+          fontSize: '0.9em',
+          transition: 'all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1)',
+          boxShadow: isSelected ? '0 2px 4px rgba(0,0,0,0.1)' : 'none',
+          transform: 'translateX(0)',
+          willChange: 'transform, background-color'
+        }}
+        onClick={(e) => {
+          e.preventDefault();
+          toggleDocument(form.path);
+        }}
+        onMouseEnter={(e) => {
+          if (!isSelected) {
+            e.currentTarget.style.backgroundColor = '#f1f5f9';
+            e.currentTarget.style.transform = 'translateX(2px)';
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!isSelected) {
+            e.currentTarget.style.backgroundColor = '#f8f9fa';
+            e.currentTarget.style.transform = 'translateX(0)';
+          }
+        }}
+      >
+        <input
+          type="checkbox"
+          checked={isSelected}
+          onChange={(e) => {
+            e.stopPropagation();
+            toggleDocument(form.path);
+          }}
+          style={{ 
+            margin: 0, 
+            transform: 'scale(1.1)',
+            transition: 'transform 0.1s ease'
+          }}
+        />
+        <span style={{ 
+          fontWeight: isSelected ? '500' : '400',
+          transition: 'font-weight 0.2s ease',
+          userSelect: 'none'
+        }}>
+          {form.name}
+        </span>
+      </div>
+    );
+  };
 
   const renderToggleSwitch = () => (
     <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9em' }}>
@@ -373,8 +395,10 @@ export default function DocumentSelector(): React.ReactElement {
         fontSize: '0.85em',
         fontWeight: '600',
         cursor: 'pointer',
-        transition: 'all 0.2s ease',
-        boxShadow: isVisible ? '0 2px 4px rgba(0,0,0,0.1)' : 'none'
+        transition: 'all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1)',
+        boxShadow: isVisible ? '0 2px 4px rgba(0,0,0,0.1)' : 'none',
+        transform: 'translateY(0)',
+        willChange: 'transform, background-color, color'
       }}
       onMouseEnter={(e) => {
         if (!isVisible) {
@@ -396,25 +420,33 @@ export default function DocumentSelector(): React.ReactElement {
   );
 
   return (
-    <div>
+    <div style={{ scrollBehavior: 'smooth' }}>
       {/* Comprehensive Header Bar */}
       <div style={{ 
         position: 'sticky', 
         top: 0, 
         zIndex: 100, 
-        backgroundColor: selectedDocs.length > 0 ? '#e7f3ff' : '#ffffff',
-        border: selectedDocs.length > 0 ? '2px solid #0d6efd' : '1px solid #dee2e6',
+        backgroundColor: '#ffffff',
+        border: '1px solid #dee2e6',
         borderRadius: '12px',
         padding: '1rem',
         marginBottom: '1.5rem',
-        boxShadow: selectedDocs.length > 0 ? '0 4px 12px rgba(13,110,253,0.15)' : '0 1px 3px rgba(0,0,0,0.1)',
-        transition: 'all 0.3s ease'
+        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+        transition: 'box-shadow 0.2s ease, border-color 0.2s ease',
+        ...(selectedDocs.length > 0 && {
+          borderColor: '#0d6efd',
+          boxShadow: '0 4px 12px rgba(13,110,253,0.15)'
+        })
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
           {/* Left: Cart Info */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <span style={{ fontWeight: 'bold' }}>
-              🛒 {selectedDocs.length} items, {getTotalCopies()} copies
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minHeight: '2rem' }}>
+            <span style={{ 
+              fontWeight: 'bold',
+              color: selectedDocs.length > 0 ? '#0d6efd' : '#6c757d',
+              transition: 'color 0.2s ease'
+            }}>
+              🛒 {selectedDocs.length} items{selectedDocs.length > 0 ? `, ${getTotalCopies()} copies` : ''}
             </span>
             {selectedDocs.length > 0 && (
               <button
@@ -488,14 +520,20 @@ export default function DocumentSelector(): React.ReactElement {
         </div>
 
         {/* Selected Documents - Always Show When Items in Cart */}
-        {selectedDocs.length > 0 && (
-          <div style={{ 
-            marginTop: '0.75rem', 
-            padding: '0.75rem', 
-            backgroundColor: '#fff', 
-            borderRadius: '4px',
-            border: '1px solid #e9ecef'
-          }}>
+        <div style={{ 
+          marginTop: '0.75rem',
+          maxHeight: selectedDocs.length > 0 ? '200px' : '0',
+          overflow: 'hidden',
+          transition: 'max-height 0.3s ease, opacity 0.2s ease',
+          opacity: selectedDocs.length > 0 ? 1 : 0
+        }}>
+          {selectedDocs.length > 0 && (
+            <div style={{ 
+              padding: '0.75rem', 
+              backgroundColor: '#f8f9fa', 
+              borderRadius: '8px',
+              border: '1px solid #e9ecef'
+            }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
               <span style={{ fontWeight: 'bold', fontSize: '0.9em' }}>Selected Documents</span>
               <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -568,8 +606,9 @@ export default function DocumentSelector(): React.ReactElement {
                 </div>
               ))
             )}
-          </div>
-        )}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Section Controls */}
