@@ -27,15 +27,15 @@ describe('ModernDocumentSelector', () => {
       render(<ModernDocumentSelector />);
       
       expect(screen.getByText('Document Hub')).toBeInTheDocument();
-      expect(screen.getByText('Modern document management for medical forms')).toBeInTheDocument();
-      expect(screen.getByText('Print Queue')).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Search documents...')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'General' })).toBeInTheDocument();
     });
 
     it('shows empty print queue initially', () => {
       render(<ModernDocumentSelector />);
       
-      expect(screen.getByText('0 items')).toBeInTheDocument();
-      expect(screen.getByText('Total copies: 0')).toBeInTheDocument();
+      // Print queue only shows when documents are selected
+      expect(screen.queryByText(/Print Queue:/)).not.toBeInTheDocument();
     });
 
     it('renders search input', () => {
@@ -64,13 +64,13 @@ describe('ModernDocumentSelector', () => {
       const mriQuestionnaire = screen.getByRole('checkbox', { name: 'MRI Questionnaire' });
       await user.click(mriQuestionnaire);
       
-      expect(screen.getByText('1 items')).toBeInTheDocument();
-      expect(screen.getByText('Total copies: 1')).toBeInTheDocument();
+      expect(screen.getByText(/Print Queue: 1 items/)).toBeInTheDocument();
+      expect(screen.getByText(/Total copies: 1/)).toBeInTheDocument();
       
       // Deselect the document
       await user.click(mriQuestionnaire);
       
-      expect(screen.getByText('0 items')).toBeInTheDocument();
+      expect(screen.queryByText(/Print Queue:/)).not.toBeInTheDocument();
     });
 
     it('updates print queue when documents are selected', async () => {
@@ -83,8 +83,8 @@ describe('ModernDocumentSelector', () => {
       await user.click(mriDoc);
       await user.click(ctDoc);
       
-      expect(screen.getByText('2 items')).toBeInTheDocument();
-      expect(screen.getByText('Total copies: 2')).toBeInTheDocument();
+      expect(screen.getByText(/Print Queue: 2 items/)).toBeInTheDocument();
+      expect(screen.getByText(/Total copies: 2/)).toBeInTheDocument();
     });
 
     it('shows selected documents in the queue preview', async () => {
@@ -94,7 +94,7 @@ describe('ModernDocumentSelector', () => {
       const mriDoc = screen.getByRole('checkbox', { name: 'MRI Questionnaire' });
       await user.click(mriDoc);
       
-      expect(screen.getByText('Selected Documents:')).toBeInTheDocument();
+      expect(screen.getByText(/Print Queue: 1 items/)).toBeInTheDocument();
       expect(screen.getByText(/MRI Questionnaire/)).toBeInTheDocument();
     });
   });
@@ -186,26 +186,22 @@ describe('ModernDocumentSelector', () => {
       expect(bulkModeCheckbox).toBeChecked();
       
       // Should show quantity selector
-      const quantitySelect = screen.getByDisplayValue('1 copies');
+      const quantitySelect = screen.getByRole('combobox');
       expect(quantitySelect).toBeInTheDocument();
       
       // Change quantity
       await user.selectOptions(quantitySelect, '5');
       
-      expect(screen.getByText('Total copies: 5')).toBeInTheDocument();
+      expect(screen.getByText(/Total copies: 5/)).toBeInTheDocument();
     });
   });
 
   describe('Print Functionality', () => {
     it('prevents printing when no documents selected', async () => {
-      const user = userEvent.setup();
       render(<ModernDocumentSelector />);
       
-      const printButton = screen.getByRole('button', { name: /Print 0/ });
-      await user.click(printButton);
-      
-      expect(global.alert).toHaveBeenCalledWith('Please select at least one document to print');
-      expect(mockWindowOpen).not.toHaveBeenCalled();
+      // No print button when nothing selected - print queue is hidden
+      expect(screen.queryByRole('button', { name: /Print/ })).not.toBeInTheDocument();
     });
 
     it('opens print windows for selected documents', async () => {
@@ -276,7 +272,7 @@ describe('ModernDocumentSelector', () => {
       const clearButton = screen.getByRole('button', { name: 'Clear selected documents' });
       await user.click(clearButton);
       
-      expect(screen.getByText('0 items')).toBeInTheDocument();
+      expect(screen.queryByText(/Print Queue:/)).not.toBeInTheDocument();
     });
   });
 
@@ -344,7 +340,7 @@ describe('ModernDocumentSelector', () => {
       }
       
       // Should end up unselected (odd number of clicks)
-      expect(screen.getByText('0 items')).toBeInTheDocument();
+      expect(screen.queryByText(/Print Queue:/)).not.toBeInTheDocument();
     });
   });
 });

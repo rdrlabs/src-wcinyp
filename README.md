@@ -118,14 +118,33 @@ npm run typecheck
 
 See [TESTING_PROTOCOL.md](./TESTING_PROTOCOL.md) for complete testing standards.
 
-## 🎨 Design System
+## ⚙️ System Architecture
 
-### Technology Stack
-- **Frontend**: React 19 + TypeScript
-- **Styling**: TailwindCSS v4 + shadcn/ui
-- **Documentation**: Docusaurus 3.8
-- **Testing**: Jest + React Testing Library
-- **Build Tool**: Webpack (via Docusaurus)
+### Core Technologies
+- **Frontend**: React 19 with TypeScript for type safety
+- **Styling**: TailwindCSS v4 with shadcn/ui component library
+- **Documentation**: Docusaurus 3.8 for content management
+- **Testing**: Jest with React Testing Library for quality assurance
+- **Build**: Webpack bundling via Docusaurus
+
+### Application Structure
+The system consists of three main functional areas:
+
+1. **Knowledge Base**: Documentation and guides using Docusaurus
+2. **Provider Database**: Searchable directory with filtering capabilities  
+3. **Document Management**: Form selection, generation, and printing tools
+
+### Data Flow
+- **Static Assets**: PDF documents stored in `/static/documents/`
+- **Provider Data**: JSON-based database with real-time filtering
+- **Form Data**: Dynamic form generation with live preview
+- **Print Queue**: Client-side document selection and batch printing
+
+### Security & Performance
+- **Client-Side Processing**: No server-side data storage
+- **Type Safety**: Full TypeScript implementation
+- **Component Isolation**: Modular architecture for maintainability
+- **Responsive Design**: Mobile-first approach with desktop optimization
 
 ### Component Architecture
 
