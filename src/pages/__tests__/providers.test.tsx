@@ -80,32 +80,28 @@ global.URL.revokeObjectURL = jest.fn();
 
 // Mock document.createElement for download functionality
 const mockClick = jest.fn();
-const mockAppendChild = jest.fn();
-const mockRemoveChild = jest.fn();
-
-global.document.createElement = jest.fn((tagName) => {
-  if (tagName === 'a') {
-    return {
-      href: '',
-      download: '',
-      click: mockClick,
-      style: {},
-    };
-  }
-  return {};
-});
-
-global.document.body = {
-  appendChild: mockAppendChild,
-  removeChild: mockRemoveChild,
-} as any;
 
 beforeEach(() => {
   mockClick.mockClear();
-  mockAppendChild.mockClear();
-  mockRemoveChild.mockClear();
   (global.URL.createObjectURL as jest.Mock).mockClear();
   (global.URL.revokeObjectURL as jest.Mock).mockClear();
+
+  const originalCreateElement = document.createElement;
+  jest.spyOn(document, 'createElement').mockImplementation((tagName: string) => {
+    if (tagName === 'a') {
+      const mockLink = originalCreateElement.call(document, 'a');
+      mockLink.click = mockClick;
+      return mockLink;
+    }
+    return originalCreateElement.call(document, tagName);
+  });
+
+  jest.spyOn(document.body, 'appendChild').mockImplementation((node) => node);
+  jest.spyOn(document.body, 'removeChild').mockImplementation((node) => node);
+});
+
+afterEach(() => {
+  jest.restoreAllMocks();
 });
 
 describe('Providers Page', () => {

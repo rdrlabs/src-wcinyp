@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+import { AppErrorBoundary, PageErrorBoundary } from '@/components/ErrorBoundary';
 import providersData from '../data/providers.json';
 
 interface PriorityNote {
@@ -116,7 +117,8 @@ export default function Providers(): React.ReactElement {
       title="Provider Database"
       description="Comprehensive provider directory with search and filtering"
     >
-      <div className="min-h-screen bg-background">
+      <PageErrorBoundary>
+        <div className="min-h-screen bg-background">
         {/* Header Section */}
         <div className="border-b bg-card">
           <div className="container mx-auto px-6 py-8">
@@ -183,7 +185,8 @@ export default function Providers(): React.ReactElement {
         <div className="container mx-auto px-6 py-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProviders.map(provider => (
-              <Card key={provider.id} className="hover:shadow-lg transition-shadow">
+              <AppErrorBoundary key={provider.id} resetKeys={[provider.id]}>
+                <Card className="hover:shadow-lg transition-shadow">
                 <CardHeader className="pb-4">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
@@ -251,7 +254,8 @@ export default function Providers(): React.ReactElement {
                     ))}
                   </div>
                 </CardContent>
-              </Card>
+                </Card>
+              </AppErrorBoundary>
             ))}
           </div>
 
@@ -266,7 +270,8 @@ export default function Providers(): React.ReactElement {
             </div>
           )}
         </div>
-      </div>
+        </div>
+      </PageErrorBoundary>
     </Layout>
   );
 }

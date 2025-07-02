@@ -10,7 +10,7 @@ import {
 } from '../select';
 
 describe('Select Component', () => {
-  const SelectExample = ({ onValueChange = () => {}, defaultValue = undefined }) => (
+  const SelectExample = ({ onValueChange = () => {}, defaultValue }: { onValueChange?: (value: string) => void; defaultValue?: string }) => (
     <Select onValueChange={onValueChange} defaultValue={defaultValue}>
       <SelectTrigger data-testid="select-trigger">
         <SelectValue placeholder="Select an option" />
@@ -189,7 +189,7 @@ describe('Select Component', () => {
           <SelectTrigger data-testid="select-trigger">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent position="top">
+          <SelectContent position="popper">
             <SelectItem value="option1">Option 1</SelectItem>
           </SelectContent>
         </Select>

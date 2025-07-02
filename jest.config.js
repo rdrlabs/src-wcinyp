@@ -1,9 +1,9 @@
 module.exports = {
   testEnvironment: 'jsdom',
-  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
+  setupFilesAfterEnv: ['<rootDir>/test-setup.ts'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
-    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    '\.(css|less|scss|sass)$': 'identity-obj-proxy',
     '^@theme/(.*)$': '<rootDir>/src/__mocks__/@theme/$1',
     '^@docusaurus/(.*)$': '<rootDir>/src/__mocks__/@docusaurus/$1',
   },
@@ -18,7 +18,7 @@ module.exports = {
   ],
   coverageReporters: ['text', 'lcov', 'html'],
   transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', {
+    '^.+\.(js|jsx|ts|tsx)$': ['babel-jest', {
       presets: [
         ['@babel/preset-env', { targets: { node: 'current' } }],
         ['@babel/preset-react', { runtime: 'automatic' }],
@@ -27,6 +27,6 @@ module.exports = {
     }],
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(.*\\.mjs$|@docusaurus|lucide-react))',
+    'node_modules/(?!(.*\.mjs$|@docusaurus|lucide-react|react-error-boundary))',
   ],
 };

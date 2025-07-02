@@ -1,5 +1,6 @@
 import React from 'react';
 import Layout from '@theme/Layout';
+import { PageErrorBoundary, AppErrorBoundary } from '@/components/ErrorBoundary';
 import ModernDocumentSelector from '../components/ModernDocumentSelector';
 
 export default function DocumentHub(): React.ReactElement {
@@ -8,7 +9,11 @@ export default function DocumentHub(): React.ReactElement {
       title="Document Hub"
       description="Modern document management for medical forms"
     >
-      <ModernDocumentSelector />
+      <PageErrorBoundary>
+        <AppErrorBoundary>
+          <ModernDocumentSelector />
+        </AppErrorBoundary>
+      </PageErrorBoundary>
     </Layout>
   );
 }

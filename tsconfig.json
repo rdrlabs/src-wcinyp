@@ -5,7 +5,9 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    // TypeScript strict mode enabled for improved type safety
+    "strict": true
   },
   "exclude": [".docusaurus", "build", "tailwind.config.mjs"]
 }
