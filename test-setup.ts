@@ -3,7 +3,7 @@ import '@testing-library/jest-dom';
 // JSDOM doesn't implement PointerEvent so we need to polyfill it
 if (!global.PointerEvent) {
   class PointerEvent extends MouseEvent {
-    constructor(type, params) {
+    constructor(type: string, params: MouseEventInit) {
       super(type, params);
     }
   }

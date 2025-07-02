@@ -15,7 +15,7 @@ jest.mock('../../components/ModernDocumentSelector', () => {
 
 // Mock the Layout component
 jest.mock('@theme/Layout', () => {
-  return function MockLayout({ children, title, description }) {
+  return function MockLayout({ children, title, description }: { children: React.ReactNode; title: string; description: string }) {
     return (
       <div data-testid="layout">
         <h1>{title}</h1>

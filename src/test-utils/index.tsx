@@ -10,9 +10,7 @@ const customRender = (
   ui: ReactElement,
   options?: Omit<RenderOptions, 'wrapper'>,
 ) => {
-  const container = document.body.appendChild(document.createElement('div'));
   return render(ui, {
-    container,
     wrapper: AllTheProviders,
     ...options,
   });

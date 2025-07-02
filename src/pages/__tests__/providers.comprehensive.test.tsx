@@ -1,8 +1,11 @@
 import React from 'react';
-import { render, screen, waitFor } from '../../test-utils';
+import { render as rtlRender, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import Providers from '../providers';
+
+// Use RTL render directly to avoid custom render issues
+const render = (ui: React.ReactElement) => rtlRender(ui);
 
 // Enhanced mock data for comprehensive testing
 jest.mock('../../data/providers.json', () => ({

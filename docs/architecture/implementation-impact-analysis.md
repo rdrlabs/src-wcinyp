@@ -216,7 +216,7 @@ function Providers() {
 #### Search Performance
 - **Current**: 200ms delay with 100 providers
 - **With 1000 providers**: 2-3 second freezes
-- **With FlexSearch**: <50ms regardless of size
+- **With FlexSearch**: Less than 50ms regardless of size
 
 #### Memory Usage
 - **Current**: All providers in DOM (100 providers = ~5MB DOM)
