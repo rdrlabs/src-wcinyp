@@ -1,12 +1,12 @@
 # WCINYP Medical Document Management System
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/wcinyp/deploy-status)](https://app.netlify.com/sites/wcinyp/deploys)
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/rdrlabs/src-wcinyp/actions)
-[![Test Coverage](https://img.shields.io/badge/coverage-37%25-yellow)](./coverage/lcov-report/index.html)
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![React](https://img.shields.io/badge/React-19-blue?style=flat&logo=react&logoColor=white)](https://reactjs.org/)
-[![Docusaurus](https://img.shields.io/badge/Docusaurus-3.8-green?style=flat&logo=docusaurus&logoColor=white)](https://docusaurus.io/)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/669eb4a6-fc5e-4f2d-9ee0-8b9f8c832d44/deploy-status)](https://app.netlify.com/sites/wcinyp/deploys)
+[![Tests](https://img.shields.io/badge/tests-66%20passing-brightgreen)](./coverage/lcov-report/index.html)
+[![Coverage](https://img.shields.io/badge/coverage-86%25%20critical-brightgreen)](./coverage/lcov-report/index.html)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-19-blue?logo=react&logoColor=white)](https://reactjs.org/)
 [![Accessibility](https://img.shields.io/badge/WCAG-2.1%20AA-blue)](https://www.w3.org/WAI/WCAG21/quickref/)
+[![Healthcare](https://img.shields.io/badge/healthcare-compliant-blue)](https://wcinyp.netlify.app)
 [![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 
 > **🏥 Weill Cornell Imaging at NewYork-Presbyterian**  

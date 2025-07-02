@@ -49,6 +49,7 @@ describe('ModernDocumentSelector', () => {
       render(<ModernDocumentSelector />);
       
       expect(screen.getByRole('button', { name: 'General' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Financial' })).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'MRI' })).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'CT' })).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'PET' })).toBeInTheDocument();
@@ -98,6 +99,23 @@ describe('ModernDocumentSelector', () => {
       // Verify document appears in print queue (not just anywhere on page)
       const printQueue = screen.getByText(/Print Queue: 1 items/).closest('div');
       expect(printQueue).toBeInTheDocument();
+    });
+
+    it('allows selecting Financial Forms documents', async () => {
+      const user = userEvent.setup();
+      render(<ModernDocumentSelector />);
+      
+      // Find and click a financial document checkbox
+      const selfPayForm = screen.getByRole('checkbox', { name: 'Waiver of Liability Form - Self Pay' });
+      await user.click(selfPayForm);
+      
+      expect(screen.getByText(/Print Queue: 1 items/)).toBeInTheDocument();
+      expect(screen.getByText(/Total copies: 1/)).toBeInTheDocument();
+      
+      // Deselect the document
+      await user.click(selfPayForm);
+      
+      expect(screen.queryByText(/Print Queue:/)).not.toBeInTheDocument();
     });
   });
 
@@ -169,6 +187,26 @@ describe('ModernDocumentSelector', () => {
       await user.click(mriButton);
       
       expect(screen.getByText('MRI Forms')).toBeInTheDocument();
+    });
+
+    it('toggles Financial section visibility', async () => {
+      const user = userEvent.setup();
+      render(<ModernDocumentSelector />);
+      
+      const financialButton = screen.getByRole('button', { name: 'Financial' });
+      
+      // Initially, Financial section should be visible
+      expect(screen.getByText('Financial Forms')).toBeInTheDocument();
+      
+      // Toggle off
+      await user.click(financialButton);
+      
+      expect(screen.queryByText('Financial Forms')).not.toBeInTheDocument();
+      
+      // Toggle back on
+      await user.click(financialButton);
+      
+      expect(screen.getByText('Financial Forms')).toBeInTheDocument();
     });
   });
 

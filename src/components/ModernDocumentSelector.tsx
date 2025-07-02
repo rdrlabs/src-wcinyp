@@ -8,7 +8,7 @@ import { Search, FileText, Printer, Trash2 } from 'lucide-react';
 interface Document {
   name: string;
   path: string;
-  category: 'general' | 'screening';
+  category: 'general' | 'screening' | 'financial';
   modality?: string;
   color?: string;
 }
