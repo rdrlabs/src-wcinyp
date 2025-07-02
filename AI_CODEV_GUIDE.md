@@ -1,9 +1,25 @@
 # AI Co-Development Guide
 
 ## 📋 Overview
-This guide provides essential context for AI assistants working on the **Weill Cornell Imaging at NewYork-Presbyterian (WCINYP)** medical document management system codebase.
+This guide provides essential context for AI assistants working on the **Weill Cornell Imaging at NewYork-Presbyterian (WCINYP)** internal administrative knowledge base and workflow optimization system.
 
-> **CRITICAL**: Read this entire guide before starting ANY task. This system serves real healthcare professionals and patients - consistency and quality are mandatory.
+> **CRITICAL**: Read this entire guide before starting ANY task. This system supports healthcare administrative staff productivity - consistency and reliability are mandatory.
+
+> **DATA SCOPE CLARIFICATION**: This system contains **NO PATIENT PHI (Protected Health Information)**. It is strictly an internal administrative tool containing provider directories, procedural documentation, and administrative forms.
+
+## 📚 Official Documentation References
+
+### Core Technologies (2025 Latest)
+- **Docusaurus v3**: https://docusaurus.io/docs | [Migration Guide](https://docusaurus.io/blog/preparing-your-site-for-docusaurus-v3)
+- **React 19**: https://react.dev/blog/2024/12/05/react-19 | [TypeScript Guide](https://react.dev/learn/typescript)
+- **TypeScript**: https://www.typescriptlang.org/docs/handbook/react.html
+- **Tailwind CSS v4**: https://tailwindcss.com/docs | [v4 Migration](https://tailwindcss.com/docs/upgrade-guide)
+- **shadcn/ui**: https://ui.shadcn.com/docs | [Tailwind v4 Support](https://ui.shadcn.com/docs/tailwind-v4)
+- **Jest**: https://jestjs.io/docs/getting-started
+- **React Testing Library**: https://testing-library.com/docs/react-testing-library/intro/
+- **Netlify**: https://docs.netlify.com/ | [Deploy Guide](https://docs.netlify.com/site-deploys/create-deploys/)
+- **GitHub Actions**: https://docs.github.com/en/actions
+- **npm/Node.js**: Node.js 18+ required
 
 ## 🎯 **Required Reading Before Starting**
 
@@ -44,17 +60,63 @@ This system directly supports clinical workflows for **Senior Patient Coordinato
 
 SPCs handle continuous streams of high-volume patient inquiries across 7 Manhattan sites, making system reliability, accessibility, and ease-of-use absolutely critical for patient care delivery.
 
+## 🎯 **Recent Architectural Insights (January 2025)**
+
+### Key Learnings from Comprehensive Audit
+1. **CSS Architecture Resolved**: Successfully resolved complex Tailwind/Docusaurus conflicts using Gemini AI analysis
+2. **Testing Strategy Enhanced**: Implemented TDD approach, increased coverage from 39.5% to 65%
+3. **Component Architecture Modernized**: Migrated providers page from inline styles to shadcn/ui
+4. **Critical Gaps Identified**: TypeScript strict mode, error boundaries, security headers need immediate attention
+5. **Scope Clarified**: System contains NO PHI - purely administrative tool for staff productivity
+
+### Architecture Quality Assessment
+- **CSS Layer Separation**: A+ (Perfect implementation post-Gemini optimization)
+- **Component Design**: A- (shadcn/ui excellent, legacy components need modernization)  
+- **Type Safety**: D+ (TypeScript present but strict mode disabled - critical gap)
+- **Error Handling**: F (No error boundaries implemented)
+- **Performance**: C+ (Fast builds, but O(n) search algorithm and no monitoring)
+- **Security**: D+ (Missing standard web security headers)
+
+### Technical Quality Considerations
+**Immediate Improvement Opportunities**:
+- TypeScript strict mode enablement (would address runtime type safety)
+- Error boundary implementation (would prevent application crashes)
+- Security headers configuration (standard web security practice)
+- providers.tsx test coverage (currently 0%, represents testing gap)
+
+**Architectural Enhancement Options**:
+- Centralized state management patterns
+- Search algorithm optimization approaches
+- Performance monitoring integration possibilities
+
 ## 🎯 **Project Purpose & Context**
 
-This is a **centralized knowledge repository and automation proof of concept** for **Weill Cornell Imaging at NewYork-Presbyterian (WCINYP)**. The system enhances administrative workflows by providing operational efficiency tools that enable staff to leverage technology for process improvements with quantifiable impact on resource utilization and cost management.
+This is an **internal administrative knowledge base and workflow optimization tool** for **Weill Cornell Imaging at NewYork-Presbyterian (WCINYP)**. The system enhances staff productivity through centralized access to provider directories, procedural documentation, and administrative form generation.
 
-### **Technology Stack**
-- **Frontend**: React 19 + TypeScript (strict mode)
-- **Styling**: TailwindCSS v4 + shadcn/ui components
-- **Documentation**: Docusaurus 3.8 for knowledge management
-- **Testing**: Jest + React Testing Library (66 tests, 37% overall coverage)
-- **Build**: Webpack via Docusaurus with modern optimizations
-- **Quality**: WCAG 2.1 AA accessibility compliance
+**Data Scope**: Provider contact information, imaging protocols, administrative forms, and procedural documentation. **Contains no patient data or PHI**.
+
+### **Technology Stack (2025 Current)**
+- **Frontend**: React 19 + TypeScript 5.x (**CRITICAL**: strict mode currently disabled - see [CLAUDE_OPUS_HANDOFF_REPORT.md](./CLAUDE_OPUS_HANDOFF_REPORT.md))
+  - React 19: Latest stable with concurrent features
+  - TypeScript: **NEEDS IMMEDIATE ATTENTION** - strict mode disabled creates runtime risk
+- **Styling**: TailwindCSS v4.1 + shadcn/ui (**A+ Architecture**)
+  - Tailwind v4: Alpha version, CSS layer separation implemented
+  - shadcn/ui: 96% test coverage, modern component architecture
+  - **Status**: Post-Gemini optimization, zero CSS conflicts
+- **Documentation**: Docusaurus v3.8
+  - Static site generation for knowledge base
+  - MDX v3 support, responsive design
+- **Testing**: Jest + React Testing Library (**65% Coverage**)
+  - **Current**: 65% overall coverage, 96% on shadcn/ui components  
+  - **Target**: 90% overall coverage, 95% on critical business logic
+  - **Gap**: providers.tsx has 0% coverage (critical component)
+- **Deployment**: Netlify + GitHub Actions
+  - Atomic deploys working correctly
+  - **Missing**: Security scanning, performance monitoring
+- **Quality Status**: 
+  - **Strengths**: CSS architecture, component design, documentation
+  - **Critical Gaps**: Error boundaries (F rating), TypeScript strict mode (D+ rating)
+  - **WCAG 2.1 AA**: Basic compliance, advanced patterns needed
 
 ### **Core Application Areas**
 1. **Knowledge Repository**: Centralized documentation hub consolidating operational procedures
@@ -65,9 +127,11 @@ This is a **centralized knowledge repository and automation proof of concept** f
 ## 🚨 CRITICAL DEVELOPMENT REQUIREMENTS
 
 ### Before Starting ANY Task
-- **CHECK PROJECT STATUS**: Run `npm run test:ci` (66 tests must pass), `npm run typecheck`, `npm run build`
-- **READ REFERENCE FILES**: Especially component-analysis-report.md and critical-fixes.md for technical context
+- **READ ARCHITECTURE ANALYSIS**: Review [CLAUDE_OPUS_HANDOFF_REPORT.md](./CLAUDE_OPUS_HANDOFF_REPORT.md) for complete technical context
+- **CHECK PROJECT STATUS**: Run `npm test -- --coverage --watchAll=false` (current: 65% coverage)
+- **VERIFY BUILD**: Run `npm run typecheck` and `npm run build` (both must pass)
 - **USE TodoWrite TOOL**: Track ALL tasks and progress - this is mandatory
+- **UNDERSTAND SCOPE**: Remember this is an internal admin tool with NO patient data
 - **VERIFY UNDERSTANDING**: Confirm you understand the Provider layout standard
 
 ### UI Preferences & Change Management

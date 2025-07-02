@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">60% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>9/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">25% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>1/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>3/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">57.14% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>8/14</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -149,35 +149,35 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -185,7 +185,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -227,17 +227,17 @@ interface FormField {
   type?: 'text' | 'date' | 'number';
 }
 &nbsp;
-const INITIAL_FORM_DATA: FormField[] = <span class="cstat-no" title="statement not covered" >[</span>
+const INITIAL_FORM_DATA: FormField[] = [
   { label: 'Patient Name', value: '', type: 'text' },
   { label: 'Date of Birth', value: '', type: 'date' },
   { label: 'Service Date', value: '', type: 'date' },
   { label: 'Amount Due', value: '', type: 'number' },
 ];
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >FormBuilder(</span>): React.ReactElement {
-  const [formData, setFormData] = <span class="cstat-no" title="statement not covered" >useState&lt;FormField[]&gt;(INITIAL_FORM_DATA);</span>
+export default function FormBuilder(): React.ReactElement {
+  const [formData, setFormData] = useState&lt;FormField[]&gt;(INITIAL_FORM_DATA);
 &nbsp;
-  const handleFieldChange = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>ndex: number, value: string): void =&gt; {</span>
+  const handleFieldChange = <span class="fstat-no" title="function not covered" >(i</span>ndex: number, value: string): void =&gt; {
 <span class="cstat-no" title="statement not covered" >    setFormData(<span class="fstat-no" title="function not covered" >pr</span>ev =&gt; </span>
 <span class="cstat-no" title="statement not covered" >      prev.map(<span class="fstat-no" title="function not covered" >(f</span>ield, i) =&gt; </span>
 <span class="cstat-no" title="statement not covered" >        i === index ? { ...field, value } : field</span>
@@ -245,30 +245,30 @@ export default function <span class="fstat-no" title="function not covered" >For
     );
   };
 &nbsp;
-  const handlePrint = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span>: void =&gt; {</span>
+  const handlePrint = <span class="fstat-no" title="function not covered" >()</span>: void =&gt; {
 <span class="cstat-no" title="statement not covered" >    window.print();</span>
   };
 &nbsp;
-  const handleReset = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span>: void =&gt; {</span>
+  const handleReset = <span class="fstat-no" title="function not covered" >()</span>: void =&gt; {
 <span class="cstat-no" title="statement not covered" >    setFormData(INITIAL_FORM_DATA);</span>
   };
 &nbsp;
-  const isFormEmpty = <span class="cstat-no" title="statement not covered" >formData.every(<span class="fstat-no" title="function not covered" >fi</span>eld =&gt; <span class="cstat-no" title="statement not covered" >!field.value.trim())</span>;</span>
+  const isFormEmpty = formData.every(field =&gt; !field.value.trim());
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;div&gt;
       &lt;div className="card margin-bottom--lg"&gt;
         &lt;div className="card__header"&gt;
           &lt;h2 className="text--center"&gt;Self-Pay Agreement Form&lt;/h2&gt;
         &lt;/div&gt;
         &lt;div className="card__body"&gt;
-          {formData.map(<span class="fstat-no" title="function not covered" >(f</span>ield, index) =&gt; (
-<span class="cstat-no" title="statement not covered" >            &lt;div key={field.label} className="margin-bottom--md"&gt;</span>
+          {formData.map((field, index) =&gt; (
+            &lt;div key={field.label} className="margin-bottom--md"&gt;
               &lt;label className="margin-bottom--sm" style={{ display: 'block', fontWeight: 'bold' }}&gt;
                 {field.label}:
               &lt;/label&gt;
               &lt;input
-                type={field.type || 'text'}
+                type={field.type || <span class="branch-1 cbranch-no" title="branch not covered" >'text'}</span>
                 value={field.value}
                 onChange={<span class="fstat-no" title="function not covered" >(e</span>) =&gt; <span class="cstat-no" title="statement not covered" >handleFieldChange(index, e.target.value)}</span>
                 placeholder={`Enter ${field.label.toLowerCase()}`}
@@ -304,7 +304,7 @@ export default function <span class="fstat-no" title="function not covered" >For
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-02T09:12:45.329Z
+                at 2025-07-02T12:18:41.759Z
             </div>
         <script src="../prettify.js"></script>
         <script>
