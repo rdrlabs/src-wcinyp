@@ -17,11 +17,11 @@ const INVOICE_TYPES = ['CT', 'MRI', 'PET (FDG)', 'PET', 'US', 'Mammo', 'Xray'] a
 const BULK_QUANTITIES = [1, 2, 3, 4, 5, 10, 15, 20, 25, 50] as const;
 
 const MODALITY_COLORS: ModalityColors = {
-  MRI: '#22c55e',
+  MRI: '#10b981',
   CT: '#3b82f6', 
   PET: '#8b5cf6',
-  US: '#f97316',
-  DEXA: '#6b7280',
+  US: '#f59e0b',
+  DEXA: '#64748b',
   Breast: '#ec4899',
   'X-Ray': '#ef4444',
   Financial: '#06b6d4',
@@ -190,84 +190,7 @@ export default function DocumentSelector(): React.ReactElement {
     return doc?.name || path.split('/').pop() || path;
   };
 
-  // PDF processing functions
-  const loadPDFLib = async () => {
-    try {
-      const { PDFDocument } = await import('pdf-lib');
-      return { PDFDocument };
-    } catch (error) {
-      throw new Error('Failed to load PDF processing library');
-    }
-  };
-
-  const fetchPDFs = async (paths: string[]): Promise<ArrayBuffer[]> => {
-    const responses = await Promise.allSettled(
-      paths.map(path => 
-        fetch(path).then(response => {
-          if (!response.ok) {
-            throw new Error(`Failed to fetch ${path.split('/').pop()}: ${response.status}`);
-          }
-          return response.arrayBuffer();
-        })
-      )
-    );
-
-    const failed = responses.filter(r => r.status === 'rejected') as PromiseRejectedResult[];
-    if (failed.length > 0) {
-      throw new Error(`Failed to load ${failed.length} document(s)`);
-    }
-
-    return responses.map(r => (r as PromiseFulfilledResult<ArrayBuffer>).value);
-  };
-
-  const mergePDFs = async (pdfBuffers: ArrayBuffer[], documentPaths: string[]): Promise<Uint8Array> => {
-    const { PDFDocument } = await loadPDFLib();
-    const mergedPdf = await PDFDocument.create();
-    
-    if (isBulkMode) {
-      // Bulk mode: add each document once
-      for (const buffer of pdfBuffers) {
-        const pdf = await PDFDocument.load(buffer);
-        const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-        pages.forEach(page => mergedPdf.addPage(page));
-      }
-    } else {
-      // Individual mode: add each document the specified number of times
-      for (let i = 0; i < documentPaths.length; i++) {
-        const buffer = pdfBuffers[i];
-        const path = documentPaths[i];
-        const copies = docQuantities[path] || 1;
-        
-        for (let copy = 0; copy < copies; copy++) {
-          const pdf = await PDFDocument.load(buffer);
-          const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-          pages.forEach(page => mergedPdf.addPage(page));
-        }
-      }
-    }
-    
-    return mergedPdf.save();
-  };
-
-  const openPrintDialog = (pdfBytes: Uint8Array): void => {
-    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-    const url = URL.createObjectURL(blob);
-    
-    const printWindow = window.open(url, '_blank');
-    if (printWindow) {
-      printWindow.addEventListener('load', () => {
-        printWindow.print();
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
-      });
-    } else {
-      // Fallback for popup blockers
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'selected-documents.pdf';
-      link.click();
-      URL.revokeObjectURL(url);
-    }
-  };
+  // Print handling - opens each PDF in its own window for individual print settings
 
   const handlePrint = async (): Promise<void> => {
     if (selectedDocs.length === 0) {
@@ -278,13 +201,32 @@ export default function DocumentSelector(): React.ReactElement {
     setIsPrinting(true);
     
     try {
-      const pdfBuffers = await fetchPDFs(selectedDocs);
-      const mergedPdfBytes = await mergePDFs(pdfBuffers, selectedDocs);
-      openPrintDialog(mergedPdfBytes);
+      // Open each document in its own popup for individual print settings
+      for (const path of selectedDocs) {
+        const copies = isBulkMode ? bulkQuantity : (docQuantities[path] || 1);
+        
+        // Open the same document multiple times if needed
+        for (let i = 0; i < copies; i++) {
+          const printWindow = window.open(path, '_blank');
+          if (printWindow) {
+            // Wait a bit to ensure the window is loaded
+            setTimeout(() => {
+              printWindow.print();
+            }, 500);
+          } else {
+            throw new Error('Unable to open print dialog. Please check your popup blocker settings.');
+          }
+          
+          // Small delay between opening multiple windows
+          if (i < copies - 1 || path !== selectedDocs[selectedDocs.length - 1]) {
+            await new Promise(resolve => setTimeout(resolve, 300));
+          }
+        }
+      }
     } catch (error) {
       console.error('Print failed:', error);
       const message = error instanceof Error ? error.message : 'Failed to prepare documents for printing';
-      alert(message + '. Please try again.');
+      alert(message);
     } finally {
       setIsPrinting(false);
     }
@@ -299,18 +241,17 @@ export default function DocumentSelector(): React.ReactElement {
         style={{ 
           display: 'flex',
           alignItems: 'center',
-          gap: '0.5rem',
-          padding: '0.5rem',
-          marginBottom: '0.25rem',
-          backgroundColor: isSelected ? '#e7f3ff' : '#f8f9fa',
-          borderRadius: '6px',
+          gap: '12px',
+          padding: '12px 16px',
+          marginBottom: '8px',
+          backgroundColor: isSelected ? '#f0f9ff' : 'white',
+          borderRadius: '8px',
           borderLeft: form.color ? `4px solid ${form.color}` : '4px solid transparent',
+          border: isSelected ? '1px solid #0284c7' : '1px solid #e2e8f0',
           cursor: 'pointer',
-          fontSize: '0.9em',
-          transition: 'all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1)',
-          boxShadow: isSelected ? '0 2px 4px rgba(0,0,0,0.1)' : 'none',
-          transform: 'translateX(0)',
-          willChange: 'transform, background-color'
+          fontSize: '14px',
+          transition: 'all 0.2s ease',
+          transform: 'translateX(0)'
         }}
         onClick={(e) => {
           e.preventDefault();
@@ -318,13 +259,13 @@ export default function DocumentSelector(): React.ReactElement {
         }}
         onMouseEnter={(e) => {
           if (!isSelected) {
-            e.currentTarget.style.backgroundColor = '#f1f5f9';
+            e.currentTarget.style.backgroundColor = '#f8fafc';
             e.currentTarget.style.transform = 'translateX(2px)';
           }
         }}
         onMouseLeave={(e) => {
           if (!isSelected) {
-            e.currentTarget.style.backgroundColor = '#f8f9fa';
+            e.currentTarget.style.backgroundColor = 'white';
             e.currentTarget.style.transform = 'translateX(0)';
           }
         }}
@@ -343,8 +284,8 @@ export default function DocumentSelector(): React.ReactElement {
           }}
         />
         <span style={{ 
-          fontWeight: isSelected ? '500' : '400',
-          transition: 'font-weight 0.2s ease',
+          fontWeight: isSelected ? '600' : '500',
+          color: '#1e293b',
           userSelect: 'none'
         }}>
           {form.name}
@@ -354,12 +295,12 @@ export default function DocumentSelector(): React.ReactElement {
   };
 
   const renderToggleSwitch = () => (
-    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9em' }}>
+    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', fontWeight: '500', color: '#1e293b' }}>
       <div 
         style={{ 
-          width: '36px', 
+          width: '40px', 
           height: '20px', 
-          backgroundColor: isBulkMode ? '#0d6efd' : '#dee2e6',
+          backgroundColor: isBulkMode ? '#3b82f6' : '#d1d5db',
           borderRadius: '10px',
           position: 'relative',
           cursor: 'pointer',
@@ -374,12 +315,12 @@ export default function DocumentSelector(): React.ReactElement {
           borderRadius: '50%',
           position: 'absolute',
           top: '2px',
-          left: isBulkMode ? '18px' : '2px',
+          left: isBulkMode ? '22px' : '2px',
           transition: 'all 0.2s ease',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+          boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
         }} />
       </div>
-      Bulk
+      Bulk Mode
     </label>
   );
 
@@ -424,65 +365,59 @@ export default function DocumentSelector(): React.ReactElement {
     <div style={{ 
       display: 'flex',
       minHeight: '100vh',
-      backgroundColor: '#f8f9fa'
+      backgroundColor: '#f8fafc'
     }}>
       {/* Sidebar */}
       <div style={{
         width: '280px',
-        backgroundColor: '#ffffff',
-        borderRight: '1px solid #dee2e6',
+        backgroundColor: 'white',
+        borderRight: '1px solid #e2e8f0',
         position: 'fixed',
         height: '100vh',
         overflowY: 'auto',
         zIndex: 100,
-        padding: '1.5rem 1rem',
-        boxShadow: '2px 0 8px rgba(0,0,0,0.1)',
-        '@media (max-width: 768px)': {
-          transform: 'translateX(-100%)',
-          transition: 'transform 0.3s ease'
-        }
+        padding: '24px 20px',
+        boxShadow: '2px 0 8px rgba(0,0,0,0.05)'
       }}>
-        {/* Search */}
-        <div style={{ marginBottom: '1.5rem' }}>
-          <h3 style={{ margin: '0 0 0.75rem 0', fontSize: '1.1rem', fontWeight: '600', color: '#374151' }}>Search Documents</h3>
-          <input
-            type="text"
-            placeholder="🔍 Search forms..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{ 
-              width: '100%',
-              padding: '0.75rem', 
-              border: '2px solid #e5e7eb', 
-              borderRadius: '8px',
-              fontSize: '0.9em',
-              transition: 'border-color 0.2s ease'
-            }}
-            onFocus={(e) => e.target.style.borderColor = '#3b82f6'}
-            onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
-          />
-        </div>
-
-        {/* Cart Summary */}
+        {/* Print Queue Summary */}
         <div style={{ 
-          marginBottom: '1.5rem',
-          padding: '1rem',
-          backgroundColor: selectedDocs.length > 0 ? '#eff6ff' : '#f9fafb',
+          marginBottom: '20px',
+          padding: '16px',
+          backgroundColor: selectedDocs.length > 0 ? '#f0f9ff' : '#f8fafc',
           borderRadius: '8px',
-          border: selectedDocs.length > 0 ? '2px solid #3b82f6' : '1px solid #e5e7eb',
+          border: selectedDocs.length > 0 ? '1px solid #3b82f6' : '1px solid #e2e8f0',
           transition: 'all 0.2s ease'
         }}>
-          <h3 style={{ margin: '0 0 0.75rem 0', fontSize: '1.1rem', fontWeight: '600', color: '#374151' }}>
-            Print Queue ({selectedDocs.length})
-          </h3>
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'space-between',
+            marginBottom: '12px'
+          }}>
+            <h3 style={{ 
+              margin: 0, 
+              fontSize: '16px', 
+              fontWeight: '600', 
+              color: '#1e293b' 
+            }}>
+              Print Queue
+            </h3>
+            <span style={{
+              fontSize: '14px',
+              fontWeight: '600',
+              color: selectedDocs.length > 0 ? '#3b82f6' : '#64748b'
+            }}>
+              {selectedDocs.length} items
+            </span>
+          </div>
           
-          <div style={{ marginBottom: '0.75rem' }}>
+          <div style={{ marginBottom: '12px' }}>
             <span style={{ 
-              fontSize: '0.9em',
-              color: selectedDocs.length > 0 ? '#1d4ed8' : '#6b7280',
+              fontSize: '13px',
+              color: selectedDocs.length > 0 ? '#0369a1' : '#64748b',
               fontWeight: '500'
             }}>
-              {selectedDocs.length} items, {getTotalCopies()} copies
+              Total copies: {getTotalCopies()}
             </span>
           </div>
 
@@ -496,14 +431,19 @@ export default function DocumentSelector(): React.ReactElement {
                     value={bulkQuantity}
                     onChange={(e) => setBulkQuantity(Number(e.target.value))}
                     style={{ 
-                      padding: '0.25rem', 
-                      fontSize: '0.85em',
+                      padding: '4px 8px', 
+                      fontSize: '13px',
                       border: '1px solid #d1d5db',
-                      borderRadius: '4px'
+                      borderRadius: '6px',
+                      backgroundColor: 'white',
+                      color: '#1e293b',
+                      fontWeight: '500',
+                      cursor: 'pointer',
+                      outline: 'none'
                     }}
                   >
                     {BULK_QUANTITIES.map(n => (
-                      <option key={n} value={n}>{n}</option>
+                      <option key={n} value={n}>{n} copies</option>
                     ))}
                   </select>
                 )}
@@ -512,27 +452,52 @@ export default function DocumentSelector(): React.ReactElement {
               {/* Action Buttons */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 <button
-                  className="button button--primary"
                   onClick={handlePrint}
                   disabled={isPrinting}
                   style={{ 
                     width: '100%',
-                    fontWeight: 'bold', 
-                    padding: '0.75rem'
+                    padding: '10px 16px',
+                    backgroundColor: '#3b82f6',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '6px',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    cursor: isPrinting ? 'not-allowed' : 'pointer',
+                    opacity: isPrinting ? 0.7 : 1,
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isPrinting) {
+                      e.currentTarget.style.backgroundColor = '#2563eb';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#3b82f6';
                   }}
                 >
-                  {isPrinting ? 'Preparing...' : `PRINT ${getTotalCopies()} ↗`}
+                  {isPrinting ? 'Opening Print Dialogs...' : `Print ${getTotalCopies()} Copies`}
                 </button>
                 
                 <button
-                  className="button button--outline"
                   onClick={clearSelectedDocs}
                   style={{ 
                     width: '100%',
-                    padding: '0.5rem',
-                    fontSize: '0.85em',
-                    color: '#dc3545',
-                    borderColor: '#dc3545'
+                    padding: '8px 16px',
+                    backgroundColor: 'white',
+                    color: '#dc2626',
+                    border: '1px solid #dc2626',
+                    borderRadius: '6px',
+                    fontSize: '13px',
+                    fontWeight: '500',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#fef2f2';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'white';
                   }}
                 >
                   Clear All
@@ -541,33 +506,35 @@ export default function DocumentSelector(): React.ReactElement {
 
               {/* Selected Items Preview */}
               <div style={{ 
-                marginTop: '0.5rem',
-                padding: '0.75rem',
-                backgroundColor: '#ffffff',
+                marginTop: '8px',
+                padding: '12px',
+                backgroundColor: 'white',
                 borderRadius: '6px',
-                border: '1px solid #e5e7eb',
+                border: '1px solid #e2e8f0',
                 maxHeight: '120px',
                 overflowY: 'auto'
               }}>
-                <div style={{ fontSize: '0.8em', fontWeight: '600', marginBottom: '0.5rem', color: '#374151' }}>
-                  Selected:
+                <div style={{ fontSize: '12px', fontWeight: '600', marginBottom: '8px', color: '#1e293b' }}>
+                  Selected Documents:
                 </div>
                 {selectedDocs.slice(0, 5).map(path => (
                   <div key={path} style={{ 
-                    fontSize: '0.75em', 
-                    color: '#6b7280',
-                    marginBottom: '0.25rem',
+                    fontSize: '12px', 
+                    color: '#64748b',
+                    marginBottom: '4px',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center'
                   }}>
-                    <span>{getDocumentName(path)}</span>
-                    <span>×{docQuantities[path] || 1}</span>
+                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginRight: '8px' }}>
+                      {getDocumentName(path)}
+                    </span>
+                    <span style={{ fontWeight: '600', flexShrink: 0 }}>×{isBulkMode ? bulkQuantity : (docQuantities[path] || 1)}</span>
                   </div>
                 ))}
                 {selectedDocs.length > 5 && (
-                  <div style={{ fontSize: '0.75em', color: '#9ca3af', fontStyle: 'italic' }}>
-                    +{selectedDocs.length - 5} more items
+                  <div style={{ fontSize: '11px', color: '#94a3b8', fontStyle: 'italic', marginTop: '4px' }}>
+                    +{selectedDocs.length - 5} more documents
                   </div>
                 )}
               </div>
@@ -575,19 +542,57 @@ export default function DocumentSelector(): React.ReactElement {
           )}
         </div>
 
+        {/* Search */}
+        <div style={{ marginBottom: '20px' }}>
+          <input
+            type="text"
+            placeholder="Search documents..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{ 
+              width: '100%',
+              padding: '10px 12px 10px 36px', 
+              border: '1px solid #d1d5db', 
+              borderRadius: '8px',
+              fontSize: '14px',
+              backgroundColor: 'white',
+              outline: 'none',
+              transition: 'all 0.2s ease',
+              paddingLeft: '36px'
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = '#3b82f6';
+              e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = '#d1d5db';
+              e.target.style.boxShadow = 'none';
+            }}
+          />
+          <div style={{
+            position: 'absolute',
+            left: '32px',
+            top: '164px',
+            color: '#64748b',
+            fontSize: '16px',
+            pointerEvents: 'none'
+          }}>🔍</div>
+        </div>
+
         {/* Quick Add */}
-        <div style={{ marginBottom: '1.5rem' }}>
-          <h3 style={{ margin: '0 0 0.75rem 0', fontSize: '1.1rem', fontWeight: '600', color: '#374151' }}>Quick Add</h3>
+        <div style={{ marginBottom: '20px' }}>
+          <h3 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: '600', color: '#1e293b' }}>Quick Add</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             <label style={{ 
               display: 'flex', 
               alignItems: 'center', 
-              gap: '0.5rem', 
-              padding: '0.5rem',
-              backgroundColor: selectedDocs.includes(QUICK_ADD_PATHS.CHAPERONE) ? '#eff6ff' : '#f9fafb',
+              gap: '8px', 
+              padding: '8px 12px',
+              backgroundColor: selectedDocs.includes(QUICK_ADD_PATHS.CHAPERONE) ? '#f0f9ff' : '#f8fafc',
               borderRadius: '6px',
               cursor: 'pointer',
-              transition: 'background-color 0.2s ease'
+              border: selectedDocs.includes(QUICK_ADD_PATHS.CHAPERONE) ? '1px solid #0284c7' : '1px solid #e2e8f0',
+              transition: 'all 0.2s ease'
             }}>
               <input
                 type="checkbox"
@@ -595,17 +600,18 @@ export default function DocumentSelector(): React.ReactElement {
                 onChange={() => toggleDocument(QUICK_ADD_PATHS.CHAPERONE)}
                 style={{ margin: 0 }}
               />
-              <span style={{ fontSize: '0.9em', fontWeight: '500' }}>Medical Chaperone</span>
+              <span style={{ fontSize: '13px', fontWeight: '500', color: '#1e293b' }}>Medical Chaperone</span>
             </label>
             <label style={{ 
               display: 'flex', 
               alignItems: 'center', 
-              gap: '0.5rem', 
-              padding: '0.5rem',
-              backgroundColor: selectedDocs.includes(QUICK_ADD_PATHS.MINOR_AUTH) ? '#eff6ff' : '#f9fafb',
+              gap: '8px', 
+              padding: '8px 12px',
+              backgroundColor: selectedDocs.includes(QUICK_ADD_PATHS.MINOR_AUTH) ? '#f0f9ff' : '#f8fafc',
               borderRadius: '6px',
               cursor: 'pointer',
-              transition: 'background-color 0.2s ease'
+              border: selectedDocs.includes(QUICK_ADD_PATHS.MINOR_AUTH) ? '1px solid #0284c7' : '1px solid #e2e8f0',
+              transition: 'all 0.2s ease'
             }}>
               <input
                 type="checkbox"
@@ -613,14 +619,14 @@ export default function DocumentSelector(): React.ReactElement {
                 onChange={() => toggleDocument(QUICK_ADD_PATHS.MINOR_AUTH)}
                 style={{ margin: 0 }}
               />
-              <span style={{ fontSize: '0.9em', fontWeight: '500' }}>Minor Authorization</span>
+              <span style={{ fontSize: '13px', fontWeight: '500', color: '#1e293b' }}>Minor Authorization</span>
             </label>
           </div>
         </div>
 
         {/* Section Filters */}
         <div>
-          <h3 style={{ margin: '0 0 0.75rem 0', fontSize: '1.1rem', fontWeight: '600', color: '#374151' }}>Form Sections</h3>
+          <h3 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: '600', color: '#1e293b' }}>Form Sections</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             {Object.entries(visibleSections).map(([section, isVisible]) => (
               <button
@@ -630,25 +636,26 @@ export default function DocumentSelector(): React.ReactElement {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  padding: '0.5rem 0.75rem',
-                  backgroundColor: isVisible ? MODALITY_COLORS[section] : '#f9fafb',
-                  color: isVisible ? 'white' : '#6b7280',
-                  border: 'none',
+                  padding: '8px 12px',
+                  backgroundColor: isVisible ? MODALITY_COLORS[section] : 'white',
+                  color: isVisible ? 'white' : '#374151',
+                  border: `1px solid ${isVisible ? MODALITY_COLORS[section] : '#d1d5db'}`,
                   borderRadius: '6px',
-                  fontSize: '0.85em',
+                  fontSize: '13px',
                   fontWeight: '500',
                   cursor: 'pointer',
                   transition: 'all 0.2s ease',
-                  textAlign: 'left'
+                  textAlign: 'left',
+                  width: '100%'
                 }}
                 onMouseEnter={(e) => {
                   if (!isVisible) {
-                    e.currentTarget.style.backgroundColor = '#f3f4f6';
+                    e.currentTarget.style.backgroundColor = '#f8fafc';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!isVisible) {
-                    e.currentTarget.style.backgroundColor = '#f9fafb';
+                    e.currentTarget.style.backgroundColor = 'white';
                   }
                 }}
               >
@@ -665,35 +672,70 @@ export default function DocumentSelector(): React.ReactElement {
       {/* Main Content Area */}
       <div style={{
         marginLeft: '280px',
-        padding: '2rem',
         flex: 1,
         minHeight: '100vh',
-        '@media (max-width: 768px)': {
-          marginLeft: '0',
-          padding: '1rem'
-        }
+        backgroundColor: '#f8fafc'
       }}>
-        <div style={{ maxWidth: '1200px' }}>
+        {/* Header */}
+        <div style={{
+          backgroundColor: 'white',
+          padding: '24px 32px',
+          borderBottom: '1px solid #e2e8f0'
+        }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <h1 style={{ 
+              fontSize: '24px',
+              fontWeight: '600',
+              color: '#1e293b',
+              margin: 0,
+              letterSpacing: '-0.025em'
+            }}>
+              Document Hub
+            </h1>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div style={{ 
+          maxWidth: '1200px', 
+          margin: '0 auto',
+          padding: '32px'
+        }}>
 
         {/* Search Results */}
         {searchTerm ? (
-          <div style={{ marginBottom: '0.75rem' }}>
-            <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1rem' }}>Search Results ({filteredForms.length})</h4>
+          <div style={{ marginBottom: '24px' }}>
+            <h4 style={{ 
+              margin: '0 0 12px 0', 
+              fontSize: '16px',
+              fontWeight: '600',
+              color: '#1e293b'
+            }}>Search Results ({filteredForms.length})</h4>
             {filteredForms.map(renderFormCheckbox)}
           </div>
         ) : (
           <>
             {/* Screening Forms by Modality */}
             {visibleSections.MRI && (
-              <div style={{ marginBottom: '0.75rem' }}>
-                <h4 style={{ margin: '0 0 0.5rem 0', color: MODALITY_COLORS.MRI, fontSize: '1rem' }}>MRI Forms</h4>
+              <div style={{ marginBottom: '24px' }}>
+                <h4 style={{ 
+                  margin: '0 0 12px 0', 
+                  color: MODALITY_COLORS.MRI, 
+                  fontSize: '16px',
+                  fontWeight: '600'
+                }}>MRI Forms</h4>
                 {SCREENING_FORMS.filter(f => f.modality === 'MRI').map(renderFormCheckbox)}
               </div>
             )}
             
             {visibleSections.CT && (
-              <div style={{ marginBottom: '0.75rem' }}>
-                <h4 style={{ margin: '0 0 0.5rem 0', color: MODALITY_COLORS.CT, fontSize: '1rem' }}>CT Forms</h4>
+              <div style={{ marginBottom: '24px' }}>
+                <h4 style={{ 
+                  margin: '0 0 12px 0', 
+                  color: MODALITY_COLORS.CT, 
+                  fontSize: '16px',
+                  fontWeight: '600'
+                }}>CT Forms</h4>
                 {SCREENING_FORMS.filter(f => f.modality === 'CT').map(renderFormCheckbox)}
               </div>
             )}
