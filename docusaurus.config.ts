@@ -68,9 +68,9 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'My Site',
+      title: 'WCINYP MRI Manual',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'WCINYP Logo',
         src: 'img/logo.svg',
       },
       items: [
