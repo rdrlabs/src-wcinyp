@@ -11,32 +11,32 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'MRI Manual',
-    emoji: '📘',
+    title: 'Provider Database',
+    emoji: '👥',
     description: (
       <>
-        Comprehensive MRI protocols, procedures, and best practices for 
-        Weill Cornell Imaging at NewYork-Presbyterian medical professionals.
+        Comprehensive provider directory with contact information, 
+        NPI numbers, and important clinical notes.
       </>
     ),
   },
   {
-    title: 'Contact Directory',
-    emoji: '📞',
+    title: 'Document Hub',
+    emoji: '📄',
     description: (
       <>
-        Quick access to essential contacts for radiology departments, 
-        technologists, and support staff across WCINYP facilities.
+        Medical forms and questionnaires organized by modality 
+        with bulk printing capabilities.
       </>
     ),
   },
   {
-    title: 'Emergency Procedures',
-    emoji: '🚨',
+    title: 'Form Generator',
+    emoji: '📝',
     description: (
       <>
-        Critical emergency protocols and safety procedures for urgent 
-        situations in medical imaging environments.
+        Generate and customize self-pay agreement forms 
+        with real-time preview and printing.
       </>
     ),
   },
