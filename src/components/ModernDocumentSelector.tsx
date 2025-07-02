@@ -1,9 +1,12 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { Search, FileText, Printer, Trash2 } from 'lucide-react';
+import styles from '../pages/document-hub.module.css';
 
 interface Document {
   name: string;
@@ -169,20 +172,21 @@ const ModernDocumentSelector = React.memo(function ModernDocumentSelector(): Rea
     const isSelected = selectedDocs.includes(form.path);
     
     return (
-      <Card 
+      <div
         key={form.path}
+        className={cn(styles.documentCard, isSelected && 'ring-2')}
         onClick={(e) => {
           e.preventDefault();
           toggleDocument(form.path);
         }}
         style={{
-          cursor: 'pointer',
-          borderColor: isSelected ? form.color : '#e2e8f0',
-          backgroundColor: isSelected ? `${form.color}10` : 'white'
+          borderColor: isSelected ? form.color : undefined,
+          backgroundColor: isSelected ? `${form.color}10` : undefined,
+          ringColor: isSelected ? form.color : undefined
         }}
       >
-        <CardContent style={{ padding: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div className={styles.documentCardContent}>
+          <div className={styles.documentCardInner}>
             <Checkbox
               checked={isSelected}
               onCheckedChange={() => toggleDocument(form.path)}
@@ -190,114 +194,72 @@ const ModernDocumentSelector = React.memo(function ModernDocumentSelector(): Rea
               aria-label={form.name}
             />
             <div 
-              style={{
-                width: '4px',
-                height: '32px',
-                borderRadius: '2px',
-                backgroundColor: form.color || MODALITY_COLORS.Other
-              }}
+              className={styles.documentIndicator}
+              style={{ backgroundColor: form.color || MODALITY_COLORS.Other }}
             />
-            <div style={{ flex: 1 }}>
-              <p style={{
-                fontSize: '14px',
-                fontWeight: '500',
-                color: isSelected ? '#1e293b' : '#374151',
-                margin: '0 0 4px 0'
-              }}>
+            <div className={styles.documentInfo}>
+              <p className={styles.documentName}>
                 {form.name}
               </p>
               {form.modality && (
-                <p style={{
-                  fontSize: '12px',
-                  color: '#64748b',
-                  margin: 0
-                }}>
+                <p className={styles.documentModality}>
                   {form.modality} form
                 </p>
               )}
             </div>
-            <FileText style={{ width: '16px', height: '16px', color: '#9ca3af' }} />
+            <FileText className={cn('h-4 w-4', styles.documentIcon)} />
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
   }, [selectedDocs, toggleDocument]);
 
   return (
-    <div style={{ 
-      backgroundColor: '#f8fafc',
-      minHeight: '100vh'
-    }}>
-      {/* Header - matching providers layout */}
-      <div style={{
-        backgroundColor: 'white',
-        padding: '24px 32px',
-        borderBottom: '1px solid #e2e8f0'
-      }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <h1 style={{ 
-            fontSize: '24px',
-            fontWeight: '600',
-            color: '#1e293b',
-            margin: '0 0 24px 0',
-            letterSpacing: '-0.025em'
-          }}>
-            Document Hub
-          </h1>
-          
-          {/* Print Queue - above search like provider filters */}
+    <div className={styles.pageContainer}>
+      {/* Header Section */}
+      <div className={styles.headerSection}>
+        <div className={styles.contentWrapper}>
+          <div className={styles.headerContent}>
+            <div>
+              <h1 className={styles.headerTitle}>
+                Document Hub
+              </h1>
+              <p className={styles.headerSubtitle}>
+                Medical forms and questionnaires for all modalities
+              </p>
+            </div>
+          </div>
+
+          {/* Print Queue */}
           {selectedDocs.length > 0 && (
-            <div style={{
-              backgroundColor: '#f1f5f9',
-              padding: '16px',
-              borderRadius: '8px',
-              marginBottom: '20px',
-              border: '1px solid #e2e8f0'
-            }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                <div>
-                  <span style={{ fontWeight: '500', color: '#1e293b' }}>Print Queue: {selectedDocs.length} items</span>
-                  <span style={{ color: '#64748b', marginLeft: '8px' }}>Total copies: {getTotalCopies()}</span>
+            <div className={styles.printQueue}>
+              <div className={styles.printQueueHeader}>
+                <div className={styles.printQueueInfo}>
+                  <span style={{ fontWeight: 500 }}>Print Queue: {selectedDocs.length} items</span>
+                  <span className={styles.printQueueCount}>Total copies: {getTotalCopies()}</span>
                 </div>
-                <div style={{ display: 'flex', gap: '8px' }}>
-                  <button
+                <div className={styles.printQueueActions}>
+                  <Button
                     onClick={handlePrint}
                     disabled={selectedDocs.length === 0 || isPrinting}
-                    style={{
-                      backgroundColor: isPrinting ? '#94a3b8' : '#3b82f6',
-                      color: 'white',
-                      border: 'none',
-                      padding: '8px 16px',
-                      borderRadius: '6px',
-                      fontSize: '14px',
-                      cursor: isPrinting ? 'not-allowed' : 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px'
-                    }}
+                    className="flex items-center gap-2"
                   >
-                    <Printer style={{ width: '16px', height: '16px' }} />
+                    <Printer className="h-4 w-4" />
                     {isPrinting ? 'Printing...' : `Print ${getTotalCopies()}`}
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     onClick={clearSelectedDocs}
-                    style={{
-                      backgroundColor: 'white',
-                      color: '#64748b',
-                      border: '1px solid #d1d5db',
-                      padding: '8px 12px',
-                      borderRadius: '6px',
-                      cursor: 'pointer'
-                    }}
+                    variant="outline"
+                    size="icon"
                     aria-label="Clear selected documents"
                   >
-                    <Trash2 style={{ width: '16px', height: '16px' }} />
-                  </button>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
                 </div>
               </div>
               
               {/* Bulk Mode Toggle */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div className={styles.bulkModeWrapper}>
                 <Checkbox
                   id="bulk-mode"
                   checked={isBulkMode}
@@ -306,13 +268,13 @@ const ModernDocumentSelector = React.memo(function ModernDocumentSelector(): Rea
                 />
                 <label
                   htmlFor="bulk-mode"
-                  style={{ fontSize: '14px', cursor: 'pointer' }}
+                  style={{ fontSize: '0.875rem', cursor: 'pointer' }}
                 >
                   Bulk Mode
                 </label>
                 {isBulkMode && (
                   <Select value={bulkQuantity.toString()} onValueChange={(value) => setBulkQuantity(Number(value))}>
-                    <SelectTrigger style={{ width: '120px', height: '32px' }}>
+                    <SelectTrigger className="w-[120px] h-8">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -329,151 +291,123 @@ const ModernDocumentSelector = React.memo(function ModernDocumentSelector(): Rea
           )}
           
           {/* Search */}
-          <div style={{ 
-            position: 'relative',
-            marginBottom: '20px'
-          }}>
-            <div style={{
-              position: 'absolute',
-              left: '12px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              color: '#64748b',
-              fontSize: '16px',
-              pointerEvents: 'none'
-            }}>
-              🔍
-            </div>
-            <input
+          <div className={styles.searchWrapper}>
+            <Search className={cn('h-4 w-4', styles.searchIcon)} />
+            <Input
               type="text"
-              placeholder="Search documents..."
+              placeholder="Search documents by name or modality..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '12px 16px 12px 40px',
-                fontSize: '14px',
-                border: '1px solid #d1d5db',
-                borderRadius: '8px',
-                backgroundColor: 'white',
-                outline: 'none',
-                transition: 'all 0.2s ease',
-                boxSizing: 'border-box'
-              }}
+              className={styles.searchInput}
+              aria-label="Search documents"
             />
           </div>
 
-          {/* Filter Buttons - matching provider layout */}
-          <div style={{
-            display: 'flex',
-            gap: '8px',
-            flexWrap: 'wrap'
-          }}>
+          {/* Filter Buttons */}
+          <div className={styles.filtersWrapper}>
             {Object.entries(visibleSections).map(([section, isVisible]) => (
-              <button
+              <Button
                 key={section}
                 onClick={() => toggleSection(section as keyof typeof visibleSections)}
+                variant={isVisible ? "default" : "outline"}
+                size="sm"
                 style={{
-                  backgroundColor: isVisible ? MODALITY_COLORS[section as keyof typeof MODALITY_COLORS] : 'white',
-                  color: isVisible ? 'white' : '#374151',
-                  border: '1px solid #d1d5db',
-                  padding: '8px 16px',
-                  borderRadius: '6px',
-                  fontSize: '14px',
-                  cursor: 'pointer',
-                  fontWeight: '500'
+                  backgroundColor: isVisible ? MODALITY_COLORS[section as keyof typeof MODALITY_COLORS] : undefined,
+                  borderColor: isVisible ? MODALITY_COLORS[section as keyof typeof MODALITY_COLORS] : undefined
                 }}
               >
                 {section}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div style={{ padding: '32px', maxWidth: '1200px', margin: '0 auto' }}>
-        {searchTerm ? (
-          <div>
-            <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px', color: '#1e293b' }}>
-              Search Results ({filteredDocuments.length})
-            </h2>
-            <div style={{ display: 'grid', gap: '12px' }}>
-              {filteredDocuments.map(renderFormCheckbox)}
+      <div className={styles.mainContent}>
+        <div className={styles.contentWrapper}>
+          {searchTerm ? (
+            <div className={styles.searchResults}>
+              <h2 className={styles.sectionTitle}>
+                Search Results ({filteredDocuments.length})
+              </h2>
+              <div className={styles.documentGrid}>
+                {filteredDocuments.map(renderFormCheckbox)}
+              </div>
             </div>
-          </div>
-        ) : (
-          <>
-            {/* General Forms */}
-            {visibleSections.General && (
-              <div style={{ marginBottom: '32px' }}>
-                <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px', color: MODALITY_COLORS.General }}>
-                  General Forms
-                </h2>
-                <div style={{ display: 'grid', gap: '12px' }}>
-                  {GENERAL_FORMS.map(renderFormCheckbox)}
+          ) : (
+            <>
+              {/* General Forms */}
+              {visibleSections.General && (
+                <div className={styles.section}>
+                  <h2 className={styles.sectionTitle} style={{ color: MODALITY_COLORS.General }}>
+                    General Forms
+                  </h2>
+                  <div className={styles.documentGrid}>
+                    {GENERAL_FORMS.map(renderFormCheckbox)}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* Financial Forms */}
-            {visibleSections.Financial && (
-              <div style={{ marginBottom: '32px' }}>
-                <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px', color: MODALITY_COLORS.Financial }}>
-                  Financial Forms
-                </h2>
-                <div style={{ display: 'grid', gap: '12px' }}>
-                  {FINANCIAL_FORMS.map(renderFormCheckbox)}
+              {/* Financial Forms */}
+              {visibleSections.Financial && (
+                <div className={styles.section}>
+                  <h2 className={styles.sectionTitle} style={{ color: MODALITY_COLORS.Financial }}>
+                    Financial Forms
+                  </h2>
+                  <div className={styles.documentGrid}>
+                    {FINANCIAL_FORMS.map(renderFormCheckbox)}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* Screening Forms by Modality */}
-            {visibleSections.MRI && (
-              <div style={{ marginBottom: '32px' }}>
-                <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px', color: MODALITY_COLORS.MRI }}>
-                  MRI Forms
-                </h2>
-                <div style={{ display: 'grid', gap: '12px' }}>
-                  {SCREENING_FORMS.filter(f => f.modality === 'MRI').map(renderFormCheckbox)}
+              {/* Screening Forms by Modality */}
+              {visibleSections.MRI && (
+                <div className={styles.section}>
+                  <h2 className={styles.sectionTitle} style={{ color: MODALITY_COLORS.MRI }}>
+                    MRI Forms
+                  </h2>
+                  <div className={styles.documentGrid}>
+                    {SCREENING_FORMS.filter(f => f.modality === 'MRI').map(renderFormCheckbox)}
+                  </div>
                 </div>
-              </div>
-            )}
-            
-            {visibleSections.CT && (
-              <div style={{ marginBottom: '32px' }}>
-                <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px', color: MODALITY_COLORS.CT }}>
-                  CT Forms
-                </h2>
-                <div style={{ display: 'grid', gap: '12px' }}>
-                  {SCREENING_FORMS.filter(f => f.modality === 'CT').map(renderFormCheckbox)}
+              )}
+              
+              {visibleSections.CT && (
+                <div className={styles.section}>
+                  <h2 className={styles.sectionTitle} style={{ color: MODALITY_COLORS.CT }}>
+                    CT Forms
+                  </h2>
+                  <div className={styles.documentGrid}>
+                    {SCREENING_FORMS.filter(f => f.modality === 'CT').map(renderFormCheckbox)}
+                  </div>
                 </div>
-              </div>
-            )}
-            
-            {visibleSections.PET && (
-              <div style={{ marginBottom: '32px' }}>
-                <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px', color: MODALITY_COLORS.PET }}>
-                  PET Forms
-                </h2>
-                <div style={{ display: 'grid', gap: '12px' }}>
-                  {SCREENING_FORMS.filter(f => f.modality === 'PET').map(renderFormCheckbox)}
+              )}
+              
+              {visibleSections.PET && (
+                <div className={styles.section}>
+                  <h2 className={styles.sectionTitle} style={{ color: MODALITY_COLORS.PET }}>
+                    PET Forms
+                  </h2>
+                  <div className={styles.documentGrid}>
+                    {SCREENING_FORMS.filter(f => f.modality === 'PET').map(renderFormCheckbox)}
+                  </div>
                 </div>
-              </div>
-            )}
-            
-            {visibleSections.US && (
-              <div style={{ marginBottom: '32px' }}>
-                <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px', color: MODALITY_COLORS.US }}>
-                  Ultrasound Forms
-                </h2>
-                <div style={{ display: 'grid', gap: '12px' }}>
-                  {SCREENING_FORMS.filter(f => f.modality === 'US').map(renderFormCheckbox)}
+              )}
+              
+              {visibleSections.US && (
+                <div className={styles.section}>
+                  <h2 className={styles.sectionTitle} style={{ color: MODALITY_COLORS.US }}>
+                    Ultrasound Forms
+                  </h2>
+                  <div className={styles.documentGrid}>
+                    {SCREENING_FORMS.filter(f => f.modality === 'US').map(renderFormCheckbox)}
+                  </div>
                 </div>
-              </div>
-            )}
-          </>
-        )}
+              )}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

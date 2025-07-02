@@ -68,9 +68,9 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: '',
+      title: 'WCINYP MRI Manual',
       logo: {
-        alt: 'Logo',
+        alt: 'WCINYP Logo',
         src: 'img/logo.png',
       },
       items: [
@@ -78,7 +78,7 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
-          label: 'Knowledge Base',
+          label: 'Knowledgebase',
         },
         {
           to: '/providers',
