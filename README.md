@@ -1,6 +1,6 @@
 # Medical Document Management System
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/wcinyp-medical/deploy-status)](https://app.netlify.com/sites/wcinyp-resources/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/wcinyp/deploy-status)](https://app.netlify.com/sites/wcinyp/deploys)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/rdrlabs/src-wcinyp/actions)
 [![Test Coverage](https://img.shields.io/badge/coverage-37%25-yellow)](./coverage/lcov-report/index.html)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -351,7 +351,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 ## 🆘 Support & Contact
 
 - **GitHub Issues**: [Report bugs or request features](https://github.com/rdrlabs/src-wcinyp/issues)
-- **Documentation**: [Full documentation site](https://your-site.netlify.app)
+- **Documentation**: [Full documentation site](https://wcinyp.netlify.app)
 - **Testing Guide**: [TESTING_PROTOCOL.md](./TESTING_PROTOCOL.md)
 
 ---
