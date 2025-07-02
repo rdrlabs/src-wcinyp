@@ -1,8 +1,8 @@
 # Medical Document Management System
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/your-site-id-here/deploy-status)](https://app.netlify.com/sites/your-site-name/deploys)
-[![CI/CD Tests](https://github.com/username/src-wcinyp/workflows/CI/badge.svg)](https://github.com/username/src-wcinyp/actions)
-[![Test Coverage](https://img.shields.io/badge/coverage-90%25-brightgreen)](https://github.com/username/src-wcinyp/actions)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/wcinyp-medical/deploy-status)](https://app.netlify.com/sites/wcinyp-resources/deploys)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/rdrlabs/src-wcinyp/actions)
+[![Test Coverage](https://img.shields.io/badge/coverage-37%25-yellow)](./coverage/lcov-report/index.html)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19-blue?style=flat&logo=react&logoColor=white)](https://reactjs.org/)
 [![Docusaurus](https://img.shields.io/badge/Docusaurus-3.8-green?style=flat&logo=docusaurus&logoColor=white)](https://docusaurus.io/)
@@ -63,14 +63,14 @@ src-wcinyp/
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 20+
+- Node.js 18+
 - npm or yarn
 
 ### Local Development
 
 ```bash
 # Clone the repository
-git clone https://github.com/username/src-wcinyp.git
+git clone https://github.com/rdrlabs/src-wcinyp.git
 cd src-wcinyp
 
 # Install dependencies
@@ -111,7 +111,7 @@ npm run typecheck
 ```
 
 ### Testing Standards
-- **90%+ coverage** on critical components
+- **85%+ coverage** on critical components
 - **Accessibility testing** with real screen reader validation
 - **User interaction testing** with realistic user scenarios
 - **Error boundary testing** for graceful failure handling
@@ -348,7 +348,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## 🆘 Support & Contact
 
-- **GitHub Issues**: [Report bugs or request features](https://github.com/username/src-wcinyp/issues)
+- **GitHub Issues**: [Report bugs or request features](https://github.com/rdrlabs/src-wcinyp/issues)
 - **Documentation**: [Full documentation site](https://your-site.netlify.app)
 - **Testing Guide**: [TESTING_PROTOCOL.md](./TESTING_PROTOCOL.md)
 
