@@ -7,60 +7,60 @@
 [![Accessibility](https://img.shields.io/badge/WCAG-2.1%20AA-blue)](https://www.w3.org/WAI/WCAG21/quickref/)
 [![Closed Source](https://img.shields.io/badge/license-proprietary-red)](https://wcinyp.netlify.app)
 
-> **🏥 Weill Cornell Imaging at NewYork-Presbyterian**  
-> Comprehensive diagnostic imaging document management system supporting CT, MRI, PET/CT, PET/MRI, Ultrasound, and general medical forms across 9 locations with 100+ expert clinicians. Built with accessibility, maintainability, and clinical workflow optimization as core principles.
+> **Weill Cornell Imaging at NewYork-Presbyterian**  
+> Centralized knowledge repository and automation proof of concept designed to enhance administrative workflows. Provides operational efficiency tools that enable staff to leverage technology for process improvements with quantifiable impact on resource utilization and cost management.
 
-## 📋 Overview
+## Overview
 
-A modern, accessible web application for managing medical forms and documents, featuring:
+Integrated platform serving as both knowledge repository and process automation laboratory. Combines document management capabilities with workflow optimization tools designed to position administrative staff for operational success through technology-enabled process improvements:
 
-> **🤖 AI Development Ready**: See [AI_PROMPT_SCRIPT.md](./AI_PROMPT_SCRIPT.md) for optimal AI assistant engagement and [PROJECT_OVERVIEW.md](./PROJECT_OVERVIEW.md) for comprehensive system understanding.
+> Development Notes: See [AI_PROMPT_SCRIPT.md](./AI_PROMPT_SCRIPT.md) and [PROJECT_OVERVIEW.md](./PROJECT_OVERVIEW.md) for development context.
 
-- **🎯 Document Selection Hub** - Intuitive interface for selecting medical forms by category
-- **📝 Form Builder** - Dynamic form generation with live preview and validation
-- **🖨️ Print Management** - Bulk printing with quantity selection and print queue
-- **♿ Accessibility First** - Full WCAG 2.1 AA compliance with screen reader support
-- **📱 Mobile Responsive** - Works seamlessly across all devices
-- **🎨 Modern UI** - Built with shadcn/ui and TailwindCSS v4
+- Document selection by category
+- Form generation with preview
+- Print management with bulk options
+- WCAG 2.1 AA compliance
+- Mobile responsive
+- Built with shadcn/ui and TailwindCSS v4
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```
 src-wcinyp/
-├── 📁 .devcontainer/              # GitHub Codespaces configuration
+├── .devcontainer/              # GitHub Codespaces configuration
 │   └── devcontainer.json
-├── 📁 .github/workflows/          # CI/CD and automation
+├── .github/workflows/          # CI/CD and automation
 │   └── codespaces.yml
-├── 📁 docs/                       # Docusaurus documentation
-├── 📁 src/
-│   ├── 📁 components/             # React components
-│   │   ├── 📁 ui/                 # shadcn/ui components
+├── docs/                       # Docusaurus documentation
+├── src/
+│   ├── components/             # React components
+│   │   ├── ui/                 # shadcn/ui components
 │   │   │   ├── button.tsx         # Accessible button component
 │   │   │   ├── card.tsx           # Card container component
 │   │   │   ├── checkbox.tsx       # Form checkbox component
 │   │   │   ├── input.tsx          # Form input component
 │   │   │   ├── select.tsx         # Select dropdown component
-│   │   │   └── 📁 __tests__/      # Component test suites
+│   │   │   └── __tests__/      # Component test suites
 │   │   ├── ModernDocumentSelector.tsx  # Main document hub interface
 │   │   ├── ModernFormBuilder.tsx       # Dynamic form generator
-│   │   └── 📁 __tests__/               # Integration tests
-│   ├── 📁 lib/
+│   │   └── __tests__/               # Integration tests
+│   ├── lib/
 │   │   └── utils.ts               # Utility functions (cn, etc.)
-│   ├── 📁 pages/                  # Docusaurus pages
+│   ├── pages/                  # Docusaurus pages
 │   │   ├── document-hub.tsx       # Document management page
 │   │   ├── form-generator.tsx     # Form builder page
 │   │   └── index.tsx              # Landing page
-│   ├── 📁 test-utils/             # Testing utilities
+│   ├── test-utils/             # Testing utilities
 │   │   └── index.tsx              # Custom render functions
 │   └── setupTests.ts              # Jest configuration
-├── 📁 static/documents/           # PDF documents storage
+├── static/documents/           # PDF documents storage
 ├── jest.config.js                 # Jest testing configuration
 ├── tailwind.config.mjs            # TailwindCSS v4 configuration
 ├── package.json                   # Dependencies and scripts
 └── TESTING_PROTOCOL.md           # Comprehensive testing standards
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Node.js 18+
@@ -82,7 +82,7 @@ npm start
 # Open browser to http://localhost:3000
 ```
 
-### GitHub Codespaces (Mobile Safari + Claude Support) 📱
+### GitHub Codespaces (Mobile Safari + Claude Support)
 
 This repository is fully configured for GitHub Codespaces with mobile development:
 
@@ -91,7 +91,7 @@ This repository is fully configured for GitHub Codespaces with mobile developmen
 3. **Claude Integration**: Works seamlessly with Claude in the browser
 4. **Auto-setup**: Dependencies install automatically via `.devcontainer/devcontainer.json`
 
-## 🧪 Testing & Quality Assurance
+## Testing & Quality Assurance
 
 ### Testing Philosophy
 Tests validate real functionality and component behavior.
@@ -118,21 +118,21 @@ npm run typecheck
 
 See [TESTING_PROTOCOL.md](./TESTING_PROTOCOL.md) for complete testing standards.
 
-## ⚙️ System Architecture
+## System Architecture
 
 ### Core Technologies
-- **Frontend**: React 19 with TypeScript for type safety
-- **Styling**: TailwindCSS v4 with shadcn/ui component library
-- **Documentation**: Docusaurus 3.8 for content management
-- **Testing**: Jest with React Testing Library for quality assurance
-- **Build**: Webpack bundling via Docusaurus
+- Frontend: React 19 with TypeScript for type safety
+- Styling: TailwindCSS v4 with shadcn/ui component library
+- Documentation: Docusaurus 3.8 for content management
+- Testing: Jest with React Testing Library for quality assurance
+- Build: Webpack bundling via Docusaurus
 
 ### Application Structure
-The system consists of three main functional areas:
+The system consists of three integrated functional areas:
 
-1. **Knowledge Base**: Documentation and guides using Docusaurus
-2. **Provider Database**: Searchable directory with filtering capabilities  
-3. **Document Management**: Form selection, generation, and printing tools
+1. **Knowledge Repository**: Centralized documentation hub consolidating operational procedures, reference materials, and institutional knowledge using Docusaurus
+2. **Provider Intelligence**: Searchable provider directory with advanced filtering and data management capabilities designed to streamline administrative decision-making
+3. **Workflow Automation**: Document lifecycle management with automated form generation, selection logic, and print queue optimization
 
 ### Data Flow
 - **Static Assets**: PDF documents stored in `/static/documents/`
@@ -141,10 +141,10 @@ The system consists of three main functional areas:
 - **Print Queue**: Client-side document selection and batch printing
 
 ### Security & Performance
-- **Client-Side Processing**: No server-side data storage
-- **Type Safety**: Full TypeScript implementation
-- **Component Isolation**: Modular architecture for maintainability
-- **Responsive Design**: Mobile-first approach with desktop optimization
+- Client-Side Processing: No server-side data storage
+- Type Safety: Full TypeScript implementation
+- Component Isolation: Modular architecture for maintainability
+- Responsive Design: Mobile-first approach with desktop optimization
 
 ### Component Architecture
 
@@ -189,29 +189,29 @@ import { Checkbox } from '@/components/ui/checkbox';
 }
 ```
 
-## 🎯 Key Features
+## Key Features
 
 ### Document Management Hub
-- **Categorized Forms**: Medical forms organized by modality (MRI, CT, PET, US)
-- **Smart Search**: Real-time filtering across all document types
-- **Bulk Operations**: Select multiple documents with quantity control
-- **Print Queue**: Visual queue showing selected documents and copy counts
+- Categorized Forms: Medical forms organized by modality (MRI, CT, PET, US)
+- Smart Search: Real-time filtering across all document types
+- Bulk Operations: Select multiple documents with quantity control
+- Print Queue: Visual queue showing selected documents and copy counts
 
 ### Form Builder
-- **Dynamic Fields**: Patient name, DOB, service date, amount due
-- **Live Preview**: Real-time form preview as you type
-- **Progress Tracking**: Visual progress bar and completion percentage
-- **Validation**: Field-level validation with visual feedback
-- **Print Ready**: Professional formatting for medical use
+- Dynamic Fields: Patient name, DOB, service date, amount due
+- Live Preview: Real-time form preview as you type
+- Progress Tracking: Visual progress bar and completion percentage
+- Validation: Field-level validation with visual feedback
+- Print Ready: Professional formatting for medical use
 
 ### Accessibility Features
-- **Screen Reader Support**: Complete ARIA labeling and semantic HTML
-- **Keyboard Navigation**: Full keyboard accessibility throughout
-- **High Contrast**: WCAG 2.1 AA color contrast compliance
-- **Focus Management**: Clear focus indicators and logical tab order
-- **Error Handling**: Descriptive error messages and fallback states
+- Screen Reader Support: Complete ARIA labeling and semantic HTML
+- Keyboard Navigation: Full keyboard accessibility throughout
+- High Contrast: WCAG 2.1 AA color contrast compliance
+- Focus Management: Clear focus indicators and logical tab order
+- Error Handling: Descriptive error messages and fallback states
 
-## 🛠️ Development Workflow
+## Development Workflow
 
 ### Code Quality
 ```bash
@@ -244,7 +244,7 @@ npm test -- ModernFormBuilder.test.tsx
 npm test -- --verbose
 ```
 
-## 🚀 Deployment
+## Deployment
 
 ### Build Process
 ```bash
@@ -265,18 +265,18 @@ npm run serve
 ### GitHub Actions & Status Badges
 Automatic testing and deployment via `.github/workflows/`:
 
-- **🔄 CI/CD Pipeline**: Runs tests, type checking, and builds on every push
-- **📊 Test Coverage Badge**: Displays current test coverage percentage 
-- **✅ Build Status**: Shows if the latest deployment succeeded
-- **🔒 Security**: Automated dependency vulnerability scanning
-- **📈 Performance**: Lighthouse scores for accessibility and performance
+- CI/CD Pipeline: Runs tests, type checking, and builds on every push
+- Test Coverage Badge: Displays current test coverage percentage 
+- Build Status: Shows if the latest deployment succeeded
+- Security: Automated dependency vulnerability scanning
+- Performance: Lighthouse scores for accessibility and performance
 
 To set up badges for your repository:
 1. Replace `username/src-wcinyp` with your actual GitHub repository
 2. Update Netlify site ID in the status badge URL
 3. Configure GitHub Actions for automated badge updates
 
-## 🎯 Future Development Roadmap
+## Future Development Roadmap
 
 ### Phase 1: Core Functionality ✅
 - ✅ Document selection interface
@@ -302,22 +302,22 @@ To set up badges for your repository:
 - 🔮 Workflow automation
 - 🔮 Advanced analytics
 
-## 🎓 For Non-Technical Users
+## For Non-Technical Users
 
 ### Application Overview
-This application shows how medical document workflows can be managed through user-friendly interfaces:
+This proof of concept validates technology-driven approaches to administrative process optimization:
 
-- **Simplicity**: Clear visual cues for document selection and form creation
-- **Reliability**: Error handling and validation throughout the interface
-- **Accessibility**: Screen reader support and keyboard navigation
-- **Maintainability**: Modular code structure for updates and modifications
+- Workflow Intelligence: Automated document routing and form generation that eliminates repetitive manual tasks
+- Knowledge Consolidation: Unified information architecture providing immediate access to procedures, forms, and reference data
+- Administrative Amplification: Technology tools that multiply individual staff capacity and enable handling of increased workload complexity
+- Resource Optimization: Process improvements yielding measurable reductions in time-to-completion and operational overhead
 
-### Business Value
-- **Reduced Training Time**: Intuitive interface requires minimal training
-- **Error Prevention**: Built-in validation prevents common mistakes
-- **Efficiency**: Streamlined workflows save time on routine tasks
-- **Compliance**: Accessibility features ensure legal compliance
-- **Scalability**: Architecture supports adding new features easily
+### Operational Impact
+- Administrative Automation: Systematic reduction of manual intervention points in document workflows
+- Information Architecture: Centralized knowledge management eliminating redundant information silos and reducing research overhead
+- Capacity Optimization: Technology enablement allowing existing staff to manage increased throughput without proportional resource expansion
+- Quality Assurance: Automated validation and error-checking mechanisms preventing costly processing errors before they propagate
+- Financial Efficiency: Quantifiable time savings in routine administrative processes translating to measurable cost avoidance and resource reallocation opportunities
 
 ### Maintenance Approach
 The codebase includes safeguards for long-term stability:
@@ -327,7 +327,7 @@ The codebase includes safeguards for long-term stability:
 3. **User Feedback**: Interface provides immediate response to user actions
 4. **Documentation**: Components and functions include documentation
 
-## 🤝 Contributing
+## Contributing
 
 ### For Developers
 1. Fork the repository
@@ -346,7 +346,7 @@ The codebase includes safeguards for long-term stability:
 
 **Proprietary Software** - All rights reserved. This software is the exclusive property of the owner. Unauthorized use, distribution, or modification is strictly prohibited without explicit written permission.
 
-## 🆘 Support & Contact
+## Support & Contact
 
 - **GitHub Issues**: [Report bugs or request features](https://github.com/rdrlabs/src-wcinyp/issues)
 - **Documentation**: [Full documentation site](https://wcinyp.netlify.app)
@@ -354,4 +354,4 @@ The codebase includes safeguards for long-term stability:
 
 ---
 
-**Built with modern web technologies and accessibility-first design principles.**
+Built with modern web technologies and accessibility-first design principles.
