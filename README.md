@@ -1,13 +1,11 @@
 # WCINYP Medical Document Management System
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/669eb4a6-fc5e-4f2d-9ee0-8b9f8c832d44/deploy-status)](https://app.netlify.com/sites/wcinyp/deploys)
 [![Tests](https://img.shields.io/badge/tests-66%20passing-brightgreen)](./coverage/lcov-report/index.html)
-[![Coverage](https://img.shields.io/badge/coverage-86%25%20critical-brightgreen)](./coverage/lcov-report/index.html)
+[![Coverage](https://img.shields.io/badge/coverage-37%25%20overall%20|%2086%25%20critical-yellow)](./coverage/lcov-report/index.html)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19-blue?logo=react&logoColor=white)](https://reactjs.org/)
 [![Accessibility](https://img.shields.io/badge/WCAG-2.1%20AA-blue)](https://www.w3.org/WAI/WCAG21/quickref/)
-[![Healthcare](https://img.shields.io/badge/healthcare-compliant-blue)](https://wcinyp.netlify.app)
-[![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
+[![Closed Source](https://img.shields.io/badge/license-proprietary-red)](https://wcinyp.netlify.app)
 
 > **🏥 Weill Cornell Imaging at NewYork-Presbyterian**  
 > Comprehensive diagnostic imaging document management system supporting CT, MRI, PET/CT, PET/MRI, Ultrasound, and general medical forms across 9 locations with 100+ expert clinicians. Built with accessibility, maintainability, and clinical workflow optimization as core principles.
@@ -346,7 +344,7 @@ The codebase includes safeguards for long-term stability:
 
 ## 📄 License
 
-MIT License - see [LICENSE](LICENSE) file for details.
+**Proprietary Software** - All rights reserved. This software is the exclusive property of the owner. Unauthorized use, distribution, or modification is strictly prohibited without explicit written permission.
 
 ## 🆘 Support & Contact
 
