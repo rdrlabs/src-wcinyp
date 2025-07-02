@@ -2,7 +2,7 @@
 
 ## 🎯 **Project Purpose & Vision**
 
-This is a **comprehensive medical document management system** for **Weill Cornell Imaging at NewYork-Presbyterian (WCINYP)**, supporting diagnostic imaging workflows across 9 locations with 100+ expert clinicians. The system streamlines medical form management for CT, MRI, PET/CT, PET/MRI, Ultrasound, and general medical procedures while showcasing modern web development practices, AI-assisted development workflows, and accessibility-first design.
+This is a **comprehensive medical document management system** for **Weill Cornell Imaging at NewYork-Presbyterian (WCINYP)**, specifically designed to support **Senior Patient Coordinators (SPCs)** who manage high-volume patient workflows across 7 Manhattan sites. The system streamlines medical form management for CT, MRI, PET/CT, PET/MRI, Ultrasound, and general medical procedures, enabling SPCs to efficiently handle patient registration, insurance verification, appointment scheduling, and pre-authorization processes while ensuring optimal patient experiences.
 
 ## 🏗️ **System Architecture Overview**
 

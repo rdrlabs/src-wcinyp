@@ -11,7 +11,14 @@ This guide provides essential context for AI assistants working on the **Weill C
 - **Academic medical center** with research and educational missions
 - **Patient-centered care** with emphasis on accessibility and usability
 
-This system directly supports clinical workflows for real medical professionals serving actual patients, making quality, accessibility, and reliability absolutely critical.
+This system directly supports clinical workflows for **Senior Patient Coordinators (SPCs)** who are responsible for:
+- **Patient registration and insurance verification** across all imaging modalities
+- **Appointment scheduling, confirmation, and management** for high-volume patient inquiries
+- **Front-end revenue cycle management** including check-in/check-out and payment collection
+- **Pre-authorization and eligibility verification** for imaging procedures
+- **Patient experience optimization** ensuring smooth visits and comprehensive support
+
+SPCs handle continuous streams of high-volume patient inquiries across 7 Manhattan sites, making system reliability, accessibility, and ease-of-use absolutely critical for patient care delivery.
 
 ## 🚨 CRITICAL REMINDERS - READ FIRST
 

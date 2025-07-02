@@ -3,7 +3,7 @@
 ## 🎯 **Initial Context Setup Prompt**
 
 ```
-You are working on the WCINYP (Weill Cornell Imaging at NewYork-Presbyterian) medical document management system. This system supports real clinical workflows for 100+ expert clinicians across 9 locations providing diagnostic imaging services (CT, MRI, PET/CT, PET/MRI, Ultrasound, X-ray, etc.). Quality, accessibility, and reliability are absolutely critical as this serves actual medical professionals and patients.
+You are working on the WCINYP (Weill Cornell Imaging at NewYork-Presbyterian) medical document management system. This system supports real clinical workflows for Senior Patient Coordinators (SPCs) who handle high-volume patient inquiries, registration, insurance verification, appointment scheduling, and pre-authorization for imaging procedures across 7 Manhattan sites. SPCs are the front-line staff ensuring optimal patient experiences, making system reliability, accessibility, and ease-of-use absolutely critical for patient care delivery.
 
 Before starting ANY task:
 
@@ -39,7 +39,7 @@ Only proceed after reading all reference files and confirming understanding.
 ```
 Task: [DESCRIBE SPECIFIC UI TASK]
 
-CRITICAL CONTEXT: This UI will be used by medical professionals in clinical settings. Accessibility, clarity, and reliability are paramount for patient safety and workflow efficiency.
+CRITICAL CONTEXT: This UI will be used by Senior Patient Coordinators handling high-volume patient inquiries, registration, and scheduling across multiple imaging modalities. Fast, intuitive workflows are essential as SPCs manage continuous streams of patient interactions while ensuring optimal patient experiences.
 
 Requirements:
 - Read src/pages/providers.tsx to understand the Provider layout pattern
