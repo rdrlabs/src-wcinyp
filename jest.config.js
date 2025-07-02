@@ -6,6 +6,7 @@ module.exports = {
     '\.(css|less|scss|sass)$': 'identity-obj-proxy',
     '^@theme/(.*)$': '<rootDir>/src/__mocks__/@theme/$1',
     '^@docusaurus/(.*)$': '<rootDir>/src/__mocks__/@docusaurus/$1',
+    '^@site/(.*)$': '<rootDir>/src/__mocks__/@site/$1',
   },
   testMatch: [
     '<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}',

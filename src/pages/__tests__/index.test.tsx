@@ -13,7 +13,7 @@ describe('Homepage', () => {
     it('displays the main heading', () => {
       render(<Homepage />);
       
-      expect(screen.getByText('Welcome')).toBeInTheDocument();
+      expect(screen.getByText('Weill Cornell Imaging')).toBeInTheDocument();
     });
 
     it('has proper page title in Layout', () => {
@@ -37,13 +37,13 @@ describe('Homepage', () => {
       
       const h1 = screen.getByRole('heading', { level: 1 });
       expect(h1).toBeInTheDocument();
-      expect(h1).toHaveTextContent('Welcome');
+      expect(h1).toHaveTextContent('Weill Cornell Imaging');
     });
 
     it('has proper layout structure', () => {
       render(<Homepage />);
       
-      const container = screen.getByText('Welcome').closest('.container');
+      const container = screen.getByText('Weill Cornell Imaging').closest('.container');
       expect(container).toBeInTheDocument();
     });
 
@@ -77,7 +77,7 @@ describe('Homepage', () => {
       render(<Homepage />);
       
       const mainHeading = screen.getByRole('heading', { level: 1 });
-      expect(mainHeading).toHaveAccessibleName('Welcome');
+      expect(mainHeading).toHaveAccessibleName('Weill Cornell Imaging');
     });
   });
 
@@ -85,14 +85,14 @@ describe('Homepage', () => {
     it('applies responsive container classes', () => {
       render(<Homepage />);
       
-      const container = screen.getByText('Welcome').closest('.container');
+      const container = screen.getByText('Weill Cornell Imaging').closest('.container');
       expect(container).toBeInTheDocument();
     });
 
     it('uses Docusaurus layout classes', () => {
       render(<Homepage />);
       
-      const hero = screen.getByText('Welcome').closest('.hero');
+      const hero = screen.getByText('Weill Cornell Imaging').closest('.hero');
       expect(hero).toBeInTheDocument();
     });
   });
@@ -103,7 +103,7 @@ describe('Homepage', () => {
       
       render(<Homepage />);
       
-      expect(screen.getByText('Welcome')).toBeInTheDocument();
+      expect(screen.getByText('Weill Cornell Imaging')).toBeInTheDocument();
       
       consoleSpy.mockRestore();
     });
@@ -113,11 +113,11 @@ describe('Homepage', () => {
     it('renders efficiently without unnecessary re-renders', () => {
       const { rerender } = render(<Homepage />);
       
-      expect(screen.getByText('Welcome')).toBeInTheDocument();
+      expect(screen.getByText('Weill Cornell Imaging')).toBeInTheDocument();
       
       rerender(<Homepage />);
       
-      expect(screen.getByText('Welcome')).toBeInTheDocument();
+      expect(screen.getByText('Weill Cornell Imaging')).toBeInTheDocument();
     });
   });
 
@@ -126,7 +126,7 @@ describe('Homepage', () => {
       render(<Homepage />);
       
       const heading = screen.getByRole('heading', { level: 1 });
-      expect(heading).toHaveTextContent('Welcome');
+      expect(heading).toHaveTextContent('Weill Cornell Imaging');
     });
 
     it('uses semantic HTML structure', () => {

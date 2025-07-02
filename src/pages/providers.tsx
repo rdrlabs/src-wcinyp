@@ -15,6 +15,8 @@ import { cn } from '@/lib/utils';
 import { AppErrorBoundary, PageErrorBoundary } from '@/components/ErrorBoundary';
 import providersData from '../data/providers.json';
 import styles from './providers.module.css';
+import '../css/shadcn-pages.css';
+import '../css/shadcn-pages.css';
 
 interface PriorityNote {
   type: 'critical' | 'contact' | 'info';
@@ -130,7 +132,7 @@ export default function Providers(): React.ReactElement {
         description="WCINYP Provider Contact Information and Guidelines"
       >
         <AppErrorBoundary>
-          <div className={styles.pageContainer}>
+          <div className={`shadcn-page ${styles.pageContainer}`}>
             {/* Header Section */}
             <div className={styles.headerSection}>
               <div className={styles.contentWrapper}>

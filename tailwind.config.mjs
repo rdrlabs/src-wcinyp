@@ -3,8 +3,14 @@ import { type Config } from 'tailwindcss';
 
 export default {
   content: [
-    "./src/**/*.{js,jsx,ts,tsx,md,mdx}",
-    "./docs/**/*.{js,jsx,ts,tsx,md,mdx}",
+    // Only scan shadcn components and pages that use them
+    "./src/components/ui/**/*.{js,jsx,ts,tsx}",
+    "./src/components/ModernFormBuilder.tsx",
+    "./src/components/ModernDocumentSelector.tsx",
+    "./src/pages/providers.tsx",
+    "./src/pages/document-hub.tsx",
+    "./src/pages/form-generator.tsx",
+    "./src/lib/utils.ts",
   ],
   darkMode: ["class", '[data-theme="dark"]'],
   theme: {

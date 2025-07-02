@@ -24,7 +24,7 @@ describe('DocumentSelector (Legacy)', () => {
     it('renders the document selector interface', () => {
       render(<DocumentSelector />);
       
-      expect(screen.getByText('Document Selector')).toBeInTheDocument();
+      expect(screen.getByText('Document Hub')).toBeInTheDocument();
     });
 
     it('renders without crashing', () => {
@@ -32,7 +32,7 @@ describe('DocumentSelector (Legacy)', () => {
       
       render(<DocumentSelector />);
       
-      expect(screen.getByText('Document Selector')).toBeInTheDocument();
+      expect(screen.getByText('Document Hub')).toBeInTheDocument();
       
       consoleSpy.mockRestore();
     });
@@ -42,7 +42,7 @@ describe('DocumentSelector (Legacy)', () => {
     it('has proper component hierarchy', () => {
       render(<DocumentSelector />);
       
-      const documentSelector = screen.getByText('Document Selector').closest('div');
+      const documentSelector = screen.getByText('Document Hub').closest('div');
       expect(documentSelector).toBeInTheDocument();
     });
   });
@@ -54,7 +54,7 @@ describe('DocumentSelector (Legacy)', () => {
       render(<DocumentSelector />);
       
       // Component should render without errors
-      expect(screen.getByText('Document Selector')).toBeInTheDocument();
+      expect(screen.getByText('Document Hub')).toBeInTheDocument();
       
       consoleSpy.mockRestore();
     });

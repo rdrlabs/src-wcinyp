@@ -2,6 +2,8 @@ import React from 'react';
 import Layout from '@theme/Layout';
 import { PageErrorBoundary, AppErrorBoundary } from '@/components/ErrorBoundary';
 import ModernDocumentSelector from '../components/ModernDocumentSelector';
+import '../css/shadcn-pages.css';
+import '../css/shadcn-pages.css';
 
 export default function DocumentHub(): React.ReactElement {
   return (
@@ -11,7 +13,9 @@ export default function DocumentHub(): React.ReactElement {
     >
       <PageErrorBoundary>
         <AppErrorBoundary>
-          <ModernDocumentSelector />
+          <div className="shadcn-page">
+            <ModernDocumentSelector />
+          </div>
         </AppErrorBoundary>
       </PageErrorBoundary>
     </Layout>

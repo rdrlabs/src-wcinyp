@@ -10,6 +10,17 @@ if (!global.PointerEvent) {
   global.PointerEvent = PointerEvent as any;
 }
 
+// Mock pointer capture methods that JSDOM doesn't support
+if (typeof Element.prototype.hasPointerCapture !== 'function') {
+  Element.prototype.hasPointerCapture = jest.fn(() => false);
+}
+if (typeof Element.prototype.setPointerCapture !== 'function') {
+  Element.prototype.setPointerCapture = jest.fn();
+}
+if (typeof Element.prototype.releasePointerCapture !== 'function') {
+  Element.prototype.releasePointerCapture = jest.fn();
+}
+
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -53,3 +64,8 @@ global.IntersectionObserver = jest.fn().mockImplementation(() => ({
   unobserve: jest.fn(),
   disconnect: jest.fn(),
 }));
+
+// Mock scrollIntoView method that JSDOM doesn't support
+if (typeof Element.prototype.scrollIntoView !== 'function') {
+  Element.prototype.scrollIntoView = jest.fn();
+}

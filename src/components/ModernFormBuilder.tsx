@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Printer, RotateCcw, FileText, Calendar, DollarSign, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import styles from './ModernFormBuilder.module.css';
 
 interface FormField {
   label: string;
@@ -18,28 +19,28 @@ const INITIAL_FORM_DATA: FormField[] = [
     label: 'Patient Name', 
     value: '', 
     type: 'text',
-    icon: <User className="h-4 w-4" />,
+    icon: <User className={styles.iconWrapper} />,
     required: true
   },
   { 
     label: 'Date of Birth', 
     value: '', 
     type: 'date',
-    icon: <Calendar className="h-4 w-4" />,
+    icon: <Calendar className={styles.iconWrapper} />,
     required: true
   },
   { 
     label: 'Service Date', 
     value: '', 
     type: 'date',
-    icon: <Calendar className="h-4 w-4" />,
+    icon: <Calendar className={styles.iconWrapper} />,
     required: true
   },
   { 
     label: 'Amount Due', 
     value: '', 
     type: 'number',
-    icon: <DollarSign className="h-4 w-4" />,
+    icon: <DollarSign className={styles.iconWrapper} />,
     required: true
   },
 ];
@@ -82,45 +83,36 @@ const ModernFormBuilder = React.memo(function ModernFormBuilder(): React.ReactEl
   }, [formData]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div>
       {/* Header */}
-      <div className="border-b bg-card">
-        <div className="p-6">
-          <div className="max-w-4xl mx-auto">
-            <div className="flex items-center gap-3">
-              <FileText className="h-8 w-8 text-primary" />
-              <div>
-                <h1 className="text-3xl font-bold tracking-tight">Form Generator</h1>
-                <p className="text-muted-foreground">Create and customize self-pay agreement forms</p>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>Form Generator</h1>
+        <p className={styles.pageSubtitle}>Create and customize self-pay agreement forms</p>
       </div>
 
       {/* Content */}
-      <div className="p-6">
-        <div className="max-w-4xl mx-auto space-y-8">
+      <div className={styles.container}>
+        <div className={cn(styles.contentWrapper, styles.sectionSpacing)}>
           {/* Progress Card */}
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className={styles.progressHeader}>
                 <div>
-                  <CardTitle className="text-lg">Form Progress</CardTitle>
+                  <CardTitle className={styles.progressTitle}>Form Progress</CardTitle>
                   <CardDescription>
                     {completedFields} of {formData.length} fields completed
                   </CardDescription>
                 </div>
-                <div className="text-right">
-                  <div className="text-2xl font-bold text-primary">
+                <div className={styles.progressText}>
+                  <div className={styles.progressPercentage}>
                     {Math.round(progressPercentage)}%
                   </div>
-                  <div className="text-sm text-muted-foreground">Complete</div>
+                  <div className={styles.progressLabel}>Complete</div>
                 </div>
               </div>
-              <div className="w-full bg-secondary rounded-full h-2">
+              <div className={styles.progressBar}>
                 <div 
-                  className="bg-primary h-2 rounded-full transition-all duration-300 ease-in-out"
+                  className={styles.progressFill}
                   style={{ width: `${progressPercentage}%` }}
                 />
               </div>
@@ -129,25 +121,25 @@ const ModernFormBuilder = React.memo(function ModernFormBuilder(): React.ReactEl
 
           {/* Form Card */}
           <Card>
-            <CardHeader className="text-center space-y-2">
-              <CardTitle className="text-2xl">Self-Pay Agreement Form</CardTitle>
+            <CardHeader className={styles.formHeader}>
+              <CardTitle className={styles.formTitle}>Self-Pay Agreement Form</CardTitle>
               <CardDescription>
                 Please fill out all required information below
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className={styles.formContent}>
               {formData.map((field, index) => {
                 const inputId = `form-field-${index}`;
                 return (
-                  <div key={field.label} className="space-y-2">
+                  <div key={field.label} className={styles.fieldWrapper}>
                     <label 
                       htmlFor={inputId}
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      className={styles.fieldLabel}
                     >
-                      <div className="flex items-center gap-2 mb-2">
+                      <div className={styles.fieldLabelContent}>
                         {field.icon}
                         {field.label}
-                        <span className="text-destructive">*</span>
+                        <span className={styles.fieldRequired}>*</span>
                       </div>
                     </label>
                     <Input
@@ -157,10 +149,8 @@ const ModernFormBuilder = React.memo(function ModernFormBuilder(): React.ReactEl
                       onChange={(e) => handleFieldChange(index, e.target.value)}
                       placeholder={`Enter ${field.label.toLowerCase()}`}
                       className={cn(
-                        "transition-all duration-200",
-                        field.value.trim() 
-                          ? "ring-2 ring-green-500/20 border-green-500/50 bg-green-50/50" 
-                          : "focus:ring-primary/20"
+                        styles.fieldInput,
+                        field.value.trim() && styles.fieldInputCompleted
                       )}
                       aria-required="true"
                     />
@@ -172,23 +162,23 @@ const ModernFormBuilder = React.memo(function ModernFormBuilder(): React.ReactEl
 
           {/* Actions Card */}
           <Card>
-            <CardContent className="p-6">
-              <div className="flex justify-center gap-4">
+            <CardContent className={styles.actionsWrapper}>
+              <div className={styles.actionsContent}>
                 <Button 
                   variant="outline"
                   onClick={handleReset}
                   disabled={isFormEmpty}
-                  className="flex items-center gap-2"
+                  className={styles.actionButton}
                 >
-                  <RotateCcw className="h-4 w-4" />
+                  <RotateCcw className={styles.iconWrapper} />
                   Clear Form
                 </Button>
                 <Button 
                   onClick={handlePrint}
-                  className="flex items-center gap-2"
+                  className={styles.actionButton}
                   disabled={isFormEmpty}
                 >
-                  <Printer className="h-4 w-4" />
+                  <Printer className={styles.iconWrapper} />
                   Print Form
                 </Button>
               </div>
@@ -196,49 +186,49 @@ const ModernFormBuilder = React.memo(function ModernFormBuilder(): React.ReactEl
           </Card>
 
           {/* Form Preview Card */}
-          <Card className="bg-muted/30">
-            <CardHeader>
-              <CardTitle className="text-lg">Live Preview</CardTitle>
+          <Card className={styles.previewCard}>
+            <CardHeader className={styles.previewHeader}>
+              <CardTitle>Live Preview</CardTitle>
               <CardDescription>
                 This is how your form will appear when printed
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="bg-white p-8 rounded-lg shadow-sm border min-h-[400px]">
-                <div className="text-center mb-8">
-                  <h2 className="text-2xl font-bold text-gray-900">Self-Pay Agreement Form</h2>
-                  <div className="w-24 h-1 bg-primary mx-auto mt-2"></div>
+              <div className={styles.previewContainer}>
+                <div className={styles.previewHeader}>
+                  <h2 className={styles.previewTitle}>Self-Pay Agreement Form</h2>
+                  <div className={styles.previewDivider}></div>
                 </div>
                 
-                <div className="space-y-6">
+                <div className={styles.previewFields}>
                   {formData.map((field, index) => (
-                    <div key={field.label} className="flex items-center justify-between border-b border-gray-200 pb-2">
-                      <label className="font-medium text-gray-700 w-1/3">
+                    <div key={field.label} className={styles.previewField}>
+                      <label className={styles.previewFieldLabel}>
                         {field.label}:
                       </label>
-                      <div className="w-2/3 text-right">
+                      <div className={styles.previewFieldValue}>
                         {field.value ? (
-                          <span className="text-gray-900 font-medium">
+                          <span className={styles.previewFieldValueText}>
                             {field.type === 'number' && field.value ? `$${field.value}` : field.value}
                           </span>
                         ) : (
-                          <span className="text-gray-400 italic">Not provided</span>
+                          <span className={styles.previewFieldEmpty}>Not provided</span>
                         )}
                       </div>
                     </div>
                   ))}
                 </div>
 
-                <div className="mt-12 pt-8 border-t border-gray-200">
-                  <div className="text-center text-sm text-gray-600">
+                <div className={styles.previewFooter}>
+                  <div className={styles.previewFooterText}>
                     <p>I acknowledge that I understand the financial responsibility for services rendered.</p>
-                    <div className="mt-8 flex justify-between">
-                      <div className="text-left">
-                        <div className="border-b border-gray-400 w-48 mb-1"></div>
+                    <div className={styles.previewSignatures}>
+                      <div className={styles.previewSignatureSection}>
+                        <div className={styles.previewSignatureLine}></div>
                         <span>Patient Signature</span>
                       </div>
-                      <div className="text-right">
-                        <div className="border-b border-gray-400 w-32 mb-1"></div>
+                      <div>
+                        <div className={styles.previewDateLine}></div>
                         <span>Date</span>
                       </div>
                     </div>
