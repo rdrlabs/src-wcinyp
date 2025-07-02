@@ -32,7 +32,7 @@ export default function Providers(): React.ReactElement {
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-  const providers: Provider[] = providersData.providers;
+  const providers: Provider[] = providersData.providers as Provider[];
 
   // Filter and search logic
   const filteredProviders = useMemo(() => {
