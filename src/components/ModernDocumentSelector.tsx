@@ -15,6 +15,7 @@ interface Document {
 
 const MODALITY_COLORS = {
   General: '#64748b',
+  Financial: '#dc2626',
   MRI: '#3b82f6',
   CT: '#10b981',
   PET: '#f59e0b',
@@ -23,11 +24,14 @@ const MODALITY_COLORS = {
 };
 
 const GENERAL_FORMS: Document[] = [
-  { name: 'General Medical Records Release Form', path: '/documents/General Medical Records Release Form.pdf', category: 'general', color: MODALITY_COLORS.General },
   { name: 'Minor Auth Form', path: '/documents/Minor Auth Form.pdf', category: 'general', color: MODALITY_COLORS.General },
   { name: 'Outpatient Medical Chaperone Form', path: '/documents/Outpatient Medical Chaperone Form.pdf', category: 'general', color: MODALITY_COLORS.General },
-  { name: 'Waiver of Liability Form - Self Pay', path: '/documents/Waiver of Liability Form - Self Pay.pdf', category: 'general', color: MODALITY_COLORS.General },
-  { name: 'Waiver of Liability Form- Insurance Off-Hours', path: '/documents/Waiver of Liability Form- Insurance Off-Hours.pdf', category: 'general', color: MODALITY_COLORS.General },
+  { name: 'General Medical Records Release Form', path: '/documents/General Medical Records Release Form.pdf', category: 'general', color: MODALITY_COLORS.General },
+];
+
+const FINANCIAL_FORMS: Document[] = [
+  { name: 'Waiver of Liability Form - Self Pay', path: '/documents/Waiver of Liability Form - Self Pay.pdf', category: 'financial', color: MODALITY_COLORS.Financial },
+  { name: 'Waiver of Liability Form- Insurance Off-Hours', path: '/documents/Waiver of Liability Form- Insurance Off-Hours.pdf', category: 'financial', color: MODALITY_COLORS.Financial },
 ];
 
 const SCREENING_FORMS: Document[] = [
@@ -46,7 +50,7 @@ const SCREENING_FORMS: Document[] = [
   { name: 'Fluoro Questionnaire', path: '/documents/Fluoro Questionnaire.pdf', category: 'screening', modality: 'Other', color: MODALITY_COLORS.Other },
 ];
 
-const ALL_DOCUMENTS = [...GENERAL_FORMS, ...SCREENING_FORMS];
+const ALL_DOCUMENTS = [...GENERAL_FORMS, ...FINANCIAL_FORMS, ...SCREENING_FORMS];
 const BULK_QUANTITIES = [1, 2, 3, 4, 5, 10, 15, 20, 25, 50];
 
 const ModernDocumentSelector = React.memo(function ModernDocumentSelector(): React.ReactElement {
@@ -54,6 +58,7 @@ const ModernDocumentSelector = React.memo(function ModernDocumentSelector(): Rea
   const [searchTerm, setSearchTerm] = useState('');
   const [visibleSections, setVisibleSections] = useState({
     General: true,
+    Financial: true,
     MRI: true,
     CT: true,
     PET: true,
@@ -100,6 +105,10 @@ const ModernDocumentSelector = React.memo(function ModernDocumentSelector(): Rea
       
       if (doc.category === 'general') {
         return matchesSearch && visibleSections.General;
+      }
+      
+      if (doc.category === 'financial') {
+        return matchesSearch && visibleSections.Financial;
       }
       
       if (doc.modality) {
@@ -403,6 +412,18 @@ const ModernDocumentSelector = React.memo(function ModernDocumentSelector(): Rea
                 </h2>
                 <div style={{ display: 'grid', gap: '12px' }}>
                   {GENERAL_FORMS.map(renderFormCheckbox)}
+                </div>
+              </div>
+            )}
+
+            {/* Financial Forms */}
+            {visibleSections.Financial && (
+              <div style={{ marginBottom: '32px' }}>
+                <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px', color: MODALITY_COLORS.Financial }}>
+                  Financial Forms
+                </h2>
+                <div style={{ display: 'grid', gap: '12px' }}>
+                  {FINANCIAL_FORMS.map(renderFormCheckbox)}
                 </div>
               </div>
             )}

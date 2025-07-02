@@ -10,6 +10,7 @@ Before starting ANY task:
 1. **READ THESE FILES FIRST** (in this order):
    - README.md - Project overview and technical requirements
    - AI_CODEV_GUIDE.md - Development standards and critical reminders  
+   - UI_PREFERENCES.md - User preferences for UI organization and layout
    - TESTING_PROTOCOL.md - Testing requirements and quality gates
    - package.json - Available scripts and dependencies
 

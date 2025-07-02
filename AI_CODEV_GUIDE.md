@@ -22,6 +22,13 @@ SPCs handle continuous streams of high-volume patient inquiries across 7 Manhatt
 
 ## 🚨 CRITICAL REMINDERS - READ FIRST
 
+### UI Preferences & Change Management
+- **READ UI_PREFERENCES.md** - tracks user preferences for organization and layout
+- **DOCUMENT new preferences** when user requests UI changes
+- **ASK clarifying questions** if changes could impact other areas
+- **DON'T make assumptions** about unmentioned areas when reorganizing
+- **BALANCE preferences** with usability and future development needs
+
 ### Testing Protocol Compliance
 - **ALWAYS run tests after ANY code change**: `npm run test:ci`
 - **Update test assertions when UI changes** - don't just make tests pass
