@@ -1,8 +1,8 @@
-# Project Overview: Medical Document Management System
+# Project Overview: WCINYP Medical Document Management System
 
 ## 🎯 **Project Purpose & Vision**
 
-This is a **comprehensive medical document management system** showcasing modern web development practices, AI-assisted development workflows, and accessibility-first design. The system demonstrates how complex healthcare workflows can be streamlined through intuitive user interfaces and robust testing protocols.
+This is a **comprehensive medical document management system** for **Weill Cornell Imaging at NewYork-Presbyterian (WCINYP)**, supporting diagnostic imaging workflows across 9 locations with 100+ expert clinicians. The system streamlines medical form management for CT, MRI, PET/CT, PET/MRI, Ultrasound, and general medical procedures while showcasing modern web development practices, AI-assisted development workflows, and accessibility-first design.
 
 ## 🏗️ **System Architecture Overview**
 

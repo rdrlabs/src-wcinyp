@@ -1,4 +1,4 @@
-# Medical Document Management System
+# WCINYP Medical Document Management System
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/wcinyp/deploy-status)](https://app.netlify.com/sites/wcinyp/deploys)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/rdrlabs/src-wcinyp/actions)
@@ -9,8 +9,8 @@
 [![Accessibility](https://img.shields.io/badge/WCAG-2.1%20AA-blue)](https://www.w3.org/WAI/WCAG21/quickref/)
 [![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 
-> **🚀 Demo & Proof of Concept**  
-> This is a demonstration of modern web development practices applied to medical document management. Built with accessibility, maintainability, and non-technical user experience as core principles.
+> **🏥 Weill Cornell Imaging at NewYork-Presbyterian**  
+> Comprehensive diagnostic imaging document management system supporting CT, MRI, PET/CT, PET/MRI, Ultrasound, and general medical forms across 9 locations with 100+ expert clinicians. Built with accessibility, maintainability, and clinical workflow optimization as core principles.
 
 ## 📋 Overview
 
