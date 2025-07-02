@@ -62,6 +62,11 @@ const config: Config = {
   themeConfig: {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
+    colorMode: {
+      defaultMode: 'light',
+      disableSwitch: false,
+      respectPrefersColorScheme: true,
+    },
     navbar: {
       title: '',
       logo: {
@@ -104,23 +109,6 @@ const config: Config = {
           type: 'html', 
           position: 'right',
           value: '<a href="https://teams.microsoft.com/" target="_blank" rel="noopener noreferrer">Teams</a>',
-        },
-        {
-          type: 'dropdown',
-          label: '🌓 Theme',
-          position: 'right',
-          items: [
-            {
-              label: 'Light Mode',
-              href: '#',
-              'data-theme': 'light',
-            },
-            {
-              label: 'Dark Mode', 
-              href: '#',
-              'data-theme': 'dark',
-            },
-          ],
         },
       ],
     },

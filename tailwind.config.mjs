@@ -68,4 +68,5 @@ export default {
   corePlugins: {
     preflight: false, // Disable Tailwind's base styles to avoid conflicts with Docusaurus
   },
+  blocklist: ['container'], // Prevent conflicts with Docusaurus Infima container class
 } satisfies Config;
