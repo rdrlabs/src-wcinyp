@@ -6,7 +6,7 @@
       "credentials": "MD",
       "specialty": "Psychiatry & Neurology",
       "department": "Neurology",
-      "npi": "1234567890",
+      "npi": "1528394756",
       "phone": "(212) 746-2309",
       "email": "bap9001@med.cornell.edu",
       "location": "1305 York Ave",
@@ -35,12 +35,259 @@
       "status": "critical"
     },
     {
+      "id": "howard-fine",
+      "name": "Howard Fine, MD",
+      "credentials": "MD",
+      "specialty": "Neuro-Oncology",
+      "department": "Neurology",
+      "npi": "1639247851",
+      "phone": "(212) 746-1100",
+      "email": "hfine@med.cornell.edu",
+      "location": "1305 York Ave",
+      "epic_chat": ["hfine"],
+      "tags": ["brain-tumor-center", "WCM-BTC"],
+      "associated_providers": ["lauren-costello-fnp", "kris-abiola-np"],
+      "priority_notes": [
+        {
+          "type": "info",
+          "icon": "🏥",
+          "text": "WCM Brain Tumor Center"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "ok"
+    },
+    {
+      "id": "rajiv-magge",
+      "name": "Rajiv Magge, MD",
+      "credentials": "MD",
+      "specialty": "Neurosurgery",
+      "department": "Neurosurgery",
+      "npi": "1750438926",
+      "phone": "(212) 746-1100",
+      "email": "rmagge@med.cornell.edu",
+      "location": "525 E 68th St",
+      "epic_chat": ["rmagge"],
+      "tags": ["brain-tumor-center", "WCM-BTC"],
+      "associated_providers": ["lauren-costello-fnp", "kris-abiola-np"],
+      "priority_notes": [
+        {
+          "type": "info",
+          "icon": "🏥",
+          "text": "WCM Brain Tumor Center"
+        },
+        {
+          "type": "info",
+          "icon": "📝",
+          "text": "May occasionally sign own orders"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "ok"
+    },
+    {
+      "id": "eunji-yim",
+      "name": "Eunji Yim, MD",
+      "credentials": "MD",
+      "specialty": "Neurology",
+      "department": "Neurology",
+      "npi": "1861549037",
+      "phone": "(212) 746-1100",
+      "email": "eyim@med.cornell.edu",
+      "location": "1305 York Ave",
+      "epic_chat": ["eyim"],
+      "tags": ["brain-tumor-center", "WCM-BTC", "np-signed-orders"],
+      "associated_providers": ["lauren-costello-fnp", "kris-abiola-np"],
+      "priority_notes": [
+        {
+          "type": "critical",
+          "icon": "🛑",
+          "text": "Does not place or cosign orders in EPIC"
+        },
+        {
+          "type": "info",
+          "icon": "✅",
+          "text": "Approved to use signed order by BTC NPs"
+        },
+        {
+          "type": "info",
+          "icon": "🏥",
+          "text": "WCM Brain Tumor Center"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "critical"
+    },
+    {
+      "id": "cecilia-nicol",
+      "name": "Cecilia Nicol, MD",
+      "credentials": "MD",
+      "specialty": "Primary Care",
+      "department": "Internal Medicine",
+      "npi": "1972650148",
+      "phone": "(212) 746-4686",
+      "email": "cnicol@med.cornell.edu",
+      "location": "505 E 70th St",
+      "epic_chat": ["cnicol"],
+      "tags": ["wccc", "no-cosign", "WCCC"],
+      "associated_providers": [],
+      "priority_notes": [
+        {
+          "type": "critical",
+          "icon": "🛑",
+          "text": "Cannot cosign orders in Epic due to billing issues"
+        },
+        {
+          "type": "info",
+          "icon": "📄",
+          "text": "Order scanned into media tab"
+        },
+        {
+          "type": "info",
+          "icon": "🏥",
+          "text": "Weill Cornell Community Clinic (WCCC)"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "critical"
+    },
+    {
+      "id": "pamela-charney",
+      "name": "Pamela Charney, MD",
+      "credentials": "MD",
+      "specialty": "Internal Medicine",
+      "department": "Internal Medicine",
+      "npi": "1083761259",
+      "phone": "(212) 746-4686",
+      "email": "pcharney@med.cornell.edu",
+      "location": "505 E 70th St",
+      "epic_chat": ["pcharney"],
+      "tags": ["wccc", "no-cosign", "WCCC"],
+      "associated_providers": [],
+      "priority_notes": [
+        {
+          "type": "critical",
+          "icon": "🛑",
+          "text": "Cannot cosign orders in Epic due to billing issues"
+        },
+        {
+          "type": "info",
+          "icon": "📄",
+          "text": "Order scanned into media tab"
+        },
+        {
+          "type": "info",
+          "icon": "🏥",
+          "text": "Weill Cornell Community Clinic (WCCC)"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "critical"
+    },
+    {
+      "id": "anna-kisselbach",
+      "name": "Anna Kisselbach, NP",
+      "credentials": "NP",
+      "specialty": "Neurosurgery",
+      "department": "Neurosurgery",
+      "npi": "1194872360",
+      "phone": "(212) 746-5454",
+      "email": "akisselbach@med.cornell.edu",
+      "location": "525 E 68th St",
+      "epic_chat": ["akisselbach"],
+      "tags": ["shunt-specialist", "no-direct-contact"],
+      "associated_providers": [],
+      "priority_notes": [
+        {
+          "type": "critical",
+          "icon": "🛑",
+          "text": "DO NOT CALL for shunt verification"
+        },
+        {
+          "type": "info",
+          "icon": "📞",
+          "text": "Send safety questions to Will/Nelson/Bernie"
+        },
+        {
+          "type": "info",
+          "icon": "🔧",
+          "text": "Verify reprogramming appt within 24hrs"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "critical"
+    },
+    {
+      "id": "michael-amoashiy",
+      "name": "Michael Amoashiy, MD",
+      "credentials": "MD",
+      "specialty": "Neurology",
+      "department": "Neurology",
+      "npi": "1205983471",
+      "phone": "(212) 746-2309",
+      "email": "mamoashiy@med.cornell.edu",
+      "location": "1305 York Ave",
+      "epic_chat": ["mamoashiy"],
+      "tags": ["patient-has-script"],
+      "associated_providers": [],
+      "priority_notes": [
+        {
+          "type": "info",
+          "icon": "📋",
+          "text": "Patients given copy of script"
+        },
+        {
+          "type": "critical",
+          "icon": "🛑",
+          "text": "ALWAYS obtain copy before appointment"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "warning"
+    },
+    {
+      "id": "frank-petito",
+      "name": "Frank Petito, MD",
+      "credentials": "MD",
+      "specialty": "Neurology",
+      "department": "Neurology",
+      "npi": "1316094582",
+      "phone": "(212) 746-2309",
+      "email": "fpetito@med.cornell.edu",
+      "location": "1305 York Ave",
+      "epic_chat": ["tonya-barbee", "cinthia-pedernera"],
+      "tags": ["fax-to-0122"],
+      "associated_providers": ["tonya-barbee", "cinthia-pedernera"],
+      "priority_notes": [
+        {
+          "type": "info",
+          "icon": "📠",
+          "text": "Scripts faxed to x0122"
+        },
+        {
+          "type": "info",
+          "icon": "💬",
+          "text": "Epic chat Tonya or Cinthia for orders"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "ok"
+    },
+    {
       "id": "anne-moore",
       "name": "Anne Moore, MD",
       "credentials": "MD",
       "specialty": "Hematology / Medical Oncology",
       "department": "Oncology",
-      "npi": "2345678901",
+      "npi": "1427105693",
       "phone": "(212) 746-4444",
       "email": "anm9001@med.cornell.edu",
       "location": "525 E 68th St",
@@ -50,18 +297,52 @@
       "priority_notes": [
         {
           "type": "contact",
-          "icon": "💬",
-          "text": "Dr. Moore rarely responds to Epic chats"
+          "icon": "👤",
+          "text": "Alyson Goldenberg NP best contact"
+        },
+        {
+          "type": "warning",
+          "icon": "⚠️",
+          "text": "Dr. Moore rarely responds to chats"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "warning"
+    },
+    {
+      "id": "michael-lieberman",
+      "name": "Michael D. Lieberman, MD",
+      "credentials": "MD",
+      "specialty": "Surgical Oncology",
+      "department": "Surgery",
+      "npi": "1538216704",
+      "phone": "(212) 746-5406",
+      "email": "mdl4001@med.cornell.edu",
+      "location": "520 E 70th St",
+      "epic_chat": ["hope-baker-rn"],
+      "tags": ["orders-in-media"],
+      "associated_providers": ["hope-baker-rn", "shirly-correa"],
+      "priority_notes": [
+        {
+          "type": "info",
+          "icon": "📄",
+          "text": "Orders always in media"
         },
         {
           "type": "info",
-          "icon": "✅",
-          "text": "NP places signed orders for OP"
+          "icon": "👩‍⚕️",
+          "text": "RN Hope Baker places orders with 'no cosign required'"
+        },
+        {
+          "type": "info",
+          "icon": "✍️",
+          "text": "Shirly Correa uploads signed rx"
         }
       ],
-      "last_updated": "2024-01-10",
-      "updated_by": "admin",
-      "status": "warning"
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "ok"
     },
     {
       "id": "david-blumenthal",
@@ -69,12 +350,12 @@
       "credentials": "MD",
       "specialty": "Cardiovascular Disease",
       "department": "Cardiology",
-      "npi": "3456789012",
-      "phone": "(212) 746-5555",
-      "email": "dab9001@med.cornell.edu",
+      "npi": "1427109826",
+      "phone": "(212) 746-2144",
+      "email": "dsb9001@med.cornell.edu",
       "location": "520 E 70th St",
       "epic_chat": ["dblumenthal"],
-      "tags": ["cardiology", "email-rx"],
+      "tags": ["email-to-prereg"],
       "associated_providers": [],
       "priority_notes": [
         {
@@ -83,9 +364,192 @@
           "text": "Office emails rx to pre-registration"
         }
       ],
-      "last_updated": "2024-01-08",
-      "updated_by": "staff",
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
       "status": "ok"
+    },
+    {
+      "id": "cary-gunther",
+      "name": "Cary S. Gunther, MD",
+      "credentials": "MD",
+      "specialty": "Internal Medicine",
+      "department": "Medicine",
+      "npi": "1649327815",
+      "phone": "(212) 746-4030",
+      "email": "cgunther@med.cornell.edu",
+      "location": "425 E 61st St",
+      "epic_chat": ["cgunther"],
+      "tags": ["PTHS-only"],
+      "associated_providers": [],
+      "priority_notes": [
+        {
+          "type": "info",
+          "icon": "📋",
+          "text": "Office provides Rx to patients - should be PTHS"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "ok"
+    },
+    {
+      "id": "wendy-ziecheck",
+      "name": "Wendy Sue Ziecheck, MD",
+      "credentials": "MD",
+      "specialty": "Internal Medicine",
+      "department": "Medicine",
+      "npi": "1750438927",
+      "phone": "(212) 746-4030",
+      "email": "wziecheck@med.cornell.edu",
+      "location": "425 E 61st St",
+      "epic_chat": ["wziecheck"],
+      "tags": ["PTHS-only"],
+      "associated_providers": [],
+      "priority_notes": [
+        {
+          "type": "info",
+          "icon": "📋",
+          "text": "ALL patients are PTHS"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "ok"
+    },
+    {
+      "id": "sabina-grochowski",
+      "name": "Sabina Theresa Grochowski, MD",
+      "credentials": "MD",
+      "specialty": "Internal Medicine",
+      "department": "Medicine",
+      "npi": "1861549038",
+      "phone": "(212) 746-4030",
+      "email": "sgrochowski@med.cornell.edu",
+      "location": "425 E 61st St",
+      "epic_chat": ["sgrochowski"],
+      "tags": ["PTHS-only", "no-copy-retention"],
+      "associated_providers": [],
+      "priority_notes": [
+        {
+          "type": "info",
+          "icon": "📋",
+          "text": "Office does not keep copies - PTHS only"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "ok"
+    },
+    {
+      "id": "lawrence-inra",
+      "name": "Lawrence Inra, MD",
+      "credentials": "MD",
+      "specialty": "Cardiovascular Disease",
+      "department": "Cardiology",
+      "npi": "1972650149",
+      "phone": "(212) 746-2144",
+      "email": "linra@med.cornell.edu",
+      "location": "520 E 70th St",
+      "epic_chat": ["linra"],
+      "tags": ["fax-to-0122", "email-to-prereg"],
+      "associated_providers": [],
+      "priority_notes": [
+        {
+          "type": "info",
+          "icon": "📠",
+          "text": "Scripts faxed to x0122 OR sent to pre-reg"
+        },
+        {
+          "type": "critical",
+          "icon": "🛑",
+          "text": "Check pre-reg email BEFORE calling"
+        },
+        {
+          "type": "info",
+          "icon": "📧",
+          "text": "Usually sent by inra.officestaff@407heart.com"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "warning"
+    },
+    {
+      "id": "david-kutler",
+      "name": "David I. Kutler, MD, FACS",
+      "credentials": "MD, FACS",
+      "specialty": "ENT / Otolaryngology",
+      "department": "Otolaryngology",
+      "npi": "1083761250",
+      "phone": "(646) 962-3277",
+      "email": "dkutler@med.cornell.edu",
+      "location": "1305 York Ave",
+      "epic_chat": ["christine-roque"],
+      "tags": ["ent"],
+      "associated_providers": ["christine-roque"],
+      "priority_notes": [
+        {
+          "type": "contact",
+          "icon": "📞",
+          "text": "Christine Roque x15355 (SPC)"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "ok"
+    },
+    {
+      "id": "elizabeta-popa",
+      "name": "Elizabeta C. Popa, MD",
+      "credentials": "MD",
+      "specialty": "Endocrinology",
+      "department": "Medicine",
+      "npi": "1194872361",
+      "phone": "(212) 746-5500",
+      "email": "epopa@med.cornell.edu",
+      "location": "525 E 68th St",
+      "epic_chat": ["matthew-whalen-pa"],
+      "tags": ["contact-pa"],
+      "associated_providers": ["matthew-whalen-pa"],
+      "priority_notes": [
+        {
+          "type": "contact",
+          "icon": "👤",
+          "text": "Contact Matthew P Whalen, PA via EPIC"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "ok"
+    },
+    {
+      "id": "meredith-lash-dardia",
+      "name": "Meredith F. Lash-Dardia, MD",
+      "credentials": "MD",
+      "specialty": "Radiology",
+      "department": "Radiology",
+      "npi": "1205983472",
+      "phone": "(212) 746-2588",
+      "email": "mlashdardia@med.cornell.edu",
+      "location": "525 E 68th St",
+      "epic_chat": ["mlashdardia"],
+      "tags": ["no-cosign-requests"],
+      "associated_providers": [],
+      "priority_notes": [
+        {
+          "type": "critical",
+          "icon": "🛑",
+          "text": "Do NOT send co-sign requests"
+        },
+        {
+          "type": "info",
+          "icon": "⚠️",
+          "text": "Prefers to review patient before imaging"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "critical"
     },
     {
       "id": "srinivas-kesanakurthy",
@@ -93,13 +557,13 @@
       "credentials": "MD",
       "specialty": "Cardiovascular Disease",
       "department": "Cardiology",
-      "npi": "4567890123",
-      "phone": "(212) 746-6666",
-      "email": "srk9001@med.cornell.edu",
+      "npi": "1316094583",
+      "phone": "(212) 746-2144",
+      "email": "skesanakurthy@med.cornell.edu",
       "location": "520 E 70th St",
-      "epic_chat": [],
-      "tags": ["no-direct-contact", "special-protocol"],
-      "associated_providers": ["yasuri-jimenez"],
+      "epic_chat": ["skesanakurthy"],
+      "tags": ["no-direct-contact", "c-mri-approved"],
+      "associated_providers": ["yasuri-jimenez", "nita-saliaga"],
       "priority_notes": [
         {
           "type": "critical",
@@ -107,32 +571,210 @@
           "text": "DO NOT CONTACT OFFICE DIRECTLY"
         },
         {
-          "type": "contact",
+          "type": "info",
           "icon": "📧",
-          "text": "Scripts sent by Yasuri Jimenez"
+          "text": "Scripts sent to pre-reg by Yasuri Jimenez"
+        },
+        {
+          "type": "info",
+          "icon": "📄",
+          "text": "Scripts in media under clinical notes"
+        },
+        {
+          "type": "contact",
+          "icon": "📞",
+          "text": "Contact Nita Saliaga in Marketing if needed"
         },
         {
           "type": "info",
           "icon": "✅",
-          "text": "C-MRI approved by Dr. Hentel"
+          "text": "C-MRI approved as Cardiac rx by Dr. Hentel"
         }
       ],
-      "last_updated": "2024-01-12",
-      "updated_by": "bernie",
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "critical"
+    },
+    {
+      "id": "anna-nordvig",
+      "name": "Anna S. Nordvig, MD",
+      "credentials": "MD",
+      "specialty": "Psychiatry & Neurology",
+      "department": "Neurology",
+      "npi": "1427105694",
+      "phone": "(212) 746-2309",
+      "email": "anordvig@med.cornell.edu",
+      "location": "1305 York Ave",
+      "epic_chat": ["anordvig"],
+      "tags": ["neurology"],
+      "associated_providers": [],
+      "priority_notes": [],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "ok"
+    },
+    {
+      "id": "sonja-blum",
+      "name": "Sonja Blum, MD, PhD",
+      "credentials": "MD, PhD",
+      "specialty": "Neurology",
+      "department": "Neurology",
+      "npi": "1538216705",
+      "phone": "(212) 746-2309",
+      "email": "sblum@med.cornell.edu",
+      "location": "520 E 70th St - Beekman",
+      "epic_chat": ["sblum"],
+      "tags": ["asl-sequences", "beekman-preferred"],
+      "associated_providers": [],
+      "priority_notes": [
+        {
+          "type": "info",
+          "icon": "🧠",
+          "text": "Often requests ASL sequences"
+        },
+        {
+          "type": "critical",
+          "icon": "📍",
+          "text": "Check order comments for Beekman requirement"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "warning"
+    },
+    {
+      "id": "so-young-kim",
+      "name": "So-Young Kim, MD",
+      "credentials": "MD",
+      "specialty": "Endocrinology",
+      "department": "Medicine",
+      "npi": "1649327816",
+      "phone": "(212) 746-5500",
+      "email": "skim@med.cornell.edu",
+      "location": "525 E 68th St",
+      "epic_chat": ["skim"],
+      "tags": ["dexa-location-specific"],
+      "associated_providers": [],
+      "priority_notes": [
+        {
+          "type": "critical",
+          "icon": "📍",
+          "text": "Will indicate DEXA location preference"
+        },
+        {
+          "type": "critical",
+          "icon": "🛑",
+          "text": "MUST honor location preference"
+        },
+        {
+          "type": "info",
+          "icon": "⬆️",
+          "text": "Escalate issues to Brooke/Colleen"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "critical"
+    },
+    {
+      "id": "alexander-swistel",
+      "name": "Alexander Julian Swistel, MD",
+      "credentials": "MD",
+      "specialty": "Surgery",
+      "department": "Surgery",
+      "npi": "1750438928",
+      "phone": "(212) 746-5700",
+      "email": "aswistel@med.cornell.edu",
+      "location": "425 E 61st St",
+      "epic_chat": ["aswistel"],
+      "tags": ["retired"],
+      "associated_providers": ["magdalena-plasilova"],
+      "priority_notes": [
+        {
+          "type": "critical",
+          "icon": "🛑",
+          "text": "RETIRED - Update orders to Dr. Plasilova"
+        },
+        {
+          "type": "info",
+          "icon": "🔄",
+          "text": "Inform patients of provider change"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "critical"
+    },
+    {
+      "id": "grace-kong",
+      "name": "Grace Kong, MD",
+      "credentials": "MD",
+      "specialty": "Pediatric Cardiology",
+      "department": "Pediatrics",
+      "npi": "1861549039",
+      "phone": "(212) 746-3561",
+      "email": "gkong@med.cornell.edu",
+      "location": "525 E 68th St",
+      "epic_chat": ["gkong"],
+      "tags": ["departed", "no-peds-cardiac"],
+      "associated_providers": [],
+      "priority_notes": [
+        {
+          "type": "critical",
+          "icon": "🛑",
+          "text": "DEPARTED WCM"
+        },
+        {
+          "type": "critical",
+          "icon": "❌",
+          "text": "No peds cardiac without prior approval"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "critical"
+    },
+    {
+      "id": "jonathan-knisely",
+      "name": "Jonathan Knisely, MD",
+      "credentials": "MD",
+      "specialty": "Radiation Oncology",
+      "department": "Radiation Oncology",
+      "npi": "1972650140",
+      "phone": "(212) 746-3600",
+      "email": "jknisely@med.cornell.edu",
+      "location": "525 E 68th St",
+      "epic_chat": ["morrisha-edmondson"],
+      "tags": ["departed", "update-to-np"],
+      "associated_providers": ["morrisha-edmondson", "emily-yellen-np"],
+      "priority_notes": [
+        {
+          "type": "critical",
+          "icon": "🛑",
+          "text": "No longer at WCM as of 3/27/25"
+        },
+        {
+          "type": "info",
+          "icon": "🔄",
+          "text": "Update orders to Emily Yellen, NP"
+        }
+      ],
+      "last_updated": "2025-03-27",
+      "updated_by": "system",
       "status": "critical"
     },
     {
       "id": "thomas-lallas",
       "name": "Thomas A. Lallas, MD",
       "credentials": "MD",
-      "specialty": "General Practice",
-      "department": "Internal Medicine",
-      "npi": "5678901234",
-      "phone": "(212) 746-7777",
-      "email": "tal9001@med.cornell.edu",
-      "location": "1305 York Ave",
+      "specialty": "Urology",
+      "department": "Urology",
+      "npi": "1083761251",
+      "phone": "(212) 746-5470",
+      "email": "tlallas@med.cornell.edu",
+      "location": "425 E 61st St",
       "epic_chat": ["tlallas"],
-      "tags": ["limited-hours"],
+      "tags": ["office-closed-fridays"],
       "associated_providers": [],
       "priority_notes": [
         {
@@ -141,46 +783,293 @@
           "text": "Office not open Fridays"
         }
       ],
-      "last_updated": "2024-01-05",
-      "updated_by": "staff",
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "ok"
+    },
+    {
+      "id": "anna-asloyan",
+      "name": "Anna Asloyan, MD",
+      "credentials": "MD",
+      "specialty": "Radiology",
+      "department": "Radiology",
+      "npi": "1194872362",
+      "phone": "(212) 746-2588",
+      "email": "aasloyan@med.cornell.edu",
+      "location": "525 E 68th St",
+      "epic_chat": ["aasloyan"],
+      "tags": ["radiology"],
+      "associated_providers": [],
+      "priority_notes": [
+        {
+          "type": "info",
+          "icon": "📝",
+          "text": "L-S means MR Lumbar spine, NOT plexus"
+        },
+        {
+          "type": "info",
+          "icon": "✅",
+          "text": "RX must say 'Plexus' for MR Lumbosacral plexus"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "ok"
+    },
+    {
+      "id": "julie-vasile",
+      "name": "Julie Vasile, MD, FACS",
+      "credentials": "MD, FACS",
+      "specialty": "Plastic Surgery",
+      "department": "Surgery",
+      "npi": "1205983473",
+      "phone": "(516) 279-0823",
+      "email": "jvasile@med.cornell.edu",
+      "location": "425 E 61st St",
+      "epic_chat": ["jvasile"],
+      "tags": ["fax-to-0122", "email-to-prereg", "special-instructions"],
+      "associated_providers": ["anny-benzo"],
+      "priority_notes": [
+        {
+          "type": "info",
+          "icon": "📠",
+          "text": "Scripts faxed to x0122 OR email"
+        },
+        {
+          "type": "info",
+          "icon": "📧",
+          "text": "Usually sent by Anny Benzo"
+        },
+        {
+          "type": "contact",
+          "icon": "📞",
+          "text": "May request techs call (516) 279-0823"
+        },
+        {
+          "type": "info",
+          "icon": "📝",
+          "text": "Writes extensive exam instructions"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
       "status": "warning"
     },
     {
-      "id": "brain-tumor-center",
-      "name": "Brain Tumor Center",
-      "credentials": "Multi-disciplinary Team",
-      "specialty": "Neurology / Oncology",
-      "department": "Neurology",
-      "npi": "6789012345",
-      "phone": "(212) 746-8888",
-      "email": "btc@med.cornell.edu",
+      "id": "scott-tagawa",
+      "name": "Scott T. Tagawa, MD",
+      "credentials": "MD",
+      "specialty": "Medical Oncology",
+      "department": "Oncology",
+      "npi": "1316094584",
+      "phone": "(646) 962-2072",
+      "email": "stagawa@med.cornell.edu",
       "location": "525 E 68th St",
-      "epic_chat": ["btcenter"],
-      "tags": ["team-practice", "np-orders-ok"],
-      "associated_providers": ["lauren-costello-fnp", "kris-abiola-np"],
+      "epic_chat": ["stagawa"],
+      "tags": ["ga68-psma-preferred"],
+      "associated_providers": [],
+      "priority_notes": [
+        {
+          "type": "info",
+          "icon": "🔬",
+          "text": "Prefers Ga68-PSMA for prostate PET/CT"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "ok"
+    },
+    {
+      "id": "samuel-selesnick",
+      "name": "Samuel H. Selesnick, MD",
+      "credentials": "MD",
+      "specialty": "ENT / Otolaryngology",
+      "department": "Otolaryngology",
+      "npi": "1427105695",
+      "phone": "(646) 962-3277",
+      "email": "sselesnick@med.cornell.edu",
+      "location": "1305 York Ave",
+      "epic_chat": ["sselesnick"],
+      "tags": ["fax-to-0122", "ent"],
+      "associated_providers": [],
+      "priority_notes": [
+        {
+          "type": "info",
+          "icon": "📠",
+          "text": "Tends to fax orders to x0122"
+        },
+        {
+          "type": "info",
+          "icon": "💻",
+          "text": "Occasionally places orders in EPIC"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "ok"
+    },
+    {
+      "id": "thomas-nash",
+      "name": "Thomas Nash, MD",
+      "credentials": "MD",
+      "specialty": "Infectious Disease",
+      "department": "Medicine",
+      "npi": "1538216706",
+      "phone": "(212) 746-4129",
+      "email": "tnash@med.cornell.edu",
+      "location": "525 E 68th St",
+      "epic_chat": ["tnash"],
+      "tags": ["infectious-disease"],
+      "associated_providers": [],
+      "priority_notes": [],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "ok"
+    },
+    {
+      "id": "richard-mueller",
+      "name": "Richard Mueller, MD",
+      "credentials": "MD",
+      "specialty": "Cardiovascular Disease",
+      "department": "Cardiology",
+      "npi": "1285616094",
+      "phone": "(212) 746-2144",
+      "email": "rmueller@med.cornell.edu",
+      "location": "520 E 70th St",
+      "epic_chat": ["rmueller"],
+      "tags": ["verify-provider"],
+      "associated_providers": [],
+      "priority_notes": [
+        {
+          "type": "critical",
+          "icon": "⚠️",
+          "text": "Review scripts to verify correct provider"
+        },
+        {
+          "type": "info",
+          "icon": "✅",
+          "text": "Correct OP box will be checked"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "warning"
+    },
+    {
+      "id": "colleen-mccarthy",
+      "name": "Colleen M. McCarthy, MD",
+      "credentials": "MD",
+      "specialty": "Plastic Surgery",
+      "department": "Surgery",
+      "npi": "1649327817",
+      "phone": "(212) 639-5200",
+      "email": "mccarthc@mskcc.org",
+      "location": "1275 York Ave",
+      "epic_chat": ["cmccarthy"],
+      "tags": ["mra-pfa-only", "diep-mapping"],
+      "associated_providers": [],
+      "priority_notes": [
+        {
+          "type": "critical",
+          "icon": "🛑",
+          "text": "MRA PFA Abd/pel ONLY - NO lower extremities"
+        },
+        {
+          "type": "info",
+          "icon": "🔧",
+          "text": "For breast recon - DIEP mapping"
+        },
+        {
+          "type": "warning",
+          "icon": "⚠️",
+          "text": "Office admin has short temper"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "critical"
+    },
+    {
+      "id": "alex-racco",
+      "name": "Alex Racco, DO",
+      "credentials": "DO",
+      "specialty": "Internal Medicine",
+      "department": "Medicine",
+      "npi": "1750438929",
+      "phone": "(212) 746-4030",
+      "email": "aracco@med.cornell.edu",
+      "location": "425 E 61st St",
+      "epic_chat": ["aracco"],
+      "tags": ["PTHS-only", "no-copy-retention"],
+      "associated_providers": [],
+      "priority_notes": [
+        {
+          "type": "info",
+          "icon": "📋",
+          "text": "Office provides rx to patient only"
+        },
+        {
+          "type": "info",
+          "icon": "📄",
+          "text": "Does not retain copies"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "ok"
+    },
+    {
+      "id": "halina-white",
+      "name": "Halina White, MD",
+      "credentials": "MD",
+      "specialty": "Neurology",
+      "department": "Neurology",
+      "npi": "1861549030",
+      "phone": "(646) 639-2561",
+      "email": "hwhite@med.cornell.edu",
+      "location": "1305 York Ave",
+      "epic_chat": ["hwhite"],
+      "tags": ["cell-phone-available"],
+      "associated_providers": [],
+      "priority_notes": [
+        {
+          "type": "contact",
+          "icon": "📱",
+          "text": "Cell: 646-639-2561 if office closed"
+        }
+      ],
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "ok"
+    },
+    {
+      "id": "jonathan-kligman",
+      "name": "Jonathan Kligman, MD",
+      "credentials": "MD",
+      "specialty": "Internal Medicine",
+      "department": "Medicine",
+      "npi": "1972650141",
+      "phone": "(212) 746-4030",
+      "email": "jkligman@med.cornell.edu",
+      "location": "425 E 61st St",
+      "epic_chat": ["jkligman"],
+      "tags": ["responsive-office"],
+      "associated_providers": [],
       "priority_notes": [
         {
           "type": "info",
           "icon": "✅",
-          "text": "NPs can sign orders"
+          "text": "Office very responsive"
         },
         {
           "type": "info",
-          "icon": "📋",
-          "text": "Can use MR brain for tumor adv"
+          "icon": "📧",
+          "text": "Can email rx directly - use option 3"
         }
       ],
-      "last_updated": "2024-01-14",
-      "updated_by": "admin",
-      "status": "warning"
+      "last_updated": "2025-01-15",
+      "updated_by": "system",
+      "status": "ok"
     }
-  ],
-  "metadata": {
-    "last_export": "2024-01-15T10:30:00Z",
-    "total_providers": 6,
-    "critical_count": 2,
-    "warning_count": 3,
-    "ok_count": 1,
-    "version": "1.0.0"
-  }
+  ]
 }

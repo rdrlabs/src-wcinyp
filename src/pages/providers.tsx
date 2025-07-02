@@ -188,9 +188,18 @@ export default function Providers(): React.ReactElement {
                     ))}
                   </div>
                   
-                  <Button onClick={downloadJSON} variant="secondary" size="sm">
-                    📥 Export JSON
-                  </Button>
+                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <Button
+                      onClick={() => window.open('https://npiregistry.cms.hhs.gov/search', '_blank')}
+                      variant="secondary"
+                      size="sm"
+                    >
+                      🔍 NPI Registry
+                    </Button>
+                    <Button onClick={downloadJSON} variant="secondary" size="sm">
+                      📥 Export JSON
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -232,7 +241,15 @@ export default function Providers(): React.ReactElement {
                               <div>
                                 <div style={{ fontWeight: 600 }}>{provider.name}</div>
                                 <div style={{ fontSize: '0.875rem', color: 'var(--ifm-color-secondary-dark)' }}>
-                                  {provider.credentials} • NPI: {provider.npi}
+                                  {provider.credentials} • NPI:{' '}
+                                  <a 
+                                    href={`https://npiregistry.cms.hhs.gov/search?npi=${provider.npi}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{ color: 'var(--ifm-link-color)', textDecoration: 'none' }}
+                                  >
+                                    {provider.npi}
+                                  </a>
                                 </div>
                               </div>
                             </TableCell>
