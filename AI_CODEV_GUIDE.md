@@ -3,6 +3,22 @@
 ## 📋 Overview
 This guide provides essential context for AI assistants working on this medical document management system codebase.
 
+## 🚨 CRITICAL REMINDERS - READ FIRST
+
+### Testing Protocol Compliance
+- **ALWAYS run tests after ANY code change**: `npm run test:ci`
+- **Update test assertions when UI changes** - don't just make tests pass
+- **Follow TESTING_PROTOCOL.md standards** - 90%+ coverage required
+- **Tests must validate REAL functionality** - not just pass for sake of passing
+- **Fix broken tests immediately** - don't leave failing tests
+
+### Consistency Requirements
+- **Match Provider layout pattern EXACTLY** - it's the design standard
+- **Use inline styles** - consistent with existing codebase approach
+- **Preserve ALL existing functionality** - never break what works
+- **Update documentation** - keep README and this guide current
+- **Test UI changes thoroughly** - verify layout + functionality
+
 ## 🏗️ Architecture Overview
 
 ### Technology Stack
@@ -73,11 +89,22 @@ src/components/ui/__tests__/component.test.tsx
 
 ## 🔧 Development Workflow
 
-### When Making Changes
-1. **Check existing tests** - update assertions for UI changes
-2. **Run test suite** - ensure no regressions
-3. **Verify build** - `npm run build` must succeed
-4. **Update documentation** - keep this guide current
+### MANDATORY Steps for Every Change
+1. **Read existing component** - understand current patterns first
+2. **Plan the change** - don't break existing functionality  
+3. **Update tests FIRST** - modify assertions for new UI structure
+4. **Make the change** - implement with testing in mind
+5. **Run full test suite** - `npm run test:ci` must pass
+6. **Verify build works** - `npm run build` must succeed
+7. **Update documentation** - README, this guide, etc.
+8. **Commit with clear message** - explain what and why
+
+### Testing Mindset
+- **Tests validate USER behavior** - not implementation details
+- **Update test assertions** - when UI structure changes
+- **Don't make tests just pass** - ensure they test real functionality
+- **Coverage is important** - aim for 90%+ on new components
+- **Accessibility testing** - verify ARIA labels and keyboard navigation
 
 ### Common Issues
 - **Layout breaks**: Always reference Provider component for structure
@@ -153,17 +180,47 @@ src/
 
 ## 🤝 AI Assistant Guidelines
 
-### When Working on This Codebase
-1. **Read this guide first** - understand the context
-2. **Check existing patterns** - don't reinvent the wheel
-3. **Test changes thoroughly** - verify functionality
-4. **Update documentation** - keep guides current
-5. **Ask clarifying questions** - when patterns aren't clear
+### Before Starting ANY Task
+1. **Read this guide completely** - understand context and rules
+2. **Check current test status** - `npm run test:ci` to see baseline
+3. **Understand the request** - what's being asked and why
+4. **Plan approach** - how to implement without breaking things
+5. **Identify test impacts** - what tests will need updating
 
-### Communication Style
-- Be specific about which component you're modifying
-- Reference line numbers when discussing code
-- Explain the reasoning behind architectural decisions
-- Highlight any potential breaking changes
+### During Development
+1. **Follow Provider layout pattern** - never deviate from this standard
+2. **Update tests as you go** - don't leave them for later
+3. **Test incrementally** - run tests after each significant change
+4. **Preserve existing functionality** - never break what already works
+5. **Use TodoWrite tool** - track progress and ensure nothing is missed
 
-This guide ensures consistent, high-quality development while maintaining the established patterns and functionality of the medical document management system.
+### After Making Changes
+1. **Run full test suite** - ensure all tests pass
+2. **Verify build works** - `npm run build` must succeed  
+3. **Update documentation** - README, this guide, any relevant docs
+4. **Commit with clear message** - explain what changed and why
+5. **Push to deploy** - get changes live
+
+### Quality Standards
+- **Test coverage 90%+** on new components
+- **All tests must pass** - no exceptions
+- **TypeScript strict mode** - no type errors allowed
+- **Accessibility compliance** - ARIA labels, keyboard navigation
+- **Layout consistency** - match Provider design exactly
+
+### Communication Approach
+- **Be specific** - reference exact files and line numbers
+- **Explain reasoning** - why this approach vs alternatives
+- **Highlight risks** - potential breaking changes or impacts
+- **Show test results** - prove functionality works as expected
+- **Keep user informed** - progress updates and completion status
+
+### Emergency Procedures
+If tests are failing:
+1. **Stop immediately** - don't continue with broken tests
+2. **Identify root cause** - what broke and why
+3. **Fix tests properly** - update assertions to match new behavior
+4. **Verify functionality** - ensure the feature actually works
+5. **Document the fix** - explain what was wrong and how it was fixed
+
+This guide ensures consistent, high-quality development while maintaining established patterns and functionality. Always prioritize stability and user experience over speed of implementation.
