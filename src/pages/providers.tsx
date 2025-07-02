@@ -14,6 +14,7 @@ import {
 import { cn } from '@/lib/utils';
 import { AppErrorBoundary, PageErrorBoundary } from '@/components/ErrorBoundary';
 import providersData from '../data/providers.json';
+import styles from './providers.module.css';
 
 interface PriorityNote {
   type: 'critical' | 'contact' | 'info';
@@ -129,40 +130,40 @@ export default function Providers(): React.ReactElement {
         description="WCINYP Provider Contact Information and Guidelines"
       >
         <AppErrorBoundary>
-          <main role="main">
-            {/* Header Section - Similar to original */}
-            <div className="bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 border-b">
-              <div className="container mx-auto px-6 py-8">
-                <div className="flex justify-between items-start mb-6">
+          <div className={styles.pageContainer}>
+            {/* Header Section */}
+            <div className={styles.headerSection}>
+              <div className={styles.contentWrapper}>
+                <div className={styles.headerContent}>
                   <div>
-                    <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                    <h1 className={styles.headerTitle}>
                       Provider Database
                     </h1>
-                    <p className="text-lg text-gray-600 dark:text-gray-400">
+                    <p className={styles.headerSubtitle}>
                       {providers.length} providers • {criticalCount} critical notes
                     </p>
                   </div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400 text-right">
+                  <div className={styles.lastUpdated}>
                     <p>Last Updated</p>
-                    <p className="font-medium">{new Date().toLocaleDateString()}</p>
+                    <p style={{ fontWeight: 600 }}>{new Date().toLocaleDateString()}</p>
                   </div>
                 </div>
 
                 {/* Search */}
-                <div className="mb-6">
+                <div className={styles.searchWrapper}>
                   <Input
                     type="text"
                     placeholder="Search providers by name, specialty, department, phone, or NPI..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full max-w-2xl"
+                    className={styles.searchInput}
                     aria-label="Search providers"
                   />
                 </div>
 
                 {/* Filters */}
-                <div className="flex gap-2 flex-wrap items-center justify-between">
-                  <div className="flex gap-2 flex-wrap">
+                <div className={styles.filtersWrapper}>
+                  <div className={styles.filterButtons}>
                     {[
                       { key: 'neurology', label: 'Neurology' },
                       { key: 'cardiology', label: 'Cardiology' },
@@ -178,8 +179,8 @@ export default function Providers(): React.ReactElement {
                         size="sm"
                         onClick={() => toggleFilter(filter.key)}
                         className={cn(
-                          "text-xs",
-                          filter.key === 'critical' && "border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                          filter.key === 'critical' && !activeFilters.includes(filter.key) && 
+                          "border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground"
                         )}
                       >
                         {filter.label}
@@ -195,100 +196,106 @@ export default function Providers(): React.ReactElement {
             </div>
 
             {/* Table Section */}
-            <div className="container mx-auto px-6 py-8">
-              <div className="rounded-lg border bg-card">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-[250px]">Provider</TableHead>
-                      <TableHead>Specialty</TableHead>
-                      <TableHead>Department</TableHead>
-                      <TableHead>Contact</TableHead>
-                      <TableHead>Location</TableHead>
-                      <TableHead>Tags</TableHead>
-                      <TableHead>Status</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredProviders.length === 0 ? (
+            <div className={styles.tableSection}>
+              <div className={styles.contentWrapper}>
+                <div className={styles.tableWrapper}>
+                  <Table>
+                    <TableHeader>
                       <TableRow>
-                        <TableCell colSpan={7} className="h-24 text-center">
-                          <div className="text-muted-foreground">
-                            <p className="text-lg font-medium mb-1">No providers found</p>
-                            <p className="text-sm">Try adjusting your search criteria</p>
-                          </div>
-                        </TableCell>
+                        <TableHead style={{ width: '250px' }}>Provider</TableHead>
+                        <TableHead>Specialty</TableHead>
+                        <TableHead>Department</TableHead>
+                        <TableHead>Contact</TableHead>
+                        <TableHead>Location</TableHead>
+                        <TableHead>Tags</TableHead>
+                        <TableHead>Status</TableHead>
                       </TableRow>
-                    ) : (
-                      filteredProviders.map((provider) => (
-                        <TableRow key={provider.id} className="hover:bg-muted/50">
-                          <TableCell className="font-medium">
-                            <div>
-                              <div className="font-semibold">{provider.name}</div>
-                              <div className="text-sm text-muted-foreground">
-                                {provider.credentials} • NPI: {provider.npi}
-                              </div>
-                            </div>
-                          </TableCell>
-                          <TableCell>{provider.specialty}</TableCell>
-                          <TableCell className="capitalize">{provider.department}</TableCell>
-                          <TableCell>
-                            <div className="text-sm space-y-1">
-                              <div className="font-medium">{provider.phone}</div>
-                              <div className="text-muted-foreground">{provider.email}</div>
-                              {provider.epic_chat.length > 0 && (
-                                <div className="text-xs text-muted-foreground">
-                                  Epic: {provider.epic_chat.join(', ')}
-                                </div>
-                              )}
-                            </div>
-                          </TableCell>
-                          <TableCell className="text-sm">{provider.location}</TableCell>
-                          <TableCell>
-                            <div className="flex flex-wrap gap-1">
-                              {provider.tags.slice(0, 3).map((tag, idx) => (
-                                <Badge key={idx} variant="secondary" className="text-xs">
-                                  {tag}
-                                </Badge>
-                              ))}
-                              {provider.tags.length > 3 && (
-                                <Badge variant="secondary" className="text-xs">
-                                  +{provider.tags.length - 3}
-                                </Badge>
-                              )}
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="space-y-1">
-                              {getStatusBadge(provider.status)}
-                              {provider.priority_notes.length > 0 && (
-                                <div className="text-xs text-muted-foreground">
-                                  {provider.priority_notes.length} note{provider.priority_notes.length !== 1 ? 's' : ''}
-                                </div>
-                              )}
+                    </TableHeader>
+                    <TableBody>
+                      {filteredProviders.length === 0 ? (
+                        <TableRow>
+                          <TableCell colSpan={7} style={{ height: '6rem', textAlign: 'center' }}>
+                            <div style={{ color: 'var(--ifm-color-secondary-dark)' }}>
+                              <p style={{ fontSize: '1.125rem', fontWeight: 500, marginBottom: '0.25rem' }}>
+                                No providers found
+                              </p>
+                              <p style={{ fontSize: '0.875rem' }}>
+                                Try adjusting your search criteria
+                              </p>
                             </div>
                           </TableCell>
                         </TableRow>
-                      ))
-                    )}
-                  </TableBody>
-                </Table>
-              </div>
-
-              {/* Footer */}
-              <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
-                <div>
-                  Showing {filteredProviders.length} of {providers.length} providers
+                      ) : (
+                        filteredProviders.map((provider) => (
+                          <TableRow key={provider.id}>
+                            <TableCell style={{ fontWeight: 500 }}>
+                              <div>
+                                <div style={{ fontWeight: 600 }}>{provider.name}</div>
+                                <div style={{ fontSize: '0.875rem', color: 'var(--ifm-color-secondary-dark)' }}>
+                                  {provider.credentials} • NPI: {provider.npi}
+                                </div>
+                              </div>
+                            </TableCell>
+                            <TableCell>{provider.specialty}</TableCell>
+                            <TableCell style={{ textTransform: 'capitalize' }}>{provider.department}</TableCell>
+                            <TableCell>
+                              <div style={{ fontSize: '0.875rem' }}>
+                                <div style={{ fontWeight: 500 }}>{provider.phone}</div>
+                                <div style={{ color: 'var(--ifm-color-secondary-dark)' }}>{provider.email}</div>
+                                {provider.epic_chat.length > 0 && (
+                                  <div style={{ fontSize: '0.75rem', color: 'var(--ifm-color-secondary-dark)' }}>
+                                    Epic: {provider.epic_chat.join(', ')}
+                                  </div>
+                                )}
+                              </div>
+                            </TableCell>
+                            <TableCell style={{ fontSize: '0.875rem' }}>{provider.location}</TableCell>
+                            <TableCell>
+                              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
+                                {provider.tags.slice(0, 3).map((tag, idx) => (
+                                  <Badge key={idx} variant="secondary" style={{ fontSize: '0.75rem' }}>
+                                    {tag}
+                                  </Badge>
+                                ))}
+                                {provider.tags.length > 3 && (
+                                  <Badge variant="secondary" style={{ fontSize: '0.75rem' }}>
+                                    +{provider.tags.length - 3}
+                                  </Badge>
+                                )}
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                                {getStatusBadge(provider.status)}
+                                {provider.priority_notes.length > 0 && (
+                                  <div style={{ fontSize: '0.75rem', color: 'var(--ifm-color-secondary-dark)' }}>
+                                    {provider.priority_notes.length} note{provider.priority_notes.length !== 1 ? 's' : ''}
+                                  </div>
+                                )}
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      )}
+                    </TableBody>
+                  </Table>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span>Critical Notes Legend:</span>
-                  <Badge variant="destructive" className="text-xs">Critical</Badge>
-                  <Badge variant="warning" className="text-xs">Warning</Badge>
-                  <Badge variant="success" className="text-xs">Active</Badge>
+
+                {/* Footer */}
+                <div className={styles.footerSection}>
+                  <div>
+                    Showing {filteredProviders.length} of {providers.length} providers
+                  </div>
+                  <div className={styles.legendWrapper}>
+                    <span>Status:</span>
+                    <Badge variant="destructive" style={{ fontSize: '0.75rem' }}>Critical</Badge>
+                    <Badge variant="warning" style={{ fontSize: '0.75rem' }}>Warning</Badge>
+                    <Badge variant="success" style={{ fontSize: '0.75rem' }}>Active</Badge>
+                  </div>
                 </div>
               </div>
             </div>
-          </main>
+          </div>
         </AppErrorBoundary>
       </Layout>
     </PageErrorBoundary>
