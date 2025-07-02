@@ -323,7 +323,7 @@ describe('ModernFormBuilder', () => {
       const nameInput = screen.getByLabelText(/Patient Name/);
       
       // Type rapidly
-      await user.type(nameInput, 'John Doe Smith Johnson', { delay: 1 });
+      await user.type(nameInput, 'John Doe Smith Johnson');
       
       expect(nameInput).toHaveValue('John Doe Smith Johnson');
     });
@@ -389,7 +389,7 @@ describe('ModernFormBuilder', () => {
       await user.type(amountInput, 'abc123');
       
       // Should only accept numeric parts (123)
-      expect(amountInput.value).toMatch(/123/);
+      expect((amountInput as HTMLInputElement).value).toMatch(/123/);
     });
   });
 });

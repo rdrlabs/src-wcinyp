@@ -106,8 +106,21 @@ const config: Config = {
           value: '<a href="https://teams.microsoft.com/" target="_blank" rel="noopener noreferrer">Teams</a>',
         },
         {
-          type: 'themeToggle',
+          type: 'dropdown',
+          label: '🌓 Theme',
           position: 'right',
+          items: [
+            {
+              label: 'Light Mode',
+              href: '#',
+              'data-theme': 'light',
+            },
+            {
+              label: 'Dark Mode', 
+              href: '#',
+              'data-theme': 'dark',
+            },
+          ],
         },
       ],
     },
