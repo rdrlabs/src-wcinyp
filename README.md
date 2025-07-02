@@ -16,6 +16,8 @@
 
 A modern, accessible web application for managing medical forms and documents, featuring:
 
+> **🤖 AI Development Ready**: See [AI_PROMPT_SCRIPT.md](./AI_PROMPT_SCRIPT.md) for optimal AI assistant engagement and [PROJECT_OVERVIEW.md](./PROJECT_OVERVIEW.md) for comprehensive system understanding.
+
 - **🎯 Document Selection Hub** - Intuitive interface for selecting medical forms by category
 - **📝 Form Builder** - Dynamic form generation with live preview and validation
 - **🖨️ Print Management** - Bulk printing with quantity selection and print queue
