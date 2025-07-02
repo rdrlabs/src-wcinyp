@@ -17,6 +17,7 @@ const INVOICE_TYPES = ['CT', 'MRI', 'PET (FDG)', 'PET', 'US', 'Mammo', 'Xray'] a
 const BULK_QUANTITIES = [1, 2, 3, 4, 5, 10, 15, 20, 25, 50] as const;
 
 const MODALITY_COLORS: ModalityColors = {
+  General: '#64748b',
   MRI: '#10b981',
   CT: '#3b82f6', 
   PET: '#8b5cf6',
@@ -60,9 +61,9 @@ const BREAST_FORMS: Document[] = [
   { name: 'Mam/US Recall Form', path: '/documents/Mammogram Visit Confirmation Form.pdf', category: 'breast', color: MODALITY_COLORS.Breast },
 ];
 
-const QUICK_ADD_FORMS: Document[] = [
-  { name: 'Medical Chaperone Form', path: '/documents/Outpatient Medical Chaperone Form.pdf', category: 'quickadd' },
-  { name: 'Minor Authorization Form', path: '/documents/Minor Auth Form.pdf', category: 'quickadd' },
+const GENERAL_FORMS: Document[] = [
+  { name: 'Medical Chaperone Form', path: '/documents/Outpatient Medical Chaperone Form.pdf', category: 'general', modality: 'General', color: MODALITY_COLORS.Other },
+  { name: 'Minor Authorization Form', path: '/documents/Minor Auth Form.pdf', category: 'general', modality: 'General', color: MODALITY_COLORS.Other },
 ];
 
 const OTHER_FORMS: Document[] = [
@@ -76,10 +77,6 @@ const FINANCIAL_FORMS = {
   SELF_PAY_WAIVER: '/documents/Waiver of Liability Form - Self Pay.pdf',
 } as const;
 
-const QUICK_ADD_PATHS = {
-  CHAPERONE: '/documents/Outpatient Medical Chaperone Form.pdf',
-  MINOR_AUTH: '/documents/Minor Auth Form.pdf',
-} as const;
 
 export default function DocumentSelector(): React.ReactElement {
   const [selectedDocs, setSelectedDocs] = useState<string[]>([]);
@@ -90,6 +87,7 @@ export default function DocumentSelector(): React.ReactElement {
   const [bulkQuantity, setBulkQuantity] = useState(1);
   const [showQueueDetails, setShowQueueDetails] = useState(false);
   const [visibleSections, setVisibleSections] = useState<SectionVisibility>({
+    General: true,
     MRI: true,
     CT: true,
     PET: true,
@@ -102,7 +100,7 @@ export default function DocumentSelector(): React.ReactElement {
   const [searchTerm, setSearchTerm] = useState('');
   const [isPrinting, setIsPrinting] = useState(false);
 
-  const allForms = [...SCREENING_FORMS, ...BREAST_FORMS, ...QUICK_ADD_FORMS, ...OTHER_FORMS];
+  const allForms = [...SCREENING_FORMS, ...BREAST_FORMS, ...GENERAL_FORMS, ...OTHER_FORMS];
 
   const toggleSection = (section: string): void => {
     setVisibleSections(prev => ({ ...prev, [section]: !prev[section] }));
@@ -579,50 +577,6 @@ export default function DocumentSelector(): React.ReactElement {
           }}>🔍</div>
         </div>
 
-        {/* Quick Add */}
-        <div style={{ marginBottom: '20px' }}>
-          <h3 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: '600', color: '#1e293b' }}>Quick Add</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <label style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '8px', 
-              padding: '8px 12px',
-              backgroundColor: selectedDocs.includes(QUICK_ADD_PATHS.CHAPERONE) ? '#f0f9ff' : '#f8fafc',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              border: selectedDocs.includes(QUICK_ADD_PATHS.CHAPERONE) ? '1px solid #0284c7' : '1px solid #e2e8f0',
-              transition: 'all 0.2s ease'
-            }}>
-              <input
-                type="checkbox"
-                checked={selectedDocs.includes(QUICK_ADD_PATHS.CHAPERONE)}
-                onChange={() => toggleDocument(QUICK_ADD_PATHS.CHAPERONE)}
-                style={{ margin: 0 }}
-              />
-              <span style={{ fontSize: '13px', fontWeight: '500', color: '#1e293b' }}>Medical Chaperone</span>
-            </label>
-            <label style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '8px', 
-              padding: '8px 12px',
-              backgroundColor: selectedDocs.includes(QUICK_ADD_PATHS.MINOR_AUTH) ? '#f0f9ff' : '#f8fafc',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              border: selectedDocs.includes(QUICK_ADD_PATHS.MINOR_AUTH) ? '1px solid #0284c7' : '1px solid #e2e8f0',
-              transition: 'all 0.2s ease'
-            }}>
-              <input
-                type="checkbox"
-                checked={selectedDocs.includes(QUICK_ADD_PATHS.MINOR_AUTH)}
-                onChange={() => toggleDocument(QUICK_ADD_PATHS.MINOR_AUTH)}
-                style={{ margin: 0 }}
-              />
-              <span style={{ fontSize: '13px', fontWeight: '500', color: '#1e293b' }}>Minor Authorization</span>
-            </label>
-          </div>
-        </div>
 
         {/* Section Filters */}
         <div>
@@ -715,6 +669,19 @@ export default function DocumentSelector(): React.ReactElement {
           </div>
         ) : (
           <>
+            {/* General Forms */}
+            {visibleSections.General && (
+              <div style={{ marginBottom: '24px' }}>
+                <h4 style={{ 
+                  margin: '0 0 12px 0', 
+                  color: MODALITY_COLORS.General, 
+                  fontSize: '16px',
+                  fontWeight: '600'
+                }}>General Forms</h4>
+                {GENERAL_FORMS.map(renderFormCheckbox)}
+              </div>
+            )}
+
             {/* Screening Forms by Modality */}
             {visibleSections.MRI && (
               <div style={{ marginBottom: '24px' }}>
@@ -741,30 +708,50 @@ export default function DocumentSelector(): React.ReactElement {
             )}
             
             {visibleSections.PET && (
-              <div style={{ marginBottom: '0.75rem' }}>
-                <h4 style={{ margin: '0 0 0.5rem 0', color: MODALITY_COLORS.PET, fontSize: '1rem' }}>PET Forms</h4>
+              <div style={{ marginBottom: '24px' }}>
+                <h4 style={{ 
+                  margin: '0 0 12px 0', 
+                  color: MODALITY_COLORS.PET, 
+                  fontSize: '16px',
+                  fontWeight: '600'
+                }}>PET Forms</h4>
                 {SCREENING_FORMS.filter(f => f.modality === 'PET').map(renderFormCheckbox)}
               </div>
             )}
             
             {visibleSections.US && (
-              <div style={{ marginBottom: '0.75rem' }}>
-                <h4 style={{ margin: '0 0 0.5rem 0', color: MODALITY_COLORS.US, fontSize: '1rem' }}>Ultrasound Forms</h4>
+              <div style={{ marginBottom: '24px' }}>
+                <h4 style={{ 
+                  margin: '0 0 12px 0', 
+                  color: MODALITY_COLORS.US, 
+                  fontSize: '16px',
+                  fontWeight: '600'
+                }}>Ultrasound Forms</h4>
                 {SCREENING_FORMS.filter(f => f.modality === 'US').map(renderFormCheckbox)}
               </div>
             )}
             
             
             {visibleSections.Breast && (
-              <div style={{ marginBottom: '0.75rem' }}>
-                <h4 style={{ margin: '0 0 0.5rem 0', color: MODALITY_COLORS.Breast, fontSize: '1rem' }}>Breast Imaging Forms</h4>
+              <div style={{ marginBottom: '24px' }}>
+                <h4 style={{ 
+                  margin: '0 0 12px 0', 
+                  color: MODALITY_COLORS.Breast, 
+                  fontSize: '16px',
+                  fontWeight: '600'
+                }}>Breast Imaging Forms</h4>
                 {BREAST_FORMS.map(renderFormCheckbox)}
               </div>
             )}
             
             {visibleSections['X-Ray'] && (
-              <div style={{ marginBottom: '0.75rem' }}>
-                <h4 style={{ margin: '0 0 0.5rem 0', color: MODALITY_COLORS['X-Ray'], fontSize: '1rem' }}>X-Ray & DEXA Forms</h4>
+              <div style={{ marginBottom: '24px' }}>
+                <h4 style={{ 
+                  margin: '0 0 12px 0', 
+                  color: MODALITY_COLORS['X-Ray'], 
+                  fontSize: '16px',
+                  fontWeight: '600'
+                }}>X-Ray & DEXA Forms</h4>
                 {SCREENING_FORMS.filter(f => f.modality === 'DEXA').map(renderFormCheckbox)}
                 {SCREENING_FORMS.filter(f => f.modality === 'XRAY').map(renderFormCheckbox)}
               </div>
@@ -772,8 +759,13 @@ export default function DocumentSelector(): React.ReactElement {
 
             {/* Financial Forms */}
             {visibleSections.Financial && (
-              <div style={{ marginBottom: '0.75rem' }}>
-                <h4 style={{ margin: '0 0 0.5rem 0', color: MODALITY_COLORS.Financial, fontSize: '1rem' }}>Financial Forms</h4>
+              <div style={{ marginBottom: '24px' }}>
+                <h4 style={{ 
+                  margin: '0 0 12px 0', 
+                  color: MODALITY_COLORS.Financial, 
+                  fontSize: '16px',
+                  fontWeight: '600'
+                }}>Financial Forms</h4>
                 
                 <div style={{ 
                   display: 'flex',
@@ -885,8 +877,13 @@ export default function DocumentSelector(): React.ReactElement {
 
             {/* Other Forms */}
             {visibleSections.Other && (
-              <div style={{ marginBottom: '0.75rem' }}>
-                <h4 style={{ margin: '0 0 0.5rem 0', color: MODALITY_COLORS.Other, fontSize: '1rem' }}>Other Forms</h4>
+              <div style={{ marginBottom: '24px' }}>
+                <h4 style={{ 
+                  margin: '0 0 12px 0', 
+                  color: MODALITY_COLORS.Other, 
+                  fontSize: '16px',
+                  fontWeight: '600'
+                }}>Other Forms</h4>
                 {OTHER_FORMS.map(renderFormCheckbox)}
               </div>
             )}
