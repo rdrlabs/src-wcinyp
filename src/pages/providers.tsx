@@ -1,8 +1,16 @@
 import React, { useState, useMemo } from 'react';
 import Layout from '@theme/Layout';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import { AppErrorBoundary, PageErrorBoundary } from '@/components/ErrorBoundary';
 import providersData from '../data/providers.json';
@@ -101,177 +109,188 @@ export default function Providers(): React.ReactElement {
     URL.revokeObjectURL(url);
   };
 
-  const getStatusVariant = (status: string) => {
+  const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'critical': return 'destructive';
-      case 'warning': return 'secondary';
-      case 'ok': return 'default';
-      default: return 'outline';
+      case 'critical':
+        return <Badge variant="destructive">Critical</Badge>;
+      case 'warning':
+        return <Badge variant="warning">Warning</Badge>;
+      default:
+        return <Badge variant="success">Active</Badge>;
     }
   };
 
   const criticalCount = providers.filter(p => p.status === 'critical').length;
 
   return (
-    <Layout
-      title="Provider Database"
-      description="Comprehensive provider directory with search and filtering"
-    >
-      <PageErrorBoundary>
-        <div className="min-h-screen bg-background">
-        {/* Header Section */}
-        <div className="border-b bg-card">
-          <div className="container mx-auto px-6 py-8">
-            <div className="mb-6">
-              <h1 className="text-3xl font-bold tracking-tight text-foreground mb-2">
-                Provider Database
-              </h1>
-              <p className="text-muted-foreground">
-                {filteredProviders.length} providers ({criticalCount} critical)
-              </p>
-            </div>
-            
-            {/* Search */}
-            <div className="mb-6">
-              <div className="relative">
-                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
-                  🔍
+    <PageErrorBoundary>
+      <Layout 
+        title="Provider Database" 
+        description="WCINYP Provider Contact Information and Guidelines"
+      >
+        <AppErrorBoundary>
+          <main role="main">
+            {/* Header Section - Similar to original */}
+            <div className="bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 border-b">
+              <div className="container mx-auto px-6 py-8">
+                <div className="flex justify-between items-start mb-6">
+                  <div>
+                    <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                      Provider Database
+                    </h1>
+                    <p className="text-lg text-gray-600 dark:text-gray-400">
+                      {providers.length} providers • {criticalCount} critical notes
+                    </p>
+                  </div>
+                  <div className="text-sm text-gray-500 dark:text-gray-400 text-right">
+                    <p>Last Updated</p>
+                    <p className="font-medium">{new Date().toLocaleDateString()}</p>
+                  </div>
                 </div>
-                <Input
-                  type="text"
-                  placeholder="Search providers..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 max-w-md"
-                />
-              </div>
-            </div>
 
-            {/* Filters */}
-            <div className="flex gap-2 flex-wrap items-center justify-between">
-              <div className="flex gap-2 flex-wrap">
-                {[
-                  { key: 'neurology', label: 'Neurology' },
-                  { key: 'cardiology', label: 'Cardiology' },
-                  { key: 'oncology', label: 'Oncology' },
-                  { key: 'critical', label: 'Critical Notes' },
-                  { key: 'pths-only', label: 'PTHS Only' },
-                  { key: '3t-required', label: '3T Required' },
-                  { key: 'no-direct-contact', label: 'No Direct Contact' }
-                ].map(filter => (
-                  <Button
-                    key={filter.key}
-                    variant={activeFilters.includes(filter.key) ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => toggleFilter(filter.key)}
-                    className={cn(
-                      "text-xs",
-                      filter.key === 'critical' && "border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground"
-                    )}
-                  >
-                    {filter.label}
-                  </Button>
-                ))}
-              </div>
-              
-              <Button onClick={downloadJSON} variant="secondary" size="sm">
-                📥 Export JSON
-              </Button>
-            </div>
-          </div>
-        </div>
+                {/* Search */}
+                <div className="mb-6">
+                  <Input
+                    type="text"
+                    placeholder="Search providers by name, specialty, department, phone, or NPI..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full max-w-2xl"
+                    aria-label="Search providers"
+                  />
+                </div>
 
-        {/* Providers Grid */}
-        <div className="container mx-auto px-6 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProviders.map(provider => (
-              <AppErrorBoundary key={provider.id} resetKeys={[provider.id]}>
-                <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader className="pb-4">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <CardTitle className="text-lg font-semibold leading-tight mb-1">
-                        {provider.name}
-                      </CardTitle>
-                      <p className="text-sm text-muted-foreground font-medium">
-                        {provider.specialty}
-                      </p>
-                    </div>
-                    <div className={cn(
-                      "w-3 h-3 rounded-full flex-shrink-0 mt-1",
-                      provider.status === 'critical' && "bg-destructive",
-                      provider.status === 'warning' && "bg-yellow-500",
-                      provider.status === 'ok' && "bg-green-500"
-                    )} />
-                  </div>
-                </CardHeader>
-                
-                <CardContent className="space-y-4">
-                  {/* Contact Info */}
-                  <div className="space-y-2 text-sm">
-                    <div className="flex">
-                      <span className="text-muted-foreground w-16 font-medium">Phone:</span>
-                      <span className="font-medium">{provider.phone}</span>
-                    </div>
-                    <div className="flex">
-                      <span className="text-muted-foreground w-16 font-medium">Location:</span>
-                      <span className="font-medium">{provider.location}</span>
-                    </div>
-                    {provider.epic_chat.length > 0 && (
-                      <div className="flex">
-                        <span className="text-muted-foreground w-16 font-medium">Epic:</span>
-                        <span className="font-medium">{provider.epic_chat.join(', ')}</span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Priority Notes */}
-                  {provider.priority_notes.length > 0 && (
-                    <div className="bg-muted rounded-lg p-3">
-                      {provider.priority_notes.map((note, index) => (
-                        <div key={index} className="flex items-start gap-2 text-sm">
-                          <span className="text-base mt-0.5 flex-shrink-0">{note.icon}</span>
-                          <span className={cn(
-                            "leading-relaxed",
-                            note.type === 'critical' && "text-destructive font-medium"
-                          )}>
-                            {note.text}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Tags */}
-                  <div className="flex gap-1 flex-wrap">
-                    {provider.tags.map(tag => (
-                      <span
-                        key={tag}
-                        className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-secondary text-secondary-foreground"
+                {/* Filters */}
+                <div className="flex gap-2 flex-wrap items-center justify-between">
+                  <div className="flex gap-2 flex-wrap">
+                    {[
+                      { key: 'neurology', label: 'Neurology' },
+                      { key: 'cardiology', label: 'Cardiology' },
+                      { key: 'oncology', label: 'Oncology' },
+                      { key: 'critical', label: 'Critical Notes' },
+                      { key: 'pths-only', label: 'PTHS Only' },
+                      { key: '3t-required', label: '3T Required' },
+                      { key: 'no-direct-contact', label: 'No Direct Contact' }
+                    ].map(filter => (
+                      <Button
+                        key={filter.key}
+                        variant={activeFilters.includes(filter.key) ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => toggleFilter(filter.key)}
+                        className={cn(
+                          "text-xs",
+                          filter.key === 'critical' && "border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                        )}
                       >
-                        {tag}
-                      </span>
+                        {filter.label}
+                      </Button>
                     ))}
                   </div>
-                </CardContent>
-                </Card>
-              </AppErrorBoundary>
-            ))}
-          </div>
-
-          {/* Empty State */}
-          {filteredProviders.length === 0 && (
-            <div className="text-center py-16">
-              <div className="text-6xl mb-4">🔍</div>
-              <h3 className="text-lg font-semibold mb-2">No providers found</h3>
-              <p className="text-muted-foreground">
-                Try adjusting your search terms or filters.
-              </p>
+                  
+                  <Button onClick={downloadJSON} variant="secondary" size="sm">
+                    📥 Export JSON
+                  </Button>
+                </div>
+              </div>
             </div>
-          )}
-        </div>
-        </div>
-      </PageErrorBoundary>
-    </Layout>
+
+            {/* Table Section */}
+            <div className="container mx-auto px-6 py-8">
+              <div className="rounded-lg border bg-card">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-[250px]">Provider</TableHead>
+                      <TableHead>Specialty</TableHead>
+                      <TableHead>Department</TableHead>
+                      <TableHead>Contact</TableHead>
+                      <TableHead>Location</TableHead>
+                      <TableHead>Tags</TableHead>
+                      <TableHead>Status</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredProviders.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={7} className="h-24 text-center">
+                          <div className="text-muted-foreground">
+                            <p className="text-lg font-medium mb-1">No providers found</p>
+                            <p className="text-sm">Try adjusting your search criteria</p>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      filteredProviders.map((provider) => (
+                        <TableRow key={provider.id} className="hover:bg-muted/50">
+                          <TableCell className="font-medium">
+                            <div>
+                              <div className="font-semibold">{provider.name}</div>
+                              <div className="text-sm text-muted-foreground">
+                                {provider.credentials} • NPI: {provider.npi}
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell>{provider.specialty}</TableCell>
+                          <TableCell className="capitalize">{provider.department}</TableCell>
+                          <TableCell>
+                            <div className="text-sm space-y-1">
+                              <div className="font-medium">{provider.phone}</div>
+                              <div className="text-muted-foreground">{provider.email}</div>
+                              {provider.epic_chat.length > 0 && (
+                                <div className="text-xs text-muted-foreground">
+                                  Epic: {provider.epic_chat.join(', ')}
+                                </div>
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell className="text-sm">{provider.location}</TableCell>
+                          <TableCell>
+                            <div className="flex flex-wrap gap-1">
+                              {provider.tags.slice(0, 3).map((tag, idx) => (
+                                <Badge key={idx} variant="secondary" className="text-xs">
+                                  {tag}
+                                </Badge>
+                              ))}
+                              {provider.tags.length > 3 && (
+                                <Badge variant="secondary" className="text-xs">
+                                  +{provider.tags.length - 3}
+                                </Badge>
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="space-y-1">
+                              {getStatusBadge(provider.status)}
+                              {provider.priority_notes.length > 0 && (
+                                <div className="text-xs text-muted-foreground">
+                                  {provider.priority_notes.length} note{provider.priority_notes.length !== 1 ? 's' : ''}
+                                </div>
+                              )}
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+
+              {/* Footer */}
+              <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
+                <div>
+                  Showing {filteredProviders.length} of {providers.length} providers
+                </div>
+                <div className="flex items-center gap-2">
+                  <span>Critical Notes Legend:</span>
+                  <Badge variant="destructive" className="text-xs">Critical</Badge>
+                  <Badge variant="warning" className="text-xs">Warning</Badge>
+                  <Badge variant="success" className="text-xs">Active</Badge>
+                </div>
+              </div>
+            </div>
+          </main>
+        </AppErrorBoundary>
+      </Layout>
+    </PageErrorBoundary>
   );
 }
