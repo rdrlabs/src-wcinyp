@@ -2,46 +2,61 @@
 sidebar_position: 1
 ---
 
-# Tutorial Intro
+# WCINYP Documentation Portal
 
-Let's discover **Docusaurus in less than 5 minutes**.
+Welcome to the Weill Cornell Imaging at NewYork-Presbyterian (WCINYP) documentation portal. This comprehensive resource provides essential information for medical staff working in our imaging facilities.
+
+## Overview
+
+WCINYP operates multiple state-of-the-art imaging centers throughout New York, offering a full range of diagnostic imaging services including:
+
+- **MRI** (Magnetic Resonance Imaging)
+- **PET/CT** and **PET/MRI** (Positron Emission Tomography)
+- **CT** (Computed Tomography)
+- **X-Ray** and **DEXA** (Bone Density Scanning)
+- **Ultrasound**
+- **Mammography**
+
+## Quick Navigation
+
+### Staff Operations
+- [Facilitation Guidelines](/docs/staff-operations/facilitation) - Patient preparation and workflow management
+- [Confirmation Calls](/docs/staff-operations/confirmation-calls) - Pre-appointment patient communication protocols
+- [GPCP Program](/docs/staff-operations/gpcp) - Genetics and Personalized Cancer Prevention workflows
+
+### Clinical Resources
+- [PET Imaging Protocols](/docs/clinical/pet-imaging) - Specialized radiopharmaceutical procedures
+- [Patient Preparation Guidelines](/docs/clinical/patient-preparation) - Exam-specific preparation requirements
+- [Safety Protocols](/docs/clinical/safety) - Contrast allergies, implant safety, and special considerations
+
+### Facility Information
+- [Location Directory](/docs/facilities/locations) - Complete facility listings with contact information
+- [Department Contacts](/docs/facilities/contacts) - Key personnel and department extensions
+- [Hours of Operation](/docs/facilities/hours) - Facility schedules and contrast availability
+
+### Administrative Resources
+- [Insurance & Authorization](/docs/admin/insurance) - Pre-authorization and billing procedures
+- [Scheduling Guidelines](/docs/admin/scheduling) - Appointment booking protocols
+- [Epic System Reports](/docs/admin/epic-reports) - Miscellaneous reports and system features
+
+## Key Contact Information
+
+**Main Number**: (212) 746-6000  
+**Fax**: (646) 962-0122  
+**NPI**: 1447430152  
+**Tax ID**: 412-237-441  
+
+## Emergency Resources
+
+**EMS**: #22222  
+**NYP Security**: (212) 746-0911  
+**Contrast Reaction**: (646) 962-7057  
 
 ## Getting Started
 
-Get started by **creating a new site**.
+New staff members should begin with:
+1. Review the [Facilitation Guidelines](/docs/staff-operations/facilitation)
+2. Familiarize yourself with [Location Directory](/docs/facilities/locations)
+3. Understand [Patient Preparation Requirements](/docs/clinical/patient-preparation)
 
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
-
-### What you'll need
-
-- [Node.js](https://nodejs.org/en/download/) version 18.0 or above:
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
-
-## Generate a new site
-
-Generate a new Docusaurus site using the **classic template**.
-
-The classic template will automatically be added to your project after you run the command:
-
-```bash
-npm init docusaurus@latest my-website classic
-```
-
-You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
-
-The command also installs all necessary dependencies you need to run Docusaurus.
-
-## Start your site
-
-Run the development server:
-
-```bash
-cd my-website
-npm run start
-```
-
-The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
-
-The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
-
-Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.
+For questions or updates to this documentation, please contact the Practice Management team.
