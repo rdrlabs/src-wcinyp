@@ -1,0 +1,39 @@
+/* Navbar height adjustment for better logo display */
+.navbar {
+  height: var(--ifm-navbar-height);
+  --ifm-navbar-height: 80px; /* Increased from default 60px */
+}
+
+.navbar__inner {
+  height: 100%;
+}
+
+.navbar__logo {
+  height: 60px; /* Larger logo */
+}
+
+.navbar__logo img {
+  height: 100%;
+  width: auto;
+}
+
+/* Adjust items alignment */
+.navbar__items {
+  height: 100%;
+}
+
+.navbar__item {
+  display: flex;
+  align-items: center;
+}
+
+/* Mobile adjustments */
+@media (max-width: 996px) {
+  .navbar {
+    --ifm-navbar-height: 60px; /* Standard height on mobile */
+  }
+  
+  .navbar__logo {
+    height: 40px;
+  }
+}

@@ -142,3 +142,6 @@ main {
 html {
   scroll-behavior: smooth;
 }
+
+/* Import navbar styles */
+@import './navbar.css';

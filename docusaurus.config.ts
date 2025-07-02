@@ -68,10 +68,10 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'WCINYP MRI Manual',
+      title: 'My Site',
       logo: {
-        alt: 'WCINYP Logo',
-        src: 'img/logo.png',
+        alt: 'My Site Logo',
+        src: 'img/logo.svg',
       },
       items: [
         {
