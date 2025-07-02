@@ -1,7 +1,17 @@
 # AI Co-Development Guide
 
 ## 📋 Overview
-This guide provides essential context for AI assistants working on this medical document management system codebase.
+This guide provides essential context for AI assistants working on the **Weill Cornell Imaging at NewYork-Presbyterian (WCINYP)** medical document management system codebase.
+
+## 🏥 **Organizational Context**
+**WCINYP** is a prestigious academic medical center providing comprehensive diagnostic imaging services:
+- **9 locations** across Manhattan and Queens
+- **100+ expert clinicians** requiring streamlined workflows
+- **Multiple imaging modalities**: CT, MRI, PET/CT, PET/MRI, Ultrasound, X-ray, Mammography, DEXA, EOS, Fluoroscopy
+- **Academic medical center** with research and educational missions
+- **Patient-centered care** with emphasis on accessibility and usability
+
+This system directly supports clinical workflows for real medical professionals serving actual patients, making quality, accessibility, and reliability absolutely critical.
 
 ## 🚨 CRITICAL REMINDERS - READ FIRST
 

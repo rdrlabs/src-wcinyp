@@ -3,7 +3,9 @@
 ## 🎯 **Initial Context Setup Prompt**
 
 ```
-You are working on the src-wcinyp medical document management system. Before starting ANY task:
+You are working on the WCINYP (Weill Cornell Imaging at NewYork-Presbyterian) medical document management system. This system supports real clinical workflows for 100+ expert clinicians across 9 locations providing diagnostic imaging services (CT, MRI, PET/CT, PET/MRI, Ultrasound, X-ray, etc.). Quality, accessibility, and reliability are absolutely critical as this serves actual medical professionals and patients.
+
+Before starting ANY task:
 
 1. **READ THESE FILES FIRST** (in this order):
    - README.md - Project overview and technical requirements
@@ -37,6 +39,8 @@ Only proceed after reading all reference files and confirming understanding.
 ```
 Task: [DESCRIBE SPECIFIC UI TASK]
 
+CRITICAL CONTEXT: This UI will be used by medical professionals in clinical settings. Accessibility, clarity, and reliability are paramount for patient safety and workflow efficiency.
+
 Requirements:
 - Read src/pages/providers.tsx to understand the Provider layout pattern
 - Match the exact header → search → filters → content structure
@@ -55,6 +59,8 @@ Expected deliverables:
 ### **For Testing Implementation:**
 ```
 Task: [DESCRIBE TESTING TASK]
+
+CRITICAL CONTEXT: These tests validate medical workflow software used by healthcare professionals. Test failures could indicate potential issues affecting patient care or clinical efficiency.
 
 Requirements:
 - Follow TESTING_PROTOCOL.md standards exactly
@@ -172,13 +178,14 @@ After completing any task:
 
 ## 💡 **Pro Tips for Maximum Effectiveness**
 
-1. **Always read the Provider component first** - it's the design standard
-2. **Use TodoWrite religiously** - it prevents missed tasks
-3. **Test in the browser** - don't just rely on automated tests
-4. **Keep commits small and focused** - easier to review and rollback
-5. **Update documentation as you go** - don't leave it for later
-6. **Ask for clarification** if requirements are ambiguous
-7. **Follow the established patterns** - consistency is key
+1. **Remember the medical context** - this serves real healthcare professionals and patients
+2. **Always read the Provider component first** - it's the design standard
+3. **Use TodoWrite religiously** - it prevents missed tasks in critical healthcare software
+4. **Test in the browser** - don't just rely on automated tests for medical workflows
+5. **Keep commits small and focused** - easier to review and rollback in production healthcare systems
+6. **Update documentation as you go** - essential for medical software compliance
+7. **Ask for clarification** if requirements are ambiguous - clarity is critical in healthcare
+8. **Follow the established patterns** - consistency reduces clinical errors
 
 ## 🎯 **Success Metrics**
 
