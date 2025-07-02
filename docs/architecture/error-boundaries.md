@@ -259,7 +259,7 @@ const AppErrorBoundary = Sentry.withErrorBoundary(Component, {
 
 - [TypeScript Strict Mode Migration](./typescript-migration.md)
 - [Architecture Overview](./overview.md)
-- [Component Testing Strategy](../testing/components.md)
+- Component Testing Strategy (see TESTING_PROTOCOL.md)
 
 ---
 

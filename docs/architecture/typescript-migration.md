@@ -166,7 +166,7 @@ The strict TypeScript configuration is now enforced at build time, preventing an
 
 - [Error Boundaries Implementation](./error-boundaries.md)
 - [Architecture Overview](./overview.md)
-- [Testing Strategy](../testing/strategy.md)
+- Testing Strategy (see TESTING_PROTOCOL.md)
 
 ---
 
