@@ -94,7 +94,7 @@ This repository is fully configured for GitHub Codespaces with mobile developmen
 ## 🧪 Testing & Quality Assurance
 
 ### Testing Philosophy
-We follow a **test-first approach** where tests validate real functionality, not just pass for the sake of passing.
+Tests validate real functionality and component behavior.
 
 ```bash
 # Run all tests
@@ -208,10 +208,10 @@ npm run build
 ```
 
 ### Component Development
-1. **Design First**: Create component with accessibility in mind
-2. **Test Driven**: Write tests before implementation
-3. **Progressive Enhancement**: Start with basic functionality
-4. **Performance**: Use React.memo, useMemo, useCallback appropriately
+1. **Accessibility**: Components include ARIA labels and keyboard navigation
+2. **Testing**: Components have comprehensive test coverage
+3. **Performance**: Components use React optimization patterns
+4. **Standards**: TypeScript strict mode and ESLint configuration
 
 ### Testing Workflow
 ```bash
@@ -285,13 +285,13 @@ To set up badges for your repository:
 
 ## 🎓 For Non-Technical Users
 
-### What This Demo Shows
-This application demonstrates how complex medical document workflows can be simplified into intuitive, user-friendly interfaces. Key principles:
+### Application Overview
+This application shows how medical document workflows can be managed through user-friendly interfaces:
 
-- **Simplicity**: Complex operations made simple with clear visual cues
-- **Reliability**: Robust error handling prevents user mistakes
-- **Accessibility**: Works for users with varying technical abilities
-- **Maintainability**: Code structure allows easy updates without breaking functionality
+- **Simplicity**: Clear visual cues for document selection and form creation
+- **Reliability**: Error handling and validation throughout the interface
+- **Accessibility**: Screen reader support and keyboard navigation
+- **Maintainability**: Modular code structure for updates and modifications
 
 ### Business Value
 - **Reduced Training Time**: Intuitive interface requires minimal training
@@ -300,20 +300,20 @@ This application demonstrates how complex medical document workflows can be simp
 - **Compliance**: Accessibility features ensure legal compliance
 - **Scalability**: Architecture supports adding new features easily
 
-### Maintenance Philosophy
-The codebase is designed to be "non-technical user proof":
+### Maintenance Approach
+The codebase includes safeguards for long-term stability:
 
-1. **Rigid Structure**: Clear boundaries prevent accidental breaking changes
-2. **Fail-Safe Defaults**: System gracefully handles unexpected inputs
-3. **Visual Feedback**: Immediate feedback guides users to correct actions
-4. **Documentation**: Every component documented for future maintenance
+1. **Structure**: Clear boundaries and component organization
+2. **Error Handling**: System handles unexpected inputs gracefully  
+3. **User Feedback**: Interface provides immediate response to user actions
+4. **Documentation**: Components and functions include documentation
 
 ## 🤝 Contributing
 
 ### For Developers
 1. Fork the repository
-2. Create feature branch: `git checkout -b feature/amazing-feature`
-3. Write tests first, then implement
+2. Create feature branch: `git checkout -b feature/feature-name`
+3. Implement changes with tests
 4. Ensure all tests pass: `npm run test:ci`
 5. Create pull request with detailed description
 
