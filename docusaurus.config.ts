@@ -96,13 +96,17 @@ const config: Config = {
           position: 'right',
         },
         {
-          href: 'https://outlook.office365.com/mail/',
-          label: 'Outlook',
+          type: 'html',
           position: 'right',
+          value: '<a href="https://outlook.office365.com/mail/" target="_blank" rel="noopener noreferrer">Outlook</a>',
         },
         {
-          href: 'https://teams.microsoft.com/',
-          label: 'Teams',
+          type: 'html', 
+          position: 'right',
+          value: '<a href="https://teams.microsoft.com/" target="_blank" rel="noopener noreferrer">Teams</a>',
+        },
+        {
+          type: 'themeToggle',
           position: 'right',
         },
       ],
