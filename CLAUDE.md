@@ -38,9 +38,9 @@ src-wcinyp/
 ## Key Scripts
 ```bash
 npm install       # Install dependencies
-npm start         # Start dev server
-npm test          # Run tests
-npm run build     # Production build
+npm run dev       # Start dev server (not configured yet)
+npm test          # Run tests (not configured yet)
+npm run build     # Production build (not configured yet)
 ```
 
 ## Development Standards
@@ -51,3 +51,12 @@ npm run build     # Production build
 
 ## AI Prompts
 @.ai/INDEX.md
+
+## Lazarus Documentation
+Valuable docs salvaged from the failed Docusaurus implementation:
+@.ai/lazarus/INDEX.md
+
+Key sections:
+- `/strategy/` - Lessons learned and postmortems
+- `/architecture/` - Technical patterns (learn from mistakes)
+- `/domain/` - Medical imaging business logic (still valid)

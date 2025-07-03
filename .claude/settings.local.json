@@ -4,7 +4,9 @@
       "Bash(mv:*)",
       "WebFetch(domain:docs.anthropic.com)",
       "Bash(git add:*)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Bash(cp:*)",
+      "Bash(npm run lint)"
     ],
     "deny": []
   }
