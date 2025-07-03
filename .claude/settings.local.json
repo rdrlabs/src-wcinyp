@@ -3,7 +3,8 @@
     "allow": [
       "Bash(mv:*)",
       "WebFetch(domain:docs.anthropic.com)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(mv:*)"
     ],
     "deny": []
   }
