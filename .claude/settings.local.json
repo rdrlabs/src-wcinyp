@@ -1,34 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(find:*)",
-      "Bash(npm run build:*)",
-      "Bash(ls:*)",
-      "Bash(npm run typecheck:*)",
-      "Bash(rm:*)",
-      "Bash(npm install)",
-      "Bash(git fetch:*)",
-      "Bash(git stash:*)",
-      "Bash(git pull:*)",
-      "Bash(npm test:*)",
-      "Bash(npm start)",
-      "Bash(npm install:*)",
-      "Bash(git add:*)",
-      "Bash(git commit:*)",
-      "Bash(git push:*)",
-      "Bash(grep:*)",
-      "Bash(curl:*)",
-      "Bash(rg:*)",
-      "Bash(wget:*)",
-      "Bash(npm run deploy:*)",
-      "Bash(netlify deploy:*)",
-      "WebFetch(domain:app.netlify.com)",
-      "Bash(git ls-tree:*)",
-      "Bash(mkdir:*)",
-      "Bash(pkill:*)",
-      "Bash(true)",
-      "Bash(python3:*)",
-      "Bash(pip install:*)"
+      "Bash(mv:*)",
+      "WebFetch(domain:docs.anthropic.com)",
+      "Bash(git add:*)"
     ],
     "deny": []
   }
