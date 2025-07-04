@@ -109,7 +109,7 @@ export default function KnowledgePage() {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground mb-3">
-              Can't find what you're looking for?
+              Can&apos;t find what you&apos;re looking for?
             </p>
             <Button size="sm" variant="outline">Contact Support</Button>
           </CardContent>

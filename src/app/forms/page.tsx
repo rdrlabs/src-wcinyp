@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import Link from "next/link";
 import {
   Table,
   TableBody,
@@ -71,16 +71,16 @@ export default function FormsPage() {
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-2">
-                    <a href={`/forms/${template.id}`}>
+                    <Link href={`/forms/${template.id}`}>
                       <Button variant="ghost" size="sm">
                         Edit
                       </Button>
-                    </a>
-                    <a href={`/forms/${template.id}`}>
+                    </Link>
+                    <Link href={`/forms/${template.id}`}>
                       <Button variant="ghost" size="sm">
                         Preview
                       </Button>
-                    </a>
+                    </Link>
                     <Button variant="ghost" size="sm">
                       Clone
                     </Button>

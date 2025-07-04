@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import formTemplatesData from "@/data/form-templates.json";
-import type { FormTemplate } from "@/types";
 
 // Mock form field types
 const fieldTypes = {
@@ -25,7 +24,7 @@ export default function FormBuilderPage() {
   
   const template = formTemplatesData.templates.find(t => t.id === formId);
   
-  const [formData, setFormData] = useState<Record<string, any>>({});
+  const [formData, setFormData] = useState<Record<string, string | boolean>>({});
   const [isPreview, setIsPreview] = useState(false);
   
   if (!template) {
@@ -77,7 +76,15 @@ export default function FormBuilderPage() {
     }
   };
   
-  const renderField = (field: any) => {
+  interface MockField {
+    id: string;
+    name: string;
+    type: string;
+    required: boolean;
+    placeholder: string;
+  }
+
+  const renderField = (field: MockField) => {
     switch (field.type) {
       case 'text':
       case 'email':

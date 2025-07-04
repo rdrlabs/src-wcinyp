@@ -4,24 +4,24 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/
 
 export function ErrorBoundary() {
   // This component is not used in Next.js app
-  const error = null as any; // useRouteError();
+  const error: Error | { status?: number; statusText?: string } | null = null; // useRouteError();
   
   let title = "Oops! Something went wrong";
   let message = "An unexpected error occurred. Please try again.";
   
   if (false) { // isRouteErrorResponse(error)) {
-    if (error.status === 404) {
+    if ((error as any)?.status === 404) {
       title = "Page Not Found";
       message = "The page you're looking for doesn't exist.";
-    } else if (error.status === 401) {
+    } else if ((error as any)?.status === 401) {
       title = "Unauthorized";
       message = "You need to be logged in to access this page.";
-    } else if (error.status === 403) {
+    } else if ((error as any)?.status === 403) {
       title = "Forbidden";
       message = "You don't have permission to access this page.";
     } else {
-      title = `Error ${error.status}`;
-      message = error.statusText || message;
+      title = `Error ${(error as any)?.status}`;
+      message = (error as any)?.statusText || message;
     }
   } else if (error instanceof Error) {
     message = error.message;
