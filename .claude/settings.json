@@ -1,0 +1,6 @@
+{
+  "bash": {
+    "defaultTimeoutMs": 600000,
+    "maxTimeoutMs": 900000
+  }
+}
