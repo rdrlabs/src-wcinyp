@@ -1,202 +1,36 @@
-# WCINYP Medical Admin Tool
-
-Medical administrative application for Weill Cornell Imaging at NewYork-Presbyterian.
-
-## 🚀 Live Demo
-
-[https://wcinyp.netlify.app](https://wcinyp.netlify.app)
-
-## Features
-
-- 📄 **Document Hub** - Manage medical documents and forms
-- 👥 **Provider Directory** - Search and manage medical staff
-- 📝 **Form Builder** - Create dynamic medical forms  
-- 📊 **Reports** - Analytics and insights dashboard
-
-## Tech Stack
-
-- **React Router v7** - Modern React framework (SPA mode)
-- **shadcn/ui** - Beautiful, accessible components
-- **Tailwind CSS v3.4** - Utility-first styling
-- **TypeScript** - Type-safe development
-- **Vitest & Playwright** - Unit and E2E testing
-- **Netlify** - Static site hosting with global CDN
-
-## AI Commands
-
-This project includes AI-powered development commands. Type these in your AI assistant:
-
-### Common Commands
-
-- `[ship]` - Run tests, build, commit, and deploy
-- `[test]` - Run test suite
-- `[clean]` - Check for code issues
-- `[deploy-status]` - Check Netlify deployment status
-- `[deploy-logs]` - View recent deployment logs
-- `[help]` - List all commands
-
-### Shortcuts
-
-- `[s]` = `[ship]`
-- `[t]` = `[test]`
-- `[ds]` = `[deploy-status]`
-- `[dl]` = `[deploy-logs]`
-- `[?]` = `[help]`
-
-### Examples
-
-```
-[ship "fix: update button styles"]   # Deploy with message
-[test unit --coverage]               # Run unit tests with coverage
-[clean --fix]                        # Find and fix issues
-[help ship]                          # Get help for ship command
-```
-
-Add `!` for fast mode: `[ship!]` skips confirmations.
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
 
-### Prerequisites
-
-- Node.js 18+ 
-- npm or pnpm
-
-### Installation
+First, run the development server:
 
 ```bash
-# Clone the repository
-git clone https://github.com/rdrlabs/src-wcinyp.git
-cd src-wcinyp
-
-# Install dependencies
-npm install
-```
-
-### Development
-
-```bash
-# Start dev server with HMR
 npm run dev
-
-# Run tests
-npm run test
-
-# Type checking
-npm run typecheck
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-Your application will be available at `http://localhost:5173`.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Building for Production
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-```bash
-# Create production build
-npm run build
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-# Preview production build locally
-npm run preview
-```
+## Learn More
 
-## Deployment
+To learn more about Next.js, take a look at the following resources:
 
-### Netlify (Recommended)
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/rdrlabs/src-wcinyp)
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-The project is configured for automatic deployment to Netlify:
+## Deploy on Vercel
 
-1. Fork this repository
-2. Connect to Netlify
-3. Deploy automatically on every push
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-#### Deployment Configuration
-
-The app is configured as a Single Page Application (SPA) for optimal static hosting:
-
-- **SPA Mode**: Client-side routing with instant navigation
-- **Static Build**: Generates `index.html` and assets
-- **CDN Delivery**: Served from Netlify's global edge network
-- **Auto Redirects**: All routes serve `index.html` for client routing
-
-#### Netlify CLI Integration
-
-For deployment monitoring and management:
-
-```bash
-# Install dependencies (includes Netlify CLI)
-npm install
-
-# Link to your Netlify site
-netlify link
-
-# Set up authentication token (optional for monitoring)
-export NETLIFY_AUTH_TOKEN=your-token-here
-# Get token from: https://app.netlify.com/user/applications/personal
-
-# Check deployment status
-npm run deploy:status
-
-# View deployment logs
-npm run deploy:logs
-
-# Open site in browser
-npm run deploy:open
-```
-
-### Docker Deployment
-
-```bash
-# Build the image
-docker build -t src-wcinyp .
-
-# Run locally
-docker run -p 3000:3000 src-wcinyp
-```
-
-Deploy to any container platform:
-- AWS ECS / Fargate
-- Google Cloud Run
-- Azure Container Apps
-- Fly.io
-- Railway
-
-### Manual Deployment
-
-The app builds as a static SPA. Deploy the build output:
-
-```
-build/
-└── client/        # Static assets
-    ├── index.html # Entry point
-    └── assets/    # JS, CSS, and other assets
-```
-
-## Project Structure
-
-```
-src-wcinyp/
-├── app/
-│   ├── routes/        # Page components
-│   ├── components/    # Shared components
-│   ├── lib/          # Utilities
-│   └── root.tsx      # App shell
-├── public/           # Static assets
-├── .ai/              # AI assistant config
-└── tests/            # Test files
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing`)
-5. Open a Pull Request
-
-## License
-
-This project is proprietary and confidential.
-
----
-
-Built with React Router v7 and shadcn/ui
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
