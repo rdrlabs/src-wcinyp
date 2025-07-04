@@ -132,7 +132,7 @@ export default function FormBuilderPage() {
             type="checkbox"
             name={field.id}
             className="w-4 h-4"
-            checked={formData[field.id] || false}
+            checked={!!formData[field.id]}
             onChange={(e) => setFormData({ ...formData, [field.id]: e.target.checked })}
           />
         );
