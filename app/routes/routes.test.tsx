@@ -12,7 +12,7 @@ describe('Route Integration Tests', () => {
         <Home />
       </MemoryRouter>
     )
-    expect(screen.getByText('WCINYP Admin Dashboard')).toBeInTheDocument()
+    expect(screen.getByText('WCINYP Dashboard')).toBeInTheDocument()
   })
 
   it('renders documents route with mock data', () => {
@@ -45,33 +45,13 @@ describe('Route Integration Tests', () => {
     // Mock the required props for the forms route
     const FormsRoute = ({ loaderData }: any) => (
       <div>
-        <h1>Form Builder</h1>
+        <h1>Form Generator</h1>
         <p>Templates: {loaderData.templates.length}</p>
       </div>
     )
     
     render(<FormsRoute loaderData={{ templates: [] }} />)
-    expect(screen.getByText('Form Builder')).toBeInTheDocument()
+    expect(screen.getByText('Form Generator')).toBeInTheDocument()
   })
 
-  it('renders reports route with mock data', () => {
-    // Mock the required props for the reports route
-    const ReportsRoute = ({ loaderData }: any) => (
-      <div>
-        <h1>Reports</h1>
-        <p>Total Reports: {loaderData.stats.totalReports}</p>
-      </div>
-    )
-    
-    render(<ReportsRoute loaderData={{ 
-      reports: [], 
-      stats: {
-        totalReports: 0,
-        scheduledReports: 0,
-        completedThisMonth: 0,
-        averageRunTime: "0 minutes"
-      }
-    }} />)
-    expect(screen.getByText('Reports')).toBeInTheDocument()
-  })
 })

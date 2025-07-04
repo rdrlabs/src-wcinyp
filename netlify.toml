@@ -4,7 +4,14 @@
   
 [build.environment]
   NODE_VERSION = "20"
-  NETLIFY_SKIP_CACHE = "true"
+  
+# Build processing optimizations
+[build.processing]
+  skip_processing = false
+
+# Enable build plugins for optimization
+[[plugins]]
+  package = "@netlify/plugin-lighthouse"
   
 # Functions disabled for SPA mode
 # [functions]

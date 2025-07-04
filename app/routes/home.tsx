@@ -5,7 +5,7 @@ import { ErrorBoundary } from "~/components/ErrorBoundary";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "WCINYP Admin Dashboard" },
+    { title: "WCINYP Dashboard" },
     { name: "description", content: "Medical imaging administrative tools" },
   ];
 }
@@ -25,23 +25,29 @@ export default function Home() {
       stats: "42 providers",
     },
     {
-      title: "Form Builder",
-      description: "Create and customize medical forms",
+      title: "Form Generator",
+      description: "Automate medical form creation and processing",
       href: "/forms",
       stats: "12 templates",
     },
     {
-      title: "Reports",
-      description: "Analytics and insights dashboard",
-      href: "/reports",
-      stats: "8 reports",
+      title: "Directory",
+      description: "Comprehensive contact database",
+      href: "/directory",
+      stats: "150+ contacts",
+    },
+    {
+      title: "Knowledge Base",
+      description: "Documentation and guides",
+      href: "/knowledge",
+      stats: "15+ articles",
     },
   ];
 
   return (
     <div className="container mx-auto py-8">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold">WCINYP Admin Dashboard</h1>
+        <h1 className="text-4xl font-bold">WCINYP Dashboard</h1>
         <p className="text-muted-foreground mt-2">
           Weill Cornell Imaging at NewYork-Presbyterian
         </p>

@@ -1,0 +1,181 @@
+---
+title: Self-Pay Form Automation
+description: Streamline the self-pay process with automated form generation
+date: 2025-01-04
+category: Form Generator
+---
+
+# Self-Pay Form Automation
+
+The self-pay form automation feature in WCINYP helps streamline the patient billing process by automatically generating personalized forms based on patient data, insurance status, and procedure type.
+
+## Overview
+
+Self-pay form automation reduces manual entry errors and improves collection rates by:
+
+- Pre-filling patient information from existing records
+- Automatically calculating costs based on procedure codes
+- Generating location-specific forms (55th Street, Broadway, etc.)
+- Supporting multiple languages (English and Spanish)
+
+## Key Features
+
+### 1. Automatic Patient Data Population
+
+When a patient is identified as self-pay, the system automatically:
+
+- Retrieves patient demographic information
+- Checks insurance eligibility status
+- Identifies the service location
+- Determines the appropriate form template
+
+### 2. Dynamic Form Selection
+
+The system intelligently selects the correct form based on:
+
+- **Location**: Each facility has its own ABN forms
+- **Procedure Type**: Special forms for Calcium Score, MRI, CT, etc.
+- **Language Preference**: English or Spanish versions
+- **Insurance Status**: Self-pay vs. off-hours insurance
+
+### 3. Cost Calculation
+
+Automated cost calculation includes:
+
+- Base procedure costs
+- Facility fees
+- Technical fees
+- Professional fees
+- Applicable discounts
+
+## Implementation Steps
+
+### Step 1: Patient Registration
+
+```
+1. Verify patient is self-pay or insurance is inactive
+2. Confirm procedure type and location
+3. Check for existing financial agreements
+```
+
+### Step 2: Form Generation
+
+The system generates the appropriate form with:
+
+- Patient demographics pre-filled
+- Procedure details and costs
+- Payment terms and conditions
+- Digital signature fields
+
+### Step 3: Review and Approval
+
+Staff can:
+
+- Review generated forms for accuracy
+- Make manual adjustments if needed
+- Send forms for patient signature
+- Track form completion status
+
+## Best Practices
+
+### Data Accuracy
+
+- Verify patient information before generation
+- Confirm procedure codes are correct
+- Double-check cost calculations
+- Ensure location-specific requirements are met
+
+### Compliance
+
+- Maintain HIPAA compliance
+- Follow Medicare ABN requirements
+- Document all financial discussions
+- Store signed forms securely
+
+### Patient Communication
+
+- Explain costs clearly
+- Provide payment options
+- Offer financial assistance information
+- Follow up on unsigned forms
+
+## Common Scenarios
+
+### Scenario 1: Walk-in Self-Pay Patient
+
+When a patient arrives without insurance:
+
+1. Register patient in system
+2. Select "Self-Pay" as payment method
+3. System auto-generates appropriate waiver
+4. Review costs with patient
+5. Obtain signature before service
+
+### Scenario 2: Insurance After-Hours
+
+For patients with insurance seen outside normal hours:
+
+1. Verify insurance cannot be confirmed
+2. Generate "Off-Hours Insurance Waiver"
+3. Explain potential patient responsibility
+4. Process insurance when available
+
+### Scenario 3: Medicare ABN Required
+
+When Medicare may not cover a service:
+
+1. System identifies Medicare patient
+2. Checks procedure coverage rules
+3. Generates location-specific ABN
+4. Documents reason for ABN
+
+## Troubleshooting
+
+### Form Not Generating
+
+If forms fail to generate:
+
+- Check patient registration is complete
+- Verify procedure codes are valid
+- Ensure location is selected
+- Confirm form templates are configured
+
+### Incorrect Costs
+
+If costs appear incorrect:
+
+- Review fee schedule settings
+- Check for special pricing rules
+- Verify discount applications
+- Confirm location-specific rates
+
+## Integration Points
+
+The self-pay automation integrates with:
+
+- **Patient Registration**: Pulls demographic data
+- **Scheduling System**: Identifies procedures
+- **Billing System**: Sends completed forms
+- **Document Management**: Stores signed forms
+
+## Reporting
+
+Track automation effectiveness with:
+
+- Form generation success rate
+- Time saved per patient
+- Collection rate improvements
+- Error reduction metrics
+
+## Future Enhancements
+
+Planned improvements include:
+
+- SMS/Email form delivery
+- Mobile-friendly signing
+- Payment plan automation
+- Real-time eligibility checking
+
+---
+
+For additional assistance, contact the WCINYP support team or refer to the Form Generator documentation.

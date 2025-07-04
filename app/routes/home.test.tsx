@@ -11,7 +11,7 @@ describe('Home Route', () => {
       </BrowserRouter>
     )
     
-    expect(screen.getByText('WCINYP Admin Dashboard')).toBeInTheDocument()
+    expect(screen.getByText('WCINYP Dashboard')).toBeInTheDocument()
     expect(screen.getByText('Weill Cornell Imaging at NewYork-Presbyterian')).toBeInTheDocument()
   })
 
@@ -24,8 +24,8 @@ describe('Home Route', () => {
     
     expect(screen.getByText('Document Hub')).toBeInTheDocument()
     expect(screen.getByText('Provider Directory')).toBeInTheDocument()
-    expect(screen.getByText('Form Builder')).toBeInTheDocument()
-    expect(screen.getByText('Reports')).toBeInTheDocument()
+    expect(screen.getByText('Form Generator')).toBeInTheDocument()
+    expect(screen.getByText('Directory')).toBeInTheDocument()
   })
 
   it('shows correct stats for each feature', () => {
@@ -38,6 +38,6 @@ describe('Home Route', () => {
     expect(screen.getByText('156 documents')).toBeInTheDocument()
     expect(screen.getByText('42 providers')).toBeInTheDocument()
     expect(screen.getByText('12 templates')).toBeInTheDocument()
-    expect(screen.getByText('8 reports')).toBeInTheDocument()
+    expect(screen.getByText('150+ contacts')).toBeInTheDocument()
   })
 })

@@ -5,5 +5,7 @@ export default [
   route("documents", "routes/documents.tsx"),
   route("providers", "routes/providers.tsx"),
   route("forms", "routes/forms.tsx"),
-  route("reports", "routes/reports.tsx"),
+  route("directory", "routes/directory.tsx"),
+  route("knowledge", "routes/knowledge.tsx"),
+  route("knowledge/*", "routes/knowledge.$.tsx"),
 ] satisfies RouteConfig;
