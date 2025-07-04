@@ -1,6 +1,10 @@
 [build]
   command = "npm run build"
-  publish = "./build/client"
+  publish = "build/client"
+  
+[build.environment]
+  NODE_VERSION = "18"
+  NPM_VERSION = "10"
   
 [functions]
   directory = "build/server"

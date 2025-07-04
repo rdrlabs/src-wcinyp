@@ -2,9 +2,12 @@
   "name": "src-wcinyp",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
   "scripts": {
-    "build": "react-router build && npm run postbuild",
-    "postbuild": "cp -r build/client/* build/ 2>/dev/null || true",
+    "build": "react-router build",
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
