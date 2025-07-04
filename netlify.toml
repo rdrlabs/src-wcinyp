@@ -7,15 +7,6 @@
   NETLIFY_NEXT_PLUGIN_SKIP = "false"
   NEXT_TELEMETRY_DISABLED = "1"
 
-# Enable build caching
-[[plugins]]
-  package = "netlify-plugin-cache"
-  [plugins.inputs]
-    paths = [
-      ".next/cache",
-      "node_modules/.cache"
-    ]
-
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
