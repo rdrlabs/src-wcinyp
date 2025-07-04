@@ -1,0 +1,300 @@
+---
+title: Form Builder Guide
+description: How to create and manage custom forms in WCINYP
+---
+
+# Form Builder Guide
+
+Learn how to create, customize, and manage forms using the WCINYP Form Builder.
+
+## Getting Started
+
+The Form Builder allows you to:
+- Create custom forms from scratch
+- Modify existing templates
+- Set up validation rules
+- Configure submission workflows
+
+## Accessing the Form Builder
+
+1. Navigate to **Documents** from the main menu
+2. Click on the **Form Builder** tab
+3. Choose to create new or edit existing forms
+
+## Creating a New Form
+
+### Step 1: Basic Information
+
+Start by providing form details:
+
+```
+- Form Name: Descriptive title
+- Form Description: Brief purpose statement
+- Category: Select appropriate category
+- Status: Draft or Published
+```
+
+### Step 2: Adding Fields
+
+Click "Add Field" to include form elements:
+
+#### Available Field Types
+
+| Field Type | Use Case | Options |
+|------------|----------|---------|
+| Text | Names, addresses | Min/max length, pattern |
+| Email | Email addresses | Auto-validation |
+| Phone | Phone numbers | Format mask |
+| Number | Quantities, IDs | Min/max values |
+| Date | Appointments, DOB | Date range limits |
+| Select | Dropdown choices | Custom options |
+| Radio | Single choice | Multiple options |
+| Checkbox | Multiple choices | Required selections |
+| Textarea | Comments, notes | Character limit |
+| File Upload | Documents, images | File type restrictions |
+
+### Step 3: Field Configuration
+
+For each field, configure:
+
+1. **Label**: Clear, descriptive name
+2. **Name**: System identifier (no spaces)
+3. **Required**: Mark if mandatory
+4. **Validation**: Set rules as needed
+5. **Help Text**: User guidance
+
+### Step 4: Form Layout
+
+Organize your form:
+
+- Drag fields to reorder
+- Group related fields in sections
+- Add section headers
+- Include instructions
+
+## Validation Rules
+
+### Common Validation Patterns
+
+```javascript
+// Email validation
+pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+// Phone validation (US)
+pattern: /^\(\d{3}\) \d{3}-\d{4}$/
+
+// ZIP code
+pattern: /^\d{5}(-\d{4})?$/
+
+// Date range
+min: '2024-01-01'
+max: '2024-12-31'
+```
+
+### Custom Validation
+
+Create custom rules:
+
+```javascript
+{
+  field: 'confirmEmail',
+  rule: 'match',
+  compareField: 'email',
+  message: 'Emails must match'
+}
+```
+
+## Advanced Features
+
+### Conditional Logic
+
+Show/hide fields based on user input:
+
+```javascript
+{
+  if: 'insuranceType === "self-pay"',
+  show: ['paymentMethod', 'estimatedCost'],
+  hide: ['insuranceId', 'groupNumber']
+}
+```
+
+### Multi-Page Forms
+
+Break long forms into steps:
+
+1. Define page breaks
+2. Add progress indicator
+3. Enable save & resume
+4. Configure navigation
+
+### Pre-filled Data
+
+Auto-populate fields:
+
+- From user profile
+- From previous submissions
+- From URL parameters
+- From API lookups
+
+## Form Templates
+
+### Using Templates
+
+1. Browse available templates
+2. Click "Use Template"
+3. Customize as needed
+4. Save as new form
+
+### Creating Templates
+
+To save a form as template:
+
+1. Design your form
+2. Click "Save as Template"
+3. Add template metadata
+4. Set sharing permissions
+
+## Testing Forms
+
+### Preview Mode
+
+Before publishing:
+
+1. Click "Preview"
+2. Test all fields
+3. Verify validation
+4. Check mobile view
+
+### Test Submissions
+
+Submit test data to verify:
+
+- Data capture works
+- Validation triggers correctly
+- Confirmation appears
+- Data saves properly
+
+## Publishing Forms
+
+### Pre-publish Checklist
+
+- [ ] All fields tested
+- [ ] Validation rules work
+- [ ] Help text is clear
+- [ ] Mobile responsive
+- [ ] Accessibility checked
+
+### Publishing Steps
+
+1. Click "Publish"
+2. Set availability dates
+3. Configure access permissions
+4. Get form URL
+
+## Managing Submissions
+
+### Viewing Submissions
+
+Access submitted data:
+
+1. Go to Forms list
+2. Click submission count
+3. View individual entries
+4. Export to CSV/Excel
+
+### Data Security
+
+All submissions are:
+- Encrypted in transit
+- Stored securely
+- Access-controlled
+- Audit-logged
+
+## Best Practices
+
+### Form Design
+
+- **Keep it simple**: Only ask for necessary information
+- **Logical flow**: Group related fields
+- **Clear labels**: Avoid jargon
+- **Help text**: Provide examples
+- **Error messages**: Be specific and helpful
+
+### Accessibility
+
+Ensure forms are accessible:
+
+- Proper label associations
+- Keyboard navigation
+- Screen reader compatible
+- High contrast mode
+- Clear error identification
+
+### Performance
+
+Optimize form performance:
+
+- Minimize required fields
+- Use appropriate field types
+- Enable auto-save
+- Implement progress indicators
+
+## Troubleshooting
+
+### Common Issues
+
+**Form won't save**
+- Check required fields
+- Verify unique form name
+- Ensure valid configuration
+
+**Validation not working**
+- Review rule syntax
+- Test with various inputs
+- Check field dependencies
+
+**Submissions failing**
+- Verify form is published
+- Check user permissions
+- Review server logs
+
+## API Integration
+
+### Webhook Configuration
+
+Send form data to external systems:
+
+```javascript
+{
+  url: 'https://api.example.com/forms',
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer TOKEN',
+    'Content-Type': 'application/json'
+  },
+  retryOnFailure: true
+}
+```
+
+### Custom Actions
+
+Trigger actions on submission:
+
+- Send email notifications
+- Create calendar events
+- Update databases
+- Generate documents
+
+## Related Resources
+
+- [Self-Pay Workflow](/knowledge/guides/self-pay-workflow)
+- [API Integration Guide](/knowledge/guides/api-integration)
+- [Form Templates](/knowledge/features/forms)
+
+## Need Help?
+
+For form builder assistance:
+- **Documentation**: You're here!
+- **Video Tutorials**: Coming soon
+- **Support**: support@wcinyp.org
+- **Phone**: (212) 555-0100

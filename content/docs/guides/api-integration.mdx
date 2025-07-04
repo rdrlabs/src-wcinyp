@@ -1,0 +1,404 @@
+---
+title: API Integration Guide
+description: Connect WCINYP with external systems and services
+---
+
+# API Integration Guide
+
+This guide covers how to integrate WCINYP with external systems using our API endpoints and webhooks.
+
+## Overview
+
+WCINYP provides several integration points:
+- RESTful API endpoints
+- Webhook notifications
+- Batch data import/export
+- Real-time event streaming
+
+## Authentication
+
+### API Keys
+
+All API requests require authentication:
+
+```bash
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+  https://api.wcinyp.org/v1/documents
+```
+
+### Obtaining API Keys
+
+1. Navigate to Settings → API Access
+2. Click "Generate New Key"
+3. Set permissions and expiration
+4. Store key securely
+
+### Security Best Practices
+
+- Rotate keys regularly
+- Use environment variables
+- Implement IP whitelisting
+- Monitor API usage
+
+## Available Endpoints
+
+### Documents API
+
+#### List Documents
+```http
+GET /api/v1/documents
+```
+
+Query parameters:
+- `category`: Filter by category
+- `search`: Search term
+- `limit`: Results per page
+- `offset`: Pagination offset
+
+#### Download Document
+```http
+GET /api/v1/documents/{id}/download
+```
+
+Returns document as binary stream.
+
+### Providers API
+
+#### Search Providers
+```http
+GET /api/v1/providers
+```
+
+Query parameters:
+- `name`: Provider name
+- `specialty`: Medical specialty
+- `location`: Office location
+- `availability`: true/false
+
+#### Get Provider Details
+```http
+GET /api/v1/providers/{id}
+```
+
+### Forms API
+
+#### Submit Form
+```http
+POST /api/v1/forms/{formId}/submit
+Content-Type: application/json
+
+{
+  "patientName": "John Doe",
+  "dateOfBirth": "1980-01-01",
+  "email": "john@example.com",
+  "customFields": {...}
+}
+```
+
+#### Get Form Schema
+```http
+GET /api/v1/forms/{formId}/schema
+```
+
+Returns form field definitions and validation rules.
+
+## Webhooks
+
+### Configuring Webhooks
+
+Set up webhooks to receive real-time notifications:
+
+```javascript
+POST /api/v1/webhooks
+Content-Type: application/json
+
+{
+  "url": "https://your-system.com/webhook",
+  "events": ["form.submitted", "document.uploaded"],
+  "secret": "your-webhook-secret"
+}
+```
+
+### Available Events
+
+| Event | Description | Payload |
+|-------|-------------|---------|
+| `form.submitted` | Form submission received | Form data + metadata |
+| `document.uploaded` | New document added | Document info |
+| `provider.updated` | Provider info changed | Updated fields |
+| `appointment.scheduled` | New appointment | Appointment details |
+
+### Webhook Security
+
+Verify webhook authenticity:
+
+```javascript
+const crypto = require('crypto');
+
+function verifyWebhook(payload, signature, secret) {
+  const hash = crypto
+    .createHmac('sha256', secret)
+    .update(payload)
+    .digest('hex');
+  
+  return hash === signature;
+}
+```
+
+## Integration Examples
+
+### Insurance Verification
+
+Integrate with insurance verification systems:
+
+```javascript
+async function verifyInsurance(patientData) {
+  const response = await fetch('/api/v1/insurance/verify', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${API_KEY}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      insuranceId: patientData.insuranceId,
+      dateOfBirth: patientData.dob,
+      serviceDate: new Date().toISOString()
+    })
+  });
+  
+  return response.json();
+}
+```
+
+### Lab System Integration
+
+Send imaging requests to lab systems:
+
+```javascript
+async function createLabOrder(studyDetails) {
+  const hl7Message = generateHL7(studyDetails);
+  
+  const response = await fetch('/api/v1/lab/orders', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${API_KEY}`,
+      'Content-Type': 'text/plain'
+    },
+    body: hl7Message
+  });
+  
+  return response.json();
+}
+```
+
+### EMR/EHR Connectivity
+
+Sync patient data with EMR systems:
+
+```javascript
+// FHIR-compliant patient data
+const fhirPatient = {
+  resourceType: "Patient",
+  identifier: [{
+    system: "http://wcinyp.org/mrn",
+    value: "12345"
+  }],
+  name: [{
+    family: "Doe",
+    given: ["John", "A"]
+  }],
+  birthDate: "1980-01-01"
+};
+
+// Send to EMR
+await sendToEMR(fhirPatient);
+```
+
+## Batch Operations
+
+### Bulk Document Upload
+
+Upload multiple documents:
+
+```bash
+POST /api/v1/documents/batch
+Content-Type: multipart/form-data
+
+--boundary
+Content-Disposition: form-data; name="metadata"
+Content-Type: application/json
+
+{
+  "documents": [
+    {"name": "Form1.pdf", "category": "ABN"},
+    {"name": "Form2.pdf", "category": "Consent"}
+  ]
+}
+--boundary
+Content-Disposition: form-data; name="files"; filename="Form1.pdf"
+Content-Type: application/pdf
+
+[PDF content]
+--boundary--
+```
+
+### Data Export
+
+Export data in various formats:
+
+```http
+GET /api/v1/export/providers?format=csv
+GET /api/v1/export/forms/submissions?format=json
+GET /api/v1/export/documents/metadata?format=xml
+```
+
+## Rate Limiting
+
+API requests are rate limited:
+
+- **Standard**: 1000 requests/hour
+- **Bulk operations**: 100 requests/hour
+- **Webhooks**: No limit
+
+Check rate limit headers:
+```
+X-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 950
+X-RateLimit-Reset: 1640995200
+```
+
+## Error Handling
+
+### Error Response Format
+
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Invalid form data",
+    "details": {
+      "fields": {
+        "email": "Invalid email format"
+      }
+    }
+  }
+}
+```
+
+### Common Error Codes
+
+| Code | Description | Action |
+|------|-------------|--------|
+| `AUTH_FAILED` | Invalid API key | Check credentials |
+| `RATE_LIMITED` | Too many requests | Wait and retry |
+| `NOT_FOUND` | Resource not found | Verify ID |
+| `VALIDATION_ERROR` | Invalid data | Fix and retry |
+| `SERVER_ERROR` | Internal error | Contact support |
+
+## Testing
+
+### Sandbox Environment
+
+Test integrations safely:
+
+- Base URL: `https://sandbox.wcinyp.org/api/v1`
+- Test API keys available
+- Data resets daily
+- No real PHI
+
+### Integration Testing
+
+Example test suite:
+
+```javascript
+describe('WCINYP API Integration', () => {
+  test('should authenticate successfully', async () => {
+    const response = await api.get('/providers');
+    expect(response.status).toBe(200);
+  });
+  
+  test('should handle errors gracefully', async () => {
+    const response = await api.get('/invalid-endpoint');
+    expect(response.status).toBe(404);
+  });
+});
+```
+
+## SDKs and Libraries
+
+### JavaScript/TypeScript
+
+```bash
+npm install @wcinyp/api-client
+```
+
+```javascript
+import { WCINYPClient } from '@wcinyp/api-client';
+
+const client = new WCINYPClient({
+  apiKey: process.env.WCINYP_API_KEY
+});
+
+const documents = await client.documents.list({
+  category: 'ABN'
+});
+```
+
+### Python
+
+```bash
+pip install wcinyp-sdk
+```
+
+```python
+from wcinyp import Client
+
+client = Client(api_key=os.environ['WCINYP_API_KEY'])
+providers = client.providers.search(specialty='Radiology')
+```
+
+## Monitoring and Logs
+
+### API Usage Dashboard
+
+Monitor your integration:
+
+1. Go to Settings → API Dashboard
+2. View request metrics
+3. Check error rates
+4. Download usage reports
+
+### Logging Best Practices
+
+```javascript
+logger.info('API request', {
+  endpoint: '/api/v1/forms/submit',
+  formId: '123',
+  timestamp: new Date().toISOString()
+});
+```
+
+## Support
+
+### Getting Help
+
+- **API Documentation**: [api.wcinyp.org/docs](https://api.wcinyp.org/docs)
+- **Status Page**: [status.wcinyp.org](https://status.wcinyp.org)
+- **Developer Support**: developers@wcinyp.org
+- **Emergency**: (212) 555-0911
+
+### Reporting Issues
+
+When reporting API issues, include:
+
+1. API endpoint and method
+2. Request headers (hide API key)
+3. Request/response bodies
+4. Error messages
+5. Timestamp of occurrence
+
+## Related Resources
+
+- [Form Builder Guide](/knowledge/guides/form-builder)
+- [Security Best Practices](/knowledge/features/security)
+- [Data Export Guide](/knowledge/features/data-export)

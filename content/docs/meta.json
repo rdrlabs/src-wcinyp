@@ -1,4 +1,9 @@
 {
   "title": "WCINYP Documentation",
-  "pages": ["index", "intro", "quickstart", "requirements"]
+  "pages": [
+    "index",
+    "getting-started",
+    "features",
+    "guides"
+  ]
 }
