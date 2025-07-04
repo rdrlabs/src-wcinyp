@@ -244,3 +244,10 @@ export default function FormBuilderPage() {
     </div>
   );
 }
+
+// Generate static params for all form templates
+export async function generateStaticParams() {
+  return formTemplatesData.templates.map((template) => ({
+    id: template.id.toString(),
+  }));
+}
