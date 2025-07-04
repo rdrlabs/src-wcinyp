@@ -6,9 +6,10 @@
   NODE_VERSION = "18"
   NETLIFY_SKIP_CACHE = "true"
   
-[functions]
-  directory = "build/server"
-  node_bundler = "esbuild"
+# Functions disabled for SPA mode
+# [functions]
+#   directory = "build/server"
+#   node_bundler = "esbuild"
 
 [[headers]]
   for = "/build/*"
@@ -26,6 +27,12 @@
 [[redirects]]
   from = "/assets/*"
   to = "/assets/:splat"
+  status = 200
+
+# SPA redirects - serve index.html for all routes
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
   status = 200
 
 [dev]
