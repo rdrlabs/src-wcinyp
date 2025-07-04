@@ -95,7 +95,7 @@ export default function FormBuilderPage() {
             name={field.id}
             placeholder={field.placeholder}
             className="w-full px-3 py-2 border rounded-md"
-            value={formData[field.id] || ''}
+            value={String(formData[field.id] || '')}
             onChange={(e) => setFormData({ ...formData, [field.id]: e.target.value })}
             required={field.required}
           />
@@ -106,7 +106,7 @@ export default function FormBuilderPage() {
             type="date"
             name={field.id}
             className="w-full px-3 py-2 border rounded-md"
-            value={formData[field.id] || ''}
+            value={String(formData[field.id] || '')}
             onChange={(e) => setFormData({ ...formData, [field.id]: e.target.value })}
             required={field.required}
           />
@@ -116,7 +116,7 @@ export default function FormBuilderPage() {
           <select
             name={field.id}
             className="w-full px-3 py-2 border rounded-md"
-            value={formData[field.id] || ''}
+            value={String(formData[field.id] || '')}
             onChange={(e) => setFormData({ ...formData, [field.id]: e.target.value })}
             required={field.required}
           >
@@ -143,7 +143,7 @@ export default function FormBuilderPage() {
             placeholder={field.placeholder}
             className="w-full px-3 py-2 border rounded-md"
             rows={4}
-            value={formData[field.id] || ''}
+            value={String(formData[field.id] || '')}
             onChange={(e) => setFormData({ ...formData, [field.id]: e.target.value })}
             required={field.required}
           />
