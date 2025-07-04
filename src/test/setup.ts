@@ -33,12 +33,12 @@ vi.mock('next/navigation', () => ({
 
 // Mock Next.js Link component
 vi.mock('next/link', () => ({
-  default: ({ children, href }: any) => React.createElement('a', { href }, children),
+  default: ({ children, href }: { children: React.ReactNode; href: string }) => React.createElement('a', { href }, children),
 }))
 
 // Mock Next.js Image component
 vi.mock('next/image', () => ({
-  default: (props: any) => {
+  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => {
     // eslint-disable-next-line @next/next/no-img-element
     return React.createElement('img', props)
   },

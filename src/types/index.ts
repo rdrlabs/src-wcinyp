@@ -50,7 +50,7 @@ export interface FormTemplate {
 export interface FormSubmission {
   formId: number;
   formName: string;
-  data: Record<string, any>;
+  data: Record<string, string | number | boolean | null>;
   submittedAt: string;
 }
 

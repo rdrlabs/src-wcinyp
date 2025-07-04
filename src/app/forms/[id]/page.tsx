@@ -27,6 +27,13 @@ export default function FormBuilderPage() {
   const [formData, setFormData] = useState<Record<string, string | boolean>>({});
   const [isPreview, setIsPreview] = useState(false);
   
+  // Helper function to safely get boolean value
+  const getCheckboxValue = (value: string | boolean | undefined): boolean => {
+    if (typeof value === 'boolean') return value;
+    if (typeof value === 'string') return value === 'true';
+    return false;
+  };
+  
   if (!template) {
     return (
       <div className="container mx-auto py-8">
@@ -132,7 +139,7 @@ export default function FormBuilderPage() {
             type="checkbox"
             name={field.id}
             className="w-4 h-4"
-            checked={!!formData[field.id]}
+            checked={getCheckboxValue(formData[field.id])}
             onChange={(e) => setFormData({ ...formData, [field.id]: e.target.checked })}
           />
         );

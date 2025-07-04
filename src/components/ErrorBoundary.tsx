@@ -2,26 +2,32 @@
 import { Button } from "./ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 
+interface RouteError {
+  status?: number;
+  statusText?: string;
+}
+
 export function ErrorBoundary() {
   // This component is not used in Next.js app
-  const error: Error | { status?: number; statusText?: string } | null = null; // useRouteError();
+  const error: Error | RouteError | null = null; // useRouteError();
   
   let title = "Oops! Something went wrong";
   let message = "An unexpected error occurred. Please try again.";
   
   if (false) { // isRouteErrorResponse(error)) {
-    if ((error as any)?.status === 404) {
+    const routeError = error as RouteError;
+    if (routeError?.status === 404) {
       title = "Page Not Found";
       message = "The page you're looking for doesn't exist.";
-    } else if ((error as any)?.status === 401) {
+    } else if (routeError?.status === 401) {
       title = "Unauthorized";
       message = "You need to be logged in to access this page.";
-    } else if ((error as any)?.status === 403) {
+    } else if (routeError?.status === 403) {
       title = "Forbidden";
       message = "You don't have permission to access this page.";
     } else {
-      title = `Error ${(error as any)?.status}`;
-      message = (error as any)?.statusText || message;
+      title = `Error ${routeError?.status}`;
+      message = routeError?.statusText || message;
     }
   } else if (error instanceof Error) {
     message = error.message;
