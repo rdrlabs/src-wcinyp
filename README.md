@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# WCINYP - Weill Cornell Imaging at NewYork-Presbyterian
+
+A modern Next.js 14 application for medical imaging administration, featuring document management, provider directories, and automated form generation.
+
+## Features
+
+- **Document Hub** - Access and manage 156+ medical forms and documents
+- **Provider Directory** - Search and manage medical staff information
+- **Form Generator** - Automate self-pay forms and document creation
+- **Master Directory** - Comprehensive contact database for all stakeholders
+- **Knowledge Base** - Documentation powered by Fumadocs
+
+## Tech Stack
+
+- **Framework**: Next.js 14 with App Router
+- **Styling**: Tailwind CSS v3 + shadcn/ui
+- **Documentation**: Fumadocs (native MDX support)
+- **Theme**: Dark mode support with next-themes
+- **Language**: TypeScript
 
 ## Getting Started
 
-First, run the development server:
+First, install dependencies:
+
+```bash
+npm install
+```
+
+Then, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to see the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/              # Next.js App Router pages
+├── components/       # Reusable React components
+│   └── ui/          # shadcn/ui components
+├── lib/             # Utility functions
+└── content/         # MDX documentation content
+    └── docs/        # Fumadocs content
 
-## Learn More
+public/
+└── documents/       # 156 PDF documents organized by category
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Key Pages
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `/` - Dashboard with quick access to all features
+- `/documents` - Document management with category filtering
+- `/providers` - Provider directory with search
+- `/forms` - Form generator and template management
+- `/directory` - Master contact directory
+- `/docs` - Knowledge base and documentation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Development
 
-## Deploy on Vercel
+```bash
+# Run development server
+npm run dev
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Build for production
+npm run build
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Run production server
+npm start
+
+# Type checking
+npm run type-check
+```
+
+## Deployment
+
+This application is configured for deployment on Netlify with automatic builds from the main branch.
+
+The `netlify.toml` file includes:
+- Next.js plugin configuration
+- Node.js v20 requirement
+- Security headers
+
+## Migration Notes
+
+This application was migrated from React Router v7 to Next.js 14 to enable:
+- Better documentation support with Fumadocs
+- Improved performance with static generation
+- Native MDX support
+- Enhanced SEO capabilities
+
+The React Router version is archived in `/archive/react-router-version/` for reference.
+
+## License
+
+Private - Weill Cornell Medicine
