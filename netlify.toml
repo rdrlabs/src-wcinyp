@@ -3,7 +3,7 @@
   publish = "build/client"
   
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "20"
   NETLIFY_SKIP_CACHE = "true"
   
 # Functions disabled for SPA mode

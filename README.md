@@ -15,12 +15,12 @@ Medical administrative application for Weill Cornell Imaging at NewYork-Presbyte
 
 ## Tech Stack
 
-- **React Router v7** - Modern React framework with SSR
+- **React Router v7** - Modern React framework (SPA mode)
 - **shadcn/ui** - Beautiful, accessible components
 - **Tailwind CSS v3.4** - Utility-first styling
 - **TypeScript** - Type-safe development
 - **Vitest & Playwright** - Unit and E2E testing
-- **Netlify** - Deployment with edge functions
+- **Netlify** - Static site hosting with global CDN
 
 ## AI Commands
 
@@ -31,12 +31,16 @@ This project includes AI-powered development commands. Type these in your AI ass
 - `[ship]` - Run tests, build, commit, and deploy
 - `[test]` - Run test suite
 - `[clean]` - Check for code issues
+- `[deploy-status]` - Check Netlify deployment status
+- `[deploy-logs]` - View recent deployment logs
 - `[help]` - List all commands
 
 ### Shortcuts
 
 - `[s]` = `[ship]`
-- `[t]` = `[test]` 
+- `[t]` = `[test]`
+- `[ds]` = `[deploy-status]`
+- `[dl]` = `[deploy-logs]`
 - `[?]` = `[help]`
 
 ### Examples
@@ -90,7 +94,7 @@ Your application will be available at `http://localhost:5173`.
 npm run build
 
 # Preview production build locally
-npm run start
+npm run preview
 ```
 
 ## Deployment
@@ -105,6 +109,15 @@ The project is configured for automatic deployment to Netlify:
 2. Connect to Netlify
 3. Deploy automatically on every push
 
+#### Deployment Configuration
+
+The app is configured as a Single Page Application (SPA) for optimal static hosting:
+
+- **SPA Mode**: Client-side routing with instant navigation
+- **Static Build**: Generates `index.html` and assets
+- **CDN Delivery**: Served from Netlify's global edge network
+- **Auto Redirects**: All routes serve `index.html` for client routing
+
 #### Netlify CLI Integration
 
 For deployment monitoring and management:
@@ -116,7 +129,7 @@ npm install
 # Link to your Netlify site
 netlify link
 
-# Set up authentication token
+# Set up authentication token (optional for monitoring)
 export NETLIFY_AUTH_TOKEN=your-token-here
 # Get token from: https://app.netlify.com/user/applications/personal
 
@@ -149,12 +162,13 @@ Deploy to any container platform:
 
 ### Manual Deployment
 
-The built app server is production-ready. Deploy the build output:
+The app builds as a static SPA. Deploy the build output:
 
 ```
 build/
-├── client/    # Static assets
-└── server/    # Server-side code
+└── client/        # Static assets
+    ├── index.html # Entry point
+    └── assets/    # JS, CSS, and other assets
 ```
 
 ## Project Structure
