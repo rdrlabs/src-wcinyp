@@ -1,12 +1,17 @@
-import type { Route } from "./+types/reports";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import { ErrorBoundary } from "~/components/ErrorBoundary";
+import { useState, useEffect } from "react";
 
-export async function loader({ request }: Route.LoaderArgs) {
-  // This will become a Netlify Function
-  // For now, return mock data
-  const reports = [
+export function meta() {
+  return [
+    { title: "Reports - WCINYP Admin" },
+    { name: "description", content: "Analytics and insights dashboard" },
+  ];
+}
+
+export default function ReportsRoute() {
+  const [reports, setReports] = useState([
     { 
       id: 1, 
       name: "Monthly Patient Volume", 
@@ -35,27 +40,14 @@ export async function loader({ request }: Route.LoaderArgs) {
       lastRun: "2025-06-28",
       status: "completed"
     },
-  ];
+  ]);
   
-  const stats = {
+  const [stats, setStats] = useState({
     totalReports: 24,
     scheduledReports: 8,
     completedThisMonth: 156,
     averageRunTime: "2.3 minutes"
-  };
-  
-  return { reports, stats };
-}
-
-export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "Reports - WCINYP Admin" },
-    { name: "description", content: "Analytics and insights dashboard" },
-  ];
-}
-
-export default function ReportsRoute({ loaderData }: Route.ComponentProps) {
-  const { reports, stats } = loaderData;
+  });
   
   return (
     <div className="container mx-auto py-8">

@@ -1,22 +1,14 @@
-import type { Route } from "./+types/documents";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import { ErrorBoundary } from "~/components/ErrorBoundary";
+import { useState, useEffect } from "react";
 
-export async function loader({ request }: Route.LoaderArgs) {
-  // This will become a Netlify Function
-  // For now, return mock data
-  const documents = [
+export default function DocumentsRoute() {
+  const [documents, setDocuments] = useState([
     { id: 1, name: "Patient Consent Form.pdf", size: "245 KB", updatedAt: "2025-07-03" },
     { id: 2, name: "Insurance Verification.docx", size: "189 KB", updatedAt: "2025-07-02" },
     { id: 3, name: "Medical History.pdf", size: "512 KB", updatedAt: "2025-07-01" },
-  ];
-  
-  return { documents };
-}
-
-export default function DocumentsRoute({ loaderData }: Route.ComponentProps) {
-  const { documents } = loaderData;
+  ]);
   
   return (
     <div className="container mx-auto py-8">

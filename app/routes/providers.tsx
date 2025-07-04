@@ -1,12 +1,10 @@
-import type { Route } from "./+types/providers";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import { ErrorBoundary } from "~/components/ErrorBoundary";
+import { useState, useEffect } from "react";
 
-export async function loader({ request }: Route.LoaderArgs) {
-  // This will become a Netlify Function
-  // For now, return mock data
-  const providers = [
+export default function ProvidersRoute() {
+  const [providers, setProviders] = useState([
     { 
       id: 1, 
       name: "Dr. Sarah Johnson", 
@@ -28,13 +26,7 @@ export async function loader({ request }: Route.LoaderArgs) {
       department: "Procedures",
       phone: "(212) 555-0103"
     },
-  ];
-  
-  return { providers };
-}
-
-export default function ProvidersRoute({ loaderData }: Route.ComponentProps) {
-  const { providers } = loaderData;
+  ]);
   
   return (
     <div className="container mx-auto py-8">

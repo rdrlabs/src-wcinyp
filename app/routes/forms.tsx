@@ -1,12 +1,17 @@
-import type { Route } from "./+types/forms";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import { ErrorBoundary } from "~/components/ErrorBoundary";
+import { useState, useEffect } from "react";
 
-export async function loader({ request }: Route.LoaderArgs) {
-  // This will become a Netlify Function
-  // For now, return mock data
-  const templates = [
+export function meta() {
+  return [
+    { title: "Form Builder - WCINYP Admin" },
+    { name: "description", content: "Create and manage medical forms" },
+  ];
+}
+
+export default function FormsRoute() {
+  const [templates, setTemplates] = useState([
     { 
       id: 1, 
       name: "Patient Intake Form", 
@@ -35,20 +40,7 @@ export async function loader({ request }: Route.LoaderArgs) {
       lastUsed: "2025-07-03",
       submissions: 312
     },
-  ];
-  
-  return { templates };
-}
-
-export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "Form Builder - WCINYP Admin" },
-    { name: "description", content: "Create and manage medical forms" },
-  ];
-}
-
-export default function FormsRoute({ loaderData }: Route.ComponentProps) {
-  const { templates } = loaderData;
+  ]);
   
   return (
     <div className="container mx-auto py-8">
