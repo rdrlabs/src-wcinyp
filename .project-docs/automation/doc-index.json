@@ -1,0 +1,91 @@
+{
+  "generated": "2025-07-04T16:49:14.313Z",
+  "categories": {
+    "architecture": {
+      "title": "Architecture & Design",
+      "description": "System architecture, migration notes, and implementation details",
+      "icon": "🏗️"
+    },
+    "development": {
+      "title": "Development",
+      "description": "Development guides, testing strategies, and contribution guidelines",
+      "icon": "🛠️"
+    },
+    "status": {
+      "title": "Project Status",
+      "description": "Current deployment status and project health",
+      "icon": "📊"
+    }
+  },
+  "documents": {
+    "status": [
+      {
+        "path": "/Users/tim/Documents/src-wcinyp/.project-docs/status/DEPLOYMENT_STATUS.md",
+        "title": "Deployment Status",
+        "description": "Last successful fixes: Fri Jul  4 07:43:07 EDT 2025",
+        "lastModified": "2025-07-04T11:43:07.797Z",
+        "hasStatus": false
+      }
+    ],
+    "development": [
+      {
+        "path": "/Users/tim/Documents/src-wcinyp/.project-docs/development/TESTING_STRATEGY.md",
+        "title": "Testing Strategy for AI-Assisted Development",
+        "description": "As an AI assistant, I need tests because:",
+        "lastModified": "2025-07-04T04:38:31.248Z",
+        "hasStatus": false
+      },
+      {
+        "path": "/Users/tim/Documents/src-wcinyp/.project-docs/development/TESTING_GUIDE.md",
+        "title": "Testing Guide for Rapid UI Evolution",
+        "description": "This guide documents our testing strategy designed to support rapid UI/UX changes while maintaining test confidence.",
+        "lastModified": "2025-07-04T15:48:38.728Z",
+        "hasStatus": true
+      },
+      {
+        "path": "/Users/tim/Documents/src-wcinyp/.project-docs/development/TECH_DEBT.md",
+        "title": "Technical Debt & Improvement Plan",
+        "description": "**Status**: RESOLVED",
+        "lastModified": "2025-07-04T16:47:59.492Z",
+        "hasStatus": true
+      },
+      {
+        "path": "/Users/tim/Documents/src-wcinyp/.project-docs/development/CONTRIBUTING.md",
+        "title": "Contributing to WCINYP",
+        "description": "1. Ensure you have Node.js 20+ installed",
+        "lastModified": "2025-07-04T04:57:05.049Z",
+        "hasStatus": false
+      },
+      {
+        "path": "/Users/tim/Documents/src-wcinyp/.project-docs/development/CLAUDE.md",
+        "title": "WCINYP Next.js Application",
+        "description": "This is a medical imaging center application built with Next.js 14, TypeScript, and Tailwind CSS. It provides document management, provider directory, form generation, and contact management features.",
+        "lastModified": "2025-07-04T04:56:24.615Z",
+        "hasStatus": false
+      }
+    ],
+    "architecture": [
+      {
+        "path": "/Users/tim/Documents/src-wcinyp/.project-docs/architecture/NETLIFY_ARCHITECTURE.md",
+        "title": "Netlify Architecture Considerations",
+        "description": "Netlify serves Next.js as a **static site** unless you use Netlify Functions. This means:",
+        "lastModified": "2025-07-04T04:40:31.579Z",
+        "hasStatus": true
+      },
+      {
+        "path": "/Users/tim/Documents/src-wcinyp/.project-docs/architecture/MIGRATION.md",
+        "title": "WCINYP Next.js Migration",
+        "description": "This directory contains the migrated Next.js 14 version of WCINYP with:",
+        "lastModified": "2025-07-04T04:12:51.000Z",
+        "hasStatus": true
+      },
+      {
+        "path": "/Users/tim/Documents/src-wcinyp/.project-docs/architecture/FUMADOCS_IMPLEMENTATION.md",
+        "title": "Fumadocs Implementation Plan",
+        "description": "This document outlines the complete implementation plan for integrating Fumadocs into the WCINYP application. Currently, the Knowledge Base page (`/knowledge`) is a static page with hardcoded links, but it should be a full Fumadocs-powered documentation system.",
+        "lastModified": "2025-07-04T15:08:42.268Z",
+        "hasStatus": false
+      }
+    ]
+  }
+}

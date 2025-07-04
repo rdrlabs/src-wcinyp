@@ -1,0 +1,110 @@
+---
+title: Form Builder & Management
+description: Creating and managing dynamic forms
+---
+
+# Form Builder & Management
+
+## Form Builder Overview
+
+The Form Builder allows you to create custom forms for various purposes:
+
+- Patient intake forms
+- Survey questionnaires
+- Custom data collection
+- Event registrations
+
+## Creating a New Form
+
+### Step 1: Choose a Starting Point
+
+1. **Start from Template**: Use pre-built templates
+2. **Blank Form**: Build from scratch
+3. **Duplicate Existing**: Copy and modify an existing form
+
+### Step 2: Add Form Fields
+
+Available field types:
+
+- **Text Input**: Single line text
+- **Text Area**: Multi-line text
+- **Select/Dropdown**: Choose from options
+- **Checkboxes**: Multiple selections
+- **Radio Buttons**: Single selection
+- **Date Picker**: Date selection
+- **File Upload**: Document attachments
+- **Number Input**: Numeric values
+- **Email**: Email addresses with validation
+- **Phone**: Phone numbers with formatting
+
+### Step 3: Configure Field Properties
+
+For each field, you can set:
+
+- **Label**: Display name
+- **Name**: Internal identifier
+- **Required**: Make field mandatory
+- **Validation**: Add rules (min/max length, patterns)
+- **Default Value**: Pre-fill with data
+- **Help Text**: Provide guidance
+
+## Form Logic
+
+### Conditional Fields
+
+Show/hide fields based on user responses:
+
+```
+IF "Insurance Type" = "Other"
+THEN SHOW "Specify Insurance" field
+```
+
+### Validation Rules
+
+- Required fields
+- Email format validation
+- Phone number formatting
+- Custom regex patterns
+- Date range restrictions
+
+## Managing Forms
+
+### Form List
+
+View all your forms in one place:
+
+- Search by form name
+- Filter by status (draft, published, archived)
+- Sort by creation date or last modified
+- Quick actions (edit, duplicate, delete)
+
+### Form Responses
+
+- View submitted responses
+- Export to CSV/Excel
+- Generate response reports
+- Set up email notifications
+
+## Publishing Forms
+
+### Sharing Options
+
+1. **Direct Link**: Share a unique URL
+2. **Embed Code**: Add to your website
+3. **QR Code**: Generate for easy mobile access
+4. **Email**: Send directly to recipients
+
+### Access Control
+
+- Public forms (no login required)
+- Protected forms (require authentication)
+- Time-limited access
+- Response limits
+
+## Best Practices
+
+1. **Keep forms concise**: Only ask for necessary information
+2. **Use clear labels**: Avoid technical jargon
+3. **Group related fields**: Use sections for organization
+4. **Test thoroughly**: Preview before publishing
+5. **Mobile-friendly**: Ensure forms work on all devices

@@ -71,7 +71,6 @@ export default function FormBuilder({ template }: FormBuilderProps) {
         alert('Failed to submit form');
       }
     } catch (error) {
-      console.error('Submission error:', error);
       alert('Error submitting form');
     }
   };

@@ -59,7 +59,12 @@
       "Bash(npm run type-check:*)",
       "Bash(npx next:*)",
       "Bash(npx:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(git pull:*)",
+      "Bash(git branch:*)",
+      "Bash(npm run test:ci:*)",
+      "Bash(npm run lint:*)",
+      "Bash(pkill:*)"
     ],
     "deny": []
   }
