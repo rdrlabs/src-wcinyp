@@ -3,13 +3,14 @@ import FormBuilder from '@/components/FormBuilder';
 import formTemplatesData from "@/data/form-templates.json";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
-export default function FormBuilderPage({ params }: PageProps) {
-  const formId = Number(params.id);
+export default async function FormBuilderPage({ params }: PageProps) {
+  const { id } = await params;
+  const formId = Number(id);
   const template = formTemplatesData.templates.find(t => t.id === formId);
   
   if (!template) {
