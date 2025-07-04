@@ -1,4 +1,20 @@
-import type { Handler, HandlerEvent, HandlerContext } from '@netlify/functions'
+// Netlify Function types
+interface HandlerEvent {
+  httpMethod: string;
+  body: string | null;
+}
+
+interface HandlerContext {
+  functionName: string;
+}
+
+interface HandlerResponse {
+  statusCode: number;
+  headers?: Record<string, string>;
+  body: string;
+}
+
+type Handler = (event: HandlerEvent, context: HandlerContext) => Promise<HandlerResponse>;
 
 interface FormSubmission {
   formType: string

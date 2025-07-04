@@ -1,4 +1,16 @@
-import type { Handler } from '@netlify/functions'
+// Netlify Function types
+interface HandlerEvent {
+  httpMethod: string;
+  queryStringParameters: Record<string, string> | null;
+}
+
+interface HandlerResponse {
+  statusCode: number;
+  headers?: Record<string, string>;
+  body: string;
+}
+
+type Handler = (event: HandlerEvent) => Promise<HandlerResponse>;
 
 // This could be fetched from a database or CMS
 const DOCUMENT_CATEGORIES = {
