@@ -109,10 +109,10 @@ The project is configured for automatic deployment to Netlify:
 
 ```bash
 # Build the image
-docker build -t wcinyp-app .
+docker build -t src-wcinyp .
 
 # Run locally
-docker run -p 3000:3000 wcinyp-app
+docker run -p 3000:3000 src-wcinyp
 ```
 
 Deploy to any container platform:
