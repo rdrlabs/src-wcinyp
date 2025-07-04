@@ -1,19 +1,14 @@
-# Sync with GitHub
+# [sync] - Synchronize State
 
-Pull latest changes from GitHub to local.
+Synchronize the current state of the project, including:
+- Git status
+- Running processes
+- Test results
+- Build status
 
-```bash
-# Fetch and show status
-git fetch
-git status
-
-# Pull if clean
-git pull --ff-only
+## Usage:
+```
+[sync]
 ```
 
-If conflicts exist:
-```bash
-git stash
-git pull
-git stash pop
-```
+Use this command to get a full picture of the project state.

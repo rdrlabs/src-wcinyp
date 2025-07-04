@@ -7,45 +7,31 @@ These documents were resurrected from the failed Docusaurus implementation. They
 ## 📋 Context (Read First)
 - [CONTEXT.md](./CONTEXT.md) - Why these docs exist and what went wrong
 
-## 🎯 Strategy Documents
-Documents about planning, decisions, and lessons learned:
+## 🚀 For Gemini Research
+- [GEMINI_RESEARCH_PROMPT.md](./GEMINI_RESEARCH_PROMPT.md) - Stack compatibility research request
+- [TECHNICAL_LESSONS_COMPILED.md](./TECHNICAL_LESSONS_COMPILED.md) - All technical failures and lessons in one file
 
-- [archived-learnings.md](./strategy/archived-learnings.md) - Comprehensive learnings from the Docusaurus + shadcn/ui integration attempt
-- [postmortem-frankenstein-architecture.md](./strategy/postmortem-frankenstein-architecture.md) - Detailed analysis of why the three technologies were incompatible
-- [AI_CODEV_GUIDE.md](./strategy/AI_CODEV_GUIDE.md) - Original AI development guide (approach failed but context valuable)
+## 🏗️ Technical Lessons
+Failed architecture and what we learned:
 
-## 🏗️ Architecture Documents
-Technical implementation details and patterns:
+### In `technical-lessons/` directory:
+- `archived-learnings.md` - Docusaurus + shadcn/ui integration failures
+- `postmortem-frankenstein-architecture.md` - Why the three technologies were incompatible
+- `overview.md` - Original system architecture attempts
+- `error-boundaries.md` - Error handling (one thing that worked well)
+- `typescript-migration.md` - TypeScript strict mode benefits
+- `testing-infrastructure-issues.md` - React 19 + Jest problems
+- `implementation-impact-analysis.md` - Cascading failure analysis
 
-- [overview.md](./architecture/overview.md) - System architecture overview
-- [error-boundaries.md](./architecture/error-boundaries.md) - Error handling strategy for medical workflows
-- [typescript-migration.md](./architecture/typescript-migration.md) - TypeScript strict mode implementation
-- [testing-infrastructure-issues.md](./architecture/testing-infrastructure-issues.md) - Testing challenges and solutions
-- [implementation-impact-analysis.md](./architecture/implementation-impact-analysis.md) - Analysis of implementation decisions
+## 🏥 Knowledge Base
+Medical imaging workflows and operations (still valid):
 
-## 🏥 Domain Knowledge
-Business logic and medical imaging workflows:
-
-### Admin Operations
-- [epic-reports.md](./domain/admin/epic-reports.md) - EPIC system integration and reporting
-- [insurance.md](./domain/admin/insurance.md) - Insurance verification workflows
-- [scheduling.md](./domain/admin/scheduling.md) - Appointment scheduling processes
-
-### Clinical Workflows
-- [patient-preparation.md](./domain/clinical/patient-preparation.md) - Patient prep requirements by modality
-- [pet-imaging.md](./domain/clinical/pet-imaging.md) - PET/CT and PET/MRI specific workflows
-
-### Facilities
-- [contacts.md](./domain/facilities/contacts.md) - Facility contact information
-- [locations.md](./domain/facilities/locations.md) - WCINYP location details
-
-### Provider Management
-- [directory.md](./domain/providers/directory.md) - Provider directory structure
-
-### Staff Operations
-- [confirmation-calls.md](./domain/staff-operations/confirmation-calls.md) - Patient confirmation call scripts
-- [facilitation.md](./domain/staff-operations/facilitation.md) - Workflow facilitation procedures
-- [gpcp.md](./domain/staff-operations/gpcp.md) - GPCP (General Patient Care Protocol) guidelines
+### In `knowledge-base/domain/` directory:
+- `admin/` - EPIC reports, insurance, scheduling
+- `clinical/` - Patient prep, PET imaging workflows
+- `facilities/` - Contacts and locations
+- `providers/` - Provider directory structure
+- `staff-operations/` - Call scripts, facilitation, GPCP
 
 ## Key Takeaways
 

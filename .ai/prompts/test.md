@@ -1,16 +1,14 @@
-# Run Test Suite
+# [test] - Run All Tests
 
-Execute all tests and quality checks.
+Run the complete test suite including:
+- Unit tests (Vitest)
+- E2E tests (Playwright)
+- Type checking
+- Linting
 
-```bash
-# Run tests with coverage
-npm test -- --coverage
-
-# Type checking
-npm run typecheck
-
-# Linting
-npm run lint
+## Usage:
+```
+[test]
 ```
 
-Target: 90% coverage
+Returns a summary of test results and any failures.

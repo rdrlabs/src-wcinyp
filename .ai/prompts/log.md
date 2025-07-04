@@ -29,6 +29,7 @@ Create this log? (yes/modify/split/skip)
 
 ## File Format
 Creates file in `/logs/YYYYMMDD_HHMM_descriptive-name.md`
+Uses local system time (EDT/EST)
 
 ## Content Structure
 - Clear title

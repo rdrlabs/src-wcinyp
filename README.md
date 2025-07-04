@@ -105,6 +105,31 @@ The project is configured for automatic deployment to Netlify:
 2. Connect to Netlify
 3. Deploy automatically on every push
 
+#### Netlify CLI Integration
+
+For deployment monitoring and management:
+
+```bash
+# Install dependencies (includes Netlify CLI)
+npm install
+
+# Link to your Netlify site
+netlify link
+
+# Set up authentication token
+export NETLIFY_AUTH_TOKEN=your-token-here
+# Get token from: https://app.netlify.com/user/applications/personal
+
+# Check deployment status
+npm run deploy:status
+
+# View deployment logs
+npm run deploy:logs
+
+# Open site in browser
+npm run deploy:open
+```
+
 ### Docker Deployment
 
 ```bash

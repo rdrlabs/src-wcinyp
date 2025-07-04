@@ -15,7 +15,10 @@
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "deploy:status": "node scripts/deploy-status.js",
+    "deploy:logs": "netlify logs:deploy --num 5",
+    "deploy:open": "netlify open:site"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
@@ -51,6 +54,7 @@
     "typescript": "^5.8.3",
     "vite": "^6.3.3",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "netlify-cli": "^17.38.0"
   }
 }
