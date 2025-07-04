@@ -54,7 +54,9 @@
       "Bash(sed:*)",
       "Bash(chmod:*)",
       "Bash(./ship-nextjs-properly.sh:*)",
-      "Bash(npm cache clean:*)"
+      "Bash(npm cache clean:*)",
+      "Bash(./cleanup.sh:*)",
+      "Bash(npm run type-check:*)"
     ],
     "deny": []
   }

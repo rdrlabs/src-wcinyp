@@ -1,0 +1,20 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Production
+build
+dist
+.next
+out
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Archive
+archive/
+
+# Generated
+coverage/

@@ -11,73 +11,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import formTemplatesData from "@/data/form-templates.json";
+import type { FormTemplate } from "@/types";
 
 export default function FormsPage() {
-  const [templates, setTemplates] = useState([
-    { 
-      id: 1, 
-      name: "Self Pay Waiver Form", 
-      fields: 15,
-      lastUsed: "2025-07-03",
-      submissions: 487,
-      status: "active",
-      category: "Financial"
-    },
-    { 
-      id: 2, 
-      name: "Patient Intake Form", 
-      fields: 12,
-      lastUsed: "2025-07-02",
-      submissions: 234,
-      status: "active",
-      category: "Registration"
-    },
-    { 
-      id: 3, 
-      name: "Insurance Verification", 
-      fields: 8,
-      lastUsed: "2025-07-03",
-      submissions: 156,
-      status: "active",
-      category: "Financial"
-    },
-    { 
-      id: 4, 
-      name: "Medical History Questionnaire", 
-      fields: 24,
-      lastUsed: "2025-07-01",
-      submissions: 89,
-      status: "active",
-      category: "Clinical"
-    },
-    { 
-      id: 5, 
-      name: "Consent for Treatment", 
-      fields: 6,
-      lastUsed: "2025-07-03",
-      submissions: 312,
-      status: "active",
-      category: "Legal"
-    },
-    { 
-      id: 6, 
-      name: "ABN Medicare Form", 
-      fields: 10,
-      lastUsed: "2025-07-02",
-      submissions: 178,
-      status: "active",
-      category: "Financial"
-    },
-    { 
-      id: 7, 
-      name: "Prior Authorization Request", 
-      fields: 18,
-      lastUsed: "2025-06-30",
-      submissions: 67,
-      status: "draft",
-      category: "Financial"
-    },
-  ]);
+  const templates: FormTemplate[] = formTemplatesData.templates as FormTemplate[];
   
   return (
     <div className="container mx-auto py-8">
@@ -133,12 +71,16 @@ export default function FormsPage() {
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-2">
-                    <Button variant="ghost" size="sm">
-                      Edit
-                    </Button>
-                    <Button variant="ghost" size="sm">
-                      Preview
-                    </Button>
+                    <a href={`/forms/${template.id}`}>
+                      <Button variant="ghost" size="sm">
+                        Edit
+                      </Button>
+                    </a>
+                    <a href={`/forms/${template.id}`}>
+                      <Button variant="ghost" size="sm">
+                        Preview
+                      </Button>
+                    </a>
                     <Button variant="ghost" size="sm">
                       Clone
                     </Button>

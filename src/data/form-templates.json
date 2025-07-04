@@ -1,0 +1,74 @@
+{
+  "templates": [
+    { 
+      "id": 1, 
+      "name": "Self Pay Waiver Form", 
+      "fields": 15,
+      "lastUsed": "2025-07-03",
+      "submissions": 487,
+      "status": "active",
+      "category": "Financial",
+      "description": "Waiver for patients paying out of pocket"
+    },
+    { 
+      "id": 2, 
+      "name": "Patient Intake Form", 
+      "fields": 12,
+      "lastUsed": "2025-07-02",
+      "submissions": 234,
+      "status": "active",
+      "category": "Registration",
+      "description": "Basic patient information and medical history"
+    },
+    { 
+      "id": 3, 
+      "name": "Insurance Verification", 
+      "fields": 8,
+      "lastUsed": "2025-07-03",
+      "submissions": 156,
+      "status": "active",
+      "category": "Financial",
+      "description": "Verify patient insurance coverage"
+    },
+    { 
+      "id": 4, 
+      "name": "Medical History Questionnaire", 
+      "fields": 24,
+      "lastUsed": "2025-07-01",
+      "submissions": 89,
+      "status": "active",
+      "category": "Clinical",
+      "description": "Comprehensive medical history"
+    },
+    { 
+      "id": 5, 
+      "name": "Consent for Treatment", 
+      "fields": 6,
+      "lastUsed": "2025-07-03",
+      "submissions": 312,
+      "status": "active",
+      "category": "Legal",
+      "description": "General treatment consent"
+    },
+    { 
+      "id": 6, 
+      "name": "ABN Medicare Form", 
+      "fields": 10,
+      "lastUsed": "2025-07-02",
+      "submissions": 178,
+      "status": "active",
+      "category": "Financial",
+      "description": "Advanced Beneficiary Notice for Medicare"
+    },
+    { 
+      "id": 7, 
+      "name": "Prior Authorization Request", 
+      "fields": 18,
+      "lastUsed": "2025-06-30",
+      "submissions": 67,
+      "status": "draft",
+      "category": "Financial",
+      "description": "Request prior auth from insurance"
+    }
+  ]
+}

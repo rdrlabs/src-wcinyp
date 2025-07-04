@@ -72,6 +72,24 @@ npm start
 
 # Type checking
 npm run type-check
+
+# Run tests
+npm test
+
+# Run tests with UI
+npm run test:watch
+
+# Test coverage
+npm run test:coverage
+
+# Linting
+npm run lint
+
+# Format code
+npm run format
+
+# Check formatting
+npm run format:check
 ```
 
 ## Deployment

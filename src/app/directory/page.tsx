@@ -11,136 +11,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import contactsData from "@/data/contacts.json";
+import type { Contact } from "@/types";
 
 export default function DirectoryPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState("all");
   
-  const [contacts, setContacts] = useState([
-    {
-      id: 1,
-      name: "Dr. Sarah Johnson",
-      type: "Provider",
-      department: "Radiology",
-      phone: "(212) 555-0101",
-      email: "sjohnson@wcinyp.org",
-      location: "61st Street",
-      lastContact: "2025-07-02"
-    },
-    {
-      id: 2,
-      name: "NewYork-Presbyterian Hospital",
-      type: "Facility",
-      department: "Main Campus",
-      phone: "(212) 555-2000",
-      email: "info@nyp.org",
-      location: "Manhattan",
-      lastContact: "2025-07-03"
-    },
-    {
-      id: 3,
-      name: "Aetna Insurance",
-      type: "Insurance",
-      department: "Prior Auth",
-      phone: "1-800-555-1234",
-      email: "priorauth@aetna.com",
-      location: "National",
-      lastContact: "2025-07-01"
-    },
-    {
-      id: 4,
-      name: "Dr. Michael Chen",
-      type: "Provider",
-      department: "Nuclear Medicine",
-      phone: "(212) 555-0102",
-      email: "mchen@wcinyp.org",
-      location: "Broadway",
-      lastContact: "2025-06-30"
-    },
-    {
-      id: 5,
-      name: "Quest Diagnostics",
-      type: "Lab",
-      department: "Lab Services",
-      phone: "(212) 555-3000",
-      email: "results@questdiagnostics.com",
-      location: "Multiple",
-      lastContact: "2025-07-03"
-    },
-    {
-      id: 6,
-      name: "United Healthcare",
-      type: "Insurance",
-      department: "Claims",
-      phone: "1-800-555-5678",
-      email: "claims@uhc.com",
-      location: "National",
-      lastContact: "2025-07-02"
-    },
-    {
-      id: 7,
-      name: "Dr. Emily Rodriguez",
-      type: "Provider",
-      department: "Interventional Radiology",
-      phone: "(212) 555-0103",
-      email: "erodriguez@wcinyp.org",
-      location: "55th Street",
-      lastContact: "2025-07-03"
-    },
-    {
-      id: 8,
-      name: "Mount Sinai Urgent Care",
-      type: "Facility",
-      department: "Urgent Care",
-      phone: "(212) 555-4000",
-      email: "urgentcare@mountsinai.org",
-      location: "Upper East Side",
-      lastContact: "2025-06-28"
-    },
-    {
-      id: 9,
-      name: "Medicare",
-      type: "Insurance",
-      department: "Part B",
-      phone: "1-800-MEDICARE",
-      email: "info@medicare.gov",
-      location: "National",
-      lastContact: "2025-07-01"
-    },
-    {
-      id: 10,
-      name: "LabCorp",
-      type: "Lab",
-      department: "Pathology",
-      phone: "(212) 555-3500",
-      email: "results@labcorp.com",
-      location: "Midtown",
-      lastContact: "2025-07-02"
-    },
-    {
-      id: 11,
-      name: "John Smith",
-      type: "Vendor",
-      department: "Medical Supplies",
-      phone: "(212) 555-6000",
-      email: "jsmith@medsupply.com",
-      location: "Brooklyn",
-      lastContact: "2025-06-25"
-    },
-    {
-      id: 12,
-      name: "NYC Health Department",
-      type: "Government",
-      department: "Compliance",
-      phone: "(212) 555-7000",
-      email: "compliance@health.nyc.gov",
-      location: "Downtown",
-      lastContact: "2025-06-20"
-    }
-  ]);
+  const contacts: Contact[] = contactsData.contacts as Contact[];
 
   // Get unique contact types
-  const contactTypes = ["all", ...new Set(contacts.map(c => c.type))];
+  const contactTypes = ["all", ...new Set(contacts.map(c => c.type))] as const;
   
   // Filter contacts
   const filteredByType = selectedType === "all" 

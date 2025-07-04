@@ -11,83 +11,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import providersData from "@/data/providers.json";
+import type { Provider } from "@/types";
 
 export default function ProvidersPage() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [providers, setProviders] = useState([
-    { 
-      id: 1, 
-      name: "Dr. Sarah Johnson", 
-      specialty: "Radiology",
-      department: "Imaging",
-      phone: "(212) 555-0101",
-      email: "sjohnson@wcinyp.org",
-      location: "61st Street"
-    },
-    { 
-      id: 2, 
-      name: "Dr. Michael Chen", 
-      specialty: "Nuclear Medicine",
-      department: "PET/CT",
-      phone: "(212) 555-0102",
-      email: "mchen@wcinyp.org",
-      location: "Broadway"
-    },
-    { 
-      id: 3, 
-      name: "Dr. Emily Rodriguez", 
-      specialty: "Interventional Radiology",
-      department: "Procedures",
-      phone: "(212) 555-0103",
-      email: "erodriguez@wcinyp.org",
-      location: "55th Street"
-    },
-    { 
-      id: 4, 
-      name: "Dr. James Wilson", 
-      specialty: "Mammography",
-      department: "Breast Imaging",
-      phone: "(212) 555-0104",
-      email: "jwilson@wcinyp.org",
-      location: "Beekman"
-    },
-    { 
-      id: 5, 
-      name: "Dr. Lisa Thompson", 
-      specialty: "MRI",
-      department: "Imaging",
-      phone: "(212) 555-0105",
-      email: "lthompson@wcinyp.org",
-      location: "DHK"
-    },
-    { 
-      id: 6, 
-      name: "Dr. Robert Martinez", 
-      specialty: "CT",
-      department: "Imaging",
-      phone: "(212) 555-0106",
-      email: "rmartinez@wcinyp.org",
-      location: "LIC"
-    },
-    { 
-      id: 7, 
-      name: "Dr. Jennifer Lee", 
-      specialty: "Ultrasound",
-      department: "Imaging",
-      phone: "(212) 555-0107",
-      email: "jlee@wcinyp.org",
-      location: "Spiral"
-    },
-    { 
-      id: 8, 
-      name: "Dr. David Brown", 
-      specialty: "Neuroradiology",
-      department: "Neuroimaging",
-      phone: "(212) 555-0108",
-      email: "dbrown@wcinyp.org",
-      location: "York Avenue"
-    }
-  ]);
+  const providers: Provider[] = providersData.providers;
   
   // Filter providers based on search
   const filteredProviders = searchTerm
