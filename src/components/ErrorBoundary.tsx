@@ -9,7 +9,7 @@ interface RouteError {
 
 export function ErrorBoundary() {
   // This component is not used in Next.js app
-  const error: Error | RouteError | null = null; // useRouteError();
+  const error: unknown = null; // useRouteError();
   
   let title = "Oops! Something went wrong";
   let message = "An unexpected error occurred. Please try again.";
@@ -29,7 +29,7 @@ export function ErrorBoundary() {
       title = `Error ${routeError?.status}`;
       message = routeError?.statusText || message;
     }
-  } else if (error && error instanceof Error) {
+  } else if (error !== null && error instanceof Error) {
     message = error.message;
   }
   
@@ -49,7 +49,7 @@ export function ErrorBoundary() {
           <CardDescription>{message}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {process.env.NODE_ENV === 'development' && error && error instanceof Error && error.stack && (
+          {process.env.NODE_ENV === 'development' && error !== null && error instanceof Error && error.stack && (
             <pre className="text-xs bg-gray-100 p-3 rounded overflow-x-auto">
               <code>{error.stack}</code>
             </pre>
