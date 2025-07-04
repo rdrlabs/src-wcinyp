@@ -57,7 +57,9 @@
       "Bash(npm cache clean:*)",
       "Bash(./cleanup.sh:*)",
       "Bash(npm run type-check:*)",
-      "Bash(npx next:*)"
+      "Bash(npx next:*)",
+      "Bash(npx:*)",
+      "Bash(git checkout:*)"
     ],
     "deny": []
   }
