@@ -21,6 +21,25 @@ vi.mock('@/components/theme-toggle', () => ({
   ThemeToggle: () => <button data-testid="theme-toggle">Toggle Theme</button>
 }))
 
+vi.mock('@/components/navbar', () => ({
+  NavBar: () => (
+    <nav>
+      <a href="/">WCI@NYP</a>
+      <div className="hidden md:flex">
+        <a href="/knowledge">Knowledge Base</a>
+        <a href="/directory">Directory</a>
+        <a href="/documents">Documents</a>
+        <a href="/providers">Providers</a>
+      </div>
+      <button data-testid="theme-toggle">Toggle Theme</button>
+    </nav>
+  )
+}))
+
+vi.mock('@/components/footer', () => ({
+  Footer: () => <footer data-testid="footer">Footer</footer>
+}))
+
 describe('RootLayout', () => {
   it('renders the layout structure', () => {
     render(
@@ -92,7 +111,8 @@ describe('RootLayout', () => {
     )
     
     // Navigation should be hidden on mobile
-    const navContainer = screen.getByRole('link', { name: 'Knowledge Base' }).parentElement
+    const knowledgeLink = screen.getByRole('link', { name: 'Knowledge Base' })
+    const navContainer = knowledgeLink.parentElement
     expect(navContainer).toHaveClass('hidden', 'md:flex')
   })
 

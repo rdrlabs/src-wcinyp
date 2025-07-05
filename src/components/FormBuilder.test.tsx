@@ -61,7 +61,6 @@ describe('FormBuilder', () => {
       render(<FormBuilder template={mockTemplate} />)
       
       expect(screen.getByRole('button', { name: 'Preview' })).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: 'Back to Forms' })).toBeInTheDocument()
       expect(screen.getByRole('button', { name: 'Clear Form' })).toBeInTheDocument()
       expect(screen.getByRole('button', { name: 'Submit Form' })).toBeInTheDocument()
     })

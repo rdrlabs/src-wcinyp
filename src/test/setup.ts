@@ -80,3 +80,10 @@ if (!Element.prototype.releasePointerCapture) {
 if (!Element.prototype.scrollIntoView) {
   Element.prototype.scrollIntoView = vi.fn()
 }
+
+// Mock ResizeObserver for cmdk
+global.ResizeObserver = vi.fn().mockImplementation(() => ({
+  observe: vi.fn(),
+  unobserve: vi.fn(),
+  disconnect: vi.fn(),
+}))

@@ -147,7 +147,6 @@ describe('Error Pages', () => {
     const errorComponents = [
       { Component: RootError, name: 'Root' },
       { Component: DocumentsError, name: 'Documents' },
-      { Component: FormsError, name: 'Forms' },
       { Component: ProvidersError, name: 'Providers' },
       { Component: DirectoryError, name: 'Directory' },
     ]

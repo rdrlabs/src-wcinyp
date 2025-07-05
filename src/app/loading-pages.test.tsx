@@ -62,7 +62,6 @@ describe('Loading Pages', () => {
     const loadingComponents = [
       { Component: RootLoading, name: 'Root' },
       { Component: DocumentsLoading, name: 'Documents' },
-      { Component: FormsLoading, name: 'Forms' },
       { Component: ProvidersLoading, name: 'Providers' },
       { Component: DirectoryLoading, name: 'Directory' },
       { Component: KnowledgeLoading, name: 'Knowledge' },

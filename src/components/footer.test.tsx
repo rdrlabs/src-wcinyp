@@ -28,13 +28,13 @@ describe('Footer', () => {
     const contactSection = screen.getByText('Contact Us').parentElement
     
     // Address
-    expect(contactSection).toHaveTextContent('520 East 70th Street')
-    expect(contactSection).toHaveTextContent('New York, NY 10021')
+    expect(contactSection).toHaveTextContent('525 East 68th Street')
+    expect(contactSection).toHaveTextContent('New York, NY 10065')
     
     // Phone
-    expect(contactSection).toHaveTextContent('(212) 746-6000')
-    const phoneLink = screen.getByRole('link', { name: '(212) 746-6000' })
-    expect(phoneLink).toHaveAttribute('href', 'tel:2127466000')
+    expect(contactSection).toHaveTextContent('(212) 746-2920')
+    const phoneLink = screen.getByRole('link', { name: '(212) 746-2920' })
+    expect(phoneLink).toHaveAttribute('href', 'tel:2127462920')
     
     // Email
     expect(contactSection).toHaveTextContent('imaging@med.cornell.edu')
