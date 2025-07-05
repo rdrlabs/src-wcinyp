@@ -1,0 +1,415 @@
+---
+title: Fumadocs Components Showcase
+description: Complete reference of all available Fumadocs UI components with examples
+---
+
+# Fumadocs Components Showcase
+
+> **Note**: Fumadocs UI components have been temporarily commented out to fix the build. The documentation structure and content has been preserved using standard Markdown. See TECHNICAL_DEBT.md for details.
+
+This guide demonstrates all available Fumadocs UI components with practical examples, variants, and best practices.
+
+## Table of Contents
+
+- Callout Component
+- Cards Component
+- Tabs Component
+- Steps Component
+- Accordion Component
+- File Tree Component
+- Type Table Component
+- Code Blocks
+- Banner Component
+- Dark Mode Behavior
+- Best Practices
+
+## Callout Component
+
+Callouts are used to highlight important information. They support different types and can include titles.
+
+### Basic Callouts
+
+```mdx
+<Callout>
+  This is a default callout with no type specified.
+</Callout>
+```
+
+### Callout Types
+
+- **Info callout**: Use for supplementary information that helps users understand the content better.
+- **Tip callout**: Share helpful tips and best practices. Great for optimization suggestions.
+- **Warning callout**: Alert users to potential issues or important considerations.
+- **Error callout**: Highlight critical problems or breaking changes that require immediate attention.
+
+```mdx
+<Callout type="info">Info message</Callout>
+<Callout type="tip">Helpful tip</Callout>
+<Callout type="warning">Warning message</Callout>
+<Callout type="error">Error message</Callout>
+```
+
+### Callouts with Titles
+
+```mdx
+<Callout type="info" title="Custom Title">
+  Callout content with a custom title
+</Callout>
+```
+
+### When to Use Callouts
+
+- **Info**: API details, additional context, feature explanations
+- **Tip**: Performance optimizations, shortcuts, best practices
+- **Warning**: Deprecations, security concerns, compatibility issues
+- **Error**: Breaking changes, critical bugs, data loss risks
+
+## Cards Component
+
+Cards create a grid layout for showcasing features, options, or related content.
+
+### Basic Cards
+
+```mdx
+<Cards>
+  <Card title="Card Title">
+    Card description text
+  </Card>
+</Cards>
+```
+
+### Cards with Icons/Emojis
+
+```mdx
+<Cards>
+  <Card title="🚀 Performance">
+    Lightning-fast response times
+  </Card>
+  <Card title="🔒 Security">
+    Enterprise-grade security
+  </Card>
+</Cards>
+```
+
+### Cards with Links
+
+```mdx
+<Card title="Linked Card" href="/path/to/page">
+  This card is clickable and navigates to another page
+</Card>
+```
+
+### When to Use Cards
+
+- Feature showcases on landing pages
+- Navigation menus for documentation sections
+- Comparison of options or plans
+- Quick links to important resources
+
+## Tabs Component
+
+Tabs organize content into switchable panels, perfect for showing variations or platform-specific content.
+
+### Basic Tabs
+
+```mdx
+<Tabs>
+  <Tab value="tab1" label="First Tab">
+    Content for the first tab
+  </Tab>
+  <Tab value="tab2" label="Second Tab">
+    Content for the second tab
+  </Tab>
+</Tabs>
+```
+
+### When to Use Tabs
+
+- Platform-specific installation instructions
+- Code examples in multiple languages
+- API endpoints for different environments
+- Configuration options for various scenarios
+
+## Steps Component
+
+Steps create numbered sequences for tutorials, workflows, or procedures.
+
+### Basic Steps
+
+```mdx
+<Steps>
+  <Step>First step description</Step>
+  <Step>Second step description</Step>
+  <Step>Third step description</Step>
+</Steps>
+```
+
+### When to Use Steps
+
+- Installation guides
+- Tutorial walkthroughs
+- Onboarding processes
+- Troubleshooting procedures
+- Recipe-style documentation
+
+## Accordion Component
+
+Accordions collapse and expand content sections, perfect for FAQs or detailed explanations.
+
+### Basic Accordion
+
+```mdx
+<Accordions>
+  <Accordion title="Question or Section Title">
+    Answer or content that expands when clicked
+  </Accordion>
+</Accordions>
+```
+
+### When to Use Accordions
+
+- FAQ sections
+- Detailed specifications that might overwhelm at first glance
+- Optional or advanced information
+- Troubleshooting guides with multiple scenarios
+- API documentation with extensive details
+
+## File Tree Component
+
+Display file and folder structures clearly in your documentation.
+
+### Basic File Tree
+
+```mdx
+<Files>
+  <Folder name="folder-name" defaultOpen>
+    <File name="file.ts" />
+  </Folder>
+  <File name="root-file.js" />
+</Files>
+```
+
+### When to Use File Trees
+
+- Showing project structure
+- Explaining file organization
+- Installation instructions
+- Configuration file locations
+- Build output structure
+
+## Type Table Component
+
+Document TypeScript types and API schemas with structured tables.
+
+### Basic Type Table
+
+```mdx
+<TypeTable
+  type={{
+    propertyName: {
+      description: 'Property description',
+      type: 'string | number | boolean',
+      required: true,
+      default: 'defaultValue',
+    },
+  }}
+/>
+```
+
+### When to Use Type Tables
+
+- TypeScript interface documentation
+- API request/response schemas
+- Configuration options
+- Component props documentation
+- Database schemas
+
+## Code Blocks
+
+Fumadocs provides enhanced code blocks with syntax highlighting, line numbers, and copy functionality.
+
+### Basic Code Block
+
+```javascript
+// Basic JavaScript function
+function calculateTotal(items) {
+  return items.reduce((sum, item) => sum + item.price, 0);
+}
+
+const items = [
+  { name: 'Apple', price: 1.99 },
+  { name: 'Banana', price: 0.99 },
+  { name: 'Orange', price: 2.49 }
+];
+
+console.log(`Total: $${calculateTotal(items).toFixed(2)}`);
+```
+
+### Code Block with Title
+
+```typescript title="user.types.ts"
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: 'admin' | 'user' | 'guest';
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface CreateUserDto {
+  name: string;
+  email: string;
+  password: string;
+  role?: User['role'];
+}
+```
+
+### Code Block with Line Highlighting
+
+```jsx {3-5,8}
+function MyComponent() {
+  const [count, setCount] = useState(0);
+  // These lines are highlighted
+  const increment = () => setCount(count + 1);
+  const decrement = () => setCount(count - 1);
+  
+  return (
+    <div> {/* This line is also highlighted */}
+      <button onClick={decrement}>-</button>
+      <span>{count}</span>
+      <button onClick={increment}>+</button>
+    </div>
+  );
+}
+```
+
+### When to Use Code Blocks
+
+- API examples
+- Configuration snippets
+- Installation commands
+- Code tutorials
+- Error examples
+- Query examples
+
+## Banner Component
+
+Banners display important announcements or notifications at the top of pages.
+
+```mdx
+<Banner>
+  Your banner message here
+</Banner>
+```
+
+### When to Use Banners
+
+- Major announcements
+- Version updates
+- Maintenance notices
+- Important deadlines
+- Promotional messages
+
+## Dark Mode Behavior
+
+All Fumadocs components automatically adapt to dark mode. Here's how different components behave:
+
+### Component-Specific Dark Mode
+
+1. **Callouts**: Background colors adjust while maintaining contrast
+2. **Code Blocks**: Syntax highlighting themes switch automatically
+3. **Cards**: Borders become more prominent in dark mode
+4. **Tables**: Alternating row colors adapt to the theme
+5. **Accordions**: Hover states adjust for visibility
+
+### Testing Dark Mode
+
+1. Toggle your system theme or use the theme switcher
+2. Verify all text remains readable
+3. Check that interactive elements are clearly visible
+4. Ensure code syntax highlighting works correctly
+
+## Best Practices
+
+### Component Selection Guide
+
+- **Use Callouts When**: Highlighting warnings or tips, adding context to complex topics, drawing attention to important info, providing quick takeaways
+- **Use Cards When**: Creating feature grids, building navigation menus, showcasing options, making content scannable
+- **Use Tabs When**: Showing platform variations, organizing code examples, presenting alternatives, reducing page length
+- **Use Steps When**: Writing tutorials, documenting processes, creating guides, showing sequences
+
+### Accessibility Considerations
+
+All Fumadocs components are built with accessibility in mind:
+- Proper ARIA labels
+- Keyboard navigation support
+- Screen reader compatibility
+- High contrast ratios
+
+### Performance Tips
+
+1. **Lazy Loading**: Large code blocks and images are lazy-loaded
+2. **Component Bundling**: Only import components you use
+3. **Static Generation**: MDX content is pre-rendered for fast loading
+4. **Responsive Design**: All components work on mobile devices
+
+### Common Patterns
+
+**Tutorial Pattern**
+Combine Steps with Code Blocks:
+```mdx
+<Steps>
+  <Step>
+    Install the package:
+    npm install package-name
+  </Step>
+</Steps>
+```
+
+**Feature Showcase Pattern**
+Use Cards with icons and links:
+```mdx
+<Cards>
+  <Card title="✨ Feature" href="/docs/feature">
+    Description of the feature
+  </Card>
+</Cards>
+```
+
+**Platform Docs Pattern**
+Tabs with platform-specific content:
+```mdx
+<Tabs>
+  <Tab value="windows" label="Windows">
+    Windows-specific instructions
+  </Tab>
+  <Tab value="mac" label="macOS">
+    macOS-specific instructions
+  </Tab>
+</Tabs>
+```
+
+## Summary
+
+Quick Reference:
+- **Callout**: Important notices and tips
+- **Cards**: Grid layouts and navigation
+- **Tabs**: Alternative content views
+- **Steps**: Sequential instructions
+- **Accordion**: Collapsible content
+- **Files**: File structure display
+- **TypeTable**: API documentation
+- **Code Blocks**: Syntax-highlighted code
+- **Banner**: Site-wide announcements
+
+### Need Help?
+
+- Check the [official Fumadocs documentation](https://fumadocs.dev)
+- Join the community discussions
+- Report issues on GitHub
+- Contribute your own examples
+
+---
+
+**Pro Tip**: Combine multiple components to create rich, interactive documentation that engages your users and clearly communicates complex information.

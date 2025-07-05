@@ -7,13 +7,14 @@ description: How to create and manage custom forms in WCINYP
 
 Learn how to create, customize, and manage forms using the WCINYP Form Builder.
 
+> **Info**: The Form Builder provides a visual interface for creating forms without coding knowledge. Advanced users can also access the JSON editor for fine-grained control.
+
 ## Getting Started
 
-The Form Builder allows you to:
-- Create custom forms from scratch
-- Modify existing templates
-- Set up validation rules
-- Configure submission workflows
+- **✨ Create from Scratch** - Build custom forms tailored to your specific needs
+- **📋 Use Templates** - Start with pre-built templates and modify as needed
+- **✅ Validation Rules** - Set up complex validation logic for data integrity
+- **🔄 Workflows** - Configure automated submission workflows
 
 ## Accessing the Form Builder
 
@@ -25,13 +26,18 @@ The Form Builder allows you to:
 
 ### Step 1: Basic Information
 
+> **Tip**: Choose descriptive names that clearly indicate the form's purpose. This helps users find the right form quickly.
+
 Start by providing form details:
 
-```
-- Form Name: Descriptive title
-- Form Description: Brief purpose statement
-- Category: Select appropriate category
-- Status: Draft or Published
+```javascript
+{
+  "formName": "Patient Intake Form",
+  "description": "Collect patient information for new visits",
+  "category": "Patient Forms",
+  "status": "Draft",
+  "tags": ["intake", "new-patient", "required"]
+}
 ```
 
 ### Step 2: Adding Fields
@@ -40,18 +46,18 @@ Click "Add Field" to include form elements:
 
 #### Available Field Types
 
-| Field Type | Use Case | Options |
-|------------|----------|---------|
-| Text | Names, addresses | Min/max length, pattern |
-| Email | Email addresses | Auto-validation |
-| Phone | Phone numbers | Format mask |
-| Number | Quantities, IDs | Min/max values |
-| Date | Appointments, DOB | Date range limits |
-| Select | Dropdown choices | Custom options |
-| Radio | Single choice | Multiple options |
-| Checkbox | Multiple choices | Required selections |
-| Textarea | Comments, notes | Character limit |
-| File Upload | Documents, images | File type restrictions |
+| Type | Use Case | Options |
+|:-----|:---------|:--------|
+| **Text** | Names, IDs | Length, pattern |
+| **Email** | Contact | Auto-validated |
+| **Phone** | Numbers | Format mask |
+| **Number** | Quantities | Min/max |
+| **Date** | DOB, appointments | Range limits |
+| **Select** | Dropdowns | Custom options |
+| **Radio** | Single choice | Multiple items |
+| **Checkbox** | Multi-select | Required count |
+| **Textarea** | Comments | Char limit |
+| **File** | Documents | Type/size limits |
 
 ### Step 3: Field Configuration
 
@@ -74,21 +80,66 @@ Organize your form:
 
 ## Validation Rules
 
+> **Warning**: Always test your validation patterns with various inputs to ensure they work correctly and don't frustrate users with overly strict rules.
+
 ### Common Validation Patterns
+
+#### Contact Info
 
 ```javascript
 // Email validation
-pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+{
+  pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  message: "Please enter a valid email address"
+}
 
 // Phone validation (US)
-pattern: /^\(\d{3}\) \d{3}-\d{4}$/
+{
+  pattern: /^\(\d{3}\) \d{3}-\d{4}$/,
+  message: "Format: (123) 456-7890"
+}
 
-// ZIP code
-pattern: /^\d{5}(-\d{4})?$/
+// International phone
+{
+  pattern: /^\+?[1-9]\d{1,14}$/,
+  message: "Enter a valid phone number"
+}
+```
 
-// Date range
-min: '2024-01-01'
-max: '2024-12-31'
+#### Address Info
+
+```javascript
+// ZIP code (US)
+{
+  pattern: /^\d{5}(-\d{4})?$/,
+  message: "Format: 12345 or 12345-6789"
+}
+
+// State abbreviation
+{
+  pattern: /^[A-Z]{2}$/,
+  message: "Use 2-letter state code (e.g., NY)"
+}
+```
+
+#### Date/Time
+
+```javascript
+// Date range for appointments
+{
+  min: new Date().toISOString().split('T')[0],
+  max: new Date(Date.now() + 90*24*60*60*1000).toISOString().split('T')[0],
+  message: "Select a date within the next 90 days"
+}
+
+// Business hours only
+{
+  validator: (time) => {
+    const hour = parseInt(time.split(':')[0]);
+    return hour >= 8 && hour < 17;
+  },
+  message: "Select time between 8 AM and 5 PM"
+}
 ```
 
 ### Custom Validation
@@ -108,13 +159,40 @@ Create custom rules:
 
 ### Conditional Logic
 
+> **Info**: Conditional logic makes forms dynamic and user-friendly by showing only relevant fields based on previous answers.
+
 Show/hide fields based on user input:
+
+#### Simple Conditions
 
 ```javascript
 {
   if: 'insuranceType === "self-pay"',
   show: ['paymentMethod', 'estimatedCost'],
   hide: ['insuranceId', 'groupNumber']
+}
+```
+
+#### Complex Logic
+
+```javascript
+{
+  conditions: [
+    {
+      if: 'age < 18',
+      then: {
+        show: ['parentGuardianSection'],
+        required: ['parentName', 'parentPhone']
+      }
+    },
+    {
+      if: 'hasInsurance === true && insuranceType === "other"',
+      then: {
+        show: ['otherInsuranceDetails'],
+        required: ['insuranceName', 'policyNumber']
+      }
+    }
+  ]
 }
 ```
 
@@ -214,11 +292,17 @@ All submissions are:
 
 ### Form Design
 
-- **Keep it simple**: Only ask for necessary information
-- **Logical flow**: Group related fields
-- **Clear labels**: Avoid jargon
-- **Help text**: Provide examples
-- **Error messages**: Be specific and helpful
+- **🎯 Keep it Simple** - Only ask for necessary information. Each additional field reduces completion rates by 3-5%.
+- **🔄 Logical Flow** - Group related fields together. Use sections to break up long forms.
+- **📝 Clear Labels** - Avoid jargon and technical terms. Use language your users understand.
+- **💡 Help Text** - Provide examples and format hints. Show "(555) 123-4567" for phone fields.
+- **❌ Error Messages** - Be specific: "Email must include @" not "Invalid format".
+
+> **Tip**: Form Completion Tips
+> - Use progress indicators for multi-page forms
+> - Save progress automatically every 30 seconds
+> - Allow users to save and resume later
+> - Provide clear submission confirmation
 
 ### Accessibility
 
@@ -243,26 +327,65 @@ Optimize form performance:
 
 ### Common Issues
 
-**Form won't save**
-- Check required fields
-- Verify unique form name
-- Ensure valid configuration
+#### Form Won't Save
 
-**Validation not working**
-- Review rule syntax
-- Test with various inputs
-- Check field dependencies
+> **Error**: Common Causes:
+> - Missing required form name
+> - Duplicate form names
+> - Invalid field configuration
 
-**Submissions failing**
-- Verify form is published
-- Check user permissions
-- Review server logs
+**Solutions:**
+1. Check browser console for errors
+2. Verify all required fields have values
+3. Ensure form name is unique
+4. Validate JSON syntax if using code editor
+
+#### Validation Issues
+
+> **Warning**: Common Problems:
+> - Regex patterns not escaping properly
+> - Conflicting validation rules
+> - Browser compatibility issues
+
+**Debug Steps:**
+```javascript
+// Test validation in console
+const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+console.log(pattern.test('user@example.com')); // true
+console.log(pattern.test('invalid.email')); // false
+```
+
+#### Submission Failures
+
+> **Info**: Check These First:
+> - Form status is "Published"
+> - User has proper permissions
+> - Network connectivity
+> - Server endpoint is responding
+
+**Error Handling:**
+```javascript
+// Add error handling to form
+onSubmit: async (data) => {
+  try {
+    await submitForm(data);
+    showSuccess('Form submitted successfully!');
+  } catch (error) {
+    console.error('Submission error:', error);
+    showError('Failed to submit. Please try again.');
+  }
+}
+```
 
 ## API Integration
 
 ### Webhook Configuration
 
+> **Tip**: Webhooks allow you to integrate form submissions with external systems like CRMs, email services, or custom APIs.
+
 Send form data to external systems:
+
+#### Basic Webhook
 
 ```javascript
 {
@@ -272,18 +395,67 @@ Send form data to external systems:
     'Authorization': 'Bearer TOKEN',
     'Content-Type': 'application/json'
   },
-  retryOnFailure: true
+  retryOnFailure: true,
+  maxRetries: 3
+}
+```
+
+#### Data Transformation
+
+```javascript
+{
+  url: 'https://api.example.com/forms',
+  method: 'POST',
+  transform: (formData) => {
+    return {
+      patient: {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email
+      },
+      appointment: {
+        date: formData.appointmentDate,
+        type: formData.appointmentType
+      },
+      metadata: {
+        formId: formData._formId,
+        submittedAt: new Date().toISOString()
+      }
+    };
+  }
+}
+```
+
+#### Multiple Endpoints
+
+```javascript
+{
+  webhooks: [
+    {
+      name: 'CRM Update',
+      url: 'https://crm.example.com/api/contacts',
+      condition: 'formData.subscribeNewsletter === true'
+    },
+    {
+      name: 'Email Service',
+      url: 'https://email.example.com/api/send',
+      template: 'form-confirmation'
+    },
+    {
+      name: 'Analytics',
+      url: 'https://analytics.example.com/track',
+      event: 'form_submission'
+    }
+  ]
 }
 ```
 
 ### Custom Actions
 
-Trigger actions on submission:
-
-- Send email notifications
-- Create calendar events
-- Update databases
-- Generate documents
+- **📧 Email Notifications** - Send confirmation emails to users and notification emails to staff
+- **📅 Calendar Events** - Automatically create appointments in calendar systems
+- **💾 Database Updates** - Store form data in external databases or data warehouses
+- **📄 Document Generation** - Generate PDFs, contracts, or reports from form data
 
 ## Related Resources
 

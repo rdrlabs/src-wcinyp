@@ -64,7 +64,15 @@
       "Bash(git branch:*)",
       "Bash(npm run test:ci:*)",
       "Bash(npm run lint:*)",
-      "Bash(pkill:*)"
+      "Bash(pkill:*)",
+      "Bash(gh pr create:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh run view:*)",
+      "Bash(gh pr merge:*)",
+      "Bash(rg:*)",
+      "Bash(python3:*)",
+      "Bash(git restore:*)"
     ],
     "deny": []
   }

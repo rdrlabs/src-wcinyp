@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FileEdit, Eye, ArrowRight } from 'lucide-react';
+import { FileEdit, Eye, ArrowRight, FileText, Users } from 'lucide-react';
 import formTemplatesData from '@/data/form-templates.json';
 import Link from 'next/link';
 
@@ -35,8 +35,14 @@ export function FormsList() {
                 <CardContent>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between text-sm text-muted-foreground">
-                      <span>{template.fields} fields</span>
-                      <span>{template.submissions} submissions</span>
+                      <span className="flex items-center gap-1">
+                        <FileText className="h-3 w-3" />
+                        {template.fields} fields
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Users className="h-3 w-3" />
+                        {template.submissions} submissions
+                      </span>
                     </div>
                     <div className="flex gap-2">
                       <Button size="sm" variant="outline" className="flex-1" asChild>

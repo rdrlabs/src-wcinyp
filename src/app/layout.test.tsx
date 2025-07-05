@@ -21,10 +21,6 @@ vi.mock('@/components/theme-toggle', () => ({
   ThemeToggle: () => <button data-testid="theme-toggle">Toggle Theme</button>
 }))
 
-vi.mock('fumadocs-ui/provider', () => ({
-  RootProvider: ({ children }: { children: React.ReactNode }) => <div data-testid="root-provider">{children}</div>
-}))
-
 describe('RootLayout', () => {
   it('renders the layout structure', () => {
     render(
@@ -45,7 +41,7 @@ describe('RootLayout', () => {
     )
     
     // Check brand link
-    expect(screen.getByRole('link', { name: 'WCINYP' })).toHaveAttribute('href', '/')
+    expect(screen.getByRole('link', { name: 'WCI@NYP' })).toHaveAttribute('href', '/')
     
     // Check navigation links
     expect(screen.getByRole('link', { name: 'Knowledge Base' })).toHaveAttribute('href', '/knowledge')
@@ -72,7 +68,7 @@ describe('RootLayout', () => {
     )
     
     expect(screen.getByTestId('providers')).toBeInTheDocument()
-    expect(screen.getByTestId('root-provider')).toBeInTheDocument()
+    // RootProvider is now only used in knowledge layout for Fumadocs isolation
   })
 
   it('applies correct CSS classes', () => {

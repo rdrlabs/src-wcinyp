@@ -4,11 +4,18 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { FormBuilderUI } from './FormBuilderUI'
 import { axe } from 'jest-axe'
 
-// Mock window.alert
-global.alert = vi.fn()
+// Mock sonner toast
+vi.mock('sonner', () => ({
+  toast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+    warning: vi.fn()
+  }
+}))
 
-// Mock console.log
-// Console spy removed - no longer logging in production code
+// Get the mocked toast for assertions
+import { toast } from 'sonner'
 
 describe('FormBuilderUI', () => {
   beforeEach(() => {
@@ -79,7 +86,9 @@ describe('FormBuilderUI', () => {
       
       // Should create a new field with default values
       expect(screen.getByDisplayValue('New Field')).toBeInTheDocument()
-      expect(screen.getByDisplayValue('Text Input')).toBeInTheDocument()
+      // The select component displays the value differently
+      const selectTrigger = screen.getByRole('combobox')
+      expect(selectTrigger).toHaveTextContent('Text Input')
     })
 
     it('updates field label', async () => {
@@ -103,10 +112,20 @@ describe('FormBuilderUI', () => {
       // Add a field
       await user.click(screen.getByRole('button', { name: /Add Field/i }))
       
-      const typeSelect = screen.getByDisplayValue('Text Input')
-      await user.selectOptions(typeSelect, 'email')
+      const typeSelect = screen.getByRole('combobox')
       
-      expect(typeSelect).toHaveValue('email')
+      // The select should show "Text Input" initially
+      expect(typeSelect).toHaveTextContent('Text Input')
+      
+      // Click to open the dropdown
+      await user.click(typeSelect)
+      
+      // Wait for the dropdown to be rendered and click on Email option
+      const emailOption = await screen.findByRole('option', { name: 'Email' })
+      await user.click(emailOption)
+      
+      // Verify the selection changed
+      expect(typeSelect).toHaveTextContent('Email')
     })
 
     it('updates placeholder text', async () => {
@@ -304,9 +323,10 @@ describe('FormBuilderUI', () => {
       // Save
       await user.click(screen.getByRole('button', { name: /Save Form/i }))
       
-      // Just check that alert was called
-      expect(global.alert).toHaveBeenCalledWith(
-        'Form template saved! (In production, this would save to your backend)'
+      // Check that toast was called
+      expect(toast.success).toHaveBeenCalledWith(
+        'Form template saved!',
+        { description: 'Your form has been saved successfully.' }
       )
     })
 
@@ -350,17 +370,29 @@ describe('FormBuilderUI', () => {
       { value: 'textarea', label: 'Text Area' },
     ]
 
-    fieldTypes.forEach(({ value, label }) => {
+    fieldTypes.forEach(({ value: _value, label }) => {
       it(`supports ${label} field type`, async () => {
         const user = userEvent.setup()
         render(<FormBuilderUI />)
         
         await user.click(screen.getByRole('button', { name: /Add Field/i }))
         
-        const typeSelect = screen.getByDisplayValue('Text Input')
-        await user.selectOptions(typeSelect, value)
+        const typeSelect = screen.getByRole('combobox')
         
-        expect(typeSelect).toHaveValue(value)
+        // Skip test if this is the default value (Text Input)
+        if (label === 'Text Input') {
+          expect(typeSelect).toHaveTextContent(label)
+          return
+        }
+        
+        // Click to open dropdown
+        await user.click(typeSelect)
+        
+        // Click on the specific field type option
+        const option = await screen.findByRole('option', { name: label })
+        await user.click(option)
+        
+        expect(typeSelect).toHaveTextContent(label)
       })
     })
   })

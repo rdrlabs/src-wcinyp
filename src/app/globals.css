@@ -1,3 +1,5 @@
+@layer base, components, utilities, fumadocs;
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

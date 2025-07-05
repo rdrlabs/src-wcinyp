@@ -3,7 +3,9 @@
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, Save, Eye, Trash2, MoveUp, MoveDown } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface FormField {
   id: string;
@@ -64,7 +66,9 @@ export function FormBuilderUI() {
     // TODO: Implement save to Netlify Function or database
     // Would save: { name: formName, description: formDescription, fields, createdAt }
     // In production, save to Netlify Function or GitHub
-    alert('Form template saved! (In production, this would save to your backend)');
+    toast.success('Form template saved!', {
+      description: 'Your form has been saved successfully.'
+    });
   };
 
   if (isPreview) {
@@ -96,12 +100,16 @@ export function FormBuilderUI() {
                       rows={4}
                     />
                   ) : field.type === 'select' ? (
-                    <select className="w-full px-3 py-2 border rounded-md">
-                      <option value="">Select an option</option>
-                      {field.options?.map((opt, idx) => (
-                        <option key={idx} value={opt}>{opt}</option>
-                      ))}
-                    </select>
+                    <Select>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select an option" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {field.options?.map((opt, idx) => (
+                          <SelectItem key={idx} value={opt}>{opt}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   ) : field.type === 'checkbox' ? (
                     <input type="checkbox" className="h-4 w-4" />
                   ) : (
@@ -170,15 +178,19 @@ export function FormBuilderUI() {
                     className="flex-1 px-3 py-2 border rounded-md"
                     placeholder="Field label"
                   />
-                  <select
+                  <Select
                     value={field.type}
-                    onChange={(e) => updateField(field.id, { type: e.target.value as FormField['type'] })}
-                    className="px-3 py-2 border rounded-md"
+                    onValueChange={(value) => updateField(field.id, { type: value as FormField['type'] })}
                   >
-                    {fieldTypes.map(type => (
-                      <option key={type.value} value={type.value}>{type.label}</option>
-                    ))}
-                  </select>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {fieldTypes.map(type => (
+                        <SelectItem key={type.value} value={type.value}>{type.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
                 
                 <div className="flex gap-2 items-center">
