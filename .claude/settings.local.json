@@ -74,7 +74,9 @@
       "Bash(python3:*)",
       "Bash(git restore:*)",
       "Bash(gh pr:*)",
-      "Bash(git stash:*)"
+      "Bash(git stash:*)",
+      "Bash(git rm:*)",
+      "Bash(true)"
     ],
     "deny": []
   }
