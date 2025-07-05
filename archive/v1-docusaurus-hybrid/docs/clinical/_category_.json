@@ -1,8 +1,0 @@
-{
-  "label": "Clinical Resources",
-  "position": 3,
-  "link": {
-    "type": "generated-index",
-    "description": "Clinical protocols, imaging guidelines, and patient preparation requirements for all modalities."
-  }
-}
