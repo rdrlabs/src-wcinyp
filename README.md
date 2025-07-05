@@ -777,6 +777,57 @@ After deployment, verify:
 - [ ] Documents can be downloaded
 - [ ] No console errors in production
 
+## Repository Management & Gitignore Configuration
+
+### Archive Management Strategy (Jan 2025)
+
+We experienced a major PR issue with +30,895 −4,812,622 changes due to improper gitignore configuration. This has been resolved with a "skeleton archive" approach:
+
+#### 1. **Archive Skeleton Philosophy**
+Archives preserve the historical record of failed attempts while removing dangerous artifacts:
+- ✅ **Preserved**: All source code (.tsx, .ts, .js), documentation (.md), configurations
+- ❌ **Removed**: node_modules, package-lock.json, coverage reports, build outputs
+- **Result**: Archives serve as educational skeletons showing what was attempted
+
+#### 2. **Enhanced .gitignore**
+Added specific patterns to prevent only dangerous artifacts:
+```
+# Archive dangerous artifacts only
+/archive/**/node_modules/
+/archive/**/package-lock.json
+/archive/**/coverage/
+/archive/**/lcov-report/
+/archive/**/.next/
+/archive/**/build/
+/archive/**/dist/
+/archive/**/.cache/
+/archive/**/.docusaurus/
+
+# Duplicate files (common pattern from macOS/file conflicts)
+**/* 2.*
+**/* 3.*
+**/* 4.*
+**/* 2/
+**/* 3/
+**/* 4/
+```
+
+#### 3. **What Archives Contain**
+Example: `archive/v1-docusaurus-hybrid/` contains:
+- 38 documentation files (.md) including handoff reports
+- 48 source code files showing the implementation attempt
+- Configuration files (docusaurus.config.ts, tsconfig.json, etc.)
+- Static assets and original PDFs
+- Test suites showing the TDD approach
+
+#### 4. **Security & Conflict Prevention**
+- No dependencies that could conflict with main app
+- No build artifacts that could interfere
+- Clear separation between active code and historical record
+- Archives are read-only references for learning
+
+This approach maintains the educational value of failed attempts while ensuring repository safety and preventing massive PR diffs.
+
 ## Migration Notes
 
 This application was migrated from React Router v7 to Next.js 14 to enable:
