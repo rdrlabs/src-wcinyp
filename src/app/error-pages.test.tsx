@@ -9,7 +9,6 @@ import DocumentsError from './documents/error'
 import FormsError from './forms/error'
 import ProvidersError from './providers/error'
 import DirectoryError from './directory/error'
-import KnowledgeError from './knowledge/error'
 import NotFound from './not-found'
 import GlobalError from './global-error'
 
@@ -26,7 +25,6 @@ describe('Error Pages', () => {
   createErrorPageTest(FormsError, 'Forms')
   createErrorPageTest(ProvidersError, 'Providers')
   createErrorPageTest(DirectoryError, 'Directory')
-  createErrorPageTest(KnowledgeError, 'Knowledge')
 
   // Test error pages with custom error messages
   describe('Error Message Display', () => {
@@ -154,7 +152,6 @@ describe('Error Pages', () => {
       { Component: FormsError, name: 'Forms' },
       { Component: ProvidersError, name: 'Providers' },
       { Component: DirectoryError, name: 'Directory' },
-      { Component: KnowledgeError, name: 'Knowledge' },
     ]
 
     errorComponents.forEach(({ Component, name }) => {

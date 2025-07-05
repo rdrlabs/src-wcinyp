@@ -3,50 +3,80 @@ title: Form Builder & Management
 description: Creating and managing dynamic forms
 ---
 
+// TODO: Fix Fumadocs UI component imports - temporarily commented out to fix build
+// import { Callout } from 'fumadocs-ui/components/callout'
+// import { Steps, Step } from 'fumadocs-ui/components/steps'
+// import { Cards, Card } from 'fumadocs-ui/components/card'
+
 # Form Builder & Management
 
 ## Form Builder Overview
 
 The Form Builder allows you to create custom forms for various purposes:
 
-- Patient intake forms
-- Survey questionnaires
-- Custom data collection
-- Event registrations
+{/* <Cards>
+  <Card title="📋 Patient Intake Forms">
+    Collect patient information and medical history
+  </Card>
+  <Card title="📊 Survey Questionnaires">
+    Gather feedback and conduct research
+  </Card>
+  <Card title="📝 Custom Data Collection">
+    Build forms for any data collection need
+  </Card>
+  <Card title="🎫 Event Registrations">
+    Manage event signups and attendance
+  </Card>
+</Cards> */}
+- **📋 Patient Intake Forms** - Collect patient information and medical history
+- **📊 Survey Questionnaires** - Gather feedback and conduct research
+- **📝 Custom Data Collection** - Build forms for any data collection need
+- **🎫 Event Registrations** - Manage event signups and attendance
 
 ## Creating a New Form
 
-### Step 1: Choose a Starting Point
+{/* <Steps>
+  All content moved outside Steps component
+</Steps> */}
+### Creating a New Form
 
-1. **Start from Template**: Use pre-built templates
-2. **Blank Form**: Build from scratch
-3. **Duplicate Existing**: Copy and modify an existing form
+#### 1. Choose a Starting Point
 
-### Step 2: Add Form Fields
+Select how you want to create your form:
 
-Available field types:
+- **Start from Template**: Use pre-built templates for common forms
+- **Blank Form**: Build from scratch with full customization
+- **Duplicate Existing**: Copy and modify an existing form
 
-- **Text Input**: Single line text
-- **Text Area**: Multi-line text
-- **Select/Dropdown**: Choose from options
-- **Checkboxes**: Multiple selections
-- **Radio Buttons**: Single selection
-- **Date Picker**: Date selection
-- **File Upload**: Document attachments
-- **Number Input**: Numeric values
-- **Email**: Email addresses with validation
-- **Phone**: Phone numbers with formatting
+#### 2. Add Form Fields
 
-### Step 3: Configure Field Properties
+Select from a variety of field types:
 
-For each field, you can set:
+| Field Type | Description | Best For |
+|:-----------|:------------|:---------|
+| **Text** | Single line | Names, IDs |
+| **Textarea** | Multi-line | Comments |
+| **Select** | Dropdown | Fixed choices |
+| **Checkbox** | Multi-select | Options |
+| **Radio** | Single choice | Either/or |
+| **Date** | Date picker | DOB, appointments |
+| **File** | Upload files | Documents |
+| **Number** | Numeric only | Quantities |
+| **Email** | Validated email | Contact info |
+| **Phone** | Formatted phone | Contact numbers |
 
-- **Label**: Display name
-- **Name**: Internal identifier
-- **Required**: Make field mandatory
+#### 3. Configure Field Properties
+
+For each field, customize these settings:
+
+- **Label**: Clear, descriptive display name
+- **Name**: Internal identifier (no spaces)
+- **Required**: Mark if field is mandatory
 - **Validation**: Add rules (min/max length, patterns)
 - **Default Value**: Pre-fill with data
-- **Help Text**: Provide guidance
+- **Help Text**: Provide guidance to users
+
+> **Tip**: Use descriptive labels and helpful text to guide users through your form
 
 ## Form Logic
 
@@ -54,18 +84,37 @@ For each field, you can set:
 
 Show/hide fields based on user responses:
 
-```
-IF "Insurance Type" = "Other"
-THEN SHOW "Specify Insurance" field
+{/* <Callout type="info">
+  Conditional logic allows you to create dynamic forms that adapt based on user input.
+</Callout> */}
+> **Info**: Conditional logic allows you to create dynamic forms that adapt based on user input.
+
+```javascript
+// Example: Show additional field when "Other" is selected
+{
+  condition: {
+    field: 'insuranceType',
+    operator: 'equals',
+    value: 'Other'
+  },
+  action: {
+    show: ['specifyInsurance']
+  }
+}
 ```
 
 ### Validation Rules
 
-- Required fields
-- Email format validation
-- Phone number formatting
-- Custom regex patterns
-- Date range restrictions
+Build robust forms with comprehensive validation:
+
+{/* <Cards>
+  All Card components removed
+</Cards> */}
+- **✓ Required Fields** - Ensure critical information is collected
+- **📧 Email Validation** - Verify proper email format automatically
+- **📱 Phone Formatting** - Format phone numbers consistently
+- **🔍 Pattern Matching** - Use regex for custom validation rules
+- **📅 Date Restrictions** - Set valid date ranges for appointments
 
 ## Managing Forms
 
@@ -103,8 +152,17 @@ View all your forms in one place:
 
 ## Best Practices
 
-1. **Keep forms concise**: Only ask for necessary information
-2. **Use clear labels**: Avoid technical jargon
-3. **Group related fields**: Use sections for organization
-4. **Test thoroughly**: Preview before publishing
-5. **Mobile-friendly**: Ensure forms work on all devices
+{/* <Cards>
+  All Card components removed
+</Cards> */}
+- **📏 Keep forms concise** - Only ask for necessary information to improve completion rates
+- **🏷️ Use clear labels** - Avoid technical jargon and use language your users understand
+- **📦 Group related fields** - Use sections for better organization and logical flow
+- **🧪 Test thoroughly** - Always preview and test before publishing to production
+- **📱 Mobile-friendly** - Ensure forms work seamlessly on all devices and screen sizes
+
+{/* <Callout type="warning">
+  Remember to test your forms on multiple devices and browsers before publishing to ensure the best user experience.
+</Callout> */}
+
+> **Warning**: Remember to test your forms on multiple devices and browsers before publishing to ensure the best user experience.

@@ -1,6 +1,7 @@
 {
   "title": "Guides",
   "pages": [
+    "components-showcase",
     "self-pay-workflow",
     "form-builder",
     "api-integration"

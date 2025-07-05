@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import {
   Table,
@@ -13,6 +14,22 @@ import {
 } from "@/components/ui/table";
 import contactsData from "@/data/contacts.json";
 import type { Contact } from "@/types";
+import { 
+  User, 
+  Shield, 
+  Building, 
+  TestTube, 
+  Package, 
+  UserPlus, 
+  FileUp, 
+  Search,
+  Edit,
+  StickyNote,
+  Phone,
+  Mail,
+  MapPin,
+  Calendar
+} from "lucide-react";
 
 export default function DirectoryPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -22,6 +39,24 @@ export default function DirectoryPage() {
 
   // Get unique contact types
   const contactTypes = ["all", ...new Set(contacts.map(c => c.type))] as const;
+  
+  // Get icon for contact type
+  const getContactTypeIcon = (type: string) => {
+    switch (type) {
+      case 'Provider':
+        return <User className="h-4 w-4" />;
+      case 'Insurance':
+        return <Shield className="h-4 w-4" />;
+      case 'Facility':
+        return <Building className="h-4 w-4" />;
+      case 'Lab':
+        return <TestTube className="h-4 w-4" />;
+      case 'Vendor':
+        return <Package className="h-4 w-4" />;
+      default:
+        return null;
+    }
+  };
   
   // Filter contacts
   const filteredByType = selectedType === "all" 
@@ -54,10 +89,11 @@ export default function DirectoryPage() {
               variant={selectedType === type ? "default" : "outline"}
               size="sm"
               onClick={() => setSelectedType(type)}
-              className="capitalize"
+              className="capitalize flex items-center gap-1.5"
             >
+              {type !== "all" && getContactTypeIcon(type)}
               {type === "all" ? "All Contacts" : type}
-              <span className="ml-2 text-xs">
+              <span className="ml-1 text-xs">
                 ({type === "all" ? contacts.length : contacts.filter(c => c.type === type).length})
               </span>
             </Button>
@@ -65,15 +101,24 @@ export default function DirectoryPage() {
         </div>
         
         <div className="flex gap-4">
-          <input
-            type="search"
-            placeholder="Search by name, department, email, or phone..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full max-w-md px-4 py-2 border rounded-lg"
-          />
-          <Button>Add Contact</Button>
-          <Button variant="outline">Import CSV</Button>
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <input
+              type="search"
+              placeholder="Search by name, department, email, or phone..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border rounded-lg"
+            />
+          </div>
+          <Button className="flex items-center gap-2">
+            <UserPlus className="h-4 w-4" />
+            Add Contact
+          </Button>
+          <Button variant="outline" className="flex items-center gap-2">
+            <FileUp className="h-4 w-4" />
+            Import CSV
+          </Button>
         </div>
       </div>
       
@@ -101,32 +146,54 @@ export default function DirectoryPage() {
               <TableRow key={contact.id}>
                 <TableCell className="font-medium">{contact.name}</TableCell>
                 <TableCell>
-                  <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ${
-                    contact.type === 'Provider' ? 'bg-blue-50 text-blue-700 ring-blue-700/10' :
-                    contact.type === 'Insurance' ? 'bg-green-50 text-green-700 ring-green-700/10' :
-                    contact.type === 'Facility' ? 'bg-purple-50 text-purple-700 ring-purple-700/10' :
-                    contact.type === 'Lab' ? 'bg-yellow-50 text-yellow-700 ring-yellow-700/10' :
-                    contact.type === 'Vendor' ? 'bg-orange-50 text-orange-700 ring-orange-700/10' :
-                    'bg-gray-50 text-gray-700 ring-gray-700/10'
-                  }`}>
+                  <Badge 
+                    variant="secondary"
+                    className={`flex items-center gap-1.5 w-fit ${
+                      contact.type === 'Provider' ? 'bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800' :
+                      contact.type === 'Insurance' ? 'bg-green-50 dark:bg-green-950/50 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800' :
+                      contact.type === 'Facility' ? 'bg-purple-50 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800' :
+                      contact.type === 'Lab' ? 'bg-yellow-50 dark:bg-yellow-950/50 text-yellow-700 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800' :
+                      contact.type === 'Vendor' ? 'bg-orange-50 dark:bg-orange-950/50 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-800' :
+                      'bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700'
+                    }`}
+                  >
+                    {getContactTypeIcon(contact.type)}
                     {contact.type}
-                  </span>
+                  </Badge>
                 </TableCell>
                 <TableCell>{contact.department}</TableCell>
                 <TableCell>
-                  <div className="text-sm">
-                    <div>{contact.phone}</div>
-                    <div className="text-muted-foreground">{contact.email}</div>
+                  <div className="text-sm space-y-1">
+                    <div className="flex items-center gap-1.5">
+                      <Phone className="h-3 w-3 text-muted-foreground" />
+                      {contact.phone}
+                    </div>
+                    <div className="flex items-center gap-1.5 text-muted-foreground">
+                      <Mail className="h-3 w-3" />
+                      {contact.email}
+                    </div>
                   </div>
                 </TableCell>
-                <TableCell>{contact.location}</TableCell>
-                <TableCell>{contact.lastContact}</TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-1.5">
+                    <MapPin className="h-3 w-3 text-muted-foreground" />
+                    {contact.location}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-1.5">
+                    <Calendar className="h-3 w-3 text-muted-foreground" />
+                    {contact.lastContact}
+                  </div>
+                </TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-2">
-                    <Button variant="ghost" size="sm">
+                    <Button variant="ghost" size="sm" className="flex items-center gap-1.5">
+                      <Edit className="h-3 w-3" />
                       Edit
                     </Button>
-                    <Button variant="ghost" size="sm">
+                    <Button variant="ghost" size="sm" className="flex items-center gap-1.5">
+                      <StickyNote className="h-3 w-3" />
                       Notes
                     </Button>
                   </div>

@@ -16,8 +16,18 @@ vi.mock('next/navigation', () => ({
 vi.spyOn(console, 'log').mockImplementation(() => {})
 vi.spyOn(console, 'error').mockImplementation(() => {})
 
-// Mock alert
-global.alert = vi.fn()
+// Mock sonner toast
+vi.mock('sonner', () => ({
+  toast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+    warning: vi.fn()
+  }
+}))
+
+// Get the mocked toast for assertions
+import { toast } from 'sonner'
 
 // Mock fetch
 global.fetch = vi.fn()
@@ -108,8 +118,23 @@ describe('FormBuilder', () => {
       if (selects.length > 0) {
         const firstSelect = selects[0]
         
-        await user.selectOptions(firstSelect, 'option2')
-        expect(firstSelect).toHaveValue('option2')
+        // Click the select trigger to open the dropdown
+        await user.click(firstSelect)
+        
+        // Wait for dropdown to open
+        await waitFor(() => {
+          // The dropdown items appear in a portal, find all Option 2 elements
+          const options = screen.getAllByText('Option 2')
+          // Click the last one (which should be the dropdown item, not the select value)
+          expect(options.length).toBeGreaterThan(0)
+        })
+        
+        // Click on the dropdown item (not the displayed value)
+        const options = screen.getAllByText('Option 2')
+        await user.click(options[options.length - 1])
+        
+        // Verify the selected value is displayed
+        expect(firstSelect).toHaveTextContent('Option 2')
       }
     })
   })
@@ -216,9 +241,12 @@ describe('FormBuilder', () => {
       // Submit
       await user.click(screen.getByRole('button', { name: 'Submit Form' }))
       
-      // Should show success alert
+      // Should show success toast
       await waitFor(() => {
-        expect(global.alert).toHaveBeenCalledWith('Form submitted successfully!')
+        expect(toast.success).toHaveBeenCalledWith(
+          'Form submitted successfully!',
+          { description: 'Your form has been submitted and saved.' }
+        )
       })
     })
 
@@ -321,9 +349,12 @@ describe('FormBuilder', () => {
       // Submit should not crash the app
       await user.click(screen.getByRole('button', { name: 'Submit Form' }))
       
-      // Should show error alert
+      // Should show error toast
       await waitFor(() => {
-        expect(global.alert).toHaveBeenCalledWith('Error submitting form')
+        expect(toast.error).toHaveBeenCalledWith(
+          'Error submitting form',
+          { description: 'An unexpected error occurred. Please try again.' }
+        )
       })
       
       // Component should still be rendered
