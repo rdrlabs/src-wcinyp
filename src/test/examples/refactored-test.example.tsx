@@ -1,7 +1,8 @@
-import { render } from '@testing-library/react'
-import { describe, it, expect } from 'vitest'
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 import DocumentsPage from '@/app/documents/page'
-import { DocumentsPage as DocumentsPageObject } from '@/test/page-objects'
+import { DocumentsPage as DocumentsPageObject, FormsListPage } from '@/test/page-objects'
 
 /**
  * Example: Refactoring tests to use Page Object Models

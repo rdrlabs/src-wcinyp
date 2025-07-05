@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import FormBuilder from '@/components/FormBuilder';
 import formTemplatesData from "@/data/form-templates.json";
+import type { FormTemplate } from '@/types';
 
 interface PageProps {
   params: Promise<{
@@ -11,11 +12,17 @@ interface PageProps {
 export default async function FormBuilderPage({ params }: PageProps) {
   const { id } = await params;
   const formId = Number(id);
-  const template = formTemplatesData.templates.find(t => t.id === formId);
+  const templateData = formTemplatesData.templates.find(t => t.id === formId);
   
-  if (!template) {
+  if (!templateData) {
     notFound();
   }
+  
+  // Cast the template to match FormTemplate type
+  const template: FormTemplate = {
+    ...templateData,
+    status: templateData.status as 'active' | 'draft'
+  };
   
   return <FormBuilder template={template} />;
 }

@@ -1,14 +1,14 @@
 'use client'
 
-import { MDXRemote } from 'next-mdx-remote'
+import { MDXRemote, type MDXRemoteSerializeResult } from 'next-mdx-remote'
 import { useMDXComponents } from '@/mdx-components'
 
 interface MDXContentProps {
-  code: any
+  code: React.ComponentType<{ components?: Record<string, React.ComponentType> }> | MDXRemoteSerializeResult
 }
 
 export function MDXContent({ code }: MDXContentProps) {
-  const components = useMDXComponents({})
+  const components = useMDXComponents({}) as Record<string, React.ComponentType>
   
   // For static export, we need to handle MDX differently
   // This is a simplified version that works with client-side rendering

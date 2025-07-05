@@ -24,11 +24,16 @@ vi.mock('@/components/theme-toggle', () => ({
 vi.mock('@/components/navbar', () => ({
   NavBar: () => (
     <nav>
+      {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
       <a href="/">WCI@NYP</a>
       <div className="hidden md:flex">
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a href="/knowledge">Knowledge Base</a>
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a href="/directory">Directory</a>
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a href="/documents">Documents</a>
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a href="/providers">Providers</a>
       </div>
       <button data-testid="theme-toggle">Toggle Theme</button>

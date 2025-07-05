@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 /**
@@ -89,37 +89,27 @@ export class FormBuilderPage {
 
   // State checks
   isInPreviewMode() {
-    try {
-      screen.getByText('Edit Mode')
-      return true
-    } catch {
-      return false
-    }
+    return screen.getByText('Edit Mode').isVisible
   }
 
   isInEditMode() {
-    try {
-      screen.getByText('Preview')
-      return true
-    } catch {
-      return false
-    }
+    return screen.getByText('Preview').isVisible
   }
 
   // Form data helpers
-  async fillFormData(data: Record<string, string | boolean | number>) {
+  async fillFormData(data: Record<string, any>) {
     for (const [fieldId, value] of Object.entries(data)) {
       if (typeof value === 'boolean') {
-        const checkbox = this.getFormCheckbox(fieldId) as HTMLInputElement
+        const checkbox = this.getFormCheckbox(fieldId)
         if (checkbox.checked !== value) {
           await this.toggleCheckbox(fieldId)
         }
       } else if (fieldId.includes('select')) {
-        await this.selectOption(fieldId, String(value))
+        await this.selectOption(fieldId, value)
       } else if (fieldId.includes('textarea')) {
-        await this.fillTextarea(fieldId, String(value))
+        await this.fillTextarea(fieldId, value)
       } else {
-        await this.fillTextField(fieldId, String(value))
+        await this.fillTextField(fieldId, value)
       }
     }
   }
