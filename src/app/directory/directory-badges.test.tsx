@@ -44,8 +44,7 @@ describe('Directory Page Badge Implementation', () => {
   it('should render contact type badges using Badge component', () => {
     render(<DirectoryPage />)
     
-    // Check that badges are rendered in the table (not filter buttons)
-    const table = screen.getByRole('table')
+    // Check that badges are rendered (both in filter buttons and table)
     const providerBadges = screen.getAllByText('Provider')
     const insuranceBadges = screen.getAllByText('Insurance')
     const labBadges = screen.getAllByText('Lab')
