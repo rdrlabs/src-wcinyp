@@ -16,12 +16,6 @@ export default function Home() {
       stats: "42 providers",
     },
     {
-      title: "Form Generator",
-      description: "Automate medical form creation and processing",
-      href: "/forms",
-      stats: "12 templates",
-    },
-    {
       title: "Directory",
       description: "Comprehensive contact database",
       href: "/directory",

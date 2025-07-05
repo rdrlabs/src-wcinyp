@@ -193,9 +193,6 @@ export default function WikiPage() {
                 <Link href="/documents" className="text-sm text-primary hover:underline block">
                   Document Hub
                 </Link>
-                <Link href="/forms" className="text-sm text-primary hover:underline block">
-                  Forms Generator
-                </Link>
               </CardContent>
             </Card>
           </div>

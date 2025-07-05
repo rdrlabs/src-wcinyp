@@ -81,9 +81,6 @@ describe('Wiki Page', () => {
     
     const documentsLink = screen.getByRole('link', { name: 'Document Hub' })
     expect(documentsLink).toHaveAttribute('href', '/documents')
-    
-    const formsLink = screen.getByRole('link', { name: 'Forms Generator' })
-    expect(formsLink).toHaveAttribute('href', '/forms')
   })
 
   it('displays help section', () => {

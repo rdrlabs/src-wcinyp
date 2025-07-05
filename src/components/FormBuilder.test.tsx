@@ -268,7 +268,7 @@ describe('FormBuilder', () => {
       
       // Should navigate
       await waitFor(() => {
-        expect(mockPush).toHaveBeenCalledWith('/forms')
+        expect(mockPush).toHaveBeenCalledWith('/documents')
       })
     })
   })
