@@ -9,19 +9,22 @@ This is a medical imaging center application built with Next.js 14, TypeScript, 
 - **Styling**: Tailwind CSS v3
 - **UI Components**: shadcn/ui
 - **Documentation**: Fumadocs (MDX) - Properly isolated with its own styling context
-- **Testing**: Vitest, React Testing Library (287 tests, TDD approach)
+- **Testing**: Vitest, React Testing Library (327 tests, TDD approach)
 - **Deployment**: Netlify (static hosting)
 
 ## Project Structure
 ```
 src/
 ├── app/                  # Next.js app router pages
-│   ├── documents/       # Document management
-│   ├── providers/       # Provider directory
-│   ├── forms/           # Form generator
+│   ├── documents/       # Documents & Forms (combined)
+│   ├── providers/       # Enhanced provider directory
 │   ├── directory/       # Contact directory
-│   └── knowledge/       # Knowledge hub (documentation)
+│   ├── knowledge/       # Fumadocs-powered knowledge base
+│   └── wiki/           # Staff wiki
 ├── components/          # Reusable React components
+│   ├── ui/             # shadcn/ui components
+│   ├── navbar.tsx      # Global navigation
+│   └── footer.tsx      # Rich footer
 ├── data/               # JSON data files
 ├── types/              # TypeScript type definitions
 └── test/               # Test setup and utilities
@@ -31,11 +34,12 @@ netlify/
 ```
 
 ## Key Features
-1. **Document Hub**: Browse and download medical forms organized by category
-2. **Provider Directory**: Search and view medical staff information
-3. **Form Generator**: Create and submit dynamic forms
-4. **Contact Directory**: Comprehensive database of all contacts
-5. **Knowledge Hub**: Fumadocs-powered documentation with full sidebar navigation and isolated styling
+1. **Documents & Forms**: Unified interface with toggle view for document browsing and form generation
+2. **Provider Directory**: Enhanced profiles with NPI, affiliations, flags, and expandable notes
+3. **Contact Directory**: Comprehensive database of all stakeholders
+4. **Knowledge Base**: Fumadocs-powered documentation with full sidebar navigation and isolated styling
+5. **Global Search**: Command+K shortcut for quick navigation
+6. **Modern UI**: WCI@NYP branding, rich footer, and shadcn/ui components throughout
 
 ## Development Commands
 ```bash
@@ -77,7 +81,7 @@ npm run type-check
 npm test -- --run  # Run tests once (avoid watch mode timeout in Claude Code)
 ```
 
-**Test Suite Status**: 287 tests across 23 test files, 100% passing
+**Test Suite Status**: 327 tests, all passing ✅
 
 ## Deployment
 The application automatically deploys to Netlify on push to main branch. The `netlify.toml` configuration handles:

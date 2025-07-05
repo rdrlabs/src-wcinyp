@@ -8,20 +8,23 @@ This is a medical imaging center application built with Next.js 14, TypeScript, 
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS v3
 - **UI Components**: shadcn/ui
-- **Documentation**: Fumadocs (MDX)
-- **Testing**: Vitest, React Testing Library
+- **Documentation**: Fumadocs (MDX) - Fully integrated with isolated styling
+- **Testing**: Vitest, React Testing Library (327 tests)
 - **Deployment**: Netlify (static hosting)
 
 ## Project Structure
 ```
 src/
 ├── app/                  # Next.js app router pages
-│   ├── documents/       # Document management
-│   ├── providers/       # Provider directory
-│   ├── forms/           # Form generator
+│   ├── documents/       # Documents & Forms (combined)
+│   ├── providers/       # Enhanced provider directory
 │   ├── directory/       # Contact directory
-│   └── knowledge/       # Knowledge hub (documentation)
+│   ├── knowledge/       # Fumadocs-powered knowledge base
+│   └── wiki/           # Staff wiki
 ├── components/          # Reusable React components
+│   ├── ui/             # shadcn/ui components
+│   ├── navbar.tsx      # Global navigation
+│   └── footer.tsx      # Rich footer
 ├── data/               # JSON data files
 ├── types/              # TypeScript type definitions
 └── test/               # Test setup and utilities
@@ -31,11 +34,36 @@ netlify/
 ```
 
 ## Key Features
-1. **Document Hub**: Browse and download medical forms organized by category
-2. **Provider Directory**: Search and view medical staff information
-3. **Form Generator**: Create and submit dynamic forms
-4. **Contact Directory**: Comprehensive database of all contacts
-5. **Knowledge Hub**: MDX-powered documentation
+1. **Documents & Forms**: Unified interface with toggle view for document browsing and form generation
+2. **Provider Directory**: Enhanced profiles with NPI, affiliations, flags, and expandable notes
+3. **Contact Directory**: Comprehensive database of all stakeholders
+4. **Knowledge Base**: Full Fumadocs implementation with sidebar navigation
+5. **Global Search**: Command+K shortcut for quick navigation
+6. **Modern UI**: shadcn/ui components throughout with dark mode support
+
+## Phase 1 UI/UX Enhancements (Completed)
+
+### Navigation
+- Reordered navbar: Knowledge Base → Directory → Documents → Providers
+- WCI@NYP branding
+- Global search with Command+K
+- Quick links dropdown (Teams, Outlook, MyApps)
+- Feedback button and login icon in navbar
+
+### Enhanced Features
+- **Documents & Forms Integration**: Single page with toggle view
+- **Provider Cards**: Epic EMR-style expandable cards with:
+  - NPI numbers
+  - Affiliation badges (WCM, NYP, etc.)
+  - Provider flags (VIP, urgent, teaching, etc.)
+  - Languages spoken
+  - Expandable notes section
+
+### Theme & Styling
+- Active page highlighting with primary color
+- White glow hover effect on inactive nav items
+- Rich footer with contact info and resources
+- Full dark mode support
 
 ## Development Commands
 ```bash
@@ -72,8 +100,10 @@ Run the following commands before committing:
 ```bash
 npm run lint
 npm run type-check
-npm test
+npm test -- --run  # Run tests once (use --run flag to avoid Claude Code timeout)
 ```
+
+**Test Suite Status**: 327 tests, all passing ✅
 
 ## Deployment
 The application automatically deploys to Netlify on push to main branch. The `netlify.toml` configuration handles:
