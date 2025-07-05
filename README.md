@@ -1,5 +1,7 @@
 # WCINYP - Weill Cornell Imaging at NewYork-Presbyterian
 
+**Developer Master Reference** - This README serves as the single source of truth for project status, architecture, and development progress.
+
 A modern Next.js 14 application for medical imaging administration, featuring document management, provider directories, and automated form generation.
 
 ## Features
@@ -687,6 +689,209 @@ Based on Phase 1 learnings:
 - [ ] Create Storybook for component documentation
 - [ ] Implement feature flags for gradual rollouts
 - [ ] Add comprehensive logging and monitoring
+
+## Claude Task Master Integration
+
+### Overview
+Claude Task Master is an AI-powered task management system designed to work seamlessly with Claude in development environments like Cursor, providing persistent task tracking and intelligent task breakdown capabilities.
+
+### Installation & Configuration
+
+#### 1. Local Installation (Recommended)
+```bash
+npm install --save-dev task-master-ai
+```
+
+#### 2. Initialize Project
+```bash
+npx task-master init
+# Answer prompts:
+# - Shell aliases: Y (allows using 'tm' instead of 'task-master')
+# - Git repository: N (already exists)
+```
+
+#### 3. Configure Models for Claude Code (No API Key Required)
+```bash
+npx task-master models --set-main opus --claude-code
+npx task-master models --set-research sonnet --claude-code
+npx task-master models --set-fallback sonnet --claude-code
+```
+
+#### 4. Project Structure Created
+```
+src-wcinyp/
+├── .taskmaster/             # Task Master project directory
+│   ├── config.json         # Model configuration
+│   ├── tasks/
+│   │   └── tasks.json     # Task storage (tag-based)
+│   └── docs/
+│       └── prd.txt        # Product Requirements Document
+├── .env                    # API keys (optional with Claude Code)
+├── .cursorrules           # AI behavior rules
+├── tasks/                 # Manual task management fallback
+│   ├── tasks.md          # Human-readable task list
+│   └── templates/        # Task templates
+└── docs/                  # Project documentation
+    ├── architecture.mermaid
+    ├── technical.md
+    └── progress.md
+```
+
+### Key Features Implemented
+
+#### 1. **Persistent Task Management**
+- Tasks stored in `tasks/tasks.md` survive between Claude sessions
+- Completed tasks archived in `tasks/completed/`
+- Clear task states: pending, in-progress, completed, blocked
+
+#### 2. **AI-Enhanced Development**
+- `.cursorrules` file guides AI behavior with project-specific rules
+- Required file reads on startup for context
+- Automated validation requirements before task completion
+
+#### 3. **Task Templates**
+- `feature.md` - Comprehensive feature development checklist
+- `bug-fix.md` - Structured bug fix workflow
+- Templates ensure consistent development practices
+
+#### 4. **Project Documentation**
+- `architecture.mermaid` - Visual system architecture
+- `technical.md` - Technical specifications and patterns
+- `progress.md` - Development progress tracking
+
+### Usage Examples
+
+#### Task Management Commands
+```bash
+# List all tasks
+npx task-master list
+
+# Show next task to work on
+npx task-master next
+
+# Show specific task details
+npx task-master show 1
+
+# Update task status
+npx task-master set-status --id=1 --status=in-progress
+
+# Add a new task with AI
+npx task-master add-task --prompt="Create API endpoint for user registration"
+```
+
+#### Task Organization
+```bash
+# Create a new tag for feature branch
+npx task-master add-tag feat/backend-auth "Backend authentication feature"
+
+# Switch to different tag context
+npx task-master use-tag feat/backend-auth
+
+# List all tags
+npx task-master tags
+```
+
+#### Advanced Features
+```bash
+# Parse PRD to generate tasks
+npx task-master parse-prd --input=.taskmaster/docs/prd.txt
+
+# Expand task into subtasks
+npx task-master expand --id=1 --num=5
+
+# Research with project context
+npx task-master research "Best practices for Netlify Functions with TypeScript"
+
+# Sync tasks to README
+npx task-master sync-readme
+```
+
+### Benefits
+
+1. **Continuity**: Tasks persist across Claude sessions
+2. **Context Awareness**: AI understands project structure and conventions
+3. **Quality Assurance**: Built-in validation requirements
+4. **Organized Workflow**: Templates and consistent practices
+5. **Progress Visibility**: Clear tracking of development status
+
+### Notes
+
+- Task Master stores all data locally in your project
+- No cross-project contamination
+- Works with git branches via tagged contexts
+- Integrates with MCP for editor support
+
+### ✅ Current Status
+
+Task Master v0.19.0 is successfully installed and configured:
+- **Local installation** in project (not global)
+- **Claude Code mode** configured (no API key required)
+- **Models configured**: Opus for main, Sonnet for research/fallback
+- **Project initialized** with `.taskmaster/` directory structure
+
+### Known Issues & Workarounds
+
+1. **Claude Code Integration**: The `parse-prd` command fails with Claude Code API errors. This appears to be a limitation of the Claude Code CLI integration.
+
+2. **Task Display**: The `list` command shows empty results even with tasks in the file. This is due to the tag-based structure expecting tasks under the current tag.
+
+3. **Manual Task Creation**: Since AI task generation has issues with Claude Code, manually create tasks in `.taskmaster/tasks/tasks.json` following the structure shown in examples.
+
+### MCP Server Integration (Alternative Approach)
+
+Instead of using the CLI directly, you can configure Task Master as an MCP (Model Context Protocol) server for better integration with Claude Desktop and IDE environments.
+
+#### Claude Desktop Configuration
+Create or update `~/Library/Application Support/Claude/claude_desktop_config.json`:
+```json
+{
+  "mcpServers": {
+    "taskmaster-ai": {
+      "command": "npx",
+      "args": ["-y", "--package=task-master-ai", "task-master-ai"],
+      "env": {},
+      "type": "stdio"
+    }
+  }
+}
+```
+
+#### VS Code Configuration
+Create `.vscode/mcp.json` in your project:
+```json
+{
+  "taskmaster-ai": {
+    "command": "npx",
+    "args": ["-y", "--package=task-master-ai", "task-master-ai"],
+    "type": "stdio"
+  }
+}
+```
+
+#### Cursor IDE Configuration
+Create `.cursor/mcp.json` in your project:
+```json
+{
+  "mcpServers": {
+    "taskmaster-ai": {
+      "command": "npx",
+      "args": ["-y", "--package=task-master-ai", "task-master-ai"],
+      "env": {},
+      "type": "stdio"
+    }
+  }
+}
+```
+
+**Note**: After creating these configurations, restart your IDE or Claude Desktop to activate the MCP server connection.
+
+### Hybrid Approach
+
+Use Task Master for structure and persistence, with manual task management:
+1. **Task Storage**: Use `.taskmaster/tasks/tasks.json` for machine-readable tasks
+2. **Human Reference**: Maintain `tasks/tasks.md` for quick viewing
+3. **Templates**: Use `tasks/templates/` for consistent task creation
+4. **Documentation**: Keep PRD in `.taskmaster/docs/prd.txt` for context
 
 ## Additional Development Considerations
 

@@ -1,0 +1,22 @@
+{
+  "project": {
+    "name": "WCINYP",
+    "description": "Weill Cornell Imaging at NewYork-Presbyterian - Medical imaging center application",
+    "version": "1.0.0"
+  },
+  "models": {
+    "main": "claude-opus-4-20250514",
+    "research": "claude-sonnet-4-20250514",
+    "fallback": "claude-sonnet-4-20250514"
+  },
+  "features": {
+    "autoBreakdown": true,
+    "complexityThreshold": 5,
+    "defaultTag": "main"
+  },
+  "paths": {
+    "tasks": "./tasks/tasks.md",
+    "completed": "./tasks/completed/",
+    "templates": "./tasks/templates/"
+  }
+}

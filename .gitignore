@@ -42,6 +42,9 @@ next-env.d.ts
 .node_modules_old_delete_me/
 .react-router/
 
+# IDE configurations
+.cursor/
+
 # Archive dangerous artifacts only
 /archive/**/node_modules/
 /archive/**/package-lock.json
