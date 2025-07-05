@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from 'sonner';
+import type { FormTemplate } from '@/types';
 
 // Mock form field types
 const fieldTypes = {
@@ -17,14 +18,6 @@ const fieldTypes = {
   textarea: { label: "Text Area", icon: "📄" },
   signature: { label: "Signature", icon: "✍️" }
 };
-
-interface FormTemplate {
-  id: number;
-  name: string;
-  category: string;
-  fields: number;
-  description: string;
-}
 
 interface FormBuilderProps {
   template: FormTemplate;
@@ -70,7 +63,7 @@ export default function FormBuilder({ template }: FormBuilderProps) {
         toast.success('Form submitted successfully!', {
           description: 'Your form has been submitted and saved.'
         });
-        router.push('/forms');
+        router.push('/documents');
       } else {
         toast.error('Failed to submit form', {
           description: 'Please try again later.'
@@ -183,8 +176,8 @@ export default function FormBuilder({ template }: FormBuilderProps) {
           >
             {isPreview ? 'Edit Mode' : 'Preview'}
           </Button>
-          <Button variant="outline" onClick={() => router.push('/forms')}>
-            Back to Forms
+          <Button variant="outline" onClick={() => router.push('/documents')}>
+            Back to Documents
           </Button>
         </div>
       </div>
@@ -245,3 +238,5 @@ export default function FormBuilder({ template }: FormBuilderProps) {
     </div>
   );
 }
+
+export { FormBuilder };

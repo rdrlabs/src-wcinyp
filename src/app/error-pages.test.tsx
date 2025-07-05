@@ -6,7 +6,6 @@ import { createErrorPageTest } from '@/test/patterns'
 // Import all error components
 import RootError from './error'
 import DocumentsError from './documents/error'
-import FormsError from './forms/error'
 import ProvidersError from './providers/error'
 import DirectoryError from './directory/error'
 import NotFound from './not-found'
@@ -22,7 +21,6 @@ describe('Error Pages', () => {
   // Use pattern for basic error tests
   createErrorPageTest(RootError, 'Root')
   createErrorPageTest(DocumentsError, 'Documents')
-  createErrorPageTest(FormsError, 'Forms')
   createErrorPageTest(ProvidersError, 'Providers')
   createErrorPageTest(DirectoryError, 'Directory')
 
@@ -149,7 +147,6 @@ describe('Error Pages', () => {
     const errorComponents = [
       { Component: RootError, name: 'Root' },
       { Component: DocumentsError, name: 'Documents' },
-      { Component: FormsError, name: 'Forms' },
       { Component: ProvidersError, name: 'Providers' },
       { Component: DirectoryError, name: 'Directory' },
     ]

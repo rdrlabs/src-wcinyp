@@ -26,7 +26,6 @@ describe('Home Page', () => {
     // Check all feature cards are present
     expect(screen.getByText('Document Hub')).toBeInTheDocument()
     expect(screen.getByText('Provider Directory')).toBeInTheDocument()
-    expect(screen.getByText('Form Generator')).toBeInTheDocument()
     expect(screen.getByText('Directory')).toBeInTheDocument()
     expect(screen.getByText('Knowledge Base')).toBeInTheDocument()
   })
@@ -36,7 +35,6 @@ describe('Home Page', () => {
     
     expect(screen.getByText('156 documents')).toBeInTheDocument()
     expect(screen.getByText('42 providers')).toBeInTheDocument()
-    expect(screen.getByText('12 templates')).toBeInTheDocument()
     expect(screen.getByText('150+ contacts')).toBeInTheDocument()
     expect(screen.getByText('15+ articles')).toBeInTheDocument()
   })
@@ -46,7 +44,6 @@ describe('Home Page', () => {
     
     expect(screen.getByText('Manage patient forms and medical documents')).toBeInTheDocument()
     expect(screen.getByText('Search and manage medical staff information')).toBeInTheDocument()
-    expect(screen.getByText('Automate medical form creation and processing')).toBeInTheDocument()
     expect(screen.getByText('Comprehensive contact database')).toBeInTheDocument()
     expect(screen.getByText('Documentation and guides')).toBeInTheDocument()
   })
@@ -59,9 +56,6 @@ describe('Home Page', () => {
     
     const providerLink = screen.getByRole('link', { name: /Provider Directory/i })
     expect(providerLink).toHaveAttribute('href', '/providers')
-    
-    const formLink = screen.getByRole('link', { name: /Form Generator/i })
-    expect(formLink).toHaveAttribute('href', '/forms')
     
     const directoryLink = screen.getByRole('link', { name: /Directory Comprehensive/i })
     expect(directoryLink).toHaveAttribute('href', '/directory')

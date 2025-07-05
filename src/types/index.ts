@@ -20,6 +20,12 @@ export interface Provider {
   phone: string;
   email: string;
   location: string;
+  npi?: string;
+  affiliation?: 'WCM' | 'NYP' | 'NYP-Affiliate' | 'NYP/Columbia' | 'Private' | 'BTC' | 'WCCC';
+  flags?: Array<'vip' | 'urgent' | 'new' | 'teaching' | 'research' | 'multilingual'>;
+  languages?: string[];
+  notes?: string;
+  availableToday?: boolean;
 }
 
 // Contact types

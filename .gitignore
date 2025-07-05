@@ -39,3 +39,24 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+.node_modules_old_delete_me/
+.react-router/
+
+# Archive dangerous artifacts only
+/archive/**/node_modules/
+/archive/**/package-lock.json
+/archive/**/coverage/
+/archive/**/lcov-report/
+/archive/**/.next/
+/archive/**/build/
+/archive/**/dist/
+/archive/**/.cache/
+/archive/**/.docusaurus/
+
+# Duplicate files (common pattern from macOS/file conflicts)
+**/* 2.*
+**/* 3.*
+**/* 4.*
+**/* 2/
+**/* 3/
+**/* 4/

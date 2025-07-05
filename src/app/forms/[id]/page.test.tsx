@@ -5,11 +5,12 @@ import formTemplatesData from '@/data/form-templates.json'
 
 // Mock the FormBuilder component
 vi.mock('@/components/FormBuilder', () => ({
-  default: ({ template }: { template: { name: string; description: string; fields: number } }) => (
+  default: ({ template }: { template: { name: string; description: string; fields: number; status: string } }) => (
     <div data-testid="form-builder">
       <h1>{template.name}</h1>
       <p>{template.description}</p>
       <p>Fields: {template.fields}</p>
+      <p>Status: {template.status}</p>
     </div>
   ),
 }))

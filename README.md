@@ -4,11 +4,10 @@ A modern Next.js 14 application for medical imaging administration, featuring do
 
 ## Features
 
-- **Document Hub** - Access and manage 156+ medical forms and documents
-- **Provider Directory** - Search and manage medical staff information
-- **Form Generator** - Automate self-pay forms and document creation
-- **Master Directory** - Comprehensive contact database for all stakeholders
 - **Knowledge Base** - Full Fumadocs-powered documentation with sidebar navigation ✨
+- **Master Directory** - Comprehensive contact database for all stakeholders  
+- **Documents & Forms** - Integrated document repository (156+ forms) with form generator for self-pay automation
+- **Provider Directory** - Enhanced provider profiles with NPI, affiliations, and expandable notes
 - **Staff Wiki** - Simple MDX-based wiki for WCINYP work documentation (policies, procedures, emergency info)
 
 ## Tech Stack
@@ -54,11 +53,10 @@ public/
 ## Key Pages
 
 - `/` - Dashboard with quick access to all features
-- `/documents` - Document management with category filtering
-- `/providers` - Provider directory with search
-- `/forms` - Form generator and template management
-- `/directory` - Master contact directory
 - `/knowledge` - Knowledge base and documentation (Fumadocs with isolated styling)
+- `/directory` - Master contact directory with advanced search
+- `/documents` - Unified documents and forms interface with toggle view
+- `/providers` - Enhanced provider directory with rich profiles
 - `/wiki` - Staff wiki for procedures, policies, and work documentation
 
 ## Development
@@ -526,6 +524,208 @@ User-facing documentation is available at:
 
 <!-- HEALTH:END -->
 
+## Phase 1 UI/UX Enhancements (COMPLETED Jan 2025) ✅
+
+### Navigation Improvements
+- [x] **Navbar Reordering**: Knowledge Base, Directory, Documents, Providers
+- [x] **WCI@NYP Branding**: Updated from WCINYP
+- [x] **Global Search**: Command+K shortcut with command palette
+- [x] **Quick Links Dropdown**: Teams, Outlook, MyApps
+- [x] **Feedback Button**: Positioned in navbar
+- [x] **Login Icon**: Shows CWID (AB12345) when logged in
+
+### Page Enhancements
+- [x] **Documents & Forms Integration**: 
+  - Single page with toggle view
+  - Table view for rapid document search and printing
+  - Form filler view for template-based form creation
+  - Self-pay automation features
+  
+- [x] **Provider Directory Redesign**:
+  - Rich expandable cards (Epic EMR style)
+  - NPI numbers prominently displayed
+  - Affiliation badges (WCM, NYP, NYP-Affiliate, NYP/Columbia, Private, BTC, WCCC)
+  - Provider flags (VIP, urgent, new, teaching, research, multilingual)
+  - Expandable notes section
+  - Available today indicator
+  - Languages spoken
+  - Star ratings
+  - Quick actions (Schedule, vCard, View Profile)
+
+### Theme & Styling
+- [x] **Active Page Highlighting**: Primary color for active, gray for inactive
+- [x] **Hover States**: White glow effect on inactive nav items
+- [x] **Rich Footer**: Comprehensive links and contact information
+- [x] **Dark Mode**: Full support across all components
+
+### Code Quality & Testing (Post-Phase 1 Refactoring) ✅
+- [x] **Eliminated Code Duplication**:
+  - Fixed FormTemplate type duplication
+  - Created shared navigation configuration
+  - Centralized icon utility functions
+  - Removed duplicate functions from components
+  
+- [x] **Comprehensive Test Coverage**:
+  - Added tests for navbar, footer, and provider-table components
+  - Enhanced documents page tests with form toggle functionality
+  - Created redirect test for /forms route
+  - Total: 4 new test files with 40+ test cases
+  
+- [x] **Constants Centralization**:
+  - Created 7 constant files organizing all hardcoded values
+  - Includes company info, URLs, UI constants, forms, locations, medical terms
+  - Eliminates magic numbers and strings throughout codebase
+  
+- [x] **Theme Consistency**:
+  - Created theme utilities for consistent styling
+  - Replaced all hardcoded colors with theme-aware classes
+  - Full dark mode support with CSS variables
+  - Fixed navbar hover effects to use theme colors
+  
+- [x] **Error Handling Strategy**:
+  - Centralized error handling with AppError class
+  - User-friendly error messages
+  - Toast notification integration
+  - React hook for component error handling
+  
+- [x] **Build & Configuration**:
+  - Fixed Vitest timeout issues
+  - All TypeScript errors resolved
+  - ESLint passing with no warnings
+  - Successful production build
+
+## Development Roadmap (Updated Jan 2025)
+
+### Phase 2: Backend Infrastructure & Authentication (Next Priority)
+- [ ] **Authentication System**:
+  - [ ] CWID integration with Cornell SSO
+  - [ ] Role-based access control (admin, staff, provider)
+  - [ ] Session management with JWT tokens
+  - [ ] Protected routes and API endpoints
+  
+- [ ] **Netlify Functions Setup**:
+  - [ ] Form submission handler with validation
+  - [ ] Document download tracking API
+  - [ ] Provider availability checker
+  - [ ] Feedback submission endpoint
+  
+- [ ] **Data Persistence**:
+  - [ ] PostgreSQL/Supabase integration
+  - [ ] Form submission storage
+  - [ ] User preferences and saved searches
+  - [ ] Audit logging for compliance
+
+### Phase 3: Enhanced User Experience (Q2 2025)
+- [ ] **Real-time Features**:
+  - [ ] Provider availability updates via WebSocket
+  - [ ] Live form collaboration for teams
+  - [ ] Notification system (in-app + email)
+  - [ ] Activity feed for recent changes
+  
+- [ ] **Knowledge Sharing Features**:
+  - [ ] "Suggest Edit" button on documentation pages
+  - [ ] Simple submission form for corrections and tips
+  - [ ] File attachment support for screenshots
+  - [ ] Basic review workflow for submissions
+  - [ ] Email notifications for status updates
+  
+- [ ] **Advanced Search & Filtering**:
+  - [ ] Full-text search across all content
+  - [ ] Smart filters with saved presets
+  - [ ] Search history and suggestions
+  - [ ] Bulk operations support
+  
+- [ ] **Performance Optimizations**:
+  - [ ] Implement React Query for data fetching
+  - [ ] Add service worker for offline support
+  - [ ] Image optimization with Next.js Image
+  - [ ] Lazy loading for heavy components
+
+### Phase 4: Healthcare System Integration (Q3 2025)
+- [ ] **Epic EMR Integration**:
+  - [ ] Patient data sync (with PHI compliance)
+  - [ ] Appointment scheduling API
+  - [ ] Provider schedule import
+  - [ ] Insurance verification
+  
+- [ ] **Workflow Automation**:
+  - [ ] Self-pay form auto-generation
+  - [ ] Document routing based on type
+  - [ ] Automated reminders and follow-ups
+  - [ ] Batch printing with queue management
+  
+- [ ] **Compliance & Security**:
+  - [ ] HIPAA compliance audit
+  - [ ] End-to-end encryption for PHI
+  - [ ] Access control matrix
+  - [ ] Audit trail for all actions
+
+### Phase 5: Analytics & Intelligence (Q4 2025)
+- [ ] **Analytics Dashboard**:
+  - [ ] Usage metrics and trends
+  - [ ] Form completion rates
+  - [ ] Provider utilization reports
+  - [ ] Document access patterns
+  
+- [ ] **Machine Learning Features**:
+  - [ ] Smart form field predictions
+  - [ ] Document classification
+  - [ ] Anomaly detection for security
+  - [ ] Predictive search suggestions
+  
+- [ ] **Business Intelligence**:
+  - [ ] ROI measurement tools
+  - [ ] Cost savings calculator
+  - [ ] Efficiency metrics
+  - [ ] Custom report builder
+
+### Technical Debt Reduction (Ongoing)
+Based on Phase 1 learnings:
+- [ ] Migrate from client-only to hybrid rendering where possible
+- [ ] Implement proper state management (Zustand/Jotai)
+- [ ] Add E2E tests with Playwright
+- [ ] Create Storybook for component documentation
+- [ ] Implement feature flags for gradual rollouts
+- [ ] Add comprehensive logging and monitoring
+
+## Knowledge Sharing System
+
+### Purpose
+Enable staff to contribute practical knowledge and corrections to improve documentation accuracy while maintaining single source of truth principles.
+
+### Core Features
+
+#### 1. Simple Contribution Options
+- **"Suggest Edit"** button on documentation pages
+- **"Report Issue"** for incorrect information
+- **"Add Example"** for real-world use cases
+- **File attachments** for screenshots or supporting documents
+
+#### 2. Practical Contributions
+- Corrections to outdated procedures
+- Tips for common problems
+- Links to relevant Epic/NYP resources
+- Department-specific workflow examples
+
+#### 3. Architecture & Quality
+- **Version Control**: Track all changes with attribution (who, what, when)
+- **Authority Levels**: Clear distinction between Official docs and Community contributions
+- **Quality Checks**: Automated duplicate detection and broken link scanning
+- **Simple Review**: Submissions reviewed by appropriate department/IT staff
+
+#### 4. Review Process
+- Submissions go to department supervisors
+- IT reviews technical changes
+- Approved changes integrated with version tracking
+- Contributors notified of status
+
+### Implementation Phases
+1. **Phase 1**: Basic contribution form and storage
+2. **Phase 2**: Review workflow and notifications
+3. **Phase 3**: Version tracking and search integration
+
+This approach maintains documentation integrity while enabling practical improvements from staff experience.
+
 ## Deployment
 
 This application is configured for deployment on Netlify with automatic builds from the main branch.
@@ -576,6 +776,57 @@ After deployment, verify:
 - [ ] Forms can be filled and submitted
 - [ ] Documents can be downloaded
 - [ ] No console errors in production
+
+## Repository Management & Gitignore Configuration
+
+### Archive Management Strategy (Jan 2025)
+
+We experienced a major PR issue with +30,895 −4,812,622 changes due to improper gitignore configuration. This has been resolved with a "skeleton archive" approach:
+
+#### 1. **Archive Skeleton Philosophy**
+Archives preserve the historical record of failed attempts while removing dangerous artifacts:
+- ✅ **Preserved**: All source code (.tsx, .ts, .js), documentation (.md), configurations
+- ❌ **Removed**: node_modules, package-lock.json, coverage reports, build outputs
+- **Result**: Archives serve as educational skeletons showing what was attempted
+
+#### 2. **Enhanced .gitignore**
+Added specific patterns to prevent only dangerous artifacts:
+```
+# Archive dangerous artifacts only
+/archive/**/node_modules/
+/archive/**/package-lock.json
+/archive/**/coverage/
+/archive/**/lcov-report/
+/archive/**/.next/
+/archive/**/build/
+/archive/**/dist/
+/archive/**/.cache/
+/archive/**/.docusaurus/
+
+# Duplicate files (common pattern from macOS/file conflicts)
+**/* 2.*
+**/* 3.*
+**/* 4.*
+**/* 2/
+**/* 3/
+**/* 4/
+```
+
+#### 3. **What Archives Contain**
+Example: `archive/v1-docusaurus-hybrid/` contains:
+- 38 documentation files (.md) including handoff reports
+- 48 source code files showing the implementation attempt
+- Configuration files (docusaurus.config.ts, tsconfig.json, etc.)
+- Static assets and original PDFs
+- Test suites showing the TDD approach
+
+#### 4. **Security & Conflict Prevention**
+- No dependencies that could conflict with main app
+- No build artifacts that could interfere
+- Clear separation between active code and historical record
+- Archives are read-only references for learning
+
+This approach maintains the educational value of failed attempts while ensuring repository safety and preventing massive PR diffs.
 
 ## Migration Notes
 

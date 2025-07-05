@@ -21,6 +21,30 @@ vi.mock('@/components/theme-toggle', () => ({
   ThemeToggle: () => <button data-testid="theme-toggle">Toggle Theme</button>
 }))
 
+vi.mock('@/components/navbar', () => ({
+  NavBar: () => (
+    <nav>
+      {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+      <a href="/">WCI@NYP</a>
+      <div className="hidden md:flex">
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+        <a href="/knowledge">Knowledge Base</a>
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+        <a href="/directory">Directory</a>
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+        <a href="/documents">Documents</a>
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+        <a href="/providers">Providers</a>
+      </div>
+      <button data-testid="theme-toggle">Toggle Theme</button>
+    </nav>
+  )
+}))
+
+vi.mock('@/components/footer', () => ({
+  Footer: () => <footer data-testid="footer">Footer</footer>
+}))
+
 describe('RootLayout', () => {
   it('renders the layout structure', () => {
     render(
@@ -92,7 +116,8 @@ describe('RootLayout', () => {
     )
     
     // Navigation should be hidden on mobile
-    const navContainer = screen.getByRole('link', { name: 'Knowledge Base' }).parentElement
+    const knowledgeLink = screen.getByRole('link', { name: 'Knowledge Base' })
+    const navContainer = knowledgeLink.parentElement
     expect(navContainer).toHaveClass('hidden', 'md:flex')
   })
 

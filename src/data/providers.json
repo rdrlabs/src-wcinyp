@@ -7,7 +7,13 @@
       "department": "Imaging",
       "phone": "(212) 555-0101",
       "email": "sjohnson@wcinyp.org",
-      "location": "61st Street"
+      "location": "61st Street",
+      "npi": "1234567890",
+      "affiliation": "WCM",
+      "flags": ["teaching", "multilingual"],
+      "languages": ["English", "Spanish"],
+      "availableToday": true,
+      "notes": "Specializes in pediatric imaging. Accepts walk-ins on Thursdays. Fluent in Spanish - preferred provider for Spanish-speaking patients."
     },
     { 
       "id": 2, 
@@ -16,7 +22,11 @@
       "department": "PET/CT",
       "phone": "(212) 555-0102",
       "email": "mchen@wcinyp.org",
-      "location": "Broadway"
+      "location": "Broadway",
+      "npi": "1234567891",
+      "affiliation": "NYP",
+      "flags": ["research", "vip"],
+      "availableToday": false
     },
     { 
       "id": 3, 
@@ -25,7 +35,12 @@
       "department": "Procedures",
       "phone": "(212) 555-0103",
       "email": "erodriguez@wcinyp.org",
-      "location": "55th Street"
+      "location": "55th Street",
+      "npi": "1234567892",
+      "affiliation": "NYP/Columbia",
+      "flags": ["urgent"],
+      "availableToday": true,
+      "notes": "Available for emergency procedures 24/7. Direct line for urgent cases: (212) 555-0199"
     },
     { 
       "id": 4, 
@@ -34,7 +49,11 @@
       "department": "Breast Imaging",
       "phone": "(212) 555-0104",
       "email": "jwilson@wcinyp.org",
-      "location": "Beekman"
+      "location": "Beekman",
+      "npi": "1234567893",
+      "affiliation": "BTC",
+      "flags": ["teaching"],
+      "notes": "Director of Breast Imaging. Leads weekly tumor board meetings on Wednesdays."
     },
     { 
       "id": 5, 
@@ -43,7 +62,11 @@
       "department": "Imaging",
       "phone": "(212) 555-0105",
       "email": "lthompson@wcinyp.org",
-      "location": "DHK"
+      "location": "DHK",
+      "npi": "1234567894",
+      "affiliation": "WCM",
+      "flags": ["new"],
+      "availableToday": true
     },
     { 
       "id": 6, 
@@ -52,7 +75,11 @@
       "department": "Imaging",
       "phone": "(212) 555-0106",
       "email": "rmartinez@wcinyp.org",
-      "location": "LIC"
+      "location": "LIC",
+      "npi": "1234567895",
+      "affiliation": "NYP-Affiliate",
+      "languages": ["English", "Portuguese", "Spanish"],
+      "flags": ["multilingual"]
     },
     { 
       "id": 7, 
@@ -61,7 +88,12 @@
       "department": "Imaging",
       "phone": "(212) 555-0107",
       "email": "jlee@wcinyp.org",
-      "location": "Spiral"
+      "location": "Spiral",
+      "npi": "1234567896",
+      "affiliation": "WCCC",
+      "flags": ["teaching", "research"],
+      "languages": ["English", "Korean"],
+      "notes": "Community outreach coordinator. Runs free screening clinics monthly."
     },
     { 
       "id": 8, 
@@ -70,7 +102,12 @@
       "department": "Neuroimaging",
       "phone": "(212) 555-0108",
       "email": "dbrown@wcinyp.org",
-      "location": "York Avenue"
+      "location": "York Avenue",
+      "npi": "1234567897",
+      "affiliation": "Private",
+      "flags": ["vip", "research"],
+      "availableToday": false,
+      "notes": "Consult required for complex cases. Published extensively on brain tumor imaging."
     }
   ]
 }

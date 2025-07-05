@@ -5,7 +5,6 @@ import { createLoadingPageTest } from '@/test/patterns'
 // Import all loading components
 import RootLoading from './loading'
 import DocumentsLoading from './documents/loading'
-import FormsLoading from './forms/loading'
 import ProvidersLoading from './providers/loading'
 import DirectoryLoading from './directory/loading'
 import KnowledgeLoading from './knowledge/loading'
@@ -14,7 +13,6 @@ describe('Loading Pages', () => {
   // Use pattern for basic loading test
   createLoadingPageTest(RootLoading, 'Root')
   createLoadingPageTest(DocumentsLoading, 'Documents')
-  createLoadingPageTest(FormsLoading, 'Forms')
   createLoadingPageTest(ProvidersLoading, 'Providers')
   createLoadingPageTest(DirectoryLoading, 'Directory')
   createLoadingPageTest(KnowledgeLoading, 'Knowledge')
@@ -64,7 +62,6 @@ describe('Loading Pages', () => {
     const loadingComponents = [
       { Component: RootLoading, name: 'Root' },
       { Component: DocumentsLoading, name: 'Documents' },
-      { Component: FormsLoading, name: 'Forms' },
       { Component: ProvidersLoading, name: 'Providers' },
       { Component: DirectoryLoading, name: 'Directory' },
       { Component: KnowledgeLoading, name: 'Knowledge' },
