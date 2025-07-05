@@ -1,0 +1,46 @@
+/* Navbar height adjustment for better logo display */
+.navbar {
+  --ifm-navbar-height: 70px; /* Slightly increased from default 60px */
+}
+
+.navbar__logo {
+  height: 50px; /* Reasonable logo size */
+  margin-right: 1rem;
+}
+
+.navbar__logo img {
+  height: 100%;
+  width: auto;
+}
+
+/* Space out navbar items */
+.navbar__items--left .navbar__item {
+  margin-right: 0.5rem;
+}
+
+.navbar__items--right .navbar__item {
+  margin-left: 1rem;
+}
+
+/* Add divider between right-side links */
+.navbar__items--right .navbar__item:not(:last-child)::after {
+  content: '|';
+  margin-left: 1rem;
+  color: var(--ifm-navbar-text-color);
+  opacity: 0.3;
+}
+
+/* Mobile adjustments */
+@media (max-width: 996px) {
+  .navbar {
+    --ifm-navbar-height: 60px; /* Standard height on mobile */
+  }
+  
+  .navbar__logo {
+    height: 40px;
+  }
+  
+  .navbar__items--right .navbar__item:not(:last-child)::after {
+    display: none;
+  }
+}

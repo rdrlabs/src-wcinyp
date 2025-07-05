@@ -1,0 +1,44 @@
+import { render, screen } from '@testing-library/react'
+import { describe, it, expect } from 'vitest'
+import Home from './page'
+
+describe.skip('Home Page', () => {
+  it('renders the dashboard title', () => {
+    render(<Home />)
+    expect(screen.getByText('WCINYP Dashboard')).toBeInTheDocument()
+  })
+
+  it('displays all feature cards', () => {
+    render(<Home />)
+    
+    // Check all features are present
+    expect(screen.getByText('Document Hub')).toBeInTheDocument()
+    expect(screen.getByText('Provider Directory')).toBeInTheDocument()
+    expect(screen.getByText('Form Generator')).toBeInTheDocument()
+    expect(screen.getByText('Directory')).toBeInTheDocument()
+    expect(screen.getByText('Knowledge Base')).toBeInTheDocument()
+  })
+
+  it('shows correct stats for each feature', () => {
+    render(<Home />)
+    
+    expect(screen.getByText('156 documents')).toBeInTheDocument()
+    expect(screen.getByText('42 providers')).toBeInTheDocument()
+    expect(screen.getByText('12 templates')).toBeInTheDocument()
+    expect(screen.getByText('150+ contacts')).toBeInTheDocument()
+    expect(screen.getByText('15+ articles')).toBeInTheDocument()
+  })
+
+  it('renders links to all sections', () => {
+    const { container } = render(<Home />)
+    
+    const links = container.querySelectorAll('a[href]')
+    const hrefs = Array.from(links).map(link => link.getAttribute('href'))
+    
+    expect(hrefs).toContain('/documents')
+    expect(hrefs).toContain('/providers')
+    expect(hrefs).toContain('/forms')
+    expect(hrefs).toContain('/directory')
+    expect(hrefs).toContain('/knowledge')
+  })
+})
