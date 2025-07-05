@@ -1,7 +1,15 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 import ProvidersPage from './page'
+
+// Mock the icon utilities
+vi.mock('@/lib/icons', () => ({
+  getSpecialtyIcon: () => () => null,
+  getLocationColor: () => 'bg-blue-50 text-blue-700',
+  getAffiliationInfo: () => ({ label: 'Columbia', color: 'bg-purple-50 text-purple-700' }),
+  getFlagInfo: () => ({ icon: () => null, color: 'text-blue-500', tooltip: 'Test flag' })
+}))
 
 describe('Providers Page', () => {
   beforeEach(() => {
@@ -13,20 +21,22 @@ describe('Providers Page', () => {
     expect(screen.getByText('Medical staff contact information and specialties')).toBeInTheDocument()
   })
 
-  it('displays all providers in table', () => {
+  it('displays all providers in cards', () => {
     expect(screen.getByText('Dr. Sarah Johnson')).toBeInTheDocument()
     expect(screen.getByText('Dr. Michael Chen')).toBeInTheDocument()
-    expect(screen.getByText('8 providers in directory')).toBeInTheDocument()
+    // Note: The UI no longer shows a count of providers
   })
 
   it('shows provider details', () => {
     // Check for Dr. Sarah Johnson's details
-    const row = screen.getByText('Dr. Sarah Johnson').closest('tr')
-    expect(row).toHaveTextContent('Radiology')
-    expect(row).toHaveTextContent('Imaging')
-    expect(row).toHaveTextContent('61st Street')
-    expect(row).toHaveTextContent('(212) 555-0101')
-    expect(row).toHaveTextContent('sjohnson@wcinyp.org')
+    expect(screen.getByText('Dr. Sarah Johnson')).toBeInTheDocument()
+    expect(screen.getByText('Radiology')).toBeInTheDocument()
+    // Multiple elements might have "Imaging" text, so use getAllByText
+    const imagingElements = screen.getAllByText('Imaging')
+    expect(imagingElements.length).toBeGreaterThan(0)
+    expect(screen.getByText('61st Street')).toBeInTheDocument()
+    expect(screen.getByText('(212) 555-0101')).toBeInTheDocument()
+    expect(screen.getByText('sjohnson@wcinyp.org')).toBeInTheDocument()
   })
 
   it('filters providers by search term', async () => {
@@ -41,9 +51,6 @@ describe('Providers Page', () => {
     
     // Should hide non-matching providers
     expect(screen.queryByText('Dr. Michael Chen')).not.toBeInTheDocument()
-    
-    // Update count
-    expect(screen.getByText('1 providers in directory')).toBeInTheDocument()
   })
 
   it('searches by specialty', async () => {

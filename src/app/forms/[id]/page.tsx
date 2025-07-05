@@ -16,6 +16,7 @@ export default async function FormBuilderPage({ params }: PageProps) {
   
   if (!templateData) {
     notFound();
+    return; // Early return to prevent TypeScript error
   }
   
   // Cast the template to match FormTemplate type

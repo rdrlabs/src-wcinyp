@@ -3,102 +3,63 @@ import { describe, it, expect, vi } from 'vitest'
 import KnowledgePage from './page'
 import { axe } from 'jest-axe'
 
-// Mock Next.js Link
-vi.mock('next/link', () => ({
-  default: ({ children, href }: { children: React.ReactNode; href: string }) => 
-    <a href={href}>{children}</a>
+// Mock fumadocs-ui components
+vi.mock('fumadocs-ui/page', () => ({
+  DocsPage: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  DocsBody: ({ children }: { children: React.ReactNode }) => <div>{children}</div>
+}))
+
+vi.mock('fumadocs-ui/components/callout', () => ({
+  Callout: ({ children, type, className }: { children: React.ReactNode; type: string; className?: string }) => 
+    <div className={className} data-type={type}>{children}</div>
 }))
 
 describe('Knowledge Page', () => {
   it('renders page title and description', () => {
     render(<KnowledgePage />)
     
-    expect(screen.getByText('Knowledge Base')).toBeInTheDocument()
-    expect(screen.getByText('Documentation, guides, and resources for WCINYP')).toBeInTheDocument()
+    expect(screen.getByText('WCINYP Knowledge Base')).toBeInTheDocument()
+    expect(screen.getByText('Documentation and guides for the WCINYP platform')).toBeInTheDocument()
   })
 
-  it('displays documentation section', () => {
+  it('displays coming soon message', () => {
     render(<KnowledgePage />)
     
-    expect(screen.getByText('Documentation')).toBeInTheDocument()
-    
-    // Check getting started docs
-    expect(screen.getByText('Introduction to WCINYP')).toBeInTheDocument()
-    expect(screen.getByText('Quick Start Guide')).toBeInTheDocument()
-    expect(screen.getByText('System Requirements')).toBeInTheDocument()
+    expect(screen.getByText(/The knowledge base is currently being updated/)).toBeInTheDocument()
   })
 
-  it('displays quick access sections', () => {
+  it('displays coming soon section with features list', () => {
     render(<KnowledgePage />)
     
-    expect(screen.getByText('Quick Access')).toBeInTheDocument()
+    expect(screen.getByText('Coming Soon')).toBeInTheDocument()
+    expect(screen.getByText(/We're working on creating comprehensive documentation/)).toBeInTheDocument()
     
-    // Check categories
-    expect(screen.getByText('Document Management')).toBeInTheDocument()
-    expect(screen.getByText('Provider & Contact Management')).toBeInTheDocument()
+    // Check feature list items
+    expect(screen.getByText(/Getting started guides/)).toBeInTheDocument()
+    expect(screen.getByText(/Feature documentation/)).toBeInTheDocument()
+    expect(screen.getByText(/API references/)).toBeInTheDocument()
+    expect(screen.getByText(/Video tutorials/)).toBeInTheDocument()
+    expect(screen.getByText(/Best practices/)).toBeInTheDocument()
+    expect(screen.getByText(/Troubleshooting guides/)).toBeInTheDocument()
   })
 
-  it('links to correct documentation pages', () => {
+  it('displays need help section with contact info', () => {
     render(<KnowledgePage />)
     
-    // Test the actual URLs used in the page
-    const introLink = screen.getByRole('link', { name: /Introduction to WCINYP/i })
-    expect(introLink).toHaveAttribute('href', '/docs/getting-started/introduction')
+    expect(screen.getByText('Need Help Now?')).toBeInTheDocument()
+    expect(screen.getByText('While we build out the knowledge base, you can:')).toBeInTheDocument()
     
-    const quickstartLink = screen.getByRole('link', { name: /Quick Start Guide/i })
-    expect(quickstartLink).toHaveAttribute('href', '/docs/getting-started/quickstart')
-    
-    const requirementsLink = screen.getByRole('link', { name: /System Requirements/i })
-    expect(requirementsLink).toHaveAttribute('href', '/docs/getting-started/requirements')
+    // Check contact options
+    expect(screen.getByText('support@wcinyp.org')).toBeInTheDocument()
+    expect(screen.getByText('(212) 555-0100')).toBeInTheDocument()
+    expect(screen.getByText(/Use the in-app help tooltips/)).toBeInTheDocument()
+    expect(screen.getByText(/Schedule a training session/)).toBeInTheDocument()
   })
 
-  it('links to feature pages', () => {
+  it('displays urgent issues warning', () => {
     render(<KnowledgePage />)
     
-    // Document management links
-    expect(screen.getByRole('link', { name: /Browse Documents Access all documents/i }))
-      .toHaveAttribute('href', '/documents')
-    
-    expect(screen.getByRole('link', { name: /Form Templates View available forms/i }))
-      .toHaveAttribute('href', '/documents?tab=forms')
-    
-    expect(screen.getByRole('link', { name: /Form Builder Create custom forms/i }))
-      .toHaveAttribute('href', '/documents?tab=builder')
-    
-    // Provider management links
-    expect(screen.getByRole('link', { name: /Provider Directory View all providers/i }))
-      .toHaveAttribute('href', '/providers')
-    
-    expect(screen.getByRole('link', { name: /Contact Directory Complete contact list/i }))
-      .toHaveAttribute('href', '/directory')
-  })
-
-  it('displays help cards', () => {
-    render(<KnowledgePage />)
-    
-    // Need Help card
-    expect(screen.getByText('Need Help?')).toBeInTheDocument()
-    expect(screen.getByText("Can't find what you're looking for?")).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Contact Support' }))
-      .toHaveAttribute('href', '/directory')
-    
-    // Video Tutorials card
-    expect(screen.getByText('Video Tutorials')).toBeInTheDocument()
-    expect(screen.getByText('Coming soon: Video guides')).toBeInTheDocument()
-    
-    // API Documentation card
-    expect(screen.getByText('API Documentation')).toBeInTheDocument()
-    expect(screen.getByText('Developer guides coming soon')).toBeInTheDocument()
-  })
-
-  it('disables coming soon buttons', () => {
-    render(<KnowledgePage />)
-    
-    const watchVideosBtn = screen.getByRole('button', { name: 'Watch Videos' })
-    expect(watchVideosBtn).toBeDisabled()
-    
-    const apiDocsBtn = screen.getByRole('button', { name: 'View API Docs' })
-    expect(apiDocsBtn).toBeDisabled()
+    expect(screen.getByText(/For urgent technical issues/)).toBeInTheDocument()
   })
 
   it('has no accessibility violations', async () => {

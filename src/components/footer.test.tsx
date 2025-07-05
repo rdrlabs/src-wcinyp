@@ -78,9 +78,10 @@ describe('Footer', () => {
     expect(screen.getByText(/© 2025 Weill Cornell Imaging at NewYork-Presbyterian/)).toBeInTheDocument()
     expect(screen.getByText(/WCI@NYP is a collaboration between/)).toBeInTheDocument()
     
-    // Check for partner links
-    const wcmLink = screen.getByRole('link', { name: 'Weill Cornell Medicine' })
-    expect(wcmLink).toHaveAttribute('href', 'https://weillcornell.org')
+    // Check for partner links - there are multiple links with same text, so use getAllByRole
+    const wcmLinks = screen.getAllByRole('link', { name: 'Weill Cornell Medicine' })
+    expect(wcmLinks.length).toBeGreaterThan(0)
+    expect(wcmLinks[0]).toHaveAttribute('href', 'https://weillcornell.org')
     
     const nypLink = screen.getByRole('link', { name: 'NewYork-Presbyterian Hospital' })
     expect(nypLink).toHaveAttribute('href', 'https://nyp.org')
