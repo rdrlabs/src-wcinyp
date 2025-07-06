@@ -19,7 +19,6 @@ describe('Footer', () => {
     expect(quickLinksSection).toHaveTextContent('Knowledge Base')
     expect(quickLinksSection).toHaveTextContent('Directory')
     expect(quickLinksSection).toHaveTextContent('Documents & Forms')
-    expect(quickLinksSection).toHaveTextContent('Providers')
   })
 
   it('renders contact information', () => {
@@ -94,7 +93,7 @@ describe('Footer', () => {
     
     // Check that icons are rendered (they'll be svg elements)
     const svgIcons = quickLinksSection?.querySelectorAll('svg')
-    expect(svgIcons?.length).toBe(4) // 4 navigation items
+    expect(svgIcons?.length).toBe(4) // 4 navigation items (Knowledge Base, Documents, Updates, Directory)
   })
 
   it('renders correct styling classes', () => {

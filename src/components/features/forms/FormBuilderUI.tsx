@@ -63,9 +63,7 @@ export function FormBuilderUI() {
   };
 
   const saveForm = () => {
-    // TODO: Implement save to Netlify Function or database
-    // Would save: { name: formName, description: formDescription, fields, createdAt }
-    // In production, save to Netlify Function or GitHub
+    // In production, this would save to Netlify Function or GitHub
     toast.success('Form template saved!', {
       description: 'Your form has been saved successfully.'
     });

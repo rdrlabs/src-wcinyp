@@ -24,51 +24,53 @@ describe('Home Page', () => {
     render(<Home />)
     
     // Check all feature cards are present
-    expect(screen.getByText('Document Hub')).toBeInTheDocument()
-    expect(screen.getByText('Provider Directory')).toBeInTheDocument()
-    expect(screen.getByText('Directory')).toBeInTheDocument()
     expect(screen.getByText('Knowledge Base')).toBeInTheDocument()
+    expect(screen.getByText('Document Hub')).toBeInTheDocument()
+    expect(screen.getByText('Updates')).toBeInTheDocument()
+    expect(screen.getByText('Directory')).toBeInTheDocument()
   })
 
-  it('displays correct statistics for each feature', () => {
+  it('does not display statistics', () => {
     render(<Home />)
     
-    expect(screen.getByText('156 documents')).toBeInTheDocument()
-    expect(screen.getByText('42 providers')).toBeInTheDocument()
-    expect(screen.getByText('150+ contacts')).toBeInTheDocument()
-    expect(screen.getByText('15+ articles')).toBeInTheDocument()
+    // Statistics have been removed
+    expect(screen.queryByText(/\d+ documents/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/\d+ providers/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/\d+\+ contacts/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/\d+\+ articles/)).not.toBeInTheDocument()
   })
 
   it('displays feature descriptions', () => {
     render(<Home />)
     
-    expect(screen.getByText('Manage patient forms and medical documents')).toBeInTheDocument()
-    expect(screen.getByText('Search and manage medical staff information')).toBeInTheDocument()
-    expect(screen.getByText('Comprehensive contact database')).toBeInTheDocument()
-    expect(screen.getByText('Documentation and guides')).toBeInTheDocument()
+    expect(screen.getByText('Technical documentation, user guides, and best practices for staff reference and training materials')).toBeInTheDocument()
+    expect(screen.getByText('Centralized repository for patient forms, medical documents, and administrative paperwork with version control')).toBeInTheDocument()
+    expect(screen.getByText('Latest news, operational updates, departmental communications, and important announcements from leadership')).toBeInTheDocument()
+    expect(screen.getByText('Complete contact database for internal staff, external partners, facilities, vendors, and referring providers')).toBeInTheDocument()
   })
 
   it('links to correct pages', () => {
     render(<Home />)
     
+    const knowledgeLink = screen.getByRole('link', { name: /Knowledge Base/i })
+    expect(knowledgeLink).toHaveAttribute('href', '/knowledge')
+    
     const documentLink = screen.getByRole('link', { name: /Document Hub/i })
     expect(documentLink).toHaveAttribute('href', '/documents')
     
-    const providerLink = screen.getByRole('link', { name: /Provider Directory/i })
-    expect(providerLink).toHaveAttribute('href', '/providers')
+    const updatesLink = screen.getByRole('link', { name: /Updates/i })
+    expect(updatesLink).toHaveAttribute('href', '/updates')
     
-    const directoryLink = screen.getByRole('link', { name: /Directory Comprehensive/i })
+    const directoryLink = screen.getByRole('link', { name: /Directory/i })
     expect(directoryLink).toHaveAttribute('href', '/directory')
-    
-    const knowledgeLink = screen.getByRole('link', { name: /Knowledge Base/i })
-    expect(knowledgeLink).toHaveAttribute('href', '/knowledge')
   })
 
   it('has responsive grid layout', () => {
     const { container } = render(<Home />)
     
     const grid = container.querySelector('.grid')
-    expect(grid).toHaveClass('md:grid-cols-2', 'lg:grid-cols-3')
+    expect(grid).toHaveClass('md:grid-cols-2')
+    expect(grid).not.toHaveClass('lg:grid-cols-3')
   })
 
   it('has no accessibility violations', async () => {

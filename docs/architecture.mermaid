@@ -1,0 +1,47 @@
+graph TB
+    subgraph "Frontend - Next.js 14 App"
+        A[Next.js App Router] --> B[Client Components]
+        B --> C[Pages]
+        B --> D[UI Components]
+        
+        C --> E[Knowledge Base<br/>Fumadocs]
+        C --> F[Documents & Forms]
+        C --> G[Provider Directory]
+        C --> H[Contact Directory]
+        C --> I[Wiki]
+        
+        D --> J[shadcn/ui]
+        D --> K[Custom Components]
+    end
+    
+    subgraph "Data Layer"
+        L[JSON Files] --> M[documents.json]
+        L --> N[providers.json]
+        L --> O[contacts.json]
+        L --> P[forms.json]
+    end
+    
+    subgraph "Documentation"
+        Q[MDX Content] --> R[Fumadocs Docs]
+        Q --> S[Wiki Content]
+    end
+    
+    subgraph "External Services"
+        T[Netlify Functions] --> U[Form Submissions]
+        T --> V[API Endpoints]
+    end
+    
+    subgraph "Task Management"
+        W[Claude Task Master] --> X[Task Tracking]
+        W --> Y[PRD Parsing]
+        W --> Z[Progress Monitoring]
+    end
+    
+    C --> L
+    E --> R
+    I --> S
+    F --> T
+    
+    style A fill:#2563eb,stroke:#1e40af,color:#fff
+    style E fill:#10b981,stroke:#059669,color:#fff
+    style W fill:#8b5cf6,stroke:#7c3aed,color:#fff

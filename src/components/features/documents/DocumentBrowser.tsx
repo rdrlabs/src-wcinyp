@@ -3,23 +3,19 @@
 import { useState, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { FileText, Download, Search } from 'lucide-react';
 import documentsData from '@/data/documents.json';
+import type { Document } from '@/types';
 
 // Type assertion to match our interface
-const typedDocumentsData = documentsData as DocumentsData;
-
-interface Document {
-  name: string;
-  size: string;
-  path: string;
-}
-
 interface DocumentsData {
   categories: {
     [key: string]: Document[];
   };
 }
+
+const typedDocumentsData = documentsData as DocumentsData;
 
 export function DocumentBrowser() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -57,9 +53,7 @@ export function DocumentBrowser() {
     return categoryEntries;
   }, [selectedCategory, searchQuery]);
 
-  const handleDownload = (path: string, _name: string) => {
-    // Track download analytics if needed
-    // TODO: Implement proper analytics tracking
+  const handleDownload = (path: string) => {
     // Construct the full URL for the document
     const url = `/documents/${path}`;
     window.open(url, '_blank');
@@ -71,12 +65,12 @@ export function DocumentBrowser() {
       <div className="flex flex-col md:flex-row gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <input
+          <Input
             type="text"
             placeholder="Search documents..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 pr-4 py-2 w-full border rounded-lg"
+            className="pl-10"
             data-testid="document-search-input"
           />
         </div>
@@ -117,7 +111,7 @@ export function DocumentBrowser() {
                       size="sm"
                       variant="outline"
                       className="w-full"
-                      onClick={() => handleDownload(doc.path, doc.name)}
+                      onClick={() => handleDownload(doc.path)}
                       data-testid={`download-button-${doc.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
                     >
                       <Download className="h-4 w-4 mr-2" />

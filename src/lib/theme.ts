@@ -94,12 +94,3 @@ export function getStatusColor(status: 'active' | 'draft' | 'archived' | 'succes
   return statusMap[status] || themeColors.category.gray
 }
 
-/**
- * Theme-aware hover effect for navigation
- */
-export const navigationHoverEffect = 'hover:text-foreground hover:drop-shadow-[0_0_8px_var(--primary)]'
-
-/**
- * Theme-aware card hover effect
- */
-export const cardHoverEffect = 'hover:shadow-lg hover:border-primary/20 transition-all duration-200'

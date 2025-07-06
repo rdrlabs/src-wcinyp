@@ -1,31 +1,27 @@
 import Link from "next/link";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Home() {
   const features = [
     {
-      title: "Document Hub",
-      description: "Manage patient forms and medical documents",
-      href: "/documents",
-      stats: "156 documents",
+      title: "Knowledge Base",
+      description: "Technical documentation, user guides, and best practices for staff reference and training materials",
+      href: "/knowledge",
     },
     {
-      title: "Provider Directory", 
-      description: "Search and manage medical staff information",
-      href: "/providers",
-      stats: "42 providers",
+      title: "Document Hub",
+      description: "Centralized repository for patient forms, medical documents, and administrative paperwork with version control",
+      href: "/documents",
+    },
+    {
+      title: "Updates",
+      description: "Latest news, operational updates, departmental communications, and important announcements from leadership",
+      href: "/updates",
     },
     {
       title: "Directory",
-      description: "Comprehensive contact database",
+      description: "Complete contact database for internal staff, external partners, facilities, vendors, and referring providers",
       href: "/directory",
-      stats: "150+ contacts",
-    },
-    {
-      title: "Knowledge Base",
-      description: "Documentation and guides",
-      href: "/knowledge",
-      stats: "15+ articles",
     },
   ];
 
@@ -38,17 +34,16 @@ export default function Home() {
         </p>
       </div>
       
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2">
         {features.map((feature) => (
           <Link key={feature.href} href={feature.href} className="no-underline">
-            <Card className="h-full transition-colors hover:bg-accent">
-              <CardHeader>
-                <CardTitle>{feature.title}</CardTitle>
-                <CardDescription>{feature.description}</CardDescription>
+            <Card className="h-full transition-colors hover:bg-accent hover:shadow-md">
+              <CardHeader className="pb-6">
+                <CardTitle className="text-xl">{feature.title}</CardTitle>
+                <CardDescription className="text-sm leading-relaxed mt-2">
+                  {feature.description}
+                </CardDescription>
               </CardHeader>
-              <CardContent>
-                <p className="text-2xl font-semibold">{feature.stats}</p>
-              </CardContent>
             </Card>
           </Link>
         ))}

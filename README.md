@@ -1,5 +1,7 @@
 # WCINYP - Weill Cornell Imaging at NewYork-Presbyterian
 
+**Developer Master Reference** - This README serves as the single source of truth for project status, architecture, and development progress.
+
 A modern Next.js 14 application for medical imaging administration, featuring document management, provider directories, and automated form generation.
 
 ## Features
@@ -594,137 +596,241 @@ User-facing documentation is available at:
   - ESLint passing with no warnings
   - Successful production build
 
-## Development Roadmap (Updated Jan 2025)
+## Development Roadmap
 
-### Phase 2: Backend Infrastructure & Authentication (Next Priority)
-- [ ] **Authentication System**:
-  - [ ] CWID integration with Cornell SSO
-  - [ ] Role-based access control (admin, staff, provider)
-  - [ ] Session management with JWT tokens
-  - [ ] Protected routes and API endpoints
+### Phase 2: Core Backend Infrastructure (Current Priority)
+
+#### Essential Features
+- [ ] **Form Submission Backend**:
+  - [ ] Create Netlify Function to handle form submissions
+  - [ ] Add server-side validation
+  - [ ] Store submissions (database or email)
+  - [ ] Return confirmation to frontend
   
-- [ ] **Netlify Functions Setup**:
-  - [ ] Form submission handler with validation
-  - [ ] Document download tracking API
-  - [ ] Provider availability checker
-  - [ ] Feedback submission endpoint
+- [ ] **Basic Authentication**:
+  - [ ] Simple login/logout functionality
+  - [ ] JWT session management
+  - [ ] Protected routes
+  - [ ] Consider CWID integration later
   
-- [ ] **Data Persistence**:
-  - [ ] PostgreSQL/Supabase integration
+- [ ] **Data Storage**:
+  - [ ] Evaluate: Email notifications vs database
+  - [ ] If database: PostgreSQL or Supabase setup
   - [ ] Form submission storage
-  - [ ] User preferences and saved searches
-  - [ ] Audit logging for compliance
+  - [ ] Basic audit logging
 
-### Phase 3: Enhanced User Experience (Q2 2025)
-- [ ] **Real-time Features**:
-  - [ ] Provider availability updates via WebSocket
-  - [ ] Live form collaboration for teams
-  - [ ] Notification system (in-app + email)
-  - [ ] Activity feed for recent changes
-  
-- [ ] **Knowledge Sharing Features**:
-  - [ ] "Suggest Edit" button on documentation pages
-  - [ ] Simple submission form for corrections and tips
-  - [ ] File attachment support for screenshots
-  - [ ] Basic review workflow for submissions
-  - [ ] Email notifications for status updates
-  
-- [ ] **Advanced Search & Filtering**:
-  - [ ] Full-text search across all content
-  - [ ] Smart filters with saved presets
-  - [ ] Search history and suggestions
-  - [ ] Bulk operations support
-  
-- [ ] **Performance Optimizations**:
-  - [ ] Implement React Query for data fetching
-  - [ ] Add service worker for offline support
-  - [ ] Image optimization with Next.js Image
-  - [ ] Lazy loading for heavy components
+### Phase 3: UI Refinement (Next Priority)
+- [ ] Implement strict design system (see [Design Guidelines](docs/DESIGN-GUIDELINES.md))
+- [ ] Streamline features based on actual usage
+- [ ] Improve performance and accessibility
 
-### Phase 4: Healthcare System Integration (Q3 2025)
-- [ ] **Epic EMR Integration**:
-  - [ ] Patient data sync (with PHI compliance)
-  - [ ] Appointment scheduling API
-  - [ ] Provider schedule import
-  - [ ] Insurance verification
-  
-- [ ] **Workflow Automation**:
-  - [ ] Self-pay form auto-generation
-  - [ ] Document routing based on type
-  - [ ] Automated reminders and follow-ups
-  - [ ] Batch printing with queue management
-  
-- [ ] **Compliance & Security**:
-  - [ ] HIPAA compliance audit
-  - [ ] End-to-end encryption for PHI
-  - [ ] Access control matrix
-  - [ ] Audit trail for all actions
+### Future Considerations
+More ambitious features have been documented in [Future Ideas](docs/FUTURE-IDEAS.md) for potential later phases.
 
-### Phase 5: Analytics & Intelligence (Q4 2025)
-- [ ] **Analytics Dashboard**:
-  - [ ] Usage metrics and trends
-  - [ ] Form completion rates
-  - [ ] Provider utilization reports
-  - [ ] Document access patterns
-  
-- [ ] **Machine Learning Features**:
-  - [ ] Smart form field predictions
-  - [ ] Document classification
-  - [ ] Anomaly detection for security
-  - [ ] Predictive search suggestions
-  
-- [ ] **Business Intelligence**:
-  - [ ] ROI measurement tools
-  - [ ] Cost savings calculator
-  - [ ] Efficiency metrics
-  - [ ] Custom report builder
+## Claude Task Master Integration
 
-### Technical Debt Reduction (Ongoing)
-Based on Phase 1 learnings:
-- [ ] Migrate from client-only to hybrid rendering where possible
-- [ ] Implement proper state management (Zustand/Jotai)
-- [ ] Add E2E tests with Playwright
-- [ ] Create Storybook for component documentation
-- [ ] Implement feature flags for gradual rollouts
-- [ ] Add comprehensive logging and monitoring
+### Overview
+Claude Task Master is an AI-powered task management system designed to work seamlessly with Claude in development environments like Cursor, providing persistent task tracking and intelligent task breakdown capabilities.
 
-## Knowledge Sharing System
+### Installation & Configuration
 
-### Purpose
-Enable staff to contribute practical knowledge and corrections to improve documentation accuracy while maintaining single source of truth principles.
+#### 1. Local Installation (Recommended)
+```bash
+npm install --save-dev task-master-ai
+```
 
-### Core Features
+#### 2. Initialize Project
+```bash
+npx task-master init
+# Answer prompts:
+# - Shell aliases: Y (allows using 'tm' instead of 'task-master')
+# - Git repository: N (already exists)
+```
 
-#### 1. Simple Contribution Options
-- **"Suggest Edit"** button on documentation pages
-- **"Report Issue"** for incorrect information
-- **"Add Example"** for real-world use cases
-- **File attachments** for screenshots or supporting documents
+#### 3. Configure Models for Claude Code (No API Key Required)
+```bash
+npx task-master models --set-main opus --claude-code
+npx task-master models --set-research sonnet --claude-code
+npx task-master models --set-fallback sonnet --claude-code
+```
 
-#### 2. Practical Contributions
-- Corrections to outdated procedures
-- Tips for common problems
-- Links to relevant Epic/NYP resources
-- Department-specific workflow examples
+#### 4. Project Structure Created
+```
+src-wcinyp/
+├── .taskmaster/             # Task Master project directory
+│   ├── config.json         # Model configuration
+│   ├── tasks/
+│   │   └── tasks.json     # Task storage (tag-based)
+│   └── docs/
+│       └── prd.txt        # Product Requirements Document
+├── .env                    # API keys (optional with Claude Code)
+├── .cursorrules           # AI behavior rules
+├── tasks/                 # Manual task management fallback
+│   ├── tasks.md          # Human-readable task list
+│   └── templates/        # Task templates
+└── docs/                  # Project documentation
+    ├── architecture.mermaid
+    ├── technical.md
+    └── progress.md
+```
 
-#### 3. Architecture & Quality
-- **Version Control**: Track all changes with attribution (who, what, when)
-- **Authority Levels**: Clear distinction between Official docs and Community contributions
-- **Quality Checks**: Automated duplicate detection and broken link scanning
-- **Simple Review**: Submissions reviewed by appropriate department/IT staff
+### Key Features Implemented
 
-#### 4. Review Process
-- Submissions go to department supervisors
-- IT reviews technical changes
-- Approved changes integrated with version tracking
-- Contributors notified of status
+#### 1. **Persistent Task Management**
+- Tasks stored in `tasks/tasks.md` survive between Claude sessions
+- Completed tasks archived in `tasks/completed/`
+- Clear task states: pending, in-progress, completed, blocked
 
-### Implementation Phases
-1. **Phase 1**: Basic contribution form and storage
-2. **Phase 2**: Review workflow and notifications
-3. **Phase 3**: Version tracking and search integration
+#### 2. **AI-Enhanced Development**
+- `.cursorrules` file guides AI behavior with project-specific rules
+- Required file reads on startup for context
+- Automated validation requirements before task completion
 
-This approach maintains documentation integrity while enabling practical improvements from staff experience.
+#### 3. **Task Templates**
+- `feature.md` - Comprehensive feature development checklist
+- `bug-fix.md` - Structured bug fix workflow
+- Templates ensure consistent development practices
+
+#### 4. **Project Documentation**
+- `architecture.mermaid` - Visual system architecture
+- `technical.md` - Technical specifications and patterns
+- `progress.md` - Development progress tracking
+
+### Usage Examples
+
+#### Task Management Commands
+```bash
+# List all tasks
+npx task-master list
+
+# Show next task to work on
+npx task-master next
+
+# Show specific task details
+npx task-master show 1
+
+# Update task status
+npx task-master set-status --id=1 --status=in-progress
+
+# Add a new task with AI
+npx task-master add-task --prompt="Create API endpoint for user registration"
+```
+
+#### Task Organization
+```bash
+# Create a new tag for feature branch
+npx task-master add-tag feat/backend-auth "Backend authentication feature"
+
+# Switch to different tag context
+npx task-master use-tag feat/backend-auth
+
+# List all tags
+npx task-master tags
+```
+
+#### Advanced Features
+```bash
+# Parse PRD to generate tasks
+npx task-master parse-prd --input=.taskmaster/docs/prd.txt
+
+# Expand task into subtasks
+npx task-master expand --id=1 --num=5
+
+# Research with project context
+npx task-master research "Best practices for Netlify Functions with TypeScript"
+
+# Sync tasks to README
+npx task-master sync-readme
+```
+
+### Benefits
+
+1. **Continuity**: Tasks persist across Claude sessions
+2. **Context Awareness**: AI understands project structure and conventions
+3. **Quality Assurance**: Built-in validation requirements
+4. **Organized Workflow**: Templates and consistent practices
+5. **Progress Visibility**: Clear tracking of development status
+
+### Notes
+
+- Task Master stores all data locally in your project
+- No cross-project contamination
+- Works with git branches via tagged contexts
+- Integrates with MCP for editor support
+
+### ✅ Current Status
+
+Task Master v0.19.0 is successfully installed and configured:
+- **Local installation** in project (not global)
+- **Claude Code mode** configured (no API key required)
+- **Models configured**: Opus for main, Sonnet for research/fallback
+- **Project initialized** with `.taskmaster/` directory structure
+
+### Known Issues & Workarounds
+
+1. **Claude Code Integration**: The `parse-prd` command fails with Claude Code API errors. This appears to be a limitation of the Claude Code CLI integration.
+
+2. **Task Display**: The `list` command shows empty results even with tasks in the file. This is due to the tag-based structure expecting tasks under the current tag.
+
+3. **Manual Task Creation**: Since AI task generation has issues with Claude Code, manually create tasks in `.taskmaster/tasks/tasks.json` following the structure shown in examples.
+
+### MCP Server Integration (Alternative Approach)
+
+Instead of using the CLI directly, you can configure Task Master as an MCP (Model Context Protocol) server for better integration with Claude Desktop and IDE environments.
+
+#### Claude Desktop Configuration
+Create or update `~/Library/Application Support/Claude/claude_desktop_config.json`:
+```json
+{
+  "mcpServers": {
+    "taskmaster-ai": {
+      "command": "npx",
+      "args": ["-y", "--package=task-master-ai", "task-master-ai"],
+      "env": {},
+      "type": "stdio"
+    }
+  }
+}
+```
+
+#### VS Code Configuration
+Create `.vscode/mcp.json` in your project:
+```json
+{
+  "taskmaster-ai": {
+    "command": "npx",
+    "args": ["-y", "--package=task-master-ai", "task-master-ai"],
+    "type": "stdio"
+  }
+}
+```
+
+#### Cursor IDE Configuration
+Create `.cursor/mcp.json` in your project:
+```json
+{
+  "mcpServers": {
+    "taskmaster-ai": {
+      "command": "npx",
+      "args": ["-y", "--package=task-master-ai", "task-master-ai"],
+      "env": {},
+      "type": "stdio"
+    }
+  }
+}
+```
+
+**Note**: After creating these configurations, restart your IDE or Claude Desktop to activate the MCP server connection.
+
+### Hybrid Approach
+
+Use Task Master for structure and persistence, with manual task management:
+1. **Task Storage**: Use `.taskmaster/tasks/tasks.json` for machine-readable tasks
+2. **Human Reference**: Maintain `tasks/tasks.md` for quick viewing
+3. **Templates**: Use `tasks/templates/` for consistent task creation
+4. **Documentation**: Keep PRD in `.taskmaster/docs/prd.txt` for context
+
+
 
 ## Deployment
 

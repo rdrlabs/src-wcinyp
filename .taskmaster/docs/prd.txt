@@ -1,0 +1,92 @@
+# WCINYP - Weill Cornell Imaging at NewYork-Presbyterian
+
+## Product Requirements Document
+
+### Overview
+WCINYP is a modern web application for medical imaging administration, built with Next.js 14, TypeScript, and Tailwind CSS. The application serves as a comprehensive platform for document management, provider directories, form generation, and contact management.
+
+### Core Features
+
+1. **Document Management**
+   - Browse and download 156+ medical forms
+   - Category-based organization
+   - Search functionality
+   - PDF document serving
+
+2. **Provider Directory**
+   - Provider profiles with essential information
+   - NPI numbers and contact details
+   - Basic filtering by specialty/location
+   - Clean, scannable layout
+
+3. **Form Templates**
+   - Pre-built form templates
+   - Client-side form filling
+   - Backend submission handler (Phase 2)
+   - Basic validation
+
+4. **Contact Directory**
+   - Staff and department contacts
+   - Search and filter capabilities
+   - Export functionality
+
+5. **Knowledge Base**
+   - Fumadocs-powered technical documentation
+   - MDX content support
+   - Searchable documentation
+
+### Technical Requirements
+
+- Static site generation for Netlify deployment
+- Client-side rendering only (no server components)
+- Dark mode support throughout
+- Mobile responsive design
+- Accessibility compliance (WCAG 2.1 AA)
+- Test-driven development approach
+
+### Development Phases
+
+#### Phase 1: UI/UX Foundation (COMPLETED)
+- Basic navigation and layout
+- Document browsing and search
+- Provider directory
+- Form templates
+- Dark mode support
+
+#### Phase 2: Core Backend & UI Refinement (CURRENT)
+
+##### Backend Priorities
+- Simple form submission handler (Netlify Function)
+- Basic authentication (start simple, CWID later if needed)
+- Data storage decision (email vs database)
+- Form validation and error handling
+
+##### UI Refinement Priorities
+- Remove unnecessary features (wiki, command palette, etc.)
+- Implement strict design system (4 fonts, 2 weights, 8pt grid)
+- Simplify provider cards (remove ratings, excess badges)
+- Clean navbar design (Next.js style)
+- Apply 60/30/10 color rule
+
+#### Phase 3: Production Readiness
+- Security improvements
+- Performance optimization
+- Comprehensive testing
+- Documentation updates
+
+### Immediate Development Tasks
+
+1. Create Netlify Function for form submission
+2. Add form validation on backend
+3. Decide on data storage approach (email notifications vs database)
+4. Implement basic authentication (if needed)
+5. Remove wiki system and simplify UI
+6. Apply design system guidelines
+
+### Quality Standards
+
+- Minimum 80% test coverage
+- All components must pass accessibility audits
+- Code must pass TypeScript strict mode
+- Follow established UI patterns (shadcn/ui)
+- Comprehensive documentation required

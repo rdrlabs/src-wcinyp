@@ -1,0 +1,137 @@
+# WCINYP AI Development Rules
+
+## System Context
+You are developing a medical imaging center application with Next.js 14, TypeScript, and Tailwind CSS.
+
+## Required File Reads on Startup
+- /CLAUDE.md: Project instructions and conventions
+- /docs/architecture.mermaid: System architecture diagram
+- /docs/technical.md: Technical specifications and patterns  
+- /tasks/tasks.md: Current development tasks
+- /.task-master/rules.md: Task management rules
+
+## Code Standards
+
+### Component Development
+- ALWAYS use 'use client' directive (Netlify static hosting requirement)
+- Follow shadcn/ui component patterns
+- Use TypeScript strictly - no 'any' types
+- Implement proper loading and error states
+- Consider accessibility (WCAG 2.1 AA)
+
+### Testing Requirements
+- Write tests FIRST (TDD approach)
+- Test user behavior, not implementation
+- Minimum 80% coverage for new code
+- Use test utilities from src/test/utils.tsx
+- Mock Fumadocs components when testing
+
+### Development Patterns
+```typescript
+// Standard component pattern
+'use client'
+
+import { ComponentProps } from '@/types'
+
+export function Component({ prop }: ComponentProps) {
+  // Implementation
+}
+```
+
+### File Organization
+- Components: src/components/[feature]/[component].tsx
+- Tests: Colocated with components
+- Types: src/types/[domain].ts
+- Constants: src/lib/constants/[category].ts
+
+## Task Workflow
+
+1. **Starting a Task**
+   - Read task requirements from tasks/tasks.md
+   - Check related code and documentation
+   - Plan approach before coding
+
+2. **Implementation**
+   - Write failing tests first
+   - Implement minimal code to pass tests
+   - Refactor for clarity and performance
+   - Add proper TypeScript types
+
+3. **Validation** (REQUIRED before completion)
+   ```bash
+   npm run lint
+   npm run type-check  
+   npm test -- --run
+   ```
+
+4. **Documentation**
+   - Update CLAUDE.md if patterns change
+   - Update technical.md for architecture changes
+   - Add JSDoc comments for complex functions
+   - Update README.md as master project reference (dev-facing)
+
+## Special Considerations
+
+### Netlify Deployment
+- Static export only - no server components
+- Use Netlify Functions for backend operations
+- All data from JSON files in src/data/
+
+### Fumadocs Integration
+- Knowledge base at /knowledge uses isolated styling
+- RootProvider only in knowledge layout
+- Don't modify Fumadocs theme system
+
+### Dark Mode
+- Use theme-aware Tailwind classes
+- Test all UI in both light and dark modes
+- Follow existing theme patterns
+
+### Performance
+- Lazy load heavy components
+- Use Next.js Image for optimization
+- Implement skeleton loaders
+- Minimize bundle size
+
+## Git Workflow
+- Create feature branches: feat/[feature-name]
+- Use conventional commits: feat:, fix:, docs:, test:
+- Reference Task Master task IDs in commits
+- Create descriptive PRs
+
+## Common Commands
+```bash
+# Development
+npm run dev
+
+# Testing
+npm test -- --watch  # Development
+npm test -- --run    # CI/Claude Code
+
+# Quality Checks
+npm run lint
+npm run type-check
+npm run format
+
+# Build
+npm run build
+```
+
+## Error Handling
+- Use toast notifications, not browser alerts
+- Implement proper error boundaries
+- Log errors appropriately
+- Provide user-friendly error messages
+
+## Security
+- Sanitize all user inputs
+- No sensitive data in code or logs
+- Use environment variables for secrets
+- Follow OWASP guidelines
+
+## Remember
+- This is a medical application - accuracy and reliability are critical
+- Follow existing patterns in the codebase
+- When in doubt, check CLAUDE.md
+- Keep code simple and maintainable
+- Test edge cases thoroughly

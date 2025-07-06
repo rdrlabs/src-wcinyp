@@ -10,33 +10,21 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import type { Provider } from "@/types";
 import { 
   Phone, 
   Mail, 
   MapPin, 
   Building2,
-  Download,
-  Calendar,
   ChevronRight,
   ChevronDown,
-  Clock,
   FileText,
-  Shield,
-  Star,
-  Languages
+  Shield
 } from "lucide-react";
 import { 
   getSpecialtyIcon, 
   getLocationColor, 
-  getAffiliationInfo, 
-  getFlagInfo 
+  getAffiliationInfo
 } from "@/lib/icons";
 
 interface ProviderTableProps {
@@ -82,8 +70,7 @@ export function ProviderTable({ providers, searchTerm }: ProviderTableProps) {
   }
 
   return (
-    <TooltipProvider>
-      <div className="space-y-4">
+    <div className="space-y-4">
         {providers.map((provider) => {
           const isExpanded = expandedCards.has(provider.id);
           const affiliationInfo = getAffiliationInfo(provider.affiliation);
@@ -102,40 +89,11 @@ export function ProviderTable({ providers, searchTerm }: ProviderTableProps) {
                           </AvatarFallback>
                         </Avatar>
                         
-                        {/* Provider flags */}
-                        {provider.flags && provider.flags.length > 0 && (
-                          <div className="absolute -right-1 -bottom-1 flex gap-0.5">
-                            {provider.flags.slice(0, 3).map((flag) => {
-                              const flagInfo = getFlagInfo(flag);
-                              const Icon = flagInfo.icon;
-                              return (
-                                <Tooltip key={flag}>
-                                  <TooltipTrigger>
-                                    <div className={`bg-white rounded-full p-1 shadow-sm border ${flagInfo.color}`}>
-                                      <Icon className="h-3 w-3" />
-                                    </div>
-                                  </TooltipTrigger>
-                                  <TooltipContent>
-                                    <p>{flagInfo.tooltip}</p>
-                                  </TooltipContent>
-                                </Tooltip>
-                              );
-                            })}
-                          </div>
-                        )}
                       </div>
               
                       <div className="flex-1 space-y-3">
                         <div>
-                          <div className="flex items-center gap-2">
-                            <h3 className="text-lg font-semibold">{provider.name}</h3>
-                            {provider.availableToday && (
-                              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                                <Clock className="h-3 w-3 mr-1" />
-                                Available Today
-                              </Badge>
-                            )}
-                          </div>
+                          <h3 className="text-lg font-semibold">{provider.name}</h3>
                           <div className="flex items-center gap-2 mt-1">
                             {(() => {
                               const SpecIcon = getSpecialtyIcon(provider.specialty);
@@ -173,25 +131,10 @@ export function ProviderTable({ providers, searchTerm }: ProviderTableProps) {
                             {provider.location}
                           </Badge>
                           
-                          {provider.languages && provider.languages.length > 0 && (
-                            <Badge variant="outline" className="text-xs">
-                              <Languages className="h-3 w-3 mr-1" />
-                              {provider.languages.join(', ')}
-                            </Badge>
-                          )}
                         </div>
                         
-                        <div className="flex items-center gap-3">
-                          <div className="flex items-center gap-1">
-                            <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                            <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                            <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                            <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                            <Star className="h-3 w-3 text-gray-300" />
-                            <span className="text-xs text-muted-foreground ml-1">(4.8)</span>
-                          </div>
-                          
-                          {provider.notes && (
+                        {provider.notes && (
+                          <div className="mt-2">
                             <CollapsibleTrigger asChild>
                               <Button variant="ghost" size="sm" className="h-6 px-2">
                                 <FileText className="h-3 w-3 mr-1" />
@@ -199,8 +142,8 @@ export function ProviderTable({ providers, searchTerm }: ProviderTableProps) {
                                 {isExpanded ? <ChevronDown className="h-3 w-3 ml-1" /> : <ChevronRight className="h-3 w-3 ml-1" />}
                               </Button>
                             </CollapsibleTrigger>
-                          )}
-                        </div>
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -223,15 +166,7 @@ export function ProviderTable({ providers, searchTerm }: ProviderTableProps) {
                         </a>
                       </div>
                       
-                      <div className="flex gap-2 mt-4">
-                        <Button variant="outline" size="sm" className="flex items-center gap-1">
-                          <Calendar className="h-3 w-3" />
-                          Schedule
-                        </Button>
-                        <Button variant="outline" size="sm" className="flex items-center gap-1">
-                          <Download className="h-3 w-3" />
-                          vCard
-                        </Button>
+                      <div className="mt-4">
                         <Button size="sm" className="flex items-center gap-1">
                           View Profile
                           <ChevronRight className="h-3 w-3" />
@@ -259,7 +194,6 @@ export function ProviderTable({ providers, searchTerm }: ProviderTableProps) {
             </Card>
           );
         })}
-      </div>
-    </TooltipProvider>
+    </div>
   );
 }

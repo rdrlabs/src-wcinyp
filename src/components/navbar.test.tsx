@@ -25,14 +25,14 @@ describe('NavBar', () => {
     const links = screen.getAllByRole('link')
     const navLinks = links.filter(link => {
       const text = link.textContent || ''
-      return ['Knowledge Base', 'Directory', 'Documents', 'Providers'].includes(text.trim())
+      return ['Knowledge Base', 'Directory', 'Documents', 'Updates'].includes(text.trim())
     })
     
     expect(navLinks).toHaveLength(4)
     expect(navLinks[0]).toHaveTextContent('Knowledge Base')
     expect(navLinks[1]).toHaveTextContent('Directory')
     expect(navLinks[2]).toHaveTextContent('Documents')
-    expect(navLinks[3]).toHaveTextContent('Providers')
+    expect(navLinks[3]).toHaveTextContent('Updates')
   })
 
   it('highlights active page', () => {
@@ -47,59 +47,50 @@ describe('NavBar', () => {
     expect(screen.getByRole('link', { name: /Knowledge Base/i })).toBeInTheDocument()
   })
 
-  it('opens search dialog on button click', () => {
+  it('does not render search functionality', () => {
     render(<NavBar />)
     
-    const searchButton = screen.getByRole('button', { name: /Search/i })
-    fireEvent.click(searchButton)
-    
-    // Check if command dialog is opened
-    const searchInput = screen.getByPlaceholderText('Type a command or search...')
-    expect(searchInput).toBeInTheDocument()
+    // Search functionality has been removed
+    const searchButton = screen.queryByRole('button', { name: /Search/i })
+    expect(searchButton).not.toBeInTheDocument()
   })
 
-  it('opens search dialog with Command+K shortcut', () => {
+  it('does not respond to Command+K shortcut', () => {
     render(<NavBar />)
     
     // Trigger Command+K
     fireEvent.keyDown(document, { key: 'k', metaKey: true })
     
-    // Check if command dialog is opened
-    const searchInput = screen.getByPlaceholderText('Type a command or search...')
-    expect(searchInput).toBeInTheDocument()
+    // Search dialog should not exist
+    const searchInput = screen.queryByPlaceholderText('Type a command or search...')
+    expect(searchInput).not.toBeInTheDocument()
   })
 
-  it('renders quick links dropdown', () => {
+  it('does not render quick links dropdown', () => {
     render(<NavBar />)
     
-    const quickLinksButton = screen.getByRole('button', { name: /Quick Links/i })
-    expect(quickLinksButton).toBeInTheDocument()
+    // Quick links dropdown has been removed
+    const quickLinksButton = screen.queryByRole('button', { name: /Quick Links/i })
+    expect(quickLinksButton).not.toBeInTheDocument()
   })
 
-  it('renders feedback button', () => {
+  it('does not render feedback button', () => {
     render(<NavBar />)
     
-    const feedbackButton = screen.getByRole('button', { name: /Feedback/i })
-    expect(feedbackButton).toBeInTheDocument()
+    // Feedback button has been removed
+    const feedbackButton = screen.queryByRole('button', { name: /Feedback/i })
+    expect(feedbackButton).not.toBeInTheDocument()
   })
 
-  it('toggles login state when login button clicked', () => {
+  it('does not render login functionality', () => {
     render(<NavBar />)
     
-    const loginButton = screen.getByRole('button', { name: /Login/i })
-    expect(loginButton).toBeInTheDocument()
+    // Login functionality has been removed
+    const loginButton = screen.queryByRole('button', { name: /Login/i })
+    expect(loginButton).not.toBeInTheDocument()
     
-    // Click to login
-    fireEvent.click(loginButton)
-    
-    // Should show CWID when logged in
-    expect(screen.getByText('AB12345')).toBeInTheDocument()
-    
-    // Click again to logout
-    fireEvent.click(loginButton)
-    
-    // Should show login icon again
-    expect(screen.getByRole('button', { name: /Login/i })).toBeInTheDocument()
+    // Should not show CWID
+    expect(screen.queryByText('AB12345')).not.toBeInTheDocument()
   })
 
   it('renders theme toggle', () => {
@@ -109,17 +100,25 @@ describe('NavBar', () => {
     expect(themeToggle).toBeInTheDocument()
   })
 
-  it('renders all navigation items in search dialog', () => {
+  it('renders simplified navbar with only essential elements', () => {
     render(<NavBar />)
     
-    // Open search dialog
-    const searchButton = screen.getByRole('button', { name: /Search/i })
-    fireEvent.click(searchButton)
+    // Should have logo
+    expect(screen.getByText('WCI@NYP')).toBeInTheDocument()
     
-    // Check all navigation items are in the command list
-    expect(screen.getByRole('option', { name: /Knowledge Base/i })).toBeInTheDocument()
-    expect(screen.getByRole('option', { name: /Directory/i })).toBeInTheDocument()
-    expect(screen.getByRole('option', { name: /Documents/i })).toBeInTheDocument()
-    expect(screen.getByRole('option', { name: /Providers/i })).toBeInTheDocument()
+    // Should have navigation links
+    expect(screen.getByRole('link', { name: /Knowledge Base/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Directory/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Documents/i })).toBeInTheDocument()
+    
+    // Should have theme toggle
+    expect(screen.getByRole('button', { name: /Toggle theme/i })).toBeInTheDocument()
+    
+    // Should not have providers link
+    expect(screen.queryByRole('link', { name: /Providers/i })).not.toBeInTheDocument()
+    
+    // Should have only theme toggle button
+    const buttons = screen.getAllByRole('button')
+    expect(buttons).toHaveLength(1) // Only theme toggle
   })
 })
