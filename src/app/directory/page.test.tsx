@@ -10,15 +10,17 @@ describe('Directory Page', () => {
     it('renders page title and description', () => {
       render(<DirectoryPage />)
       
-      expect(screen.getByText('Directory')).toBeInTheDocument()
-      expect(screen.getByText('Comprehensive contact database for all providers, facilities, and partners')).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: 'Directory' })).toBeInTheDocument()
+      expect(screen.getByText('Comprehensive contact database for all internal staff, facilities, and partners')).toBeInTheDocument()
     })
 
     it('displays all contacts by default', () => {
       render(<DirectoryPage />)
       
-      const caption = screen.getByText(/contacts in directory/i)
-      expect(caption).toHaveTextContent(`${contactsData.contacts.length} contacts in directory`)
+      // Table should contain all contacts
+      const rows = screen.getAllByRole('row')
+      // Subtract 1 for header row
+      expect(rows.length - 1).toBe(contactsData.contacts.length)
     })
 
     it('renders contact table with correct headers', () => {
@@ -29,63 +31,16 @@ describe('Directory Page', () => {
       expect(screen.getByRole('columnheader', { name: 'Department' })).toBeInTheDocument()
       expect(screen.getByRole('columnheader', { name: 'Contact Info' })).toBeInTheDocument()
       expect(screen.getByRole('columnheader', { name: 'Location' })).toBeInTheDocument()
-      expect(screen.getByRole('columnheader', { name: 'Last Contact' })).toBeInTheDocument()
-      expect(screen.getByRole('columnheader', { name: 'Actions' })).toBeInTheDocument()
     })
   })
 
-  describe('Contact Type Filtering', () => {
-    it('displays all contact type filter buttons', () => {
+  describe('View Toggle', () => {
+    it('displays view toggle buttons', () => {
       render(<DirectoryPage />)
       
-      expect(screen.getByRole('button', { name: /All Contacts/i })).toBeInTheDocument()
-      
-      // Get unique types from the data
-      const uniqueTypes = [...new Set(contactsData.contacts.map(c => c.type))]
-      uniqueTypes.forEach(type => {
-        expect(screen.getByRole('button', { name: new RegExp(type, 'i') })).toBeInTheDocument()
-      })
-    })
-
-    it('shows correct count for each type', () => {
-      render(<DirectoryPage />)
-      
-      // Check All Contacts count
-      const allButton = screen.getByRole('button', { name: /All Contacts/i })
-      expect(allButton).toHaveTextContent(`(${contactsData.contacts.length})`)
-    })
-
-    it('filters contacts by type when button is clicked', async () => {
-      const user = userEvent.setup()
-      render(<DirectoryPage />)
-      
-      // Click on Provider button
-      const providerButton = screen.getByRole('button', { name: /Provider/i })
-      await user.click(providerButton)
-      
-      // Check that only provider contacts are shown
-      const providerContacts = contactsData.contacts.filter(c => c.type === 'Provider')
-      const caption = screen.getByText(/contacts in directory/i)
-      expect(caption).toHaveTextContent(`${providerContacts.length} contacts in directory`)
-    })
-
-    it('highlights active filter button', async () => {
-      const user = userEvent.setup()
-      render(<DirectoryPage />)
-      
-      const providerButton = screen.getByRole('button', { name: /Provider/i })
-      const allButton = screen.getByRole('button', { name: /All Contacts/i })
-      
-      // Initially All Contacts is active (default variant)
-      expect(allButton).not.toHaveClass('border')
-      expect(providerButton).toHaveClass('border')
-      
-      // Click to activate Provider
-      await user.click(providerButton)
-      
-      // Should be highlighted (no border class for active)
-      expect(providerButton).not.toHaveClass('border')
-      expect(allButton).toHaveClass('border')
+      // Check we have the view toggle buttons
+      expect(screen.getByRole('button', { name: 'Directory' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'Referring Provider Database' })).toBeInTheDocument()
     })
   })
 
@@ -116,7 +71,7 @@ describe('Directory Page', () => {
       expect(screen.getByText(firstContact.name)).toBeInTheDocument()
     })
 
-    it('shows no results message when search yields nothing', async () => {
+    it('shows empty table when search yields nothing', async () => {
       const user = userEvent.setup()
       render(<DirectoryPage />)
       
@@ -125,7 +80,9 @@ describe('Directory Page', () => {
       // Search for non-existent term
       await user.type(searchInput, 'xyzabc123')
       
-      expect(screen.getByText('No contacts found matching "xyzabc123"')).toBeInTheDocument()
+      // Should have only the header row
+      const rows = screen.getAllByRole('row')
+      expect(rows.length).toBe(1) // Only header row
     })
 
     it('searches across multiple fields', async () => {
@@ -145,48 +102,18 @@ describe('Directory Page', () => {
       expect(screen.getByText(firstContact.name)).toBeInTheDocument()
     })
 
-    it('combines search with type filter', async () => {
+    it('filters contacts based on search', async () => {
       const user = userEvent.setup()
       render(<DirectoryPage />)
       
-      // First filter by type
-      const providerButton = screen.getByRole('button', { name: /Provider/i })
-      await user.click(providerButton)
-      
-      // Then search
       const searchInput = screen.getByPlaceholderText(/search/i)
-      await user.type(searchInput, 'test')
+      await user.type(searchInput, contactsData.contacts[0].name.slice(0, 5))
       
-      // Results should be filtered by both type and search
-      const caption = screen.getByText(/contacts in directory|No contacts found/i)
-      expect(caption).toBeInTheDocument()
-    })
-  })
-
-  describe('Action Buttons', () => {
-    it('displays Add Contact button', () => {
-      render(<DirectoryPage />)
-      
-      expect(screen.getByRole('button', { name: 'Add Contact' })).toBeInTheDocument()
-    })
-
-    it('displays Import CSV button', () => {
-      render(<DirectoryPage />)
-      
-      expect(screen.getByRole('button', { name: 'Import CSV' })).toBeInTheDocument()
-    })
-
-    it('displays Edit and Notes buttons for each contact', () => {
-      render(<DirectoryPage />)
-      
+      // Should show filtered results
       const rows = screen.getAllByRole('row')
-      // Skip header row
-      const dataRows = rows.slice(1)
       
-      dataRows.forEach(row => {
-        within(row).getByRole('button', { name: 'Edit' })
-        within(row).getByRole('button', { name: 'Notes' })
-      })
+      // Should have at least the header row plus some results
+      expect(rows.length).toBeGreaterThanOrEqual(2)
     })
   })
 
@@ -206,7 +133,6 @@ describe('Directory Page', () => {
       within(row!).getByText(firstContact.phone)
       within(row!).getByText(firstContact.email)
       within(row!).getByText(firstContact.location)
-      within(row!).getByText(firstContact.lastContact)
     })
 
     it('applies correct styling to contact type badges', () => {
@@ -240,15 +166,16 @@ describe('Directory Page', () => {
       expect(searchInput).toHaveAttribute('type', 'search')
     })
 
-    it('supports keyboard navigation for filter buttons', async () => {
+    it('supports keyboard navigation', async () => {
       const user = userEvent.setup()
       render(<DirectoryPage />)
       
-      // Tab to first filter button
+      // Tab to first interactive element
       await user.tab()
       
-      // Should focus on a button
-      expect(document.activeElement?.tagName).toBe('BUTTON')
+      // Should focus on a button or input
+      const activeElement = document.activeElement?.tagName
+      expect(['BUTTON', 'INPUT'].includes(activeElement || '')).toBe(true)
     })
   })
 })

@@ -45,5 +45,4 @@ export const INTERNAL_ROUTES = {
   documents: '/documents',
   providers: '/providers',
   forms: '/forms', // Redirects to /documents
-  wiki: '/wiki',
 } as const

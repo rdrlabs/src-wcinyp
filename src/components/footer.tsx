@@ -44,7 +44,7 @@ export function Footer() {
             <h3 className="font-semibold mb-4">Resources</h3>
             <ul className="space-y-2 text-sm">
               {footerLinks.resources.map((link) => (
-                <li key={link.href}>
+                <li key={link.label}>
                   <a 
                     href={link.href} 
                     target={link.external ? "_blank" : undefined}

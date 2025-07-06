@@ -5,38 +5,35 @@
 ### Overview
 WCINYP is a modern web application for medical imaging administration, built with Next.js 14, TypeScript, and Tailwind CSS. The application serves as a comprehensive platform for document management, provider directories, form generation, and contact management.
 
-### Key Features
+### Core Features
 
-1. **Document Management System**
-   - Browse and search 156+ medical forms and documents
-   - Category-based organization (ABN, Invoices, Fax Forms, etc.)
-   - Quick download functionality
-   - Search with real-time filtering
+1. **Document Management**
+   - Browse and download 156+ medical forms
+   - Category-based organization
+   - Search functionality
+   - PDF document serving
 
 2. **Provider Directory**
-   - Enhanced provider profiles with NPI numbers
-   - Affiliation badges (WCM, NYP, Private, etc.)
-   - Provider flags (VIP, urgent, new, teaching, research)
-   - Expandable notes and contact information
-   - Availability indicators
+   - Provider profiles with essential information
+   - NPI numbers and contact details
+   - Basic filtering by specialty/location
+   - Clean, scannable layout
 
-3. **Form Generation**
-   - Dynamic form builder for self-pay automation
-   - Pre-built templates for common scenarios
-   - Field validation and error handling
-   - Form submission tracking
+3. **Form Templates**
+   - Pre-built form templates
+   - Client-side form filling
+   - Backend submission handler (Phase 2)
+   - Basic validation
 
 4. **Contact Directory**
-   - Comprehensive database of all stakeholders
-   - Department-based organization
+   - Staff and department contacts
+   - Search and filter capabilities
    - Export functionality
-   - Advanced search capabilities
 
 5. **Knowledge Base**
-   - Fumadocs-powered documentation
-   - Full sidebar navigation
-   - Isolated styling system
+   - Fumadocs-powered technical documentation
    - MDX content support
+   - Searchable documentation
 
 ### Technical Requirements
 
@@ -49,46 +46,42 @@ WCINYP is a modern web application for medical imaging administration, built wit
 
 ### Development Phases
 
-#### Phase 1: UI/UX Enhancements (COMPLETED)
-- Navbar with WCI@NYP branding
-- Global search functionality
-- Documents & Forms integration
-- Provider directory redesign
-- Dark mode implementation
-- Rich footer
+#### Phase 1: UI/UX Foundation (COMPLETED)
+- Basic navigation and layout
+- Document browsing and search
+- Provider directory
+- Form templates
+- Dark mode support
 
-#### Phase 2: Backend Infrastructure (CURRENT)
-- Authentication system with CWID integration
-- Netlify Functions for form submissions
-- Database integration (PostgreSQL/Supabase)
-- API development for data persistence
+#### Phase 2: Core Backend & UI Refinement (CURRENT)
 
-#### Phase 3: Enhanced User Experience
-- Real-time provider availability
-- Knowledge sharing features
-- Advanced search and filtering
-- Performance optimizations
+##### Backend Priorities
+- Simple form submission handler (Netlify Function)
+- Basic authentication (start simple, CWID later if needed)
+- Data storage decision (email vs database)
+- Form validation and error handling
 
-#### Phase 4: Healthcare Integration
-- Epic EMR integration
-- Workflow automation
-- HIPAA compliance
-- Security enhancements
+##### UI Refinement Priorities
+- Remove unnecessary features (wiki, command palette, etc.)
+- Implement strict design system (4 fonts, 2 weights, 8pt grid)
+- Simplify provider cards (remove ratings, excess badges)
+- Clean navbar design (Next.js style)
+- Apply 60/30/10 color rule
 
-#### Phase 5: Analytics & Intelligence
-- Usage analytics dashboard
-- Machine learning features
-- Business intelligence tools
-- Custom report generation
+#### Phase 3: Production Readiness
+- Security improvements
+- Performance optimization
+- Comprehensive testing
+- Documentation updates
 
-### Current Development Tasks
+### Immediate Development Tasks
 
-1. Complete Claude Task Master setup for persistent task management
-2. Design Netlify Functions architecture
-3. Plan authentication flow with CWID
-4. Research database options
-5. Create API specification document
-6. Implement first Netlify Function for form submissions
+1. Create Netlify Function for form submission
+2. Add form validation on backend
+3. Decide on data storage approach (email notifications vs database)
+4. Implement basic authentication (if needed)
+5. Remove wiki system and simplify UI
+6. Apply design system guidelines
 
 ### Quality Standards
 

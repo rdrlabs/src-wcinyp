@@ -2,43 +2,38 @@
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import contactsData from "@/data/contacts.json";
-import type { Contact } from "@/types";
+import providersData from "@/data/providers.json";
+import type { Contact, Provider } from "@/types";
+import { ReferringProviderTable } from "./components/ReferringProviderTable";
 import { 
   User, 
   Shield, 
   Building, 
   TestTube, 
   Package, 
-  UserPlus, 
-  FileUp, 
   Search,
-  Edit,
-  StickyNote,
   Phone,
   Mail,
-  MapPin,
-  Calendar
+  MapPin
 } from "lucide-react";
 
 export default function DirectoryPage() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedType, setSelectedType] = useState("all");
+  const [viewMode, setViewMode] = useState<'directory' | 'providers'>('directory');
   
   const contacts: Contact[] = contactsData.contacts as Contact[];
-
-  // Get unique contact types
-  const contactTypes = ["all", ...new Set(contacts.map(c => c.type))] as const;
+  const providers: Provider[] = providersData.providers as Provider[];
   
   // Get icon for contact type
   const getContactTypeIcon = (type: string) => {
@@ -59,77 +54,69 @@ export default function DirectoryPage() {
   };
   
   // Filter contacts
-  const filteredByType = selectedType === "all" 
-    ? contacts 
-    : contacts.filter(contact => contact.type === selectedType);
-    
   const filteredContacts = searchTerm
-    ? filteredByType.filter(contact =>
+    ? contacts.filter(contact =>
         contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         contact.department.toLowerCase().includes(searchTerm.toLowerCase()) ||
         contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
         contact.phone.includes(searchTerm)
       )
-    : filteredByType;
+    : contacts;
 
   return (
     <div className="container mx-auto py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Directory</h1>
         <p className="text-muted-foreground mt-2">
-          Comprehensive contact database for all providers, facilities, and partners
+          {viewMode === 'directory' 
+            ? 'Comprehensive contact database for all internal staff, facilities, and partners'
+            : 'External providers who refer patients to our imaging center'
+          }
         </p>
       </div>
       
-      <div className="mb-6 space-y-4">
-        <div className="flex flex-wrap gap-2">
-          {contactTypes.map((type) => (
-            <Button
-              key={type}
-              variant={selectedType === type ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSelectedType(type)}
-              className="capitalize flex items-center gap-1.5"
-            >
-              {type !== "all" && getContactTypeIcon(type)}
-              {type === "all" ? "All Contacts" : type}
-              <span className="ml-1 text-xs">
-                ({type === "all" ? contacts.length : contacts.filter(c => c.type === type).length})
-              </span>
-            </Button>
-          ))}
-        </div>
-        
-        <div className="flex gap-4">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <input
-              type="search"
-              placeholder="Search by name, department, email, or phone..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border rounded-lg"
-            />
-          </div>
-          <Button className="flex items-center gap-2">
-            <UserPlus className="h-4 w-4" />
-            Add Contact
+      {/* View Toggle */}
+      <div className="mb-6">
+        <div className="flex items-center gap-2">
+          <Button
+            variant={viewMode === 'directory' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setViewMode('directory')}
+            className="min-w-[100px]"
+          >
+            Directory
           </Button>
-          <Button variant="outline" className="flex items-center gap-2">
-            <FileUp className="h-4 w-4" />
-            Import CSV
+          <Button
+            variant={viewMode === 'providers' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setViewMode('providers')}
+            className="min-w-[180px]"
+          >
+            Referring Provider Database
           </Button>
         </div>
       </div>
       
-      <div className="rounded-md border">
-        <Table>
-          <TableCaption>
-            {searchTerm && filteredContacts.length === 0 
-              ? `No contacts found matching "${searchTerm}"`
-              : `${filteredContacts.length} contacts in directory`
+      <div className="mb-6">
+        <div className="relative max-w-md">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder={viewMode === 'directory' 
+              ? "Search by name, department, email, or phone..."
+              : "Search providers by name, specialty, department, or location..."
             }
-          </TableCaption>
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+      </div>
+      
+      {/* Conditional rendering based on view mode */}
+      {viewMode === 'directory' ? (
+        <div className="rounded-md border">
+          <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>
@@ -137,8 +124,6 @@ export default function DirectoryPage() {
               <TableHead>Department</TableHead>
               <TableHead>Contact Info</TableHead>
               <TableHead>Location</TableHead>
-              <TableHead>Last Contact</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -180,29 +165,26 @@ export default function DirectoryPage() {
                     {contact.location}
                   </div>
                 </TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-1.5">
-                    <Calendar className="h-3 w-3 text-muted-foreground" />
-                    {contact.lastContact}
-                  </div>
-                </TableCell>
-                <TableCell className="text-right">
-                  <div className="flex justify-end gap-2">
-                    <Button variant="ghost" size="sm" className="flex items-center gap-1.5">
-                      <Edit className="h-3 w-3" />
-                      Edit
-                    </Button>
-                    <Button variant="ghost" size="sm" className="flex items-center gap-1.5">
-                      <StickyNote className="h-3 w-3" />
-                      Notes
-                    </Button>
-                  </div>
-                </TableCell>
               </TableRow>
             ))}
           </TableBody>
-        </Table>
-      </div>
+          </Table>
+        </div>
+      ) : (
+        // Referring Provider Database View
+        <ReferringProviderTable 
+          providers={searchTerm
+            ? providers.filter(provider =>
+                provider.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                provider.specialty.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                provider.department.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                provider.location.toLowerCase().includes(searchTerm.toLowerCase())
+              )
+            : providers
+          }
+          searchTerm={searchTerm}
+        />
+      )}
     </div>
   );
 }

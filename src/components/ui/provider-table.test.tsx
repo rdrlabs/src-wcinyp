@@ -88,28 +88,30 @@ describe('ProviderTable', () => {
     expect(broadwayBadge.parentElement).toContainHTML('svg')
   })
 
-  it('displays provider flags with tooltips', () => {
+  it('does not display provider flags', () => {
     render(<ProviderTable providers={mockProviders} />)
     
-    // Check that flag icons are rendered by looking for the flag container
+    // Provider flags have been removed
     const { container } = render(<ProviderTable providers={mockProviders} />)
     const flagContainers = container.querySelectorAll('.absolute.-right-1.-bottom-1')
     
-    // Should have at least one provider with flags
-    expect(flagContainers.length).toBeGreaterThan(0)
+    // Should not have any flag containers
+    expect(flagContainers.length).toBe(0)
   })
 
-  it('shows available today badge when applicable', () => {
+  it('does not show available today badge', () => {
     render(<ProviderTable providers={mockProviders} />)
     
-    expect(screen.getByText('Available Today')).toBeInTheDocument()
+    // Available Today badge has been removed
+    expect(screen.queryByText('Available Today')).not.toBeInTheDocument()
   })
 
-  it('displays languages when provided', () => {
+  it('does not display languages', () => {
     render(<ProviderTable providers={mockProviders} />)
     
-    expect(screen.getByText('English, Spanish')).toBeInTheDocument()
-    expect(screen.getByText('English, Mandarin, French')).toBeInTheDocument()
+    // Languages section has been removed
+    expect(screen.queryByText('English, Spanish')).not.toBeInTheDocument()
+    expect(screen.queryByText('English, Mandarin, French')).not.toBeInTheDocument()
   })
 
   it('renders contact information correctly', () => {
@@ -126,12 +128,12 @@ describe('ProviderTable', () => {
     expect(emailLinks[1]).toHaveAttribute('href', 'mailto:john.doe@med.cornell.edu')
   })
 
-  it('renders action buttons', () => {
+  it('renders only View Profile button', () => {
     render(<ProviderTable providers={mockProviders} />)
     
-    // Should have Schedule, vCard, and View Profile buttons for each provider
-    expect(screen.getAllByText('Schedule')).toHaveLength(2)
-    expect(screen.getAllByText('vCard')).toHaveLength(2)
+    // Should only have View Profile button for each provider
+    expect(screen.queryAllByText('Schedule')).toHaveLength(0)
+    expect(screen.queryAllByText('vCard')).toHaveLength(0)
     expect(screen.getAllByText('View Profile')).toHaveLength(2)
   })
 
@@ -177,11 +179,11 @@ describe('ProviderTable', () => {
     expect(avatarInitials).toHaveLength(2) // Both providers result in "DJ"
   })
 
-  it('renders rating stars', () => {
+  it('does not render rating stars', () => {
     render(<ProviderTable providers={mockProviders} />)
     
-    // Check for rating text
-    const ratings = screen.getAllByText('(4.8)')
-    expect(ratings).toHaveLength(2)
+    // Rating stars have been removed
+    const ratings = screen.queryAllByText('(4.8)')
+    expect(ratings).toHaveLength(0)
   })
 })

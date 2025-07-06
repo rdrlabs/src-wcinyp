@@ -1,4 +1,4 @@
-import { BookOpen, Home, FileText, Users } from 'lucide-react';
+import { BookOpen, Home, FileText, Bell } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 export interface NavItem {
@@ -11,7 +11,7 @@ export const mainNavItems: NavItem[] = [
   { href: '/knowledge', label: 'Knowledge Base', icon: BookOpen },
   { href: '/directory', label: 'Directory', icon: Home },
   { href: '/documents', label: 'Documents', icon: FileText },
-  { href: '/providers', label: 'Providers', icon: Users },
+  { href: '/updates', label: 'Updates', icon: Bell },
 ];
 
 export const quickLinks = [

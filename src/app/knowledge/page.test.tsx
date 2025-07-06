@@ -1,65 +1,48 @@
 import { render, screen } from '@testing-library/react'
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import KnowledgePage from './page'
 import { axe } from 'jest-axe'
 
-// Mock fumadocs-ui components
-vi.mock('fumadocs-ui/page', () => ({
-  DocsPage: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  DocsBody: ({ children }: { children: React.ReactNode }) => <div>{children}</div>
-}))
-
-vi.mock('fumadocs-ui/components/callout', () => ({
-  Callout: ({ children, type, className }: { children: React.ReactNode; type: string; className?: string }) => 
-    <div className={className} data-type={type}>{children}</div>
-}))
-
 describe('Knowledge Page', () => {
-  it('renders page title and description', () => {
+  it('renders page title and coming soon message', () => {
     render(<KnowledgePage />)
     
-    expect(screen.getByText('WCINYP Knowledge Base')).toBeInTheDocument()
-    expect(screen.getByText('Documentation and guides for the WCINYP platform')).toBeInTheDocument()
-  })
-
-  it('displays coming soon message', () => {
-    render(<KnowledgePage />)
-    
-    expect(screen.getByText(/The knowledge base is currently being updated/)).toBeInTheDocument()
-  })
-
-  it('displays coming soon section with features list', () => {
-    render(<KnowledgePage />)
-    
+    expect(screen.getByRole('heading', { name: 'Knowledge Base' })).toBeInTheDocument()
     expect(screen.getByText('Coming Soon')).toBeInTheDocument()
-    expect(screen.getByText(/We're working on creating comprehensive documentation/)).toBeInTheDocument()
-    
-    // Check feature list items
-    expect(screen.getByText(/Getting started guides/)).toBeInTheDocument()
-    expect(screen.getByText(/Feature documentation/)).toBeInTheDocument()
-    expect(screen.getByText(/API references/)).toBeInTheDocument()
-    expect(screen.getByText(/Video tutorials/)).toBeInTheDocument()
-    expect(screen.getByText(/Best practices/)).toBeInTheDocument()
-    expect(screen.getByText(/Troubleshooting guides/)).toBeInTheDocument()
   })
 
-  it('displays need help section with contact info', () => {
+  it('displays placeholder description', () => {
     render(<KnowledgePage />)
     
-    expect(screen.getByText('Need Help Now?')).toBeInTheDocument()
-    expect(screen.getByText('While we build out the knowledge base, you can:')).toBeInTheDocument()
-    
-    // Check contact options
-    expect(screen.getByText('support@wcinyp.org')).toBeInTheDocument()
-    expect(screen.getByText('(212) 555-0100')).toBeInTheDocument()
-    expect(screen.getByText(/Use the in-app help tooltips/)).toBeInTheDocument()
-    expect(screen.getByText(/Schedule a training session/)).toBeInTheDocument()
+    expect(screen.getByText(/Our comprehensive documentation and guides are being prepared/)).toBeInTheDocument()
   })
 
-  it('displays urgent issues warning', () => {
+  it('displays coming soon feature cards', () => {
     render(<KnowledgePage />)
     
-    expect(screen.getByText(/For urgent technical issues/)).toBeInTheDocument()
+    // Check feature cards
+    expect(screen.getByText('Getting Started Guide')).toBeInTheDocument()
+    expect(screen.getByText('Documentation')).toBeInTheDocument()
+    expect(screen.getByText('Provider Resources')).toBeInTheDocument()
+    expect(screen.getByText('System Configuration')).toBeInTheDocument()
+    expect(screen.getByText('FAQ & Troubleshooting')).toBeInTheDocument()
+    expect(screen.getByText('Best Practices')).toBeInTheDocument()
+  })
+
+  it('displays contact information', () => {
+    render(<KnowledgePage />)
+    
+    expect(screen.getByText(/Need immediate assistance/)).toBeInTheDocument()
+    const emailLink = screen.getByRole('link', { name: 'imaging@med.cornell.edu' })
+    expect(emailLink).toHaveAttribute('href', 'mailto:imaging@med.cornell.edu')
+  })
+
+  it('renders feature card descriptions', () => {
+    render(<KnowledgePage />)
+    
+    expect(screen.getByText('Learn the basics of using the imaging center portal')).toBeInTheDocument()
+    expect(screen.getByText('Comprehensive guides for all features and workflows')).toBeInTheDocument()
+    expect(screen.getByText('Information for referring providers and staff')).toBeInTheDocument()
   })
 
   it('has no accessibility violations', async () => {
