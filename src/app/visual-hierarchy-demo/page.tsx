@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { FormItem, FormLabel, FormControl } from "@/components/ui/form";
+import { Label } from "@/components/ui/label";
 import { Search, FileText, Users, Settings, ChevronRight } from "lucide-react";
 
 export default function VisualHierarchyDemo() {
@@ -87,18 +87,14 @@ export default function VisualHierarchyDemo() {
                   Personal Information
                 </h3>
                 <div className="grid gap-4 md:grid-cols-2">
-                  <FormItem>
-                    <FormLabel>First Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter first name" />
-                    </FormControl>
-                  </FormItem>
-                  <FormItem>
-                    <FormLabel>Last Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter last name" />
-                    </FormControl>
-                  </FormItem>
+                  <div className="space-y-2">
+                    <Label>First Name</Label>
+                    <Input placeholder="Enter first name" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Last Name</Label>
+                    <Input placeholder="Enter last name" />
+                  </div>
                 </div>
               </div>
 
@@ -107,18 +103,14 @@ export default function VisualHierarchyDemo() {
                   Contact Details
                 </h3>
                 <div className="grid gap-4 md:grid-cols-2">
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input type="email" placeholder="Enter email" />
-                    </FormControl>
-                  </FormItem>
-                  <FormItem>
-                    <FormLabel>Phone</FormLabel>
-                    <FormControl>
-                      <Input type="tel" placeholder="Enter phone" />
-                    </FormControl>
-                  </FormItem>
+                  <div className="space-y-2">
+                    <Label>Email</Label>
+                    <Input type="email" placeholder="Enter email" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Phone</Label>
+                    <Input type="tel" placeholder="Enter phone" />
+                  </div>
                 </div>
               </div>
             </div>
