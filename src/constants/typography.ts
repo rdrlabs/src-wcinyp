@@ -43,8 +43,8 @@ export const TYPOGRAPHY = {
   tableCell: `${TEXT_SIZES.small} ${FONT_WEIGHTS.normal}`,
   
   // Navigation
-  navLink: `${TEXT_SIZES.small} ${FONT_WEIGHTS.normal}`,
-  navLinkActive: `${TEXT_SIZES.small} ${FONT_WEIGHTS.semibold}`,
+  navLink: `${TEXT_SIZES.base} font-light`,
+  navLinkActive: `${TEXT_SIZES.base} font-light`,
   
   // Body text
   body: `${TEXT_SIZES.body} ${FONT_WEIGHTS.normal}`,

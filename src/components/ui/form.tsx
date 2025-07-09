@@ -164,6 +164,34 @@ const FormMessage = React.forwardRef<
 })
 FormMessage.displayName = "FormMessage"
 
+const FormSection = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement> & {
+    title?: string
+    description?: string
+  }
+>(({ className, title, description, children, ...props }, ref) => {
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        "space-y-4 p-6 rounded-lg bg-muted-lighter border border-border",
+        className
+      )}
+      {...props}
+    >
+      {(title || description) && (
+        <div className="space-y-1 pb-4 border-b border-border-strong">
+          {title && <h3 className="text-lg font-semibold">{title}</h3>}
+          {description && <p className="text-sm text-muted-foreground">{description}</p>}
+        </div>
+      )}
+      {children}
+    </div>
+  )
+})
+FormSection.displayName = "FormSection"
+
 export {
   useFormField,
   Form,
@@ -173,4 +201,5 @@ export {
   FormDescription,
   FormMessage,
   FormField,
+  FormSection,
 }

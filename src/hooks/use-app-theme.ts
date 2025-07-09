@@ -3,7 +3,7 @@
 import { useTheme } from 'next-themes'
 import { useEffect, useState, useCallback } from 'react'
 
-export type ColorTheme = 'blue' | 'red' | 'orange' | 'green' | 'yellow' | 'neutral'
+export type ColorTheme = 'blue' | 'red' | 'orange' | 'green' | 'yellow' | 'pink' | 'purple' | 'neutral'
 
 interface UseAppThemeReturn {
   // From next-themes

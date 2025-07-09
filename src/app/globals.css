@@ -14,12 +14,15 @@
   --color-background: #ffffff;
   --color-foreground: #0a0a0a;
   --color-muted: #f5f5f5;
+  --color-muted-lighter: #fafafa;
+  --color-muted-darker: #e5e5e5;
   --color-muted-foreground: #737373;
   --color-card: #ffffff;
   --color-card-foreground: #0a0a0a;
   --color-popover: #ffffff;
   --color-popover-foreground: #0a0a0a;
   --color-border: #e5e5e5;
+  --color-border-strong: #d4d4d4;
   --color-input: #e5e5e5;
   --color-primary: #3b82f6;
   --color-primary-foreground: #fafafa;
@@ -44,13 +47,16 @@
   [data-theme="dark"] {
     --color-background: oklch(10% 0 0);        /* Was 15%, darker background */
     --color-foreground: oklch(95% 0 0);        /* Was 98%, slightly less bright */
-    --color-muted: oklch(20% 0 0);             /* Was 25%, more contrast */
-    --color-muted-foreground: oklch(70% 0 0);  /* Was 65%, brighter muted text */
+    --color-muted: oklch(17% 0 0);             /* Was 20%, better contrast */
+    --color-muted-lighter: oklch(14% 0 0);     /* Subtle background layering */
+    --color-muted-darker: oklch(25% 0 0);      /* Stronger dividers */
+    --color-muted-foreground: oklch(65% 0 0);  /* Was 70%, better hierarchy */
     --color-card: oklch(13% 0 0);              /* Was 18%, more contrast from bg */
     --color-card-foreground: oklch(95% 0 0);
     --color-popover: oklch(13% 0 0);           /* Was 18% */
     --color-popover-foreground: oklch(95% 0 0);
-    --color-border: oklch(27% 0 0);            /* Was 25%, slightly brighter */
+    --color-border: oklch(30% 0 0);            /* Was 27%, more visible */
+    --color-border-strong: oklch(40% 0 0);     /* Strong borders for emphasis */
     --color-input: oklch(18% 0 0);             /* Was 25%, darker inputs */
     --color-primary: oklch(69.8% 0.195 238.4);
     --color-primary-foreground: oklch(15% 0 0);
@@ -78,7 +84,7 @@
   --color-primary: oklch(69.8% 0.195 238.4);
   --color-ring: oklch(69.8% 0.195 238.4);
 }
-[data-theme="dark"].theme-blue {
+[data-theme="dark"] .theme-blue {
   --color-primary: oklch(62.8% 0.195 238.4);
   --color-primary-foreground: oklch(98% 0 0);
   --color-ring: oklch(62.8% 0.195 238.4);
@@ -89,7 +95,7 @@
   --color-primary: oklch(69.5% 0.203 25.5);
   --color-ring: oklch(69.5% 0.203 25.5);
 }
-[data-theme="dark"].theme-red {
+[data-theme="dark"] .theme-red {
   --color-primary: oklch(59.2% 0.203 25.5);
   --color-primary-foreground: oklch(98% 0 0);
   --color-ring: oklch(59.2% 0.203 25.5);
@@ -100,7 +106,7 @@
   --color-primary: oklch(70.1% 0.179 44.2);
   --color-ring: oklch(70.1% 0.179 44.2);
 }
-[data-theme="dark"].theme-orange {
+[data-theme="dark"] .theme-orange {
   --color-primary: oklch(63.9% 0.172 41.7);
   --color-primary-foreground: oklch(98% 0 0);
   --color-ring: oklch(63.9% 0.172 41.7);
@@ -111,7 +117,7 @@
   --color-primary: oklch(60.8% 0.149 149.5);
   --color-ring: oklch(60.8% 0.149 149.5);
 }
-[data-theme="dark"].theme-green {
+[data-theme="dark"] .theme-green {
   --color-primary: oklch(54.2% 0.129 149.5);
   --color-primary-foreground: oklch(98% 0 0);
   --color-ring: oklch(54.2% 0.129 149.5);
@@ -123,23 +129,45 @@
   --color-primary-foreground: oklch(20% 0 0);
   --color-ring: oklch(77.9% 0.152 95.8);
 }
-[data-theme="dark"].theme-yellow {
+[data-theme="dark"] .theme-yellow {
   --color-primary: oklch(72.4% 0.145 92.6);
   --color-primary-foreground: oklch(20% 0 0);
   --color-ring: oklch(72.4% 0.145 92.6);
 }
 
-/* Default Theme (Neutral - No color, adapts to light/dark) */
-.theme-default {
-  --color-primary: oklch(25% 0 0);  /* Dark gray for light mode */
+/* Pink Theme */
+.theme-pink {
+  --color-primary: oklch(70% 0.25 350);
+  --color-ring: oklch(70% 0.25 350);
+}
+[data-theme="dark"] .theme-pink {
+  --color-primary: oklch(60% 0.25 350);
   --color-primary-foreground: oklch(98% 0 0);
-  --color-ring: oklch(45% 0 0);
+  --color-ring: oklch(60% 0.25 350);
 }
 
-[data-theme="dark"].theme-default {
-  --color-primary: oklch(85% 0 0);  /* Light gray for dark mode */
-  --color-primary-foreground: oklch(10% 0 0);
-  --color-ring: oklch(85% 0 0);
+/* Purple Theme */
+.theme-purple {
+  --color-primary: oklch(70% 0.25 280);
+  --color-ring: oklch(70% 0.25 280);
+}
+[data-theme="dark"] .theme-purple {
+  --color-primary: oklch(60% 0.25 280);
+  --color-primary-foreground: oklch(98% 0 0);
+  --color-ring: oklch(60% 0.25 280);
+}
+
+/* Neutral Theme (No color, adapts to light/dark) */
+.theme-neutral {
+  --color-primary: oklch(0% 0 0);  /* Pure black for light mode */
+  --color-primary-foreground: oklch(100% 0 0);
+  --color-ring: oklch(0% 0 0);
+}
+
+[data-theme="dark"] .theme-neutral {
+  --color-primary: oklch(100% 0 0);  /* Pure white for dark mode */
+  --color-primary-foreground: oklch(0% 0 0);
+  --color-ring: oklch(100% 0 0);
 }
 
 /* Base styles without @apply for Tailwind v4 */

@@ -10,8 +10,8 @@ describe('Directory Page', () => {
     it('renders page title and description', () => {
       render(<DirectoryPage />)
       
-      expect(screen.getByRole('heading', { name: 'Directory' })).toBeInTheDocument()
-      expect(screen.getByText('Comprehensive contact database for all internal staff, facilities, and partners')).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: 'Contact Directory' })).toBeInTheDocument()
+      expect(screen.getByText('Comprehensive database of contacts and referring providers')).toBeInTheDocument()
     })
 
     it('displays all contacts by default', () => {
@@ -35,12 +35,15 @@ describe('Directory Page', () => {
   })
 
   describe('View Toggle', () => {
-    it('displays view toggle buttons', () => {
+    it('displays view toggle switch', () => {
       render(<DirectoryPage />)
       
-      // Check we have the view toggle buttons
-      expect(screen.getByRole('button', { name: 'Directory' })).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: 'Referring Provider Database' })).toBeInTheDocument()
+      // Check we have the view toggle switch
+      expect(screen.getByRole('switch', { name: 'Toggle between Directory and Providers view' })).toBeInTheDocument()
+      
+      // Check for labels near the switch
+      const labels = screen.getAllByText(/Directory|Providers/)
+      expect(labels.length).toBeGreaterThan(0)
     })
   })
 
@@ -48,7 +51,7 @@ describe('Directory Page', () => {
     it('renders search input with placeholder', () => {
       render(<DirectoryPage />)
       
-      const searchInput = screen.getByPlaceholderText('Search by name, department, email, or phone...')
+      const searchInput = screen.getByPlaceholderText('Search contacts...')
       expect(searchInput).toBeInTheDocument()
     })
 
@@ -56,11 +59,11 @@ describe('Directory Page', () => {
       const user = userEvent.setup()
       render(<DirectoryPage />)
       
-      const searchInput = screen.getByPlaceholderText(/search/i)
+      const searchInput = screen.getByPlaceholderText('Search contacts...')
       
       // Search for a term that exists in the data
       const firstContact = contactsData.contacts[0]
-      await user.type(searchInput, firstContact.name.slice(0, 3))
+      await user.type(searchInput, firstContact.name)
       
       // Should find at least one result
       const rows = screen.getAllByRole('row')
@@ -75,29 +78,31 @@ describe('Directory Page', () => {
       const user = userEvent.setup()
       render(<DirectoryPage />)
       
-      const searchInput = screen.getByPlaceholderText(/search/i)
+      const searchInput = screen.getByPlaceholderText('Search contacts...')
       
       // Search for non-existent term
-      await user.type(searchInput, 'xyzabc123')
+      await user.type(searchInput, 'xyzabc123notfound')
+      
+      // Wait for the search to take effect
+      await screen.findByText('No contacts found matching your search.')
       
       // Should have header row + empty message row
       const rows = screen.getAllByRole('row')
       expect(rows.length).toBe(2) // Header row + empty message row
-      expect(screen.getByText('No contacts found matching your search.')).toBeInTheDocument()
     })
 
     it('searches across multiple fields', async () => {
       const user = userEvent.setup()
       render(<DirectoryPage />)
       
-      const searchInput = screen.getByPlaceholderText(/search/i)
+      const searchInput = screen.getByPlaceholderText('Search contacts...')
       
       // Get first contact's data
       const firstContact = contactsData.contacts[0]
       
       // Search by email
       await user.clear(searchInput)
-      await user.type(searchInput, firstContact.email.slice(0, 5))
+      await user.type(searchInput, firstContact.email)
       
       // Should find the contact
       expect(screen.getByText(firstContact.name)).toBeInTheDocument()
@@ -107,8 +112,8 @@ describe('Directory Page', () => {
       const user = userEvent.setup()
       render(<DirectoryPage />)
       
-      const searchInput = screen.getByPlaceholderText(/search/i)
-      await user.type(searchInput, contactsData.contacts[0].name.slice(0, 5))
+      const searchInput = screen.getByPlaceholderText('Search contacts...')
+      await user.type(searchInput, contactsData.contacts[0].name)
       
       // Should show filtered results
       const rows = screen.getAllByRole('row')
@@ -163,7 +168,7 @@ describe('Directory Page', () => {
     it('search input is properly labeled', () => {
       render(<DirectoryPage />)
       
-      const searchInput = screen.getByPlaceholderText(/search/i)
+      const searchInput = screen.getByPlaceholderText('Search contacts...')
       expect(searchInput).toHaveAttribute('type', 'search')
     })
 

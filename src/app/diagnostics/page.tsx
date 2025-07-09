@@ -124,6 +124,19 @@ export default function DiagnosticsPage() {
   // Selected section state
   const [selectedSection, setSelectedSection] = useState<string>('all')
   
+  // Track if navigation is sticky
+  const [isSticky, setIsSticky] = useState(false)
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      // Navigation becomes sticky when scrolled past ~88px (the height of the header card)
+      setIsSticky(window.scrollY > 88)
+    }
+    
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+  
   // Component preview state
   const [selectedComponent, setSelectedComponent] = useState<string | null>(null)
   const [selectedUsage, setSelectedUsage] = useState<{ component: string; page: string } | null>(null)
@@ -795,143 +808,208 @@ function cn(...inputs: (string | undefined)[]) {
 
   return (
     <div className="container mx-auto p-8 space-y-6 max-w-7xl">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-3">
-            <Activity className="h-8 w-8 text-primary" />
-            System Diagnostics
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Real-time application health and configuration dashboard
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={copyDiagnostics}>
-            <Copy className="h-4 w-4 mr-2" />
-            Copy
-          </Button>
-          <Button variant="outline" size="sm" onClick={exportDiagnostics}>
-            <Download className="h-4 w-4 mr-2" />
-            Export
-          </Button>
-        </div>
-      </div>
-
-      {/* Quick Navigation - Sticky */}
-      <div className="sticky top-[88px] z-30 -mx-8 mb-6">
-        <div className="px-8 py-4 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b shadow-sm">
-          <nav aria-label="Section navigation" className="flex flex-wrap gap-2">
+      {/* Header Card - Not Sticky */}
+      <Card className="mb-6">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold flex items-center gap-3">
+                <Activity className="h-8 w-8 text-primary" />
+                System Diagnostics
+              </h1>
+              <p className="text-muted-foreground mt-1">
+                Real-time application health and configuration dashboard
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm" onClick={copyDiagnostics}>
+                <Copy className="h-4 w-4 mr-2" />
+                Copy
+              </Button>
+              <Button variant="outline" size="sm" onClick={exportDiagnostics}>
+                <Download className="h-4 w-4 mr-2" />
+                Export
+              </Button>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <nav aria-label="Section navigation" className="flex flex-wrap gap-2 justify-center">
           <Badge 
             variant={selectedSection === 'all' ? 'default' : 'outline'}
-            className="cursor-pointer" 
+            className="cursor-pointer text-sm py-1.5 px-3 flex items-center justify-center" 
             onClick={() => setSelectedSection('all')}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => e.key === 'Enter' && setSelectedSection('all')}
             aria-label="View all sections"
           >
-            <Info className="h-3 w-3 mr-1" />
+            <Info className="h-4 w-4 mr-1.5" />
             View All
           </Badge>
         <Badge 
           variant={selectedSection === 'system' ? 'default' : 'outline'}
-          className="cursor-pointer" 
+          className="cursor-pointer text-sm py-1.5 px-3 flex items-center justify-center" 
           onClick={() => setSelectedSection('system')}
           role="button"
           tabIndex={0}
           onKeyDown={(e) => e.key === 'Enter' && setSelectedSection('system')}
           aria-label="View System Information section"
         >
-          <Monitor className="h-3 w-3 mr-1" />
+          <Monitor className="h-4 w-4 mr-1.5" />
           System
         </Badge>
         <Badge 
           variant={selectedSection === 'theme' ? 'default' : 'outline'}
-          className="cursor-pointer" 
+          className="cursor-pointer text-sm py-1.5 px-3 flex items-center justify-center" 
           onClick={() => setSelectedSection('theme')}
           role="button"
           tabIndex={0}
           onKeyDown={(e) => e.key === 'Enter' && setSelectedSection('theme')}
           aria-label="View Theme Diagnostics section"
         >
-          <Palette className="h-3 w-3 mr-1" />
+          <Palette className="h-4 w-4 mr-1.5" />
           Theme
         </Badge>
         <Badge 
           variant={selectedSection === 'components' ? 'default' : 'outline'}
-          className="cursor-pointer" 
+          className="cursor-pointer text-sm py-1.5 px-3 flex items-center justify-center" 
           onClick={() => setSelectedSection('components')}
           role="button"
           tabIndex={0}
           onKeyDown={(e) => e.key === 'Enter' && setSelectedSection('components')}
           aria-label="View Component Health Check section"
         >
-          <Package className="h-3 w-3 mr-1" />
+          <Package className="h-4 w-4 mr-1.5" />
           Components
         </Badge>
         <Badge 
           variant={selectedSection === 'showcase' ? 'default' : 'outline'}
-          className="cursor-pointer" 
+          className="cursor-pointer text-sm py-1.5 px-3 flex items-center justify-center" 
           onClick={() => setSelectedSection('showcase')}
           role="button"
           tabIndex={0}
           onKeyDown={(e) => e.key === 'Enter' && setSelectedSection('showcase')}
           aria-label="View Theme Showcase section"
         >
-          <Palette className="h-3 w-3 mr-1" />
+          <Palette className="h-4 w-4 mr-1.5" />
           Showcase
         </Badge>
         <Badge 
           variant={selectedSection === 'usage' ? 'default' : 'outline'}
-          className="cursor-pointer" 
+          className="cursor-pointer text-sm py-1.5 px-3 flex items-center justify-center" 
           onClick={() => setSelectedSection('usage')}
           role="button"
           tabIndex={0}
           onKeyDown={(e) => e.key === 'Enter' && setSelectedSection('usage')}
           aria-label="View Component Usage Map section"
         >
-          <Map className="h-3 w-3 mr-1" />
+          <Map className="h-4 w-4 mr-1.5" />
           Usage Map
         </Badge>
         <Badge 
           variant={selectedSection === 'state' ? 'default' : 'outline'}
-          className="cursor-pointer" 
+          className="cursor-pointer text-sm py-1.5 px-3 flex items-center justify-center" 
           onClick={() => setSelectedSection('state')}
           role="button"
           tabIndex={0}
           onKeyDown={(e) => e.key === 'Enter' && setSelectedSection('state')}
           aria-label="View State Management section"
         >
-          <Database className="h-3 w-3 mr-1" />
+          <Database className="h-4 w-4 mr-1.5" />
           State
         </Badge>
         <Badge 
           variant={selectedSection === 'actions' ? 'default' : 'outline'}
-          className="cursor-pointer" 
+          className="cursor-pointer text-sm py-1.5 px-3 flex items-center justify-center" 
           onClick={() => setSelectedSection('actions')}
           role="button"
           tabIndex={0}
           onKeyDown={(e) => e.key === 'Enter' && setSelectedSection('actions')}
           aria-label="View Quick Actions section"
         >
-          <Zap className="h-3 w-3 mr-1" />
+          <Zap className="h-4 w-4 mr-1.5" />
           Actions
         </Badge>
         <Badge 
           variant={selectedSection === 'shortcuts' ? 'default' : 'outline'}
-          className="cursor-pointer" 
+          className="cursor-pointer text-sm py-1.5 px-3 flex items-center justify-center" 
           onClick={() => setSelectedSection('shortcuts')}
           role="button"
           tabIndex={0}
           onKeyDown={(e) => e.key === 'Enter' && setSelectedSection('shortcuts')}
           aria-label="View Keyboard Shortcuts section"
         >
-          <Keyboard className="h-3 w-3 mr-1" />
+          <Keyboard className="h-4 w-4 mr-1.5" />
           Shortcuts
         </Badge>
+        <Badge 
+          variant={selectedSection === 'errors' ? 'default' : 'outline'}
+          className="cursor-pointer text-sm py-1.5 px-3 flex items-center justify-center" 
+          onClick={() => setSelectedSection('errors')}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => e.key === 'Enter' && setSelectedSection('errors')}
+          aria-label="View Error Pages section"
+        >
+          <AlertCircle className="h-4 w-4 mr-1.5" />
+          Errors
+        </Badge>
           </nav>
-        </div>
+        </CardContent>
+      </Card>
+      
+      {/* Sticky Navigation - Only Navigation Buttons */}
+      <div className="sticky top-20 z-30 -mt-[88px]">
+        <Card className={cn(
+          "transition-all duration-300",
+          isSticky ? "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-md" : "bg-card shadow-sm"
+        )}>
+          <CardContent className="py-4">
+            <nav aria-label="Section navigation" className="flex flex-wrap gap-2 justify-center">
+              <Badge variant={selectedSection === 'all' ? 'default' : 'outline'} className="cursor-pointer text-sm py-1.5 px-3 flex items-center justify-center" onClick={() => setSelectedSection('all')} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && setSelectedSection('all')} aria-label="View all sections">
+                <Info className="h-4 w-4 mr-1.5" />
+                View All
+              </Badge>
+              <Badge variant={selectedSection === 'system' ? 'default' : 'outline'} className="cursor-pointer text-sm py-1.5 px-3 flex items-center justify-center" onClick={() => setSelectedSection('system')} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && setSelectedSection('system')} aria-label="View System Information section">
+                <Monitor className="h-4 w-4 mr-1.5" />
+                System
+              </Badge>
+              <Badge variant={selectedSection === 'theme' ? 'default' : 'outline'} className="cursor-pointer text-sm py-1.5 px-3 flex items-center justify-center" onClick={() => setSelectedSection('theme')} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && setSelectedSection('theme')} aria-label="View Theme Diagnostics section">
+                <Palette className="h-4 w-4 mr-1.5" />
+                Theme
+              </Badge>
+              <Badge variant={selectedSection === 'components' ? 'default' : 'outline'} className="cursor-pointer text-sm py-1.5 px-3 flex items-center justify-center" onClick={() => setSelectedSection('components')} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && setSelectedSection('components')} aria-label="View Component Health Check section">
+                <Package className="h-4 w-4 mr-1.5" />
+                Components
+              </Badge>
+              <Badge variant={selectedSection === 'showcase' ? 'default' : 'outline'} className="cursor-pointer text-sm py-1.5 px-3 flex items-center justify-center" onClick={() => setSelectedSection('showcase')} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && setSelectedSection('showcase')} aria-label="View Theme Showcase section">
+                <Palette className="h-4 w-4 mr-1.5" />
+                Showcase
+              </Badge>
+              <Badge variant={selectedSection === 'usage' ? 'default' : 'outline'} className="cursor-pointer text-sm py-1.5 px-3 flex items-center justify-center" onClick={() => setSelectedSection('usage')} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && setSelectedSection('usage')} aria-label="View Component Usage Map section">
+                <Map className="h-4 w-4 mr-1.5" />
+                Usage Map
+              </Badge>
+              <Badge variant={selectedSection === 'state' ? 'default' : 'outline'} className="cursor-pointer text-sm py-1.5 px-3 flex items-center justify-center" onClick={() => setSelectedSection('state')} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && setSelectedSection('state')} aria-label="View State Management section">
+                <Database className="h-4 w-4 mr-1.5" />
+                State
+              </Badge>
+              <Badge variant={selectedSection === 'actions' ? 'default' : 'outline'} className="cursor-pointer text-sm py-1.5 px-3 flex items-center justify-center" onClick={() => setSelectedSection('actions')} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && setSelectedSection('actions')} aria-label="View Quick Actions section">
+                <Zap className="h-4 w-4 mr-1.5" />
+                Actions
+              </Badge>
+              <Badge variant={selectedSection === 'shortcuts' ? 'default' : 'outline'} className="cursor-pointer text-sm py-1.5 px-3 flex items-center justify-center" onClick={() => setSelectedSection('shortcuts')} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && setSelectedSection('shortcuts')} aria-label="View Keyboard Shortcuts section">
+                <Keyboard className="h-4 w-4 mr-1.5" />
+                Shortcuts
+              </Badge>
+              <Badge variant={selectedSection === 'errors' ? 'default' : 'outline'} className="cursor-pointer text-sm py-1.5 px-3 flex items-center justify-center" onClick={() => setSelectedSection('errors')} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && setSelectedSection('errors')} aria-label="View Error Pages section">
+                <AlertCircle className="h-4 w-4 mr-1.5" />
+                Errors
+              </Badge>
+            </nav>
+          </CardContent>
+        </Card>
       </div>
 
       {/* 1. System Information */}
@@ -949,7 +1027,7 @@ function cn(...inputs: (string | undefined)[]) {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div>
-                  <Label className="text-xs text-muted-foreground">Environment</Label>
+                  <Label className="text-sm text-muted-foreground">Environment</Label>
                   <div className="flex items-center gap-2 mt-1">
                     <Badge variant={systemInfo.environment === 'development' ? 'default' : 'secondary'}>
                       {systemInfo.environment}
@@ -957,22 +1035,22 @@ function cn(...inputs: (string | undefined)[]) {
                   </div>
                 </div>
                 <div>
-                  <Label className="text-xs text-muted-foreground">Platform</Label>
+                  <Label className="text-sm text-muted-foreground">Platform</Label>
                   <p className="font-mono text-sm mt-1">{systemInfo.platform}</p>
                 </div>
                 <div>
-                  <Label className="text-xs text-muted-foreground">Viewport</Label>
+                  <Label className="text-sm text-muted-foreground">Viewport</Label>
                   <p className="font-mono text-sm mt-1">
                     {systemInfo.viewport.width} × {systemInfo.viewport.height}
                   </p>
                 </div>
                 <div>
-                  <Label className="text-xs text-muted-foreground">Next.js</Label>
+                  <Label className="text-sm text-muted-foreground">Next.js</Label>
                   <p className="font-mono text-sm mt-1">v15.3.5</p>
                 </div>
               </div>
               <div>
-                <Label className="text-xs text-muted-foreground">User Agent</Label>
+                <Label className="text-sm text-muted-foreground">User Agent</Label>
                 <p className="font-mono text-xs mt-1 text-muted-foreground break-all">
                   {systemInfo.userAgent}
                 </p>
@@ -999,16 +1077,16 @@ function cn(...inputs: (string | undefined)[]) {
                 <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
                   <div className="flex items-center gap-4">
                     <div>
-                      <Label className="text-xs text-muted-foreground">Color Theme</Label>
+                      <Label className="text-sm text-muted-foreground">Color Theme</Label>
                       <p className="font-semibold text-lg capitalize text-primary">{colorTheme}</p>
                       <p className="text-xs text-muted-foreground mt-1">Expected class: theme-{colorTheme}</p>
                     </div>
                     <div>
-                      <Label className="text-xs text-muted-foreground">Mode</Label>
+                      <Label className="text-sm text-muted-foreground">Mode</Label>
                       <p className="font-semibold text-lg capitalize">{theme}</p>
                     </div>
                     <div>
-                      <Label className="text-xs text-muted-foreground">Mounted</Label>
+                      <Label className="text-sm text-muted-foreground">Mounted</Label>
                       <Badge variant={mounted ? "default" : "secondary"}>
                         {mounted ? "Yes" : "No"}
                       </Badge>
@@ -1022,7 +1100,7 @@ function cn(...inputs: (string | undefined)[]) {
                 
                 {/* Visual Theme Test */}
                 <div className="p-4 border rounded-lg">
-                  <Label className="text-xs text-muted-foreground mb-2 block">Theme Color Test</Label>
+                  <Label className="text-sm text-muted-foreground mb-2 block">Theme Color Test</Label>
                   <div className="flex items-center gap-4">
                     <div className="w-16 h-16 bg-primary rounded-lg shadow-lg" />
                     <div>
@@ -1088,13 +1166,13 @@ function cn(...inputs: (string | undefined)[]) {
               {/* Classes */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-xs text-muted-foreground">Body Classes</Label>
+                  <Label className="text-sm text-muted-foreground">Body Classes</Label>
                   <p className="font-mono text-xs mt-1 p-2 bg-muted rounded break-all">
                     {bodyClasses || '(none)'}
                   </p>
                 </div>
                 <div>
-                  <Label className="text-xs text-muted-foreground">HTML Classes</Label>
+                  <Label className="text-sm text-muted-foreground">HTML Classes</Label>
                   <p className="font-mono text-xs mt-1 p-2 bg-muted rounded break-all">
                     {htmlClasses || '(none)'}
                   </p>
@@ -1488,23 +1566,23 @@ function cn(...inputs: (string | undefined)[]) {
                 <Label className="text-sm font-semibold mb-3 block">App Context</Label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div>
-                    <Label className="text-xs text-muted-foreground">Mounted</Label>
+                    <Label className="text-sm text-muted-foreground">Mounted</Label>
                     <Badge variant={appContext.mounted ? 'default' : 'secondary'}>
                       {appContext.mounted ? 'Yes' : 'No'}
                     </Badge>
                   </div>
                   <div>
-                    <Label className="text-xs text-muted-foreground">Loading</Label>
+                    <Label className="text-sm text-muted-foreground">Loading</Label>
                     <Badge variant={appContext.isLoading ? 'destructive' : 'default'}>
                       {appContext.isLoading ? 'Yes' : 'No'}
                     </Badge>
                   </div>
                   <div>
-                    <Label className="text-xs text-muted-foreground">Notifications</Label>
+                    <Label className="text-sm text-muted-foreground">Notifications</Label>
                     <p className="font-mono text-sm mt-1">{appContext.notifications.length}</p>
                   </div>
                   <div>
-                    <Label className="text-xs text-muted-foreground">Preferences</Label>
+                    <Label className="text-sm text-muted-foreground">Preferences</Label>
                     <p className="font-mono text-sm mt-1">{Object.keys(appContext.preferences).length}</p>
                   </div>
                 </div>
@@ -1633,6 +1711,55 @@ function cn(...inputs: (string | undefined)[]) {
                 ))}
               </div>
             </CardContent>
+        </Card>
+      )}
+
+      {/* 9. Error Pages */}
+      {(selectedSection === 'all' || selectedSection === 'errors') && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground">9.</span>
+              <AlertCircle className="h-5 w-5" />
+              Error Pages
+              <HelpTooltip content="Test error handling and error pages throughout the application." />
+            </CardTitle>
+            <CardDescription>Test error handling and error pages</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <FileText className="h-4 w-4 text-muted-foreground" />
+                  <div className="flex-1">
+                    <p className="font-semibold text-sm">404 Not Found</p>
+                    <p className="text-xs text-muted-foreground">Test the 404 page with broken MRI icon</p>
+                  </div>
+                </div>
+                <Link href="/this-page-does-not-exist">
+                  <Button variant="outline" className="w-full">
+                    Test 404 Page
+                  </Button>
+                </Link>
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 text-muted-foreground" />
+                  <div className="flex-1">
+                    <p className="font-semibold text-sm">Trigger Error</p>
+                    <p className="text-xs text-muted-foreground">Throws a test error to see error boundary</p>
+                  </div>
+                </div>
+                <Button 
+                  variant="outline" 
+                  className="w-full"
+                  onClick={() => { throw new Error('Test error from diagnostics') }}
+                >
+                  Throw Test Error
+                </Button>
+              </div>
+            </div>
+          </CardContent>
         </Card>
       )}
 

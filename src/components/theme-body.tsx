@@ -10,11 +10,11 @@ export function ThemeBody({
   useEffect(() => {
     // Apply saved color theme
     try {
-      const colorTheme = localStorage.getItem('color-theme') || 'default'
+      const colorTheme = localStorage.getItem('color-theme') || 'blue'
       document.body.classList.add(`theme-${colorTheme}`)
     } catch (error) {
       // If localStorage is not available, use default theme
-      document.body.classList.add('theme-default')
+      document.body.classList.add('theme-blue')
     }
   }, [])
 

@@ -74,12 +74,17 @@ export function ReferringProviderTable({ providers, searchTerm }: ReferringProvi
           return (
             <React.Fragment key={provider.id}>
               <TableRow 
-                className="cursor-pointer hover:bg-muted/50"
+                className="cursor-pointer hover:bg-muted-darker/40 transition-all duration-150"
                 onClick={() => toggleRow(provider.id)}
               >
                 <TableCell>
-                  <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                    {isExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="h-6 w-6 p-0"
+                    aria-label={isExpanded ? "Collapse provider details" : "Expand provider details"}
+                  >
+                    {isExpanded ? <ChevronDown className="h-4 w-4" strokeWidth={1.5} /> : <ChevronRight className="h-4 w-4" strokeWidth={1.5} />}
                   </Button>
                 </TableCell>
                 <TableCell className="font-semibold">{provider.name}</TableCell>
@@ -120,11 +125,11 @@ export function ReferringProviderTable({ providers, searchTerm }: ReferringProvi
               </TableRow>
               {isExpanded && (
                 <TableRow>
-                  <TableCell colSpan={6} className="bg-muted/30">
+                  <TableCell colSpan={6} className="bg-muted-lighter border-l-4 border-l-border-strong">
                     <div className="py-4 px-8 space-y-3">
                       {provider.npi && (
                         <div className="flex items-center gap-2">
-                          <Shield className="h-4 w-4 text-muted-foreground" />
+                          <Shield className="h-4 w-4 text-muted-foreground" strokeWidth={1.5} />
                           <span className="text-sm">
                             <span className="font-semibold">NPI:</span> {provider.npi}
                           </span>
@@ -132,7 +137,7 @@ export function ReferringProviderTable({ providers, searchTerm }: ReferringProvi
                       )}
                       {provider.notes && (
                         <div className="flex items-start gap-2">
-                          <FileText className="h-4 w-4 text-muted-foreground mt-0.5" />
+                          <FileText className="h-4 w-4 text-muted-foreground mt-0.5" strokeWidth={1.5} />
                           <div className="space-y-2">
                             <span className="text-sm font-semibold">Notes:</span>
                             <p className="text-sm text-muted-foreground">{provider.notes}</p>

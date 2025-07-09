@@ -6,7 +6,7 @@ import { Toaster } from "sonner";
 import { Footer } from "@/components/footer";
 import { NavBar } from "@/components/navbar";
 import { ThemeBody } from "@/components/theme-body";
-import { DiagnosticButton } from "@/components/diagnostic-button";
+import { CommandMenu } from "@/components/command-menu";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -55,7 +55,7 @@ export default function RootLayout({
               closeButton
               theme="system"
             />
-            <DiagnosticButton />
+            <CommandMenu />
           </ThemeBody>
         </Providers>
       </body>

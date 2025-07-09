@@ -130,27 +130,27 @@ export function FormBuilderUI() {
   return (
     <div className="space-y-6">
       {/* Form Settings */}
-      <Card>
+      <Card className="border-border-strong bg-gradient-to-br from-background to-muted-lighter">
         <CardHeader>
           <CardTitle>Form Settings</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div>
+          <div className="p-4 rounded-lg bg-background border border-border">
             <label className="block text-sm font-semibold mb-1">Form Name</label>
             <input
               type="text"
               value={formName}
               onChange={(e) => setFormName(e.target.value)}
-              className="w-full px-3 py-2 border rounded-md"
+              className="w-full px-3 py-2 border border-border rounded-md bg-muted-lighter/30 focus:bg-background transition-colors"
               placeholder="Enter form name"
             />
           </div>
-          <div>
+          <div className="p-4 rounded-lg bg-background border border-border">
             <label className="block text-sm font-semibold mb-1">Description</label>
             <textarea
               value={formDescription}
               onChange={(e) => setFormDescription(e.target.value)}
-              className="w-full px-3 py-2 border rounded-md"
+              className="w-full px-3 py-2 border border-border rounded-md bg-muted-lighter/30 focus:bg-background transition-colors"
               placeholder="Enter form description"
               rows={3}
             />
@@ -159,14 +159,14 @@ export function FormBuilderUI() {
       </Card>
 
       {/* Form Fields */}
-      <Card>
+      <Card className="overflow-hidden">
         <CardHeader>
           <CardTitle>Form Fields</CardTitle>
           <CardDescription>Add and configure form fields</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 bg-muted-lighter/20">
           {fields.map((field, index) => (
-            <Card key={field.id} className="p-4">
+            <Card key={field.id} className="p-4 shadow-sm hover:shadow-md transition-all duration-200 border-l-4 border-l-primary">
               <div className="space-y-3">
                 <div className="flex gap-2">
                   <input

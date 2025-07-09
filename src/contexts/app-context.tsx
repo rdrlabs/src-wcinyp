@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react';
 import { useTheme } from 'next-themes';
 
-export type ColorTheme = 'blue' | 'red' | 'orange' | 'green' | 'yellow' | 'default';
+export type ColorTheme = 'blue' | 'red' | 'orange' | 'green' | 'yellow' | 'pink' | 'purple' | 'neutral';
 
 interface Notification {
   id: string;
@@ -48,7 +48,7 @@ const AppContext = createContext<AppContextValue | undefined>(undefined);
 
 const COLOR_THEME_KEY = 'color-theme';
 const PREFERENCES_KEY = 'app-preferences';
-const DEFAULT_COLOR_THEME: ColorTheme = 'default';
+const DEFAULT_COLOR_THEME: ColorTheme = 'blue';
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const nextThemes = useTheme();
@@ -85,7 +85,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         existingThemeClasses.forEach(cls => document.body.classList.remove(cls));
         
         // Apply the correct theme
-        if (savedTheme && ['blue', 'red', 'orange', 'green', 'yellow', 'default'].includes(savedTheme)) {
+        if (savedTheme && ['blue', 'red', 'orange', 'green', 'yellow', 'pink', 'purple', 'neutral'].includes(savedTheme)) {
           setColorThemeState(savedTheme);
           document.body.classList.add(`theme-${savedTheme}`);
         } else {

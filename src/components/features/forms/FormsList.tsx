@@ -18,11 +18,11 @@ export function FormsList() {
   return (
     <div className="space-y-8">
       {Object.entries(groupedTemplates).map(([category, templates]) => (
-        <div key={category}>
-          <h3 className="text-lg font-semibold mb-4 capitalize">{category.replace('-', ' ')}</h3>
+        <div key={category} className="p-6 bg-muted-lighter/30 rounded-lg border border-border">
+          <h3 className="text-lg font-semibold mb-4 capitalize p-3 bg-background rounded-md border-l-4 border-primary">{category.replace('-', ' ')}</h3>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {templates.map((template) => (
-              <Card key={template.id} className="hover:shadow-lg transition-shadow" data-testid={`form-template-${template.id}`}>
+              <Card key={template.id} variant="elevated" className="hover:shadow-lg transition-all hover:border-border-strong" data-testid={`form-template-${template.id}`}>
                 <CardHeader>
                   <CardTitle className="text-base flex items-center gap-2">
                     <FileEdit className="h-4 w-4" />

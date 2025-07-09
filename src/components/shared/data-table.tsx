@@ -65,7 +65,7 @@ export function DataTable<T>({
     <div className={cn("space-y-4", className)}>
       {/* Search and Filters */}
       {(onSearch || filters) && (
-        <div className="flex flex-col md:flex-row gap-4">
+        <div className="flex flex-col md:flex-row gap-4 p-4 bg-muted-lighter rounded-lg border border-border">
           {onSearch && (
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -74,7 +74,7 @@ export function DataTable<T>({
                 placeholder={searchPlaceholder}
                 value={searchValue}
                 onChange={(e) => onSearch(e.target.value)}
-                className="pl-10"
+                className="pl-10 bg-background border-border-strong focus:border-primary"
                 data-testid="data-table-search"
               />
             </div>
@@ -114,7 +114,8 @@ export function DataTable<T>({
                   <React.Fragment key={rowKey}>
                     <TableRow
                       className={cn(
-                        onRowClick || expandable ? "cursor-pointer hover:bg-muted/50" : "",
+                        onRowClick || expandable ? "cursor-pointer hover:bg-muted-darker/50" : "",
+                        "even:bg-muted-lighter/50"
                       )}
                       onClick={() => {
                         if (expandable) {
