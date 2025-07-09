@@ -43,7 +43,7 @@ const Separator = React.forwardRef<
     <SeparatorPrimitive.Root
       ref={ref}
       decorative={decorative}
-      orientation={orientation}
+      orientation={orientation as "horizontal" | "vertical" | undefined}
       className={cn(separatorVariants({ variant, orientation }), className)}
       {...props}
     />

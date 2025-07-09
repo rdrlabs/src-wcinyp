@@ -148,7 +148,7 @@ export default function DiagnosticsPage() {
     { value: 'orange', name: 'Orange', color: 'oklch(70.1% 0.179 44.2)' },
     { value: 'green', name: 'Green', color: 'oklch(60.8% 0.149 149.5)' },
     { value: 'yellow', name: 'Yellow', color: 'oklch(82.5% 0.155 92.1)' },
-    { value: 'default', name: 'Default', color: 'oklch(25% 0 0)' }
+    { value: 'neutral', name: 'Neutral', color: 'oklch(25% 0 0)' }
   ]
 
   // Component usage map

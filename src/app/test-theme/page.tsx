@@ -6,13 +6,13 @@ import { Button } from '@/components/ui/button'
 export default function TestThemePage() {
   const { colorTheme, setColorTheme, mounted } = useAppTheme()
   
-  const themes: Array<{ value: 'blue' | 'red' | 'orange' | 'green' | 'yellow' | 'default', label: string }> = [
+  const themes: Array<{ value: 'blue' | 'red' | 'orange' | 'green' | 'yellow' | 'neutral', label: string }> = [
     { value: 'blue', label: 'Blue' },
     { value: 'red', label: 'Red' },
     { value: 'orange', label: 'Orange' },
     { value: 'green', label: 'Green' },
     { value: 'yellow', label: 'Yellow' },
-    { value: 'default', label: 'Default' },
+    { value: 'neutral', label: 'Neutral' },
   ]
   
   if (!mounted) {

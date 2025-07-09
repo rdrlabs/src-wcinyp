@@ -34,7 +34,7 @@ export default function LabsPage() {
     {
       icon: MessageCircleQuestion,
       title: "Hm, let me run this one by...",
-      description: <span>Rather than ask the same questions, redirect your queries to <em>Cornellius</em>, an AI chatbot that forces you to find the answer in the knowledge base</span>,
+      description: "Rather than ask the same questions, redirect your queries to Cornellius, an AI chatbot that forces you to find the answer in the knowledge base",
       isPlaceholder: true
     },
     {
@@ -68,7 +68,7 @@ export default function LabsPage() {
     <ComingSoonCard
       icon={Lightbulb}
       title="Ideas"
-      description={<span>Experimental features and innovative tools <em>where imaging meets imagination</em></span>}
+      description="Experimental features and innovative tools where imaging meets imagination"
       sections={sections}
       footer={footer}
     />
