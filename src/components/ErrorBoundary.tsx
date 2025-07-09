@@ -45,16 +45,16 @@ export function ErrorBoundary() {
     <div className="min-h-screen flex items-center justify-center p-4">
       <Card className="max-w-md w-full">
         <CardHeader>
-          <CardTitle className="text-2xl text-red-600">{title}</CardTitle>
+          <CardTitle className="text-2xl text-destructive">{title}</CardTitle>
           <CardDescription>{message}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           {process.env.NODE_ENV === 'development' && error !== null && error instanceof Error && error.stack && (
-            <pre className="text-xs bg-gray-100 p-3 rounded overflow-x-auto">
+            <pre className="text-sm bg-muted p-3 rounded overflow-x-auto">
               <code>{error.stack}</code>
             </pre>
           )}
-          <div className="flex gap-3">
+          <div className="flex gap-4">
             <Button onClick={handleReload} variant="outline">
               Try Again
             </Button>

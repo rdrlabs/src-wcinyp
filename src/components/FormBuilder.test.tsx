@@ -2,6 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import FormBuilder from './FormBuilder'
+import { FormProvider } from '@/contexts/form-context'
 import type { FormTemplate } from '@/types'
 
 // Mock useRouter
@@ -44,6 +45,15 @@ const mockTemplate: FormTemplate = {
   status: 'active'
 }
 
+// Helper function to render with providers
+const renderWithProviders = (component: React.ReactElement) => {
+  return render(
+    <FormProvider>
+      {component}
+    </FormProvider>
+  )
+}
+
 describe('FormBuilder', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -51,14 +61,14 @@ describe('FormBuilder', () => {
 
   describe('Initial Render', () => {
     it('renders form title and description', () => {
-      render(<FormBuilder template={mockTemplate} />)
+      renderWithProviders(<FormBuilder template={mockTemplate} />)
       
       expect(screen.getByText('Test Form')).toBeInTheDocument()
       expect(screen.getByText('Test form description')).toBeInTheDocument()
     })
 
     it('renders action buttons', () => {
-      render(<FormBuilder template={mockTemplate} />)
+      renderWithProviders(<FormBuilder template={mockTemplate} />)
       
       expect(screen.getByRole('button', { name: 'Preview' })).toBeInTheDocument()
       expect(screen.getByRole('button', { name: 'Clear Form' })).toBeInTheDocument()
@@ -66,7 +76,7 @@ describe('FormBuilder', () => {
     })
 
     it('renders correct number of form fields', () => {
-      render(<FormBuilder template={mockTemplate} />)
+      renderWithProviders(<FormBuilder template={mockTemplate} />)
       
       // Should render 3 fields based on template.fields
       const fieldLabels = screen.getAllByText(/Field \d+/)
@@ -74,7 +84,7 @@ describe('FormBuilder', () => {
     })
 
     it('shows required indicators for some fields', () => {
-      render(<FormBuilder template={mockTemplate} />)
+      renderWithProviders(<FormBuilder template={mockTemplate} />)
       
       // Based on the mock logic, every 3rd field is required
       const requiredIndicators = screen.getAllByText('*')
@@ -85,7 +95,7 @@ describe('FormBuilder', () => {
   describe('Form Interactions', () => {
     it('updates text input values', async () => {
       const user = userEvent.setup()
-      render(<FormBuilder template={mockTemplate} />)
+      renderWithProviders(<FormBuilder template={mockTemplate} />)
       
       const firstInput = screen.getAllByRole('textbox')[0]
       await user.type(firstInput, 'Test Value')
@@ -96,7 +106,7 @@ describe('FormBuilder', () => {
     it('toggles checkbox values', async () => {
       const user = userEvent.setup()
       const checkboxTemplate = { ...mockTemplate, fields: 6 } // Ensure we have a checkbox
-      render(<FormBuilder template={checkboxTemplate} />)
+      renderWithProviders(<FormBuilder template={checkboxTemplate} />)
       
       const checkboxes = screen.getAllByRole('checkbox')
       if (checkboxes.length > 0) {
@@ -111,7 +121,7 @@ describe('FormBuilder', () => {
     it('selects dropdown options', async () => {
       const user = userEvent.setup()
       const selectTemplate = { ...mockTemplate, fields: 5 } // Ensure we have a select
-      render(<FormBuilder template={selectTemplate} />)
+      renderWithProviders(<FormBuilder template={selectTemplate} />)
       
       const selects = screen.getAllByRole('combobox')
       if (selects.length > 0) {
@@ -141,7 +151,7 @@ describe('FormBuilder', () => {
   describe('Preview Mode', () => {
     it('switches to preview mode', async () => {
       const user = userEvent.setup()
-      render(<FormBuilder template={mockTemplate} />)
+      renderWithProviders(<FormBuilder template={mockTemplate} />)
       
       const previewButton = screen.getByRole('button', { name: /Preview/i })
       await user.click(previewButton)
@@ -152,7 +162,7 @@ describe('FormBuilder', () => {
 
     it('displays form fields in preview mode', async () => {
       const user = userEvent.setup()
-      render(<FormBuilder template={mockTemplate} />)
+      renderWithProviders(<FormBuilder template={mockTemplate} />)
       
       // Switch to preview
       await user.click(screen.getByRole('button', { name: /Preview/i }))
@@ -167,7 +177,7 @@ describe('FormBuilder', () => {
 
     it('returns to edit mode from preview', async () => {
       const user = userEvent.setup()
-      render(<FormBuilder template={mockTemplate} />)
+      renderWithProviders(<FormBuilder template={mockTemplate} />)
       
       // Go to preview
       await user.click(screen.getByRole('button', { name: /Preview/i }))
@@ -182,7 +192,7 @@ describe('FormBuilder', () => {
   describe('Form Submission', () => {
     it('validates required fields on submit', async () => {
       const user = userEvent.setup()
-      render(<FormBuilder template={mockTemplate} />)
+      renderWithProviders(<FormBuilder template={mockTemplate} />)
       
       // Verify required fields exist
       const requiredField = screen.getAllByRole('textbox')[0]
@@ -200,7 +210,7 @@ describe('FormBuilder', () => {
 
     it('submits form with valid data', async () => {
       const user = userEvent.setup()
-      render(<FormBuilder template={mockTemplate} />)
+      renderWithProviders(<FormBuilder template={mockTemplate} />)
       
       // Fill all required fields (every 3rd field)
       const inputs = screen.getAllByRole('textbox')
@@ -231,7 +241,7 @@ describe('FormBuilder', () => {
         json: async () => ({ success: true })
       })
       
-      render(<FormBuilder template={mockTemplate} />)
+      renderWithProviders(<FormBuilder template={mockTemplate} />)
       
       // Fill required fields
       const inputs = screen.getAllByRole('textbox')
@@ -258,7 +268,7 @@ describe('FormBuilder', () => {
         json: async () => ({ success: true })
       })
       
-      render(<FormBuilder template={mockTemplate} />)
+      renderWithProviders(<FormBuilder template={mockTemplate} />)
       
       // Fill and submit
       const inputs = screen.getAllByRole('textbox')
@@ -276,7 +286,7 @@ describe('FormBuilder', () => {
     it('renders different field types correctly', async () => {
       const largeTemplate = { ...mockTemplate, fields: 8 }
       const user = userEvent.setup()
-      render(<FormBuilder template={largeTemplate} />)
+      renderWithProviders(<FormBuilder template={largeTemplate} />)
       
       // In edit mode, check we have various input types
       const textboxes = screen.getAllByRole('textbox')
@@ -298,7 +308,7 @@ describe('FormBuilder', () => {
 
     it('handles email field validation', async () => {
       const user = userEvent.setup()
-      render(<FormBuilder template={{ ...mockTemplate, fields: 2 }} />)
+      renderWithProviders(<FormBuilder template={{ ...mockTemplate, fields: 2 }} />)
       
       const inputs = screen.getAllByRole('textbox')
       // Second field should be email type based on mock logic
@@ -317,7 +327,7 @@ describe('FormBuilder', () => {
   describe('Data Persistence', () => {
     it('maintains form data when switching between modes', async () => {
       const user = userEvent.setup()
-      render(<FormBuilder template={mockTemplate} />)
+      renderWithProviders(<FormBuilder template={mockTemplate} />)
       
       // Enter data
       const input = screen.getAllByRole('textbox')[0]
@@ -339,13 +349,14 @@ describe('FormBuilder', () => {
       // Mock fetch to reject
       global.fetch = vi.fn().mockRejectedValueOnce(new Error('Network error'))
       
-      render(<FormBuilder template={mockTemplate} />)
+      renderWithProviders(<FormBuilder template={mockTemplate} />)
       
-      // Fill and submit
+      // Fill all required fields
       const inputs = screen.getAllByRole('textbox')
+      // Field 1 (index 0) is required based on i % 3 === 0
       await user.type(inputs[0], 'Test')
       
-      // Submit should not crash the app
+      // Submit should trigger error handling
       await user.click(screen.getByRole('button', { name: 'Submit Form' }))
       
       // Should show error toast

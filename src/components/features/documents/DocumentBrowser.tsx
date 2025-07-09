@@ -1,12 +1,11 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { FileText, Download, Search } from 'lucide-react';
+import { FileText, Download } from 'lucide-react';
 import documentsData from '@/data/documents.json';
 import type { Document } from '@/types';
+import { ResourceBrowser, ResourceItem } from '@/components/shared';
+import { useSearch } from '@/hooks/shared';
 
 // Type assertion to match our interface
 interface DocumentsData {
@@ -19,117 +18,61 @@ const typedDocumentsData = documentsData as DocumentsData;
 
 export function DocumentBrowser() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [searchQuery, setSearchQuery] = useState('');
-
-  // Get unique categories
-  const categories = useMemo(() => {
-    return ['all', ...Object.keys(typedDocumentsData.categories)];
+  
+  // Flatten documents for search
+  const allDocuments = useMemo(() => {
+    const docs: (Document & { category: string })[] = [];
+    Object.entries(typedDocumentsData.categories).forEach(([category, categoryDocs]) => {
+      categoryDocs.forEach(doc => {
+        docs.push({ ...doc, category });
+      });
+    });
+    return docs;
   }, []);
 
-  // Filter documents based on category and search
-  const filteredDocuments = useMemo(() => {
-    let categoryEntries: [string, Document[]][] = [];
-    
-    if (selectedCategory === 'all') {
-      categoryEntries = Object.entries(typedDocumentsData.categories);
-    } else {
-      const docs = typedDocumentsData.categories[selectedCategory];
-      if (docs) {
-        categoryEntries = [[selectedCategory, docs]];
-      }
-    }
-    
-    if (searchQuery) {
-      categoryEntries = categoryEntries
-        .map(([category, docs]) => [
-          category,
-          docs.filter(doc => 
-            doc.name.toLowerCase().includes(searchQuery.toLowerCase())
-          )
-        ])
-        .filter(([_, docs]) => docs.length > 0) as [string, Document[]][];
-    }
-    
-    return categoryEntries;
-  }, [selectedCategory, searchQuery]);
+  // Use search hook
+  const { searchQuery, filteredData, handleSearch } = useSearch(allDocuments, {
+    searchableFields: ['name'],
+    minSearchLength: 1
+  });
+
+  // Convert documents to ResourceItem format
+  const resourceItems: ResourceItem[] = useMemo(() => {
+    return filteredData.map(doc => ({
+      id: `${doc.category}-${doc.name}`,
+      title: doc.name,
+      description: doc.size || '',
+      category: doc.category,
+      icon: <FileText className="h-4 w-4" />,
+      actions: [{
+        label: 'Download',
+        icon: <Download className="h-4 w-4 mr-2" />,
+        onClick: () => handleDownload(doc.path),
+        variant: 'outline' as const
+      }]
+    }));
+  }, [filteredData]);
 
   const handleDownload = (path: string) => {
-    // Construct the full URL for the document
     const url = `/documents/${path}`;
     window.open(url, '_blank');
   };
 
+  const categories = useMemo(() => {
+    return ['all', ...Object.keys(typedDocumentsData.categories)];
+  }, []);
+
   return (
-    <div className="space-y-6">
-      {/* Search and Filter Bar */}
-      <div className="flex flex-col md:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="text"
-            placeholder="Search documents..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
-            data-testid="document-search-input"
-          />
-        </div>
-        <div className="flex gap-2 flex-wrap">
-          {categories.map(cat => (
-            <Button
-              key={cat}
-              variant={selectedCategory === cat ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSelectedCategory(cat)}
-              data-testid={`category-button-${cat.toLowerCase().replace(/\s+/g, '-')}`}
-            >
-              {cat === 'all' ? 'All Documents' : cat}
-            </Button>
-          ))}
-        </div>
-      </div>
-
-      {/* Document Grid */}
-      <div className="space-y-8">
-        {filteredDocuments.map(([categoryName, documents]) => (
-          <div key={categoryName}>
-            <h3 className="text-lg font-semibold mb-4">{categoryName}</h3>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {documents.map((doc, docIdx) => (
-                <Card key={docIdx} className="hover:shadow-lg transition-shadow">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-sm font-medium flex items-center gap-2">
-                      <FileText className="h-4 w-4" />
-                      {doc.name}
-                    </CardTitle>
-                    <CardDescription className="text-xs">
-                      {doc.size}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="w-full"
-                      onClick={() => handleDownload(doc.path)}
-                      data-testid={`download-button-${doc.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
-                    >
-                      <Download className="h-4 w-4 mr-2" />
-                      Download
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {filteredDocuments.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground">No documents found matching your criteria.</p>
-        </div>
-      )}
-    </div>
+    <ResourceBrowser
+      items={resourceItems}
+      onSearch={handleSearch}
+      searchValue={searchQuery}
+      searchPlaceholder="Search documents..."
+      categories={categories}
+      selectedCategory={selectedCategory}
+      onCategoryChange={setSelectedCategory}
+      emptyMessage="No documents found matching your criteria."
+      gridCols={{ default: 1, md: 2, lg: 3 }}
+    />
   );
 }

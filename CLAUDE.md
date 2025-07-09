@@ -6,10 +6,11 @@ This is a medical imaging center application built with Next.js 14, TypeScript, 
 ## Tech Stack
 - **Framework**: Next.js 14 (App Router)
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS v3
+- **Styling**: Tailwind CSS v4 (migrated from v3)
 - **UI Components**: shadcn/ui
+- **Theme System**: Dual-theme approach (next-themes for dark/light, custom for color themes)
 - **Documentation**: Fumadocs (MDX) - Properly isolated with its own styling context
-- **Testing**: Vitest, React Testing Library (327 tests, TDD approach)
+- **Testing**: Vitest, React Testing Library (387 tests, TDD approach)
 - **Deployment**: Netlify (static hosting)
 
 ## Project Structure
@@ -81,7 +82,7 @@ npm run type-check
 npm test -- --run  # Run tests once (avoid watch mode timeout in Claude Code)
 ```
 
-**Test Suite Status**: 327 tests, all passing ✅
+**Test Suite Status**: 387 tests, all passing ✅
 
 ## Deployment
 The application automatically deploys to Netlify on push to main branch. The `netlify.toml` configuration handles:
@@ -100,3 +101,8 @@ The application automatically deploys to Netlify on push to main branch. The `ne
    - Uses Fumadocs' default styling system
    - Prevents style conflicts with main app
    - TDD approach for ensuring isolation
+6. **Theme System**: Dual-theme approach to avoid conflicts
+   - next-themes manages light/dark mode on `<html>` element
+   - Custom color themes (blue, red, orange, green, yellow, neutral) on `<body>` element
+   - Uses OKLCH color space for perceptually uniform colors
+   - ThemeBody component handles client-side theme application

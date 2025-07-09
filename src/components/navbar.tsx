@@ -3,24 +3,24 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { ThemeSelector } from "@/components/theme-selector";
 import { mainNavItems } from "@/config/navigation";
+import { TYPOGRAPHY } from "@/constants/typography";
+import { LAYOUT_SPACING } from "@/constants/spacing";
 
 export function NavBar() {
   const pathname = usePathname();
 
-
   return (
     <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-      <div className="container mx-auto px-4">
+      <div className={cn("container mx-auto", LAYOUT_SPACING.navPadding)}>
         <div className="flex h-16 items-center justify-between">
-          <div className="flex items-center space-x-8">
-            <Link href="/" className="text-xl font-bold hover:text-primary transition-colors">
+          <div className={cn("flex items-center", LAYOUT_SPACING.navItemGap)}>
+            <Link href="/" className="text-lg font-semibold hover:text-primary transition-colors">
               WCI@NYP
             </Link>
-            <div className="hidden md:flex space-x-6">
+            <div className={cn("hidden md:flex", LAYOUT_SPACING.navItemGap)}>
               {mainNavItems.map((item) => {
-                const Icon = item.icon;
                 const isActive = pathname.startsWith(item.href);
                 
                 return (
@@ -28,13 +28,12 @@ export function NavBar() {
                     key={item.href}
                     href={item.href} 
                     className={cn(
-                      "text-sm font-medium transition-colors flex items-center gap-1.5",
+                      "transition-colors",
                       isActive 
-                        ? "text-primary" 
-                        : "text-muted-foreground hover:text-foreground"
+                        ? cn(TYPOGRAPHY.navLinkActive, "text-primary")
+                        : cn(TYPOGRAPHY.navLink, "text-muted-foreground hover:text-foreground")
                     )}
                   >
-                    <Icon className="h-4 w-4" />
                     {item.label}
                   </Link>
                 );
@@ -42,7 +41,7 @@ export function NavBar() {
             </div>
           </div>
           
-          <ThemeToggle />
+          <ThemeSelector />
         </div>
       </div>
     </nav>

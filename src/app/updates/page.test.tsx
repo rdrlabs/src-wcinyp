@@ -70,7 +70,7 @@ describe('Updates Page', () => {
       iconContainers.forEach(container => {
         const icon = container.querySelector('svg')
         expect(icon).toBeInTheDocument()
-        expect(icon).toHaveClass('h-5', 'w-5', 'text-primary')
+        expect(icon).toHaveClass('h-6', 'w-6', 'text-primary')
       })
     })
   })

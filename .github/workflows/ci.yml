@@ -34,6 +34,9 @@ jobs:
     - name: Type check
       run: npm run type-check
       
+    - name: Validate design system
+      run: npm run validate:design
+      
     - name: Run tests
       run: npm test -- --run
       

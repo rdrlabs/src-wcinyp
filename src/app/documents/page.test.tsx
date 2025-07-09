@@ -17,7 +17,7 @@ describe('Documents Page', () => {
 
   it('renders the page title and description', () => {
     expect(screen.getByText('Documents & Forms')).toBeInTheDocument()
-    expect(screen.getByText('Medical forms and documents repository')).toBeInTheDocument()
+    expect(screen.getByText('Access medical forms, documents, and create custom forms')).toBeInTheDocument()
   })
 
   it('shows documents view by default', () => {
@@ -27,25 +27,26 @@ describe('Documents Page', () => {
   })
 
   it('toggles between documents and forms view', () => {
-    // Should show documents initially
-    expect(screen.getByText('Medical forms and documents repository')).toBeInTheDocument()
+    // Should show documents initially - check for table headers specific to documents
+    expect(screen.getByText('Document Name')).toBeInTheDocument()
     
     // Find and click the toggle switch
     const toggle = screen.getByRole('switch')
     fireEvent.click(toggle)
     
-    // Should now show forms view
-    expect(screen.getByText('Create and manage form templates')).toBeInTheDocument()
+    // Should now show forms view - check for table headers specific to forms
     expect(screen.getByText('Form Name')).toBeInTheDocument()
+    expect(screen.getByText('Fields')).toBeInTheDocument()
+    expect(screen.getByText('Submissions')).toBeInTheDocument()
     
     // Toggle back to documents
     fireEvent.click(toggle)
-    expect(screen.getByText('Medical forms and documents repository')).toBeInTheDocument()
+    expect(screen.getByText('Document Name')).toBeInTheDocument()
   })
 
   it('shows correct labels near toggle switch', () => {
     expect(screen.getByText('Documents')).toBeInTheDocument()
-    expect(screen.getByText('Form Filler')).toBeInTheDocument()
+    expect(screen.getByText('Forms')).toBeInTheDocument()
   })
 
   it('displays form action buttons in forms view', () => {
@@ -114,7 +115,7 @@ describe('Documents Page', () => {
 
   it('search functionality works in both views', async () => {
     const user = userEvent.setup()
-    const searchInput = screen.getByPlaceholderText('Search documents...')
+    const searchInput = screen.getByPlaceholderText('Search...')
     
     // Search in documents view
     await user.type(searchInput, 'ABN')
@@ -146,12 +147,15 @@ describe('Documents Page', () => {
   })
 
   it('shows correct document count', () => {
+    // The count is displayed in the stats area as "Total Documents"
+    expect(screen.getByText('Total Documents')).toBeInTheDocument()
+    // Check the actual table caption still shows document count
     expect(screen.getByText(/69 documents available/)).toBeInTheDocument()
   })
 
   it('filters documents by search term', async () => {
     const user = userEvent.setup()
-    const searchInput = screen.getByPlaceholderText('Search documents...')
+    const searchInput = screen.getByPlaceholderText('Search...')
     
     // Search for ABN
     await user.type(searchInput, 'ABN')

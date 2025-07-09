@@ -14,7 +14,7 @@ describe('Knowledge Page', () => {
   it('displays placeholder description', () => {
     render(<KnowledgePage />)
     
-    expect(screen.getByText(/Our comprehensive documentation and guides are being prepared/)).toBeInTheDocument()
+    expect(screen.getByText(/Comprehensive documentation and guides for using the imaging center portal/)).toBeInTheDocument()
   })
 
   it('displays coming soon feature cards', () => {

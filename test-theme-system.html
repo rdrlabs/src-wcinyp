@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme System Test</title>
+    <style>
+        /* CSS Variables for runtime theme switching */
+        :root {
+            --color-background: oklch(100% 0 0);
+            --color-foreground: oklch(20% 0 0);
+            --color-muted: oklch(96% 0 0);
+            --color-muted-foreground: oklch(45% 0 0);
+            --color-card: oklch(100% 0 0);
+            --color-card-foreground: oklch(20% 0 0);
+            --color-border: oklch(90% 0 0);
+            --color-primary: oklch(60% 0.18 235);
+            --color-primary-foreground: oklch(98% 0 0);
+        }
+
+        /* Dark mode color overrides */
+        .dark {
+            --color-background: oklch(15% 0 0);
+            --color-foreground: oklch(98% 0 0);
+            --color-muted: oklch(25% 0 0);
+            --color-muted-foreground: oklch(65% 0 0);
+            --color-card: oklch(18% 0 0);
+            --color-card-foreground: oklch(98% 0 0);
+            --color-border: oklch(25% 0 0);
+            --color-primary: oklch(70% 0.15 235);
+            --color-primary-foreground: oklch(15% 0 0);
+        }
+
+        /* Color Theme Variations */
+        body.theme-blue { --color-primary: oklch(66.7% 0.203 241.7); }
+        .dark body.theme-blue { --color-primary: oklch(69.8% 0.195 238.4); }
+        
+        body.theme-red { --color-primary: oklch(69.5% 0.203 25.5); }
+        .dark body.theme-red { --color-primary: oklch(59.2% 0.203 25.5); }
+        
+        body.theme-green { --color-primary: oklch(60.8% 0.149 149.5); }
+        .dark body.theme-green { --color-primary: oklch(54.2% 0.129 149.5); }
+
+        /* Base styles */
+        body {
+            background-color: var(--color-background);
+            color: var(--color-foreground);
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 2rem;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .card {
+            background-color: var(--color-card);
+            color: var(--color-card-foreground);
+            border: 1px solid var(--color-border);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .muted {
+            color: var(--color-muted-foreground);
+        }
+
+        button {
+            background-color: var(--color-primary);
+            color: var(--color-primary-foreground);
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            margin: 0.25rem;
+        }
+
+        .controls {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body class="theme-blue">
+    <div class="controls">
+        <h3>Theme Controls</h3>
+        <div>
+            <button onclick="toggleDark()">Toggle Dark Mode</button>
+        </div>
+        <div style="margin-top: 1rem;">
+            <button onclick="setTheme('blue')">Blue</button>
+            <button onclick="setTheme('red')">Red</button>
+            <button onclick="setTheme('green')">Green</button>
+            <button onclick="setTheme('yellow')">Yellow</button>
+            <button onclick="setTheme('violet')">Violet</button>
+            <button onclick="setTheme('neutral')">Neutral</button>
+        </div>
+    </div>
+
+    <h1>Theme System Test</h1>
+    
+    <div class="card">
+        <h2>Primary Card</h2>
+        <p>This is regular card text. It should be clearly visible in both light and dark modes.</p>
+        <p class="muted">This is muted text. It should be dimmer but still readable.</p>
+    </div>
+
+    <div class="theme-grid">
+        <div class="card">
+            <h3>Component Test 1</h3>
+            <p>Regular paragraph text</p>
+            <p class="muted">Muted text example</p>
+            <button>Primary Button</button>
+        </div>
+        
+        <div class="card">
+            <h3>Component Test 2</h3>
+            <p>Testing visibility in all modes</p>
+            <p class="muted">Secondary information</p>
+            <button>Action Button</button>
+        </div>
+        
+        <div class="card">
+            <h3>Component Test 3</h3>
+            <p>Different content types</p>
+            <p class="muted">Supporting details</p>
+            <button>Click Me</button>
+        </div>
+    </div>
+
+    <div class="card" style="margin-top: 2rem;">
+        <h2>Current Theme Info</h2>
+        <p>Dark Mode: <span id="darkMode">false</span></p>
+        <p>Color Theme: <span id="colorTheme">blue</span></p>
+        <p>Background: <span id="bgColor"></span></p>
+        <p>Foreground: <span id="fgColor"></span></p>
+        <p>Primary: <span id="primaryColor"></span></p>
+    </div>
+
+    <script>
+        function toggleDark() {
+            document.documentElement.classList.toggle('dark');
+            updateInfo();
+        }
+
+        function setTheme(theme) {
+            const body = document.body;
+            const classes = body.className.split(' ');
+            const nonThemeClasses = classes.filter(c => !c.startsWith('theme-'));
+            body.className = [...nonThemeClasses, `theme-${theme}`].join(' ');
+            updateInfo();
+        }
+
+        function updateInfo() {
+            const isDark = document.documentElement.classList.contains('dark');
+            const theme = Array.from(document.body.classList).find(c => c.startsWith('theme-'))?.replace('theme-', '') || 'none';
+            
+            document.getElementById('darkMode').textContent = isDark;
+            document.getElementById('colorTheme').textContent = theme;
+            
+            const styles = getComputedStyle(document.body);
+            document.getElementById('bgColor').textContent = styles.getPropertyValue('--color-background');
+            document.getElementById('fgColor').textContent = styles.getPropertyValue('--color-foreground');
+            document.getElementById('primaryColor').textContent = styles.getPropertyValue('--color-primary');
+        }
+
+        updateInfo();
+    </script>
+</body>
+</html>

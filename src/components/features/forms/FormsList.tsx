@@ -35,12 +35,12 @@ export function FormsList() {
                 <CardContent>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between text-sm text-muted-foreground">
-                      <span className="flex items-center gap-1">
-                        <FileText className="h-3 w-3" />
+                      <span className="flex items-center gap-2">
+                        <FileText className="h-4 w-4" />
                         {template.fields} fields
                       </span>
-                      <span className="flex items-center gap-1">
-                        <Users className="h-3 w-3" />
+                      <span className="flex items-center gap-2">
+                        <Users className="h-4 w-4" />
                         {template.submissions} submissions
                       </span>
                     </div>

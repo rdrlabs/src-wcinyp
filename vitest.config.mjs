@@ -9,11 +9,12 @@ export default defineConfig({
     globals: true,
     setupFiles: ['./src/test/setup.ts'],
     exclude: ['node_modules', 'dist', 'coverage', 'archive', '.node_modules_old_delete_me'],
-    testTimeout: 30000, // 30 seconds
-    hookTimeout: 30000, // 30 seconds
+    testTimeout: 10000, // 10 seconds
+    hookTimeout: 10000, // 10 seconds
     pool: 'forks', // Use forks instead of threads for better isolation
     isolate: true, // Isolate tests
-    maxConcurrency: 5, // Limit concurrent tests
+    maxConcurrency: 1, // Run tests sequentially to avoid timeouts
+    bail: 1, // Stop on first failure
   },
   resolve: {
     alias: {

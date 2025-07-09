@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -25,6 +25,7 @@ import { getAffiliationInfo } from "@/lib/icons";
 interface ReferringProviderTableProps {
   providers: Provider[];
   searchTerm?: string;
+  onSearch?: (value: string) => void;
 }
 
 export function ReferringProviderTable({ providers, searchTerm }: ReferringProviderTableProps) {
@@ -71,9 +72,8 @@ export function ReferringProviderTable({ providers, searchTerm }: ReferringProvi
           const affiliationInfo = getAffiliationInfo(provider.affiliation);
           
           return (
-            <>
+            <React.Fragment key={provider.id}>
               <TableRow 
-                key={provider.id} 
                 className="cursor-pointer hover:bg-muted/50"
                 onClick={() => toggleRow(provider.id)}
               >
@@ -82,7 +82,7 @@ export function ReferringProviderTable({ providers, searchTerm }: ReferringProvi
                     {isExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
                   </Button>
                 </TableCell>
-                <TableCell className="font-medium">{provider.name}</TableCell>
+                <TableCell className="font-semibold">{provider.name}</TableCell>
                 <TableCell>
                   <div className="space-y-0.5">
                     <div className="text-sm">{provider.specialty}</div>
@@ -90,21 +90,21 @@ export function ReferringProviderTable({ providers, searchTerm }: ReferringProvi
                   </div>
                 </TableCell>
                 <TableCell>
-                  <div className="space-y-1">
+                  <div className="space-y-2">
                     <a 
                       href={`tel:${provider.phone}`} 
-                      className="flex items-center gap-1.5 text-sm hover:text-primary"
+                      className="flex items-center gap-2 text-sm hover:text-primary"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <Phone className="h-3 w-3" />
+                      <Phone className="h-4 w-4" />
                       {provider.phone}
                     </a>
                     <a 
                       href={`mailto:${provider.email}`} 
-                      className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary"
+                      className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <Mail className="h-3 w-3" />
+                      <Mail className="h-4 w-4" />
                       {provider.email}
                     </a>
                   </div>
@@ -112,8 +112,7 @@ export function ReferringProviderTable({ providers, searchTerm }: ReferringProvi
                 <TableCell>{provider.location}</TableCell>
                 <TableCell>
                   <Badge 
-                    variant="secondary" 
-                    className={`${affiliationInfo.color} ring-1 ring-inset`}
+                    variant="secondary"
                   >
                     {affiliationInfo.label}
                   </Badge>
@@ -127,15 +126,15 @@ export function ReferringProviderTable({ providers, searchTerm }: ReferringProvi
                         <div className="flex items-center gap-2">
                           <Shield className="h-4 w-4 text-muted-foreground" />
                           <span className="text-sm">
-                            <span className="font-medium">NPI:</span> {provider.npi}
+                            <span className="font-semibold">NPI:</span> {provider.npi}
                           </span>
                         </div>
                       )}
                       {provider.notes && (
                         <div className="flex items-start gap-2">
                           <FileText className="h-4 w-4 text-muted-foreground mt-0.5" />
-                          <div className="space-y-1">
-                            <span className="text-sm font-medium">Notes:</span>
+                          <div className="space-y-2">
+                            <span className="text-sm font-semibold">Notes:</span>
                             <p className="text-sm text-muted-foreground">{provider.notes}</p>
                           </div>
                         </div>
@@ -144,7 +143,7 @@ export function ReferringProviderTable({ providers, searchTerm }: ReferringProvi
                   </TableCell>
                 </TableRow>
               )}
-            </>
+            </React.Fragment>
           );
         })}
       </TableBody>

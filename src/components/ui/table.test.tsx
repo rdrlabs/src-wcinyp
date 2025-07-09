@@ -80,7 +80,7 @@ describe('Table Components', () => {
       
       const footer = container.querySelector('tfoot')
       expect(footer).toHaveClass('custom-footer')
-      expect(footer).toHaveClass('border-t', 'bg-muted/50', 'font-medium')
+      expect(footer).toHaveClass('border-t', 'bg-muted/50', 'font-semibold')
     })
   })
 

@@ -55,51 +55,47 @@ describe('Directory Page Badge Implementation', () => {
     expect(labBadges.length).toBeGreaterThan(0)
   })
 
-  it('should apply correct color classes to Provider badge', () => {
+  it('should apply semantic color classes to Provider badge', () => {
     render(<DirectoryPage />)
     
     // Get badges in the table, not filter buttons
     const providerBadges = screen.getAllByText('Provider')
     // Find the one that's actually a badge (in the table)
     const tableBadge = providerBadges.find(badge => 
-      badge.className.includes('bg-blue-50') || badge.className.includes('inline-flex')
+      badge.className.includes('bg-secondary') || badge.className.includes('inline-flex')
     )
     
     expect(tableBadge).toBeDefined()
-    expect(tableBadge?.className).toContain('bg-blue-50')
-    expect(tableBadge?.className).toContain('dark:bg-blue-950/50')
-    expect(tableBadge?.className).toContain('text-blue-700')
-    expect(tableBadge?.className).toContain('dark:text-blue-300')
+    expect(tableBadge?.className).toContain('bg-secondary')
+    expect(tableBadge?.className).toContain('text-secondary-foreground')
   })
 
-  it('should apply correct color classes to Insurance badge', () => {
+  // Test removed - NEUTRAL_BADGES_ONLY is always true now
+
+  it('should apply semantic color classes to Insurance badge', () => {
     render(<DirectoryPage />)
     
     const insuranceBadges = screen.getAllByText('Insurance')
     const tableBadge = insuranceBadges.find(badge => 
-      badge.className.includes('bg-green-50') || badge.className.includes('inline-flex')
+      badge.className.includes('bg-secondary') || badge.className.includes('inline-flex')
     )
     
     expect(tableBadge).toBeDefined()
-    expect(tableBadge?.className).toContain('bg-green-50')
-    expect(tableBadge?.className).toContain('dark:bg-green-950/50')
-    expect(tableBadge?.className).toContain('text-green-700')
-    expect(tableBadge?.className).toContain('dark:text-green-300')
+    expect(tableBadge?.className).toContain('bg-secondary')
+    expect(tableBadge?.className).toContain('text-secondary-foreground')
   })
 
-  it('should apply correct color classes to Lab badge', () => {
+  it('should apply semantic color classes to Lab badge', () => {
     render(<DirectoryPage />)
     
     const labBadges = screen.getAllByText('Lab')
     const tableBadge = labBadges.find(badge => 
-      badge.className.includes('bg-yellow-50') || badge.className.includes('inline-flex')
+      badge.className.includes('bg-secondary') || badge.className.includes('inline-flex')
     )
     
     expect(tableBadge).toBeDefined()
-    expect(tableBadge?.className).toContain('bg-yellow-50')
-    expect(tableBadge?.className).toContain('dark:bg-yellow-950/50')
-    expect(tableBadge?.className).toContain('text-yellow-700')
-    expect(tableBadge?.className).toContain('dark:text-yellow-300')
+    expect(tableBadge?.className).toContain('bg-secondary')
+    expect(tableBadge?.className).toContain('text-secondary-foreground')
   })
 
   it('should have Badge component structure', () => {
@@ -107,15 +103,18 @@ describe('Directory Page Badge Implementation', () => {
     
     const allElements = screen.getAllByText(/Provider|Insurance|Lab/)
     // Filter to only get the table badges (not buttons)
-    const badges = allElements.filter(el => 
-      el.className.includes('bg-') && el.className.includes('50')
-    )
+    const badges = allElements.filter(el => {
+      const parent = el.parentElement
+      // Look for elements that are either the badge itself or inside a badge
+      return (el.className.includes('inline-flex') && el.className.includes('rounded')) ||
+             (parent?.className.includes('inline-flex') && parent?.className.includes('rounded'))
+    })
     
     expect(badges.length).toBeGreaterThan(0)
     
     badges.forEach(badge => {
       // Badge component should have proper structure
-      expect(badge.className).toContain('text-xs')
+      expect(badge.className).toContain('text-sm')
       // Should have rounded corners
       expect(badge.className).toContain('rounded')
     })

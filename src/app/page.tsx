@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { TYPOGRAPHY } from "@/constants/typography";
+import { LAYOUT_SPACING } from "@/constants/spacing";
+import { cn } from "@/lib/utils";
 
 export default function Home() {
   const features = [
@@ -26,21 +29,21 @@ export default function Home() {
   ];
 
   return (
-    <div className="container mx-auto py-8">
+    <div className={LAYOUT_SPACING.pageContainer}>
       <div className="mb-8">
-        <h1 className="text-4xl font-bold">WCINYP Dashboard</h1>
-        <p className="text-muted-foreground mt-2">
+        <h1 className={TYPOGRAPHY.pageTitle}>WCINYP Dashboard</h1>
+        <p className={cn(TYPOGRAPHY.pageDescription, "mt-2")}>
           Weill Cornell Imaging at NewYork-Presbyterian
         </p>
       </div>
       
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className={cn("grid md:grid-cols-2", LAYOUT_SPACING.cardGap)}>
         {features.map((feature) => (
           <Link key={feature.href} href={feature.href} className="no-underline">
             <Card className="h-full transition-colors hover:bg-accent hover:shadow-md">
-              <CardHeader className="pb-6">
-                <CardTitle className="text-xl">{feature.title}</CardTitle>
-                <CardDescription className="text-sm leading-relaxed mt-2">
+              <CardHeader className={LAYOUT_SPACING.cardPadding}>
+                <CardTitle className={TYPOGRAPHY.cardTitle}>{feature.title}</CardTitle>
+                <CardDescription className={cn(TYPOGRAPHY.cardDescription, "leading-relaxed mt-2")}>
                   {feature.description}
                 </CardDescription>
               </CardHeader>

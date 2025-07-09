@@ -1,11 +1,24 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { NavBar } from './navbar'
 import { vi } from 'vitest'
+import { AppProvider } from '@/contexts/app-context'
+import { ThemeProvider } from 'next-themes'
 
 // Mock Next.js navigation
 vi.mock('next/navigation', () => ({
   usePathname: () => '/',
 }))
+
+// Helper function to render with providers
+const renderWithProviders = (component: React.ReactElement) => {
+  return render(
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <AppProvider>
+        {component}
+      </AppProvider>
+    </ThemeProvider>
+  )
+}
 
 describe('NavBar', () => {
   beforeEach(() => {
@@ -14,13 +27,13 @@ describe('NavBar', () => {
   })
 
   it('renders WCI@NYP branding', () => {
-    render(<NavBar />)
+    renderWithProviders(<NavBar />)
     const branding = screen.getByText('WCI@NYP')
     expect(branding).toBeInTheDocument()
   })
 
   it('renders all navigation links in correct order', () => {
-    render(<NavBar />)
+    renderWithProviders(<NavBar />)
     
     const links = screen.getAllByRole('link')
     const navLinks = links.filter(link => {
@@ -38,7 +51,7 @@ describe('NavBar', () => {
   it('highlights active page', () => {
     // For this test, we need to check the actual implementation
     // The active state is determined by usePathname hook
-    render(<NavBar />)
+    renderWithProviders(<NavBar />)
     
     // The navbar should render without errors
     expect(screen.getByText('WCI@NYP')).toBeInTheDocument()
@@ -48,7 +61,7 @@ describe('NavBar', () => {
   })
 
   it('does not render search functionality', () => {
-    render(<NavBar />)
+    renderWithProviders(<NavBar />)
     
     // Search functionality has been removed
     const searchButton = screen.queryByRole('button', { name: /Search/i })
@@ -56,7 +69,7 @@ describe('NavBar', () => {
   })
 
   it('does not respond to Command+K shortcut', () => {
-    render(<NavBar />)
+    renderWithProviders(<NavBar />)
     
     // Trigger Command+K
     fireEvent.keyDown(document, { key: 'k', metaKey: true })
@@ -67,7 +80,7 @@ describe('NavBar', () => {
   })
 
   it('does not render quick links dropdown', () => {
-    render(<NavBar />)
+    renderWithProviders(<NavBar />)
     
     // Quick links dropdown has been removed
     const quickLinksButton = screen.queryByRole('button', { name: /Quick Links/i })
@@ -75,7 +88,7 @@ describe('NavBar', () => {
   })
 
   it('does not render feedback button', () => {
-    render(<NavBar />)
+    renderWithProviders(<NavBar />)
     
     // Feedback button has been removed
     const feedbackButton = screen.queryByRole('button', { name: /Feedback/i })
@@ -83,7 +96,7 @@ describe('NavBar', () => {
   })
 
   it('does not render login functionality', () => {
-    render(<NavBar />)
+    renderWithProviders(<NavBar />)
     
     // Login functionality has been removed
     const loginButton = screen.queryByRole('button', { name: /Login/i })
@@ -94,14 +107,14 @@ describe('NavBar', () => {
   })
 
   it('renders theme toggle', () => {
-    render(<NavBar />)
+    renderWithProviders(<NavBar />)
     
     const themeToggle = screen.getByRole('button', { name: /Toggle theme/i })
     expect(themeToggle).toBeInTheDocument()
   })
 
   it('renders simplified navbar with only essential elements', () => {
-    render(<NavBar />)
+    renderWithProviders(<NavBar />)
     
     // Should have logo
     expect(screen.getByText('WCI@NYP')).toBeInTheDocument()

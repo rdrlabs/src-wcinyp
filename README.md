@@ -96,7 +96,31 @@ npm run format
 
 # Check formatting
 npm run format:check
+
+# Validate design system compliance
+npm run validate:design
 ```
+
+## Design System
+
+The application follows a strict design system to ensure consistency and maintainability. All code must comply with these rules, which are automatically enforced in CI/CD.
+
+### Quick Reference
+
+- **Typography**: Only 4 sizes allowed: `text-sm`, `text-base`, `text-lg`, `text-2xl`
+- **Font Weights**: Only 2 weights allowed: `font-normal`, `font-semibold`
+- **Colors**: Use semantic tokens (`bg-primary`, `text-destructive`) instead of Tailwind colors
+- **Spacing**: Follow 8pt grid system (`gap-2`, `gap-4`, `gap-6`, `gap-8`)
+
+### Validation
+
+Design system compliance is enforced at multiple levels:
+
+1. **Local Development**: Run `npm run validate:design` to check for violations
+2. **CI/CD**: Pull requests are blocked if violations are found
+3. **Pre-commit**: Consider adding a git hook to validate before commits
+
+See [DESIGN-SYSTEM-GUIDE.md](./DESIGN-SYSTEM-GUIDE.md) for complete documentation and examples.
 
 ## Testing
 

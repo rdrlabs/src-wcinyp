@@ -122,16 +122,38 @@ describe('Error Pages', () => {
       
       expect(mockReset).toHaveBeenCalledTimes(1)
     })
+
+    it('global error uses semantic color classes', () => {
+      const { container } = render(<GlobalError error={new Error('Test')} reset={() => {}} />)
+      
+      // Check for semantic classes in global error
+      expect(container.querySelector('.border-destructive\\/20')).toBeInTheDocument()
+      expect(container.querySelector('.text-destructive')).toBeInTheDocument()
+      expect(container.querySelector('.text-destructive\\/80')).toBeInTheDocument()
+      expect(container.querySelector('.bg-destructive')).toBeInTheDocument()
+      expect(container.querySelector('.text-destructive-foreground')).toBeInTheDocument()
+    })
   })
 
   // Test error page styling
   describe('Error Page Styling', () => {
-    it('uses error-specific styling (red theme)', () => {
+    it('uses error-specific styling (destructive theme)', () => {
       const { container } = render(<RootError error={new Error()} reset={() => {}} />)
       
-      // Check for red-themed elements
-      const redElements = container.querySelectorAll('[class*="red"]')
-      expect(redElements.length).toBeGreaterThan(0)
+      // Check for destructive-themed elements
+      const destructiveElements = container.querySelectorAll('[class*="destructive"]')
+      expect(destructiveElements.length).toBeGreaterThan(0)
+    })
+
+    it('uses semantic color classes for error pages', () => {
+      const { container } = render(<RootError error={new Error()} reset={() => {}} />)
+      
+      // Check for specific semantic classes
+      expect(container.querySelector('.bg-destructive\\/10')).toBeInTheDocument()
+      expect(container.querySelector('.border-destructive\\/20')).toBeInTheDocument()
+      expect(container.querySelector('.text-destructive')).toBeInTheDocument()
+      expect(container.querySelector('.bg-destructive')).toBeInTheDocument()
+      expect(container.querySelector('.text-destructive-foreground')).toBeInTheDocument()
     })
 
     it('centers content on screen', () => {
@@ -162,8 +184,8 @@ describe('Error Pages', () => {
       it(`${name} error page displays error styling`, () => {
         const { container } = render(<Component error={new Error()} reset={() => {}} />)
         
-        // Should have error-themed styling (red colors)
-        const hasErrorStyling = container.querySelector('[class*="red"]') || 
+        // Should have error-themed styling (destructive colors)
+        const hasErrorStyling = container.querySelector('[class*="destructive"]') || 
                               container.querySelector('[class*="error"]')
         expect(hasErrorStyling).toBeTruthy()
       })

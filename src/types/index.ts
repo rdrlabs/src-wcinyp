@@ -40,11 +40,22 @@ export interface Contact {
   lastContact: string;
 }
 
+// Form field types
+export interface FormField {
+  id: string;
+  name?: string; // Optional for backward compatibility
+  label: string;
+  type: 'text' | 'email' | 'phone' | 'date' | 'select' | 'checkbox' | 'textarea' | 'tel' | 'radio' | 'file' | 'signature' | 'number';
+  required: boolean;
+  placeholder?: string;
+  options?: string[];
+}
+
 // Form template types
 export interface FormTemplate {
-  id: number;
+  id: string | number; // Allow both for compatibility
   name: string;
-  fields: number;
+  fields: FormField[] | number; // Allow both: array of fields or field count
   lastUsed: string;
   submissions: number;
   status: 'active' | 'draft';
@@ -52,11 +63,23 @@ export interface FormTemplate {
   description: string;
 }
 
+// JSON data types (for compatibility with existing data files)
+export interface FormTemplateJSON {
+  id: number;
+  name: string;
+  fields: number;
+  lastUsed: string;
+  submissions: number;
+  status: string;
+  category: string;
+  description: string;
+}
+
 // Form submission types
 export interface FormSubmission {
-  formId: number;
-  formName: string;
-  data: Record<string, string | number | boolean | null>;
+  id: string;
+  formTemplateId: string;
+  data: Record<string, unknown>;
   submittedAt: string;
 }
 

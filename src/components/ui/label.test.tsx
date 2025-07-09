@@ -15,7 +15,7 @@ describe('Label', () => {
     const label = screen.getByText('Custom Label')
     expect(label).toHaveClass('custom-class')
     // Also has default classes
-    expect(label).toHaveClass('text-sm', 'font-medium', 'leading-none')
+    expect(label).toHaveClass('text-sm', 'font-semibold', 'leading-none')
   })
 
   it('forwards htmlFor attribute', () => {

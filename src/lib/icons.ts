@@ -72,7 +72,7 @@ export function getSpecialtyIcon(specialty: string): LucideIcon {
 export function getLocationColor(location: string): string {
   const locationData = LOCATIONS[location as keyof typeof LOCATIONS];
   if (locationData?.colorKey) {
-    return getThemeColor(locationData.colorKey as keyof typeof import('./theme').themeColors.category);
+    return getThemeColor(locationData.colorKey);
   }
   return getThemeColor('gray');
 }
@@ -90,7 +90,7 @@ export function getAffiliationInfo(affiliation?: string): AffiliationInfo {
   if (affiliationData) {
     return {
       label: affiliationData.label,
-      color: getThemeColor(affiliationData.colorKey as keyof typeof import('./theme').themeColors.category),
+      color: getThemeColor(affiliationData.colorKey),
     };
   }
   
@@ -111,17 +111,17 @@ export interface FlagInfo {
 
 export function getFlagInfo(flag: string): FlagInfo {
   const flags: Record<string, FlagInfo> = {
-    'vip': { icon: Star, tooltip: 'VIP Provider', color: 'text-yellow-500' },
-    'urgent': { icon: AlertCircle, tooltip: 'Urgent Availability', color: 'text-red-500' },
-    'new': { icon: Zap, tooltip: 'New Provider', color: 'text-green-500' },
-    'teaching': { icon: GraduationCap, tooltip: 'Teaching Faculty', color: 'text-purple-500' },
-    'research': { icon: Award, tooltip: 'Research Faculty', color: 'text-blue-500' },
-    'multilingual': { icon: Languages, tooltip: 'Multilingual', color: 'text-indigo-500' },
+    'vip': { icon: Star, tooltip: 'VIP Provider', color: 'text-muted-foreground' },
+    'urgent': { icon: AlertCircle, tooltip: 'Urgent Availability', color: 'text-destructive' },
+    'new': { icon: Zap, tooltip: 'New Provider', color: 'text-primary' },
+    'teaching': { icon: GraduationCap, tooltip: 'Teaching Faculty', color: 'text-primary' },
+    'research': { icon: Award, tooltip: 'Research Faculty', color: 'text-primary' },
+    'multilingual': { icon: Languages, tooltip: 'Multilingual', color: 'text-primary' },
   };
   
   return flags[flag as keyof typeof flags] || { 
     icon: AlertCircle, 
     tooltip: flag, 
-    color: 'text-gray-500' 
+    color: 'text-muted-foreground' 
   };
 }

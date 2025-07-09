@@ -8,6 +8,8 @@ import {
   FileText,
   Bell
 } from "lucide-react";
+import { TYPOGRAPHY } from "@/constants/typography";
+import { cn } from "@/lib/utils";
 
 export default function UpdatesPage() {
   const sections = [
@@ -52,14 +54,14 @@ export default function UpdatesPage() {
   return (
     <div className="container mx-auto py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold">Updates</h1>
-        <p className="text-muted-foreground mt-2">
+        <h1 className={TYPOGRAPHY.pageTitle}>Updates</h1>
+        <p className={cn(TYPOGRAPHY.pageDescription, "mt-2")}>
           Stay informed with the latest news, operational updates, and important communications
         </p>
       </div>
       
       <div className="text-center py-12 border rounded-lg bg-muted/10">
-        <h2 className="text-2xl font-semibold mb-8">Coming Soon</h2>
+        <h2 className={cn(TYPOGRAPHY.sectionTitle, "mb-8")}>Coming Soon</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {sections.map((section, index) => {
@@ -69,16 +71,16 @@ export default function UpdatesPage() {
                 key={index}
                 className="p-6 border rounded-lg bg-background hover:shadow-md transition-shadow"
               >
-                <div className="flex items-center gap-3 mb-3">
+                <div className="flex items-center gap-4 mb-3">
                   <div className="p-2 rounded-lg bg-primary/10">
-                    <Icon className="h-5 w-5 text-primary" />
+                    <Icon className="h-6 w-6 text-primary" />
                   </div>
                   <h3 className="font-semibold">{section.title}</h3>
                 </div>
                 <p className="text-sm text-muted-foreground mb-3">
                   {section.description}
                 </p>
-                <p className="text-xs font-medium text-primary">
+                <p className="text-sm font-semibold text-primary">
                   {section.status}
                 </p>
               </div>

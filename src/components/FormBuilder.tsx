@@ -1,11 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from 'sonner';
-import type { FormTemplate } from '@/types';
+import { useFormContext, useFormFields, useFormSubmission, useFormValidation } from '@/contexts/form-context';
+import { FieldBuilder } from '@/components/features/forms/FieldBuilder';
+import type { FormTemplate, FormField } from '@/types';
 
 // Mock form field types
 const fieldTypes = {
@@ -25,8 +27,13 @@ interface FormBuilderProps {
 
 export default function FormBuilder({ template }: FormBuilderProps) {
   const router = useRouter();
+  const { setCurrentForm, resetForm } = useFormContext();
+  const { fields, addField, removeField } = useFormFields();
+  const { isSubmitting, submitForm } = useFormSubmission();
+  const { validateField } = useFormValidation();
   const [formData, setFormData] = useState<Record<string, string | boolean>>({});
   const [isPreview, setIsPreview] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
   
   // Helper function to safely get boolean value
   const getCheckboxValue = (value: string | boolean | undefined): boolean => {
@@ -35,19 +42,58 @@ export default function FormBuilder({ template }: FormBuilderProps) {
     return false;
   };
 
-  // Mock form fields based on template
-  const mockFields = Array.from({ length: template.fields }, (_, i) => ({
-    id: `field_${i + 1}`,
-    name: `Field ${i + 1}`,
-    type: Object.keys(fieldTypes)[i % Object.keys(fieldTypes).length],
-    required: i % 3 === 0,
-    placeholder: `Enter ${i % 2 === 0 ? 'patient' : 'insurance'} information`
-  }));
+  // Initialize form with template
+  useEffect(() => {
+    setCurrentForm(template);
+    
+    // If template has predefined fields, use them; otherwise create mock fields
+    if (template.fields && typeof template.fields === 'object' && Array.isArray(template.fields)) {
+      // Template has actual field definitions
+      template.fields.forEach(field => {
+        addField(field);
+      });
+    } else {
+      // Create mock fields based on field count
+      const fieldCount = typeof template.fields === 'number' ? template.fields : 5;
+      Array.from({ length: fieldCount }, (_, i) => {
+        const fieldId = `field_${i + 1}`;
+        addField({
+          id: fieldId,
+          label: `Field ${i + 1}`,
+          type: Object.keys(fieldTypes)[i % Object.keys(fieldTypes).length] as FormField['type'],
+          required: i % 3 === 0,
+          placeholder: `Enter ${i % 2 === 0 ? 'patient' : 'insurance'} information`
+        });
+      });
+    }
+    
+    return () => {
+      resetForm();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [template.id]); // Only re-run when template ID changes
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Validate required fields manually since context validation doesn't use formData
+    let hasErrors = false;
+    for (const field of fields) {
+      if (field.required && !formData[field.id]) {
+        hasErrors = true;
+        break;
+      }
+    }
+    
+    if (hasErrors) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+    
     try {
+      await submitForm(formData);
+      
+      // Also send to Netlify function
       const response = await fetch('/.netlify/functions/submit-form', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -76,15 +122,7 @@ export default function FormBuilder({ template }: FormBuilderProps) {
     }
   };
   
-  interface MockField {
-    id: string;
-    name: string;
-    type: string;
-    required: boolean;
-    placeholder?: string;
-  }
-  
-  const renderField = (field: MockField) => {
+  const renderField = (field: FormField) => {
     switch (field.type) {
       case 'text':
       case 'email':
@@ -94,7 +132,7 @@ export default function FormBuilder({ template }: FormBuilderProps) {
             type={field.type}
             name={field.id}
             placeholder={field.placeholder}
-            className="w-full px-3 py-2 border dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 rounded-md"
+            className="w-full px-3 py-2 border border-input bg-background text-foreground rounded-md"
             value={String(formData[field.id] || '')}
             onChange={(e) => setFormData({ ...formData, [field.id]: e.target.value })}
             required={field.required}
@@ -105,7 +143,7 @@ export default function FormBuilder({ template }: FormBuilderProps) {
           <input
             type="date"
             name={field.id}
-            className="w-full px-3 py-2 border dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 rounded-md"
+            className="w-full px-3 py-2 border border-input bg-background text-foreground rounded-md"
             value={String(formData[field.id] || '')}
             onChange={(e) => setFormData({ ...formData, [field.id]: e.target.value })}
             required={field.required}
@@ -137,6 +175,12 @@ export default function FormBuilder({ template }: FormBuilderProps) {
             className="w-4 h-4"
             checked={getCheckboxValue(formData[field.id])}
             onChange={(e) => setFormData({ ...formData, [field.id]: e.target.checked })}
+            onBlur={(e) => {
+              const error = validateField(field, e.target.checked);
+              if (error) {
+                toast.error(error);
+              }
+            }}
           />
         );
       case 'textarea':
@@ -144,7 +188,7 @@ export default function FormBuilder({ template }: FormBuilderProps) {
           <textarea
             name={field.id}
             placeholder={field.placeholder}
-            className="w-full px-3 py-2 border dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 rounded-md"
+            className="w-full px-3 py-2 border border-input bg-background text-foreground rounded-md"
             rows={4}
             value={String(formData[field.id] || '')}
             onChange={(e) => setFormData({ ...formData, [field.id]: e.target.value })}
@@ -153,7 +197,7 @@ export default function FormBuilder({ template }: FormBuilderProps) {
         );
       case 'signature':
         return (
-          <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-md p-4 text-center text-gray-500 dark:text-gray-400">
+          <div className="border-2 border-dashed border-border rounded-md p-4 text-center text-muted-foreground">
             Signature pad would go here
           </div>
         );
@@ -166,8 +210,8 @@ export default function FormBuilder({ template }: FormBuilderProps) {
     <div className="container mx-auto py-8">
       <div className="mb-6 flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">{template.name}</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">{template.description}</p>
+          <h1 className="text-2xl font-semibold">{template.name}</h1>
+          <p className="text-muted-foreground mt-2">{template.description}</p>
         </div>
         <div className="flex gap-2">
           <Button
@@ -184,27 +228,27 @@ export default function FormBuilder({ template }: FormBuilderProps) {
       
       {isPreview ? (
         <div className="space-y-6">
-          <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg">
-            <h2 className="text-xl font-semibold mb-4">Form Preview</h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
+          <div className="bg-muted p-6 rounded-lg">
+            <h2 className="text-lg font-semibold mb-4">Form Preview</h2>
+            <p className="text-muted-foreground mb-4">
               This is how your form will appear to users. Switch to edit mode to make changes.
             </p>
           </div>
           
-          <div className="border dark:border-gray-700 rounded-lg p-4">
+          <div className="border border-border rounded-lg p-4">
             <h3 className="font-semibold mb-4">Form Fields</h3>
             <div className="space-y-2">
-              {mockFields.map((field) => (
-                <div key={field.id} className="flex items-center gap-3 p-2 border dark:border-gray-700 rounded">
-                  <span className="text-xl">
-                    {fieldTypes[field.type as keyof typeof fieldTypes].icon}
+              {fields.map((field) => (
+                <div key={field.id} className="flex items-center gap-4 p-2 border border-border rounded">
+                  <span className="text-lg">
+                    {fieldTypes[field.type as keyof typeof fieldTypes]?.icon}
                   </span>
-                  <span className="font-medium">{field.name}</span>
-                  <span className="text-sm text-gray-500 dark:text-gray-400">
-                    ({fieldTypes[field.type as keyof typeof fieldTypes].label})
+                  <span className="font-semibold">{field.label}</span>
+                  <span className="text-sm text-muted-foreground">
+                    ({fieldTypes[field.type as keyof typeof fieldTypes]?.label})
                   </span>
                   {field.required && (
-                    <span className="text-red-500 dark:text-red-400 text-sm">Required</span>
+                    <span className="text-destructive text-sm">Required</span>
                   )}
                 </div>
               ))}
@@ -213,24 +257,44 @@ export default function FormBuilder({ template }: FormBuilderProps) {
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg p-6">
-            {mockFields.map((field) => (
+          <div className="bg-card border border-border rounded-lg p-6">
+            {fields.map((field) => (
               <div key={field.id} className="mb-4">
-                <label className="block text-sm font-medium mb-2">
-                  {field.name}
-                  {field.required && <span className="text-red-500 ml-1">*</span>}
-                </label>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="text-sm font-semibold">
+                    {fieldTypes[field.type as keyof typeof fieldTypes]?.icon} {field.label}
+                    {field.required && <span className="text-destructive ml-1">*</span>}
+                  </label>
+                  {isEditMode && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeField(field.id)}
+                    >
+                      Remove
+                    </Button>
+                  )}
+                </div>
                 {renderField(field)}
               </div>
             ))}
+            {isEditMode && (
+              <div className="mt-4">
+                <FieldBuilder />
+              </div>
+            )}
           </div>
           
           <div className="flex justify-end gap-4">
             <Button type="button" variant="outline" onClick={() => setFormData({})}>
               Clear Form
             </Button>
-            <Button type="submit">
-              Submit Form
+            <Button type="button" variant="secondary" onClick={() => setIsEditMode(!isEditMode)}>
+              {isEditMode ? 'Done Editing' : 'Edit Fields'}
+            </Button>
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Submitting...' : 'Submit Form'}
             </Button>
           </div>
         </form>

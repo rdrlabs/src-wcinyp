@@ -1,5 +1,6 @@
 'use client';
 
+
 export default function Error({
   error,
   reset,
@@ -9,16 +10,16 @@ export default function Error({
 }) {
   return (
     <div className="container mx-auto py-8">
-      <div className="rounded-lg border border-red-200 bg-red-50 p-8 text-center">
-        <h2 className="mb-4 text-2xl font-bold text-red-900">
+      <div className="rounded-lg border border-destructive/20 bg-destructive/10 p-8 text-center">
+        <h2 className="mb-4 text-2xl font-semibold text-destructive">
           Something went wrong!
         </h2>
-        <p className="mb-6 text-red-700">
+        <p className="mb-6 text-destructive/80">
           {error.message || "Failed to load contact directory"}
         </p>
         <button
           onClick={reset}
-          className="rounded-md bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+          className="rounded-md bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 py-2"
         >
           Try again
         </button>

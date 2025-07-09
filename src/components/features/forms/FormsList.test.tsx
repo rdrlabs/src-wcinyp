@@ -126,7 +126,7 @@ describe('FormsList', () => {
       
       // Check for FileEdit icon presence (by checking SVG elements)
       const cards = screen.getAllByText(/Form/).filter(el => 
-        el.className?.includes('font-medium') || el.className?.includes('font-semibold')
+        el.className?.includes('font-semibold')
       )
       expect(cards.length).toBeGreaterThan(0)
     })

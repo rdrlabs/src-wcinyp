@@ -80,9 +80,10 @@ describe('Directory Page', () => {
       // Search for non-existent term
       await user.type(searchInput, 'xyzabc123')
       
-      // Should have only the header row
+      // Should have header row + empty message row
       const rows = screen.getAllByRole('row')
-      expect(rows.length).toBe(1) // Only header row
+      expect(rows.length).toBe(2) // Header row + empty message row
+      expect(screen.getByText('No contacts found matching your search.')).toBeInTheDocument()
     })
 
     it('searches across multiple fields', async () => {
@@ -148,7 +149,7 @@ describe('Directory Page', () => {
       
       // Find the type badge within that row
       const typeBadge = within(row!).getByText(providerContact.type)
-      expect(typeBadge).toHaveClass('bg-blue-50', 'text-blue-700')
+      expect(typeBadge).toHaveClass('bg-secondary', 'text-secondary-foreground')
     })
   })
 

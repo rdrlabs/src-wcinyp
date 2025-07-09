@@ -25,32 +25,32 @@ export const PROVIDER_FLAGS = {
   vip: {
     value: 'vip',
     label: 'VIP Provider',
-    color: 'text-yellow-500',
+    color: 'text-warning',
   },
   urgent: {
     value: 'urgent',
     label: 'Urgent Availability',
-    color: 'text-red-500',
+    color: 'text-destructive',
   },
   new: {
     value: 'new',
     label: 'New Provider',
-    color: 'text-green-500',
+    color: 'text-success',
   },
   teaching: {
     value: 'teaching',
     label: 'Teaching Faculty',
-    color: 'text-purple-500',
+    color: 'text-primary',
   },
   research: {
     value: 'research',
     label: 'Research Faculty',
-    color: 'text-blue-500',
+    color: 'text-info',
   },
   multilingual: {
     value: 'multilingual',
     label: 'Multilingual',
-    color: 'text-indigo-500',
+    color: 'text-primary',
   },
 } as const
 
