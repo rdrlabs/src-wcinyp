@@ -106,11 +106,16 @@ export default function DocumentsPage() {
 
   // Handle category button click
   const handleCategoryClick = (category: string) => {
-    setSelectedCategory(category);
+    setSelectedTab(category);
     
-    if (viewMode === 'documents') {
+    // Determine if we're viewing documents or forms based on the category
+    const isFormsView = category === 'forms';
+    
+    if (!isFormsView) {
       const categoryDocs = category === 'all' 
         ? allDocuments 
+        : category === 'documents'
+        ? allDocuments
         : documentCategories[category as keyof typeof documentCategories];
       
       const items = (Array.isArray(categoryDocs) ? categoryDocs : allDocuments)
@@ -135,21 +140,21 @@ export default function DocumentsPage() {
         : 0;
       
       setSelectedCategoryDetails({
-        name: category === 'all' ? 'All Documents' : category,
+        name: category === 'all' ? 'All Documents' : category === 'documents' ? 'Documents' : category,
         type: 'documents',
         description: category === 'all' 
           ? 'View all documents across all categories' 
+          : category === 'documents'
+          ? 'View all documents'
           : `View all ${category.toLowerCase()} documents`,
-        count: category === 'all' ? allDocuments.length : (categoryDocs as any[]).length,
+        count: category === 'all' ? allDocuments.length : category === 'documents' ? allDocuments.length : (categoryDocs as any[]).length,
         totalSize: `${(totalSize / 1024).toFixed(1)} MB`,
         lastUpdated: '2025-01-04',
         items
       });
     } else {
       // For forms view
-      const categoryForms = templates.filter(t => 
-        category === 'all' || t.category.toLowerCase() === category.toLowerCase()
-      );
+      const categoryForms = templates;
       
       const items = categoryForms.slice(0, 5).map(form => ({
         id: form.id.toString(),
@@ -159,11 +164,9 @@ export default function DocumentsPage() {
       }));
       
       setSelectedCategoryDetails({
-        name: category === 'all' ? 'All Forms' : category,
+        name: 'All Forms',
         type: 'forms',
-        description: category === 'all' 
-          ? 'View all form templates' 
-          : `View all ${category.toLowerCase()} form templates`,
+        description: 'View all form templates',
         count: categoryForms.length,
         items
       });
@@ -199,8 +202,9 @@ export default function DocumentsPage() {
       }
     },
     {
-      accessorKey: 'size',
+      id: 'size',
       header: ({ column }) => createSortableHeader(column, 'Size'),
+      accessorFn: (row: any) => row.itemType === 'form' ? (typeof row.fields === 'number' ? row.fields : row.fields?.length || 0) : row.size,
       cell: ({ row }) => {
         const item = row.original;
         if (item.itemType === 'form') {
@@ -208,14 +212,14 @@ export default function DocumentsPage() {
           return (
             <div className="flex items-center gap-2">
               <FolderOpen className="h-4 w-4 text-muted-foreground" />
-              {typeof fields === 'number' ? fields : fields.length} fields
+              {typeof fields === 'number' ? fields : fields?.length || 0} fields
             </div>
           );
         }
         return (
           <div className="flex items-center gap-2">
             <HardDrive className="h-4 w-4 text-muted-foreground" />
-            {row.getValue('size')}
+            {item.size}
           </div>
         );
       }
@@ -370,11 +374,17 @@ export default function DocumentsPage() {
   // Available columns for visibility control
   const availableColumns = useMemo(() => {
     return columns
-      .filter(col => col.id !== 'actions' && col.accessorKey)
-      .map(col => ({
-        id: col.accessorKey as string,
-        label: (col.header as any)?.({ column: {} })?.props?.children?.[0] || col.accessorKey
-      }));
+      .filter(col => col.id !== 'actions')
+      .map(col => {
+        const columnId = col.id || (col as any).accessorKey;
+        return {
+          id: columnId as string,
+          label: columnId === 'updated' ? 'Updated' : 
+                 columnId === 'status' ? 'Status' :
+                 columnId === 'size' ? 'Size' :
+                 (col as any).accessorKey || columnId
+        };
+      });
   }, [columns]);
 
   return (

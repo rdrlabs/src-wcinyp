@@ -46,8 +46,8 @@ interface DataTableProps<TData, TValue> {
   showPagination?: boolean
   pageSize?: number
   enableRowSelection?: boolean
-  columnVisibility?: Record<string, boolean>
-  onColumnVisibilityChange?: (visibility: Record<string, boolean>) => void
+  columnVisibility?: VisibilityState
+  onColumnVisibilityChange?: (visibility: VisibilityState) => void
 }
 
 export function DataTable<TData, TValue>({
@@ -70,7 +70,17 @@ export function DataTable<TData, TValue>({
 
   // Use external column visibility if provided, otherwise use internal state
   const columnVisibility = externalColumnVisibility || internalColumnVisibility
-  const setColumnVisibility = onColumnVisibilityChange || setInternalColumnVisibility
+  const setColumnVisibility = React.useCallback(
+    (updater: VisibilityState | ((old: VisibilityState) => VisibilityState)) => {
+      if (onColumnVisibilityChange) {
+        const newValue = typeof updater === 'function' ? updater(columnVisibility) : updater
+        onColumnVisibilityChange(newValue)
+      } else {
+        setInternalColumnVisibility(updater)
+      }
+    },
+    [columnVisibility, onColumnVisibilityChange]
+  )
 
   // Add selection column if not already present and if selection is enabled
   const columns = React.useMemo(() => {

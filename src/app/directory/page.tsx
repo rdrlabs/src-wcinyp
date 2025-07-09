@@ -232,11 +232,15 @@ export default function DirectoryPage() {
   // Available columns for visibility control
   const availableColumns = useMemo(() => {
     return columns
-      .filter(col => col.id !== 'actions' && col.accessorKey)
-      .map(col => ({
-        id: col.accessorKey as string,
-        label: (col.header as any)?.({ column: {} })?.props?.children?.[0] || col.accessorKey
-      }));
+      .filter(col => col.id !== 'actions')
+      .map(col => {
+        const columnId = col.id || (col as any).accessorKey;
+        return {
+          id: columnId as string,
+          label: columnId === 'contactInfo' ? 'Contact Info' :
+                 (col as any).accessorKey || columnId
+        };
+      });
   }, [columns]);
 
   return (
