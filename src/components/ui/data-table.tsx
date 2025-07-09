@@ -36,8 +36,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
+interface DataTableProps<TData> {
+  columns: ColumnDef<TData, any>[]
   data: TData[]
   onRowClick?: (row: TData) => void
   searchColumn?: string
@@ -50,7 +50,7 @@ interface DataTableProps<TData, TValue> {
   onColumnVisibilityChange?: (visibility: VisibilityState) => void
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData>({
   columns: userColumns,
   data,
   onRowClick,
@@ -62,7 +62,7 @@ export function DataTable<TData, TValue>({
   enableRowSelection = true,
   columnVisibility: externalColumnVisibility,
   onColumnVisibilityChange,
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<TData>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [internalColumnVisibility, setInternalColumnVisibility] = React.useState<VisibilityState>({})
@@ -89,14 +89,14 @@ export function DataTable<TData, TValue>({
     }
 
     const hasSelectionColumn = userColumns.some(
-      (col) => (col as any).id === "select"
+      (col) => col.id === "select"
     )
 
     if (hasSelectionColumn) {
       return userColumns
     }
 
-    const selectColumn: ColumnDef<TData, TValue> = {
+    const selectColumn: ColumnDef<TData, any> = {
       id: "select",
       header: ({ table }) => (
         <Checkbox
@@ -283,8 +283,10 @@ export function DataTable<TData, TValue>({
 }
 
 // Helper function to create sortable column headers
+import type { Column } from "@tanstack/react-table"
+
 export function createSortableHeader<TData>(
-  column: any,
+  column: Column<TData, any>,
   title: string
 ): React.ReactNode {
   return (

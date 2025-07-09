@@ -41,7 +41,9 @@ async function findFiles() {
       '**/archive/**', 
       '**/*.test.*', 
       '**/*.spec.*',
-      '**/design-system-migration.ts'
+      '**/design-system-migration.ts',
+      '**/theme-selector.tsx', // Needs direct colors for theme preview swatches
+      '**/test-colors/**' // Test pages for color validation
     ]
   });
   return files;

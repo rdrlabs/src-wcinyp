@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -24,10 +24,8 @@ import {
   HardDrive,
   Plus,
   Upload,
-  Edit,
   Eye,
   Copy,
-  Users,
   CheckCircle,
   AlertCircle,
   Settings,
@@ -41,7 +39,7 @@ import { getThemeColor, getStatusColor } from "@/lib/theme";
 import { DataTable, createSortableHeader, createActionsColumn } from "@/components/ui/data-table";
 import { DetailsSheet, type CategoryData } from "@/components/shared";
 import type { ColumnDef } from "@tanstack/react-table";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -96,9 +94,9 @@ export default function DocumentsPage() {
   const categories = Object.keys(documentCategories);
 
   // Handle form selection
-  const handleFormSelect = (formId: number) => {
+  const handleFormSelect = useCallback((formId: number) => {
     setSelectedFormId(formId);
-  };
+  }, []);
 
   const handleBackToList = () => {
     setSelectedFormId(null);
@@ -176,7 +174,8 @@ export default function DocumentsPage() {
   };
 
   // Define columns for unified table
-  const columns: ColumnDef<any>[] = useMemo(() => [
+  type UnifiedItem = (typeof allDocuments[0] & { itemType: 'document' }) | (FormTemplate & { itemType: 'form' });
+  const columns: ColumnDef<UnifiedItem>[] = useMemo(() => [
     {
       accessorKey: 'name',
       header: ({ column }) => createSortableHeader(column, 'Name'),
@@ -204,7 +203,7 @@ export default function DocumentsPage() {
     {
       id: 'size',
       header: ({ column }) => createSortableHeader(column, 'Size'),
-      accessorFn: (row: any) => row.itemType === 'form' ? (typeof row.fields === 'number' ? row.fields : row.fields?.length || 0) : row.size,
+      accessorFn: (row: UnifiedItem) => row.itemType === 'form' ? (typeof row.fields === 'number' ? row.fields : row.fields?.length || 0) : row.size,
       cell: ({ row }) => {
         const item = row.original;
         if (item.itemType === 'form') {
@@ -255,7 +254,7 @@ export default function DocumentsPage() {
         return null;
       }
     },
-    createActionsColumn<any>([
+    createActionsColumn<UnifiedItem>([
       {
         label: 'View',
         onClick: (item) => {
@@ -280,109 +279,20 @@ export default function DocumentsPage() {
     ])
   ], [handleFormSelect]);
 
-  // Define columns for forms table (kept for reference but not used)
-  const formColumns: ColumnDef<FormTemplate>[] = useMemo(() => [
-    {
-      accessorKey: 'name',
-      header: ({ column }) => createSortableHeader(column, 'Form Name'),
-      cell: ({ row }) => (
-        <div className="flex items-center gap-2">
-          <FileText className="h-4 w-4 text-muted-foreground" />
-          <span className="font-semibold">{row.getValue('name')}</span>
-        </div>
-      )
-    },
-    {
-      accessorKey: 'category',
-      header: ({ column }) => createSortableHeader(column, 'Category'),
-      cell: ({ row }) => {
-        const category = row.getValue('category') as string;
-        const Icon = getCategoryIcon(category);
-        return (
-          <span className={`inline-flex items-center gap-2 rounded-md px-2 py-2 text-sm font-semibold ring-1 ring-inset ${getThemeColor('purple')}`}>
-            <Icon className="h-4 w-4" />
-            {category}
-          </span>
-        );
-      }
-    },
-    {
-      id: 'fields',
-      header: 'Fields',
-      cell: ({ row }) => {
-        const fields = row.original.fields;
-        return (
-          <div className="flex items-center justify-center gap-2">
-            <FolderOpen className="h-4 w-4 text-muted-foreground" />
-            {typeof fields === 'number' ? fields : fields.length}
-          </div>
-        );
-      }
-    },
-    {
-      accessorKey: 'submissions',
-      header: ({ column }) => createSortableHeader(column, 'Submissions'),
-      cell: ({ row }) => (
-        <div className="flex items-center justify-center gap-2">
-          <Users className="h-4 w-4 text-muted-foreground" />
-          {row.getValue('submissions')}
-        </div>
-      )
-    },
-    {
-      accessorKey: 'lastUsed',
-      header: ({ column }) => createSortableHeader(column, 'Last Used'),
-      cell: ({ row }) => (
-        <div className="flex items-center gap-2">
-          <Calendar className="h-4 w-4 text-muted-foreground" />
-          {row.getValue('lastUsed')}
-        </div>
-      )
-    },
-    {
-      accessorKey: 'status',
-      header: ({ column }) => createSortableHeader(column, 'Status'),
-      cell: ({ row }) => {
-        const status = row.getValue('status') as string;
-        return (
-          <span className={`inline-flex items-center gap-2 rounded-md px-2 py-2 text-sm font-semibold ring-1 ring-inset ${getStatusColor(status)}`}>
-            {status === 'active' ? <CheckCircle className="h-4 w-4" /> : <AlertCircle className="h-4 w-4" />}
-            {status}
-          </span>
-        );
-      }
-    },
-    createActionsColumn<FormTemplate>([
-      {
-        label: 'Fill Form',
-        onClick: (template) => handleFormSelect(typeof template.id === 'string' ? parseInt(template.id) : template.id),
-        icon: <Edit className="h-4 w-4" />
-      },
-      {
-        label: 'Preview',
-        onClick: (template) => console.log('Preview', template),
-        icon: <Eye className="h-4 w-4" />
-      },
-      {
-        label: 'Clone',
-        onClick: (template) => console.log('Clone', template),
-        icon: <Copy className="h-4 w-4" />
-      }
-    ])
-  ], []);
 
   // Available columns for visibility control
   const availableColumns = useMemo(() => {
     return columns
       .filter(col => col.id !== 'actions')
       .map(col => {
-        const columnId = col.id || (col as any).accessorKey;
+        const columnDef = col as ColumnDef<UnifiedItem> & { accessorKey?: string };
+        const columnId = col.id || columnDef.accessorKey;
         return {
           id: columnId as string,
           label: columnId === 'updated' ? 'Updated' : 
                  columnId === 'status' ? 'Status' :
                  columnId === 'size' ? 'Size' :
-                 (col as any).accessorKey || columnId
+                 columnDef.accessorKey || columnId
         };
       });
   }, [columns]);

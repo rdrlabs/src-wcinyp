@@ -8,7 +8,6 @@ import { useState, useMemo } from "react";
 import contactsData from "@/data/contacts.json";
 import providersData from "@/data/providers.json";
 import type { Contact, Provider } from "@/types";
-import { ReferringProviderTable } from "./components/ReferringProviderTable";
 import { TYPOGRAPHY } from "@/constants/typography";
 import { cn } from "@/lib/utils";
 import { 
@@ -26,9 +25,8 @@ import {
 } from "lucide-react";
 import { DataTable, createSortableHeader, createActionsColumn } from "@/components/ui/data-table";
 import { DetailsSheet, type ContactTypeData } from "@/components/shared";
-import { useSearch } from "@/hooks/shared";
 import type { ColumnDef } from "@tanstack/react-table";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -160,7 +158,8 @@ export default function DirectoryPage() {
   };
 
   // Define columns for unified table
-  const columns: ColumnDef<any>[] = useMemo(() => [
+  type UnifiedItem = (Contact & { itemType: 'contact' }) | (Provider & { itemType: 'provider'; type: 'Provider' });
+  const columns: ColumnDef<UnifiedItem>[] = useMemo(() => [
     {
       accessorKey: 'name',
       header: ({ column }) => createSortableHeader(column, 'Name'),
@@ -234,11 +233,12 @@ export default function DirectoryPage() {
     return columns
       .filter(col => col.id !== 'actions')
       .map(col => {
-        const columnId = col.id || (col as any).accessorKey;
+        const columnDef = col as ColumnDef<UnifiedItem> & { accessorKey?: string };
+        const columnId = col.id || columnDef.accessorKey;
         return {
           id: columnId as string,
           label: columnId === 'contactInfo' ? 'Contact Info' :
-                 (col as any).accessorKey || columnId
+                 columnDef.accessorKey || columnId
         };
       });
   }, [columns]);
