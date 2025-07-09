@@ -19,20 +19,20 @@ export default function UpdatesError({
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="text-center">
         <div className="flex justify-center mb-6">
-          <div className="p-4 bg-red-100 dark:bg-red-900/20 rounded-full">
-            <AlertCircle className="h-12 w-12 text-red-600 dark:text-red-400" />
+          <div className="p-4 bg-destructive/20 dark:bg-destructive/20 rounded-full">
+            <AlertCircle className="h-12 w-12 text-destructive" />
           </div>
         </div>
         
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+        <h1 className="text-2xl font-semibold text-foreground mb-4">
           Updates Error
         </h1>
         
-        <p className="text-lg text-gray-600 dark:text-gray-400 mb-2">
+        <p className="text-lg text-muted-foreground mb-2">
           Failed to load updates
         </p>
         
-        <p className="text-sm text-gray-500 dark:text-gray-500 mb-8 max-w-md mx-auto">
+        <p className="text-sm text-muted-foreground mb-8 max-w-md mx-auto">
           {error.message || 'An unexpected error occurred while loading the updates page'}
         </p>
         
@@ -46,7 +46,7 @@ export default function UpdatesError({
           
           <Link
             href="/"
-            className="px-6 py-3 bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors"
+            className="px-6 py-3 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors"
           >
             Go home
           </Link>

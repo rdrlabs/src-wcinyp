@@ -15,7 +15,7 @@ describe('Card Components', () => {
       
       const card = container.firstChild
       expect(card).toHaveClass('custom-card')
-      expect(card).toHaveClass('rounded-xl', 'border', 'bg-card')
+      expect(card).toHaveClass('rounded-xl', 'text-card-foreground')
     })
   })
 
@@ -31,7 +31,7 @@ describe('Card Components', () => {
       
       const header = container.firstChild
       expect(header).toHaveClass('custom-header')
-      expect(header).toHaveClass('flex', 'flex-col', 'space-y-1.5', 'p-6')
+      expect(header).toHaveClass('flex', 'flex-col', 'space-y-2', 'p-6')
     })
   })
 

@@ -5,6 +5,8 @@ import { Providers } from "@/components/providers";
 import { Toaster } from "sonner";
 import { Footer } from "@/components/footer";
 import { NavBar } from "@/components/navbar";
+import { ThemeBody } from "@/components/theme-body";
+import { CommandMenu } from "@/components/command-menu";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -23,19 +25,38 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                // Apply saved theme to prevent FOUC
+                if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                  document.documentElement.setAttribute('data-theme', 'dark')
+                } else if (localStorage.theme === 'light') {
+                  document.documentElement.setAttribute('data-theme', 'light')
+                }
+              } catch {}
+            `,
+          }}
+        />
+      </head>
       <body className={inter.className}>
         <Providers>
-          <div className="min-h-screen bg-background flex flex-col">
-            <NavBar />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
-          <Toaster 
-            position="top-right"
-            richColors
-            closeButton
-            theme="system"
-          />
+          <ThemeBody>
+            <div className="min-h-screen bg-background flex flex-col">
+              <NavBar />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
+            <Toaster 
+              position="top-right"
+              richColors
+              closeButton
+              theme="system"
+            />
+            <CommandMenu />
+          </ThemeBody>
         </Providers>
       </body>
     </html>

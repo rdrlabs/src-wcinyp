@@ -23,7 +23,6 @@ import {
 } from "lucide-react";
 import { 
   getSpecialtyIcon, 
-  getLocationColor, 
   getAffiliationInfo
 } from "@/lib/icons";
 
@@ -99,17 +98,17 @@ export function ProviderTable({ providers, searchTerm }: ProviderTableProps) {
                               const SpecIcon = getSpecialtyIcon(provider.specialty);
                               return <SpecIcon className="h-4 w-4" />;
                             })()}
-                            <span className="text-sm font-medium">{provider.specialty}</span>
+                            <span className="text-sm font-semibold">{provider.specialty}</span>
                             <span className="text-muted-foreground">•</span>
-                            <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                              <Building2 className="h-3 w-3" />
+                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                              <Building2 className="h-4 w-4" />
                               {provider.department}
                             </div>
                           </div>
                           {provider.npi && (
                             <div className="flex items-center gap-2 mt-1">
-                              <Shield className="h-3 w-3 text-muted-foreground" />
-                              <span className="text-xs font-mono text-muted-foreground">NPI: {provider.npi}</span>
+                              <Shield className="h-4 w-4 text-muted-foreground" />
+                              <span className="text-sm font-mono text-muted-foreground">NPI: {provider.npi}</span>
                             </div>
                           )}
                         </div>
@@ -118,16 +117,15 @@ export function ProviderTable({ providers, searchTerm }: ProviderTableProps) {
                           {provider.affiliation && (
                             <Badge 
                               variant="secondary" 
-                              className={`${affiliationInfo.color} ring-1 ring-inset font-medium`}
+                              className="font-semibold"
                             >
                               {affiliationInfo.label}
                             </Badge>
                           )}
                           <Badge 
-                            variant="secondary" 
-                            className={`${getLocationColor(provider.location)} ring-1 ring-inset`}
+                            variant="secondary"
                           >
-                            <MapPin className="h-3 w-3 mr-1" />
+                            <MapPin className="h-4 w-4 mr-1" />
                             {provider.location}
                           </Badge>
                           
@@ -137,9 +135,9 @@ export function ProviderTable({ providers, searchTerm }: ProviderTableProps) {
                           <div className="mt-2">
                             <CollapsibleTrigger asChild>
                               <Button variant="ghost" size="sm" className="h-6 px-2">
-                                <FileText className="h-3 w-3 mr-1" />
+                                <FileText className="h-4 w-4 mr-1" />
                                 Notes
-                                {isExpanded ? <ChevronDown className="h-3 w-3 ml-1" /> : <ChevronRight className="h-3 w-3 ml-1" />}
+                                {isExpanded ? <ChevronDown className="h-4 w-4 ml-1" /> : <ChevronRight className="h-4 w-4 ml-1" />}
                               </Button>
                             </CollapsibleTrigger>
                           </div>
@@ -154,22 +152,22 @@ export function ProviderTable({ providers, searchTerm }: ProviderTableProps) {
                           href={`tel:${provider.phone}`} 
                           className="flex items-center gap-2 text-sm hover:text-primary transition-colors"
                         >
-                          <Phone className="h-3 w-3" />
+                          <Phone className="h-4 w-4" />
                           {provider.phone}
                         </a>
                         <a 
                           href={`mailto:${provider.email}`} 
                           className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
                         >
-                          <Mail className="h-3 w-3" />
+                          <Mail className="h-4 w-4" />
                           {provider.email}
                         </a>
                       </div>
                       
                       <div className="mt-4">
-                        <Button size="sm" className="flex items-center gap-1">
+                        <Button size="sm" className="flex items-center gap-2">
                           View Profile
-                          <ChevronRight className="h-3 w-3" />
+                          <ChevronRight className="h-4 w-4" />
                         </Button>
                       </div>
                     </div>
@@ -182,7 +180,7 @@ export function ProviderTable({ providers, searchTerm }: ProviderTableProps) {
                         <div className="flex items-start gap-2">
                           <FileText className="h-4 w-4 text-muted-foreground mt-0.5" />
                           <div className="flex-1">
-                            <h4 className="text-sm font-medium mb-1">Provider Notes</h4>
+                            <h4 className="text-sm font-semibold mb-1">Provider Notes</h4>
                             <p className="text-sm text-muted-foreground whitespace-pre-wrap">{provider.notes}</p>
                           </div>
                         </div>

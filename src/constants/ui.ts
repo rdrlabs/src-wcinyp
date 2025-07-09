@@ -8,11 +8,11 @@ export const KEYBOARD_SHORTCUTS = {
 } as const
 
 export const ICON_SIZES = {
-  xs: 'h-3 w-3',
-  sm: 'h-4 w-4',
-  md: 'h-5 w-5',
-  lg: 'h-6 w-6',
-  xl: 'h-8 w-8',
+  xs: 'h-3 w-3',   // 12px - tiny icons
+  sm: 'h-4 w-4',   // 16px - default for most UI icons
+  md: 'h-6 w-6',   // 24px - feature/section icons
+  lg: 'h-8 w-8',   // 32px - large feature icons
+  xl: 'h-12 w-12', // 48px - hero icons
 } as const
 
 export const SPACING = {
@@ -48,13 +48,22 @@ export const GRID_LAYOUTS = {
 } as const
 
 export const TEXT_SIZES = {
-  hero: 'text-5xl md:text-6xl',
-  title: 'text-4xl',
+  // Full Tailwind range (excluding extreme sizes)
+  xs: 'text-xs',       // 12px
+  sm: 'text-sm',       // 14px  
+  base: 'text-base',   // 16px
+  lg: 'text-lg',       // 18px
+  xl: 'text-xl',       // 20px
+  '2xl': 'text-2xl',   // 24px
+  '3xl': 'text-3xl',   // 30px
+  '4xl': 'text-4xl',   // 36px
+  '5xl': 'text-5xl',   // 48px
+  
+  // Legacy semantic mappings for backward compatibility
   heading: 'text-2xl',
-  subheading: 'text-xl',
+  subheading: 'text-lg',
   body: 'text-base',
   small: 'text-sm',
-  xs: 'text-xs',
 } as const
 
 export const CONTAINER_STYLES = {

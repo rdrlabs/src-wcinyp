@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, it, expect, vi } from 'vitest'
 import { ThemeProvider } from 'next-themes'
 import FormBuilder from '@/components/FormBuilder'
+import { FormProvider } from '@/contexts/form-context'
 import type { FormTemplate } from '@/types'
 
 // Mock next-themes to control theme state
@@ -35,7 +36,9 @@ describe('Dark Mode Theming', () => {
       const user = userEvent.setup()
       render(
         <ThemeProvider attribute="class" defaultTheme="dark">
-          <FormBuilder template={mockTemplate} />
+          <FormProvider>
+            <FormBuilder template={mockTemplate} />
+          </FormProvider>
         </ThemeProvider>
       )
       
@@ -46,37 +49,34 @@ describe('Dark Mode Theming', () => {
       // Check that dark mode classes are applied
       const previewSection = screen.getByText('Form Preview').parentElement
       
-      // Should NOT have light-only colors
-      expect(previewSection?.className).not.toMatch(/bg-gray-50(?!\s*dark:)/)
-      expect(previewSection?.className).not.toMatch(/text-gray-600(?!\s*dark:)/)
-      
-      // Should have dark mode variants
-      expect(previewSection?.className).toMatch(/dark:bg-gray-900|dark:bg-gray-800/)
+      // Should have semantic colors that work in both light and dark modes
+      expect(previewSection?.className).toContain('bg-muted')
     })
 
     it('should apply dark mode classes to form container', () => {
       render(
         <ThemeProvider attribute="class" defaultTheme="dark">
-          <FormBuilder template={mockTemplate} />
+          <FormProvider>
+            <FormBuilder template={mockTemplate} />
+          </FormProvider>
         </ThemeProvider>
       )
       
-      // Find form container
+      // Find form container with semantic colors
       const formFields = screen.getAllByRole('textbox')
-      const formContainer = formFields[0].closest('.bg-white')
+      const formContainer = formFields[0].closest('.bg-card')
       
-      // Should NOT have bg-white without dark variant
-      expect(formContainer?.className).not.toMatch(/bg-white(?!\s*dark:)/)
-      
-      // Should have dark mode background
-      expect(formContainer?.className).toMatch(/dark:bg-gray-800|dark:bg-gray-900/)
+      // Should have semantic background color
+      expect(formContainer?.className).toContain('bg-card')
     })
 
     it('should properly style text in dark mode', async () => {
       const user = userEvent.setup()
       render(
         <ThemeProvider attribute="class" defaultTheme="dark">
-          <FormBuilder template={mockTemplate} />
+          <FormProvider>
+            <FormBuilder template={mockTemplate} />
+          </FormProvider>
         </ThemeProvider>
       )
       
@@ -87,8 +87,8 @@ describe('Dark Mode Theming', () => {
       // Find text elements
       const descriptionText = screen.getByText(/This is how your form will appear/)
       
-      // Should have proper text color for dark mode
-      expect(descriptionText.className).toMatch(/dark:text-gray-400|dark:text-gray-300/)
+      // Should have semantic text color
+      expect(descriptionText.className).toContain('text-muted-foreground')
     })
   })
 

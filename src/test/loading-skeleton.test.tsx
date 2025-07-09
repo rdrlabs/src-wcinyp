@@ -11,9 +11,8 @@ describe('Loading Components with Skeleton', () => {
       const loadingText = screen.getByText('Loading...')
       expect(loadingText).toBeInTheDocument()
       
-      // Should have dark mode text color
-      expect(loadingText.className).toContain('text-gray-600')
-      expect(loadingText.className).toContain('dark:text-gray-400')
+      // Should have semantic text color
+      expect(loadingText.className).toContain('text-muted-foreground')
     })
 
     it('should have spinning animation', () => {
@@ -41,13 +40,13 @@ describe('Loading Components with Skeleton', () => {
     it('should render card skeletons', () => {
       render(<KnowledgeLoading />)
       
-      // Card skeletons
-      const cards = document.querySelectorAll('.bg-gray-50.dark\\:bg-gray-800')
+      // Card skeletons with semantic colors - more specific selector
+      const cards = document.querySelectorAll('.grid > div.bg-muted')
       expect(cards).toHaveLength(6)
       
-      // Each card should have dark border
+      // Each card should have semantic border
       cards.forEach(card => {
-        expect(card.className).toContain('dark:border-gray-700')
+        expect(card.className).toContain('border-border')
       })
     })
   })

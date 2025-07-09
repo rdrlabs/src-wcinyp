@@ -21,7 +21,7 @@ describe('DocumentBrowser', () => {
       expect(screen.getByPlaceholderText('Search documents...')).toBeInTheDocument()
       
       // Category buttons - use real categories from data
-      expect(screen.getByRole('button', { name: 'All Documents' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'All' })).toBeInTheDocument()
       expect(screen.getByRole('button', { name: 'ABN Forms' })).toBeInTheDocument()
       expect(screen.getByRole('button', { name: 'Patient Questionnaires' })).toBeInTheDocument()
     })
@@ -104,7 +104,7 @@ describe('DocumentBrowser', () => {
       await user.click(screen.getByRole('button', { name: 'ABN Forms' }))
       
       // Then click All Documents
-      await user.click(screen.getByRole('button', { name: 'All Documents' }))
+      await user.click(screen.getByRole('button', { name: 'All' }))
       
       // Should show documents from multiple categories
       expect(screen.getByText('ABN - 55th Street.pdf')).toBeInTheDocument()
@@ -158,7 +158,7 @@ describe('DocumentBrowser', () => {
       
       // Tab to first category button
       await user.tab()
-      const allButton = screen.getByRole('button', { name: 'All Documents' })
+      const allButton = screen.getByRole('button', { name: 'All' })
       expect(allButton).toHaveFocus()
     })
   })

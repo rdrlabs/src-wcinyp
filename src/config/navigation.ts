@@ -1,4 +1,4 @@
-import { BookOpen, Home, FileText, Bell } from 'lucide-react';
+import { Brain, Users, FileText, Bell } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 export interface NavItem {
@@ -8,8 +8,8 @@ export interface NavItem {
 }
 
 export const mainNavItems: NavItem[] = [
-  { href: '/knowledge', label: 'Knowledge Base', icon: BookOpen },
-  { href: '/directory', label: 'Directory', icon: Home },
+  { href: '/knowledge', label: 'Knowledge Base', icon: Brain },
+  { href: '/directory', label: 'Directory', icon: Users },
   { href: '/documents', label: 'Documents', icon: FileText },
   { href: '/updates', label: 'Updates', icon: Bell },
 ];

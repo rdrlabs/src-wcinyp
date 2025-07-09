@@ -1,62 +1,184 @@
-@layer base, components, utilities, fumadocs;
+@import "tailwindcss";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Enable data-attribute-based dark mode for Tailwind v4 */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
+@layer fumadocs;
+
+/* Define theme tokens in @theme for Tailwind v4 with concrete OKLCH values */
+@theme {
+  /* Design Tokens */
+  --radius: 0.5rem;
+  
+  /* Default colors (light mode, blue theme) with hex fallbacks */
+  --color-background: #ffffff;
+  --color-foreground: #0a0a0a;
+  --color-muted: #f5f5f5;
+  --color-muted-lighter: #fafafa;
+  --color-muted-darker: #e5e5e5;
+  --color-muted-foreground: #737373;
+  --color-card: #ffffff;
+  --color-card-foreground: #0a0a0a;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #0a0a0a;
+  --color-border: #e5e5e5;
+  --color-border-strong: #d4d4d4;
+  --color-input: #e5e5e5;
+  --color-primary: #3b82f6;
+  --color-primary-foreground: #fafafa;
+  --color-accent: #f5f5f5;
+  --color-accent-foreground: #0a0a0a;
+  --color-secondary: #f5f5f5;
+  --color-secondary-foreground: #0a0a0a;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #fafafa;
+  --color-ring: #3b82f6;
+  --color-success: #22c55e;
+  --color-success-foreground: #fafafa;
+  --color-warning: #f59e0b;
+  --color-warning-foreground: #0a0a0a;
+  --color-info: #3b82f6;
+  --color-info-foreground: #fafafa;
+}
+
+/* CSS overrides for dark mode and themes */
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+  /* Dark mode color overrides */
+  [data-theme="dark"] {
+    --color-background: oklch(10% 0 0);        /* Was 15%, darker background */
+    --color-foreground: oklch(95% 0 0);        /* Was 98%, slightly less bright */
+    --color-muted: oklch(17% 0 0);             /* Was 20%, better contrast */
+    --color-muted-lighter: oklch(14% 0 0);     /* Subtle background layering */
+    --color-muted-darker: oklch(25% 0 0);      /* Stronger dividers */
+    --color-muted-foreground: oklch(65% 0 0);  /* Was 70%, better hierarchy */
+    --color-card: oklch(13% 0 0);              /* Was 18%, more contrast from bg */
+    --color-card-foreground: oklch(95% 0 0);
+    --color-popover: oklch(13% 0 0);           /* Was 18% */
+    --color-popover-foreground: oklch(95% 0 0);
+    --color-border: oklch(30% 0 0);            /* Was 27%, more visible */
+    --color-border-strong: oklch(40% 0 0);     /* Strong borders for emphasis */
+    --color-input: oklch(18% 0 0);             /* Was 25%, darker inputs */
+    --color-primary: oklch(69.8% 0.195 238.4);
+    --color-primary-foreground: oklch(15% 0 0);
+    --color-accent: oklch(17% 0 0);            /* Was 25%, darker accent */
+    --color-accent-foreground: oklch(95% 0 0);
+    --color-secondary: oklch(17% 0 0);         /* Was 25%, darker secondary */
+    --color-secondary-foreground: oklch(95% 0 0);
+    --color-destructive: oklch(50% 0.25 27);
+    --color-destructive-foreground: oklch(95% 0 0);
+    --color-ring: oklch(69.8% 0.195 238.4);
+    --color-success: oklch(70% 0.15 150);
+    --color-success-foreground: oklch(15% 0 0);
+    --color-warning: oklch(80% 0.15 85);
+    --color-warning-foreground: oklch(15% 0 0);
+    --color-info: oklch(70% 0.15 235);
+    --color-info-foreground: oklch(15% 0 0);
   }
 }
 
+/* Color Theme Variations - Applied via class on HTML element */
+/* These are outside of any @layer to ensure proper specificity */
+
+/* Blue Theme (Default) */
+.theme-blue {
+  --color-primary: oklch(69.8% 0.195 238.4);
+  --color-ring: oklch(69.8% 0.195 238.4);
+}
+[data-theme="dark"] .theme-blue {
+  --color-primary: oklch(62.8% 0.195 238.4);
+  --color-primary-foreground: oklch(98% 0 0);
+  --color-ring: oklch(62.8% 0.195 238.4);
+}
+
+/* Red Theme */
+.theme-red {
+  --color-primary: oklch(69.5% 0.203 25.5);
+  --color-ring: oklch(69.5% 0.203 25.5);
+}
+[data-theme="dark"] .theme-red {
+  --color-primary: oklch(59.2% 0.203 25.5);
+  --color-primary-foreground: oklch(98% 0 0);
+  --color-ring: oklch(59.2% 0.203 25.5);
+}
+
+/* Orange Theme */
+.theme-orange {
+  --color-primary: oklch(70.1% 0.179 44.2);
+  --color-ring: oklch(70.1% 0.179 44.2);
+}
+[data-theme="dark"] .theme-orange {
+  --color-primary: oklch(63.9% 0.172 41.7);
+  --color-primary-foreground: oklch(98% 0 0);
+  --color-ring: oklch(63.9% 0.172 41.7);
+}
+
+/* Green Theme */
+.theme-green {
+  --color-primary: oklch(60.8% 0.149 149.5);
+  --color-ring: oklch(60.8% 0.149 149.5);
+}
+[data-theme="dark"] .theme-green {
+  --color-primary: oklch(54.2% 0.129 149.5);
+  --color-primary-foreground: oklch(98% 0 0);
+  --color-ring: oklch(54.2% 0.129 149.5);
+}
+
+/* Yellow Theme */
+.theme-yellow {
+  --color-primary: oklch(77.9% 0.152 95.8);
+  --color-primary-foreground: oklch(20% 0 0);
+  --color-ring: oklch(77.9% 0.152 95.8);
+}
+[data-theme="dark"] .theme-yellow {
+  --color-primary: oklch(72.4% 0.145 92.6);
+  --color-primary-foreground: oklch(20% 0 0);
+  --color-ring: oklch(72.4% 0.145 92.6);
+}
+
+/* Pink Theme */
+.theme-pink {
+  --color-primary: oklch(70% 0.25 350);
+  --color-ring: oklch(70% 0.25 350);
+}
+[data-theme="dark"] .theme-pink {
+  --color-primary: oklch(60% 0.25 350);
+  --color-primary-foreground: oklch(98% 0 0);
+  --color-ring: oklch(60% 0.25 350);
+}
+
+/* Purple Theme */
+.theme-purple {
+  --color-primary: oklch(70% 0.25 280);
+  --color-ring: oklch(70% 0.25 280);
+}
+[data-theme="dark"] .theme-purple {
+  --color-primary: oklch(60% 0.25 280);
+  --color-primary-foreground: oklch(98% 0 0);
+  --color-ring: oklch(60% 0.25 280);
+}
+
+/* Neutral Theme (No color, adapts to light/dark) */
+.theme-neutral {
+  --color-primary: oklch(0% 0 0);  /* Pure black for light mode */
+  --color-primary-foreground: oklch(100% 0 0);
+  --color-ring: oklch(0% 0 0);
+}
+
+[data-theme="dark"] .theme-neutral {
+  --color-primary: oklch(100% 0 0);  /* Pure white for dark mode */
+  --color-primary-foreground: oklch(0% 0 0);
+  --color-ring: oklch(100% 0 0);
+}
+
+/* Base styles without @apply for Tailwind v4 */
 @layer base {
   * {
-    @apply border-border;
+    border-color: var(--color-border);
   }
+  
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
       "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
       sans-serif;

@@ -87,3 +87,15 @@ global.ResizeObserver = vi.fn().mockImplementation(() => ({
   unobserve: vi.fn(),
   disconnect: vi.fn(),
 }))
+
+// Initialize feature flags for tests
+// By default, all feature flags are disabled to ensure backward compatibility
+global.process = {
+  ...global.process,
+  env: {
+    ...global.process.env,
+    NEXT_PUBLIC_STRICT_DESIGN_SYSTEM: 'false',
+    NEXT_PUBLIC_NEUTRAL_BADGES: 'false', 
+    NEXT_PUBLIC_ENFORCE_TYPOGRAPHY: 'false',
+  }
+}

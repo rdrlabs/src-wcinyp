@@ -1,23 +1,21 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import documentsData from "@/data/documents.json";
 import formTemplatesData from "@/data/form-templates.json";
 import type { DocumentCategories, FormTemplate } from "@/types";
 import { FormBuilder } from "@/components/FormBuilder";
+import { TYPOGRAPHY } from "@/constants/typography";
+import { cn } from "@/lib/utils";
 import { 
   Search, 
   Download, 
@@ -26,26 +24,36 @@ import {
   HardDrive,
   Plus,
   Upload,
-  Edit,
   Eye,
   Copy,
-  Users,
   CheckCircle,
   AlertCircle,
   Settings,
   Printer,
-  FileInput,
   FolderOpen,
-  DollarSign
+  DollarSign,
+  ChevronDown
 } from "lucide-react";
 import { getCategoryIcon } from "@/lib/icons";
 import { getThemeColor, getStatusColor } from "@/lib/theme";
+import { DataTable, createSortableHeader, createActionsColumn } from "@/components/ui/data-table";
+import { DetailsSheet, type CategoryData } from "@/components/shared";
+import type { ColumnDef } from "@tanstack/react-table";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function DocumentsPage() {
-  const [viewMode, setViewMode] = useState<'documents' | 'forms'>('documents');
+  const [selectedTab, setSelectedTab] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedFormId, setSelectedFormId] = useState<number | null>(null);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [selectedCategoryDetails, setSelectedCategoryDetails] = useState<CategoryData | null>(null);
+  const [columnVisibility, setColumnVisibility] = useState<Record<string, boolean>>({});
 
   // Use imported data
   const documentCategories = documentsData.categories as DocumentCategories;
@@ -54,314 +62,433 @@ export default function DocumentsPage() {
 
   // Flatten all documents for search
   const allDocuments = Object.entries(documentCategories).flatMap(([category, docs]) =>
-    docs.map(doc => ({ ...doc, category, lastUpdated: "2025-01-04" }))
+    docs.map(doc => ({ ...doc, category, lastUpdated: "2025-01-04", itemType: 'document' as const }))
   );
-  
-  // Filter documents based on search and category
-  const baseDocuments = selectedCategory === "all"
-    ? allDocuments
-    : allDocuments.filter(doc => doc.category === selectedCategory);
 
-  const filteredDocuments = searchTerm
-    ? baseDocuments.filter(doc =>
-        doc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        doc.category.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    : baseDocuments;
+  // Combine documents and forms into a single list
+  const allItems = useMemo(() => {
+    const documentsWithType = allDocuments;
+    const formsWithType = templates.map(t => ({ ...t, itemType: 'form' as const }));
+    return [...documentsWithType, ...formsWithType];
+  }, [allDocuments, templates]);
 
-  const categories = ["all", ...Object.keys(documentCategories)];
+  // Filter items based on selected tab
+  const filteredByTab = useMemo(() => {
+    if (selectedTab === 'all') return allItems;
+    if (selectedTab === 'documents') return allItems.filter(item => item.itemType === 'document');
+    if (selectedTab === 'forms') return allItems.filter(item => item.itemType === 'form');
+    // Filter by document category
+    return allItems.filter(item => item.itemType === 'document' && item.category === selectedTab);
+  }, [allItems, selectedTab]);
 
-  // Filter forms
-  const filteredForms = searchTerm
-    ? templates.filter(template =>
-        template.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        template.category.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    : templates;
+  // Apply search filter
+  const filteredItems = useMemo(() => {
+    if (!searchTerm) return filteredByTab;
+    const query = searchTerm.toLowerCase();
+    return filteredByTab.filter(item => 
+      item.name.toLowerCase().includes(query) ||
+      (item.category && item.category.toLowerCase().includes(query))
+    );
+  }, [filteredByTab, searchTerm]);
+
+  const categories = Object.keys(documentCategories);
 
   // Handle form selection
-  const handleFormSelect = (formId: number) => {
+  const handleFormSelect = useCallback((formId: number) => {
     setSelectedFormId(formId);
-  };
+  }, []);
 
   const handleBackToList = () => {
     setSelectedFormId(null);
   };
 
-  return (
-    <div className="container mx-auto py-8">
-      <div className="mb-8">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">Documents & Forms</h1>
-            <p className="text-muted-foreground mt-2">
-              {viewMode === 'documents' 
-                ? 'Medical forms and documents repository' 
-                : 'Create and manage form templates'}
-            </p>
-          </div>
-          <div className="flex items-center space-x-3">
-            <Label htmlFor="view-mode" className="text-sm">
-              <FileText className="h-4 w-4 inline mr-1" />
-              Documents
-            </Label>
-            <Switch
-              id="view-mode"
-              checked={viewMode === 'forms'}
-              onCheckedChange={(checked) => setViewMode(checked ? 'forms' : 'documents')}
-            />
-            <Label htmlFor="view-mode" className="text-sm">
-              <FileInput className="h-4 w-4 inline mr-1" />
-              Form Filler
-            </Label>
-          </div>
-        </div>
-      </div>
-
-      {selectedFormId && viewMode === 'forms' ? (
-        <div>
-          <Button
-            variant="outline"
-            onClick={handleBackToList}
-            className="mb-4"
-          >
-            ← Back to Forms
-          </Button>
-          <FormBuilder 
-            template={templates.find(t => t.id === selectedFormId)!}
-          />
-        </div>
-      ) : (
-        <>
-      <div className="mb-6 space-y-4">
-        <div className="flex flex-wrap gap-2">
-          {categories.map((category) => (
-            <Button
-              key={category}
-              variant={selectedCategory === category ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSelectedCategory(category)}
-              className="capitalize flex items-center gap-1.5"
-            >
-              {(() => {
-                const Icon = getCategoryIcon(category);
-                return <Icon className="h-4 w-4" />;
-              })()}
-              {category === "all" ? "All Documents" : category}
-              {category === "all" && (
-                <span className="ml-1 text-xs">({allDocuments.length})</span>
-              )}
-              {category !== "all" && (
-                <span className="ml-1 text-xs">({documentCategories[category as keyof typeof documentCategories].length})</span>
-              )}
-            </Button>
-          ))}
-        </div>
-
-        <div className="relative max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search documents..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-      </div>
-
-      {viewMode === 'forms' && (
-        <div className="mb-6 flex gap-4">
-          <Button className="flex items-center gap-2">
-            <Plus className="h-4 w-4" />
-            Create New Form
-          </Button>
-          <Button variant="outline" className="flex items-center gap-2">
-            <Upload className="h-4 w-4" />
-            Import Template
-          </Button>
-          <Button variant="outline" className="flex items-center gap-2">
-            <Download className="h-4 w-4" />
-            Bulk Export
-          </Button>
-          <Button variant="outline" className="flex items-center gap-2">
-            <Printer className="h-4 w-4" />
-            Print Batch
-          </Button>
-        </div>
-      )}
-
-      <div className="rounded-md border">
-        {viewMode === 'documents' ? (
-        <Table>
-          <TableCaption>
-            {searchTerm && filteredDocuments.length === 0 
-              ? `No documents found matching "${searchTerm}"`
-              : `${filteredDocuments.length} documents available`
-            }
-          </TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[40%]">Document Name</TableHead>
-              <TableHead>Category</TableHead>
-              <TableHead>Size</TableHead>
-              <TableHead>Updated</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredDocuments.map((doc, idx) => (
-              <TableRow key={idx}>
-                <TableCell className="font-medium">
-                  <div className="flex items-center gap-2">
-                    <FileText className="h-4 w-4 text-muted-foreground" />
-                    {doc.name}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <span className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ${getThemeColor('blue')}`}>
-                    {(() => {
-                      const Icon = getCategoryIcon(doc.category);
-                      return <Icon className="h-3 w-3" />;
-                    })()}
-                    {doc.category}
-                  </span>
-                </TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-1">
-                    <HardDrive className="h-3 w-3 text-muted-foreground" />
-                    {doc.size}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-1">
-                    <Calendar className="h-3 w-3 text-muted-foreground" />
-                    {doc.lastUpdated}
-                  </div>
-                </TableCell>
-                <TableCell className="text-right">
-                  <a
-                    href={`/documents/${doc.path}`}
-                    download
-                    className="inline-flex"
-                  >
-                    <Button variant="ghost" size="sm" className="flex items-center gap-1.5">
-                      <Download className="h-4 w-4" />
-                      Download
-                    </Button>
-                  </a>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        ) : (
-        <Table>
-          <TableCaption>
-            {searchTerm && filteredForms.length === 0 
-              ? `No forms found matching "${searchTerm}"`
-              : `${filteredForms.length} form templates available`
-            }
-          </TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Form Name</TableHead>
-              <TableHead>Category</TableHead>
-              <TableHead className="text-center">Fields</TableHead>
-              <TableHead className="text-center">Submissions</TableHead>
-              <TableHead>Last Used</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredForms.map((template) => (
-              <TableRow key={template.id}>
-                <TableCell className="font-medium">
-                  <div className="flex items-center gap-2">
-                    <FileText className="h-4 w-4 text-muted-foreground" />
-                    {template.name}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <span className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ${getThemeColor('purple')}`}>
-                    {(() => {
-                      const Icon = getCategoryIcon(template.category);
-                      return <Icon className="h-3 w-3" />;
-                    })()}
-                    {template.category}
-                  </span>
-                </TableCell>
-                <TableCell className="text-center">
-                  <div className="flex items-center justify-center gap-1">
-                    <FolderOpen className="h-3 w-3 text-muted-foreground" />
-                    {template.fields}
-                  </div>
-                </TableCell>
-                <TableCell className="text-center">
-                  <div className="flex items-center justify-center gap-1">
-                    <Users className="h-3 w-3 text-muted-foreground" />
-                    {template.submissions}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-1">
-                    <Calendar className="h-3 w-3 text-muted-foreground" />
-                    {template.lastUsed}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <span className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ${getStatusColor(template.status)}`}>
-                    {template.status === 'active' ? <CheckCircle className="h-3 w-3" /> : <AlertCircle className="h-3 w-3" />}
-                    {template.status}
-                  </span>
-                </TableCell>
-                <TableCell className="text-right">
-                  <div className="flex justify-end gap-2">
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="flex items-center gap-1"
-                      onClick={() => handleFormSelect(template.id)}
-                    >
-                      <Edit className="h-3 w-3" />
-                      Fill
-                    </Button>
-                    <Button variant="ghost" size="sm" className="flex items-center gap-1">
-                      <Eye className="h-3 w-3" />
-                      Preview
-                    </Button>
-                    <Button variant="ghost" size="sm" className="flex items-center gap-1">
-                      <Copy className="h-3 w-3" />
-                      Clone
-                    </Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        )}
-      </div>
+  // Handle category button click
+  const handleCategoryClick = (category: string) => {
+    setSelectedTab(category);
+    
+    // Determine if we're viewing documents or forms based on the category
+    const isFormsView = category === 'forms';
+    
+    if (!isFormsView) {
+      const categoryDocs = category === 'all' 
+        ? allDocuments 
+        : category === 'documents'
+        ? allDocuments
+        : documentCategories[category as keyof typeof documentCategories];
       
-      {viewMode === 'forms' && (
-        <div className={`mt-8 p-6 rounded-lg ${getThemeColor('info')}`}>
-          <h2 className="text-lg font-semibold mb-2 flex items-center gap-2">
-            <DollarSign className="h-5 w-5" />
-            Self-Pay Form Automation
-          </h2>
-          <p className="text-sm mb-4">
-            Streamline the self-pay process by automatically generating personalized forms based on patient data, 
-            insurance status, and procedure type. Reduce manual entry errors and improve collection rates.
-          </p>
-          <Button className="flex items-center gap-2">
-            <Settings className="h-4 w-4" />
-            Configure Self-Pay Workflow
-          </Button>
+      const items = (Array.isArray(categoryDocs) ? categoryDocs : allDocuments)
+        .slice(0, 5)
+        .map((doc, index) => ({
+          id: index.toString(),
+          name: doc.name,
+          size: doc.size,
+          date: doc.lastUpdated || '2025-01-04'
+        }));
+      
+      const totalSize = Array.isArray(categoryDocs) 
+        ? categoryDocs.reduce((acc, doc) => {
+            const sizeMatch = doc.size.match(/([\d.]+)\s*(KB|MB|GB)/i);
+            if (sizeMatch) {
+              const [, value, unit] = sizeMatch;
+              const multiplier = unit.toUpperCase() === 'KB' ? 1 : unit.toUpperCase() === 'MB' ? 1024 : 1024 * 1024;
+              return acc + parseFloat(value) * multiplier;
+            }
+            return acc;
+          }, 0)
+        : 0;
+      
+      setSelectedCategoryDetails({
+        name: category === 'all' ? 'All Documents' : category === 'documents' ? 'Documents' : category,
+        type: 'documents',
+        description: category === 'all' 
+          ? 'View all documents across all categories' 
+          : category === 'documents'
+          ? 'View all documents'
+          : `View all ${category.toLowerCase()} documents`,
+        count: category === 'all' ? allDocuments.length : category === 'documents' ? allDocuments.length : (categoryDocs as any[]).length,
+        totalSize: `${(totalSize / 1024).toFixed(1)} MB`,
+        lastUpdated: '2025-01-04',
+        items
+      });
+    } else {
+      // For forms view
+      const categoryForms = templates;
+      
+      const items = categoryForms.slice(0, 5).map(form => ({
+        id: form.id.toString(),
+        name: form.name,
+        submissions: form.submissions,
+        date: form.lastUsed
+      }));
+      
+      setSelectedCategoryDetails({
+        name: 'All Forms',
+        type: 'forms',
+        description: 'View all form templates',
+        count: categoryForms.length,
+        items
+      });
+    }
+    
+    setIsDetailsOpen(true);
+  };
+
+  // Define columns for unified table
+  type UnifiedItem = (typeof allDocuments[0] & { itemType: 'document' }) | (FormTemplate & { itemType: 'form' });
+  const columns: ColumnDef<UnifiedItem>[] = useMemo(() => [
+    {
+      accessorKey: 'name',
+      header: ({ column }) => createSortableHeader(column, 'Name'),
+      cell: ({ row }) => (
+        <div className="flex items-center gap-2">
+          <FileText className="h-4 w-4 text-muted-foreground" />
+          <span className="font-semibold">{row.getValue('name')}</span>
         </div>
+      )
+    },
+    {
+      accessorKey: 'category',
+      header: ({ column }) => createSortableHeader(column, 'Category'),
+      cell: ({ row }) => {
+        const category = row.getValue('category') as string;
+        const Icon = getCategoryIcon(category);
+        return (
+          <span className={`inline-flex items-center gap-2 rounded-md px-2 py-2 text-sm font-semibold ring-1 ring-inset ${getThemeColor('blue')}`}>
+            <Icon className="h-4 w-4" />
+            {category}
+          </span>
+        );
+      }
+    },
+    {
+      id: 'size',
+      header: ({ column }) => createSortableHeader(column, 'Size'),
+      accessorFn: (row: UnifiedItem) => row.itemType === 'form' ? (typeof row.fields === 'number' ? row.fields : row.fields?.length || 0) : row.size,
+      cell: ({ row }) => {
+        const item = row.original;
+        if (item.itemType === 'form') {
+          const fields = item.fields;
+          return (
+            <div className="flex items-center gap-2">
+              <FolderOpen className="h-4 w-4 text-muted-foreground" />
+              {typeof fields === 'number' ? fields : fields?.length || 0} fields
+            </div>
+          );
+        }
+        return (
+          <div className="flex items-center gap-2">
+            <HardDrive className="h-4 w-4 text-muted-foreground" />
+            {item.size}
+          </div>
+        );
+      }
+    },
+    {
+      id: 'updated',
+      header: ({ column }) => createSortableHeader(column, 'Updated'),
+      accessorFn: (row) => row.itemType === 'document' ? row.lastUpdated : row.lastUsed,
+      cell: ({ row }) => {
+        const value = row.getValue('updated') as string;
+        return (
+          <div className="flex items-center gap-2">
+            <Calendar className="h-4 w-4 text-muted-foreground" />
+            {value}
+          </div>
+        );
+      }
+    },
+    {
+      id: 'status',
+      header: ({ column }) => createSortableHeader(column, 'Status'),
+      cell: ({ row }) => {
+        const item = row.original;
+        if (item.itemType === 'form' && item.status) {
+          const status = item.status;
+          return (
+            <span className={`inline-flex items-center gap-2 rounded-md px-2 py-2 text-sm font-semibold ring-1 ring-inset ${getStatusColor(status)}`}>
+              {status === 'active' ? <CheckCircle className="h-4 w-4" /> : <AlertCircle className="h-4 w-4" />}
+              {status}
+            </span>
+          );
+        }
+        return null;
+      }
+    },
+    createActionsColumn<UnifiedItem>([
+      {
+        label: 'View',
+        onClick: (item) => {
+          if (item.itemType === 'form') {
+            handleFormSelect(typeof item.id === 'string' ? parseInt(item.id) : item.id);
+          } else {
+            console.log('Preview document', item);
+          }
+        },
+        icon: <Eye className="h-4 w-4" />
+      },
+      {
+        label: 'Download',
+        onClick: (item) => console.log('Download', item),
+        icon: <Download className="h-4 w-4" />
+      },
+      {
+        label: 'Clone',
+        onClick: (item) => console.log('Clone', item),
+        icon: <Copy className="h-4 w-4" />
+      }
+    ])
+  ], [handleFormSelect]);
+
+
+  // Available columns for visibility control
+  const availableColumns = useMemo(() => {
+    return columns
+      .filter(col => col.id !== 'actions')
+      .map(col => {
+        const columnDef = col as ColumnDef<UnifiedItem> & { accessorKey?: string };
+        const columnId = col.id || columnDef.accessorKey;
+        return {
+          id: columnId as string,
+          label: columnId === 'updated' ? 'Updated' : 
+                 columnId === 'status' ? 'Status' :
+                 columnId === 'size' ? 'Size' :
+                 columnDef.accessorKey || columnId
+        };
+      });
+  }, [columns]);
+
+  return (
+    <TooltipProvider>
+      <div className="container mx-auto py-8 space-y-6">
+        {/* Page Header */}
+        <div className="space-y-1 mb-6">
+          <h1 className={TYPOGRAPHY.pageTitle}>Documents & Forms</h1>
+          <p className={cn(TYPOGRAPHY.pageDescription)}>
+            Access medical forms, documents, and create custom forms
+          </p>
+        </div>
+
+        {selectedFormId ? (
+          <div>
+            <Button
+              variant="outline"
+              onClick={handleBackToList}
+              className="mb-4"
+            >
+              ← Back to Forms
+            </Button>
+            <FormBuilder 
+              template={templates.find(t => (typeof t.id === 'string' ? parseInt(t.id) : t.id) === selectedFormId)!}
+            />
+          </div>
+        ) : (
+          <>
+            {/* Toolbar */}
+            <div className="flex flex-col md:flex-row gap-4 mb-6">
+              {/* Search */}
+              <div className="relative flex-1 max-w-md">
+                <Input
+                  type="search"
+                  placeholder="Search..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10"
+                />
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              </div>
+
+              {/* Tabs */}
+              <Tabs value={selectedTab} onValueChange={setSelectedTab} className="flex-1 overflow-hidden">
+                <TabsList className="inline-flex h-10 items-center justify-start rounded-md bg-muted p-1 text-muted-foreground w-max overflow-x-auto">
+                  <TabsTrigger value="all" onClick={() => handleCategoryClick('all')} className="whitespace-nowrap">
+                    All ({allDocuments.length + templates.length})
+                  </TabsTrigger>
+                  <TabsTrigger value="documents" onClick={() => handleCategoryClick('documents')} className="whitespace-nowrap">
+                    Documents ({allDocuments.length})
+                  </TabsTrigger>
+                  {categories.map((category) => (
+                    <TabsTrigger key={category} value={category} onClick={() => handleCategoryClick(category)} className="whitespace-nowrap">
+                      {category} ({documentCategories[category as keyof typeof documentCategories].length})
+                    </TabsTrigger>
+                  ))}
+                  <TabsTrigger value="forms" onClick={() => handleCategoryClick('forms')} className="whitespace-nowrap">
+                    Forms ({templates.length})
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+
+              {/* Column Visibility */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    Columns <ChevronDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {availableColumns.map((column) => (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      checked={columnVisibility[column.id] !== false}
+                      onCheckedChange={(value) =>
+                        setColumnVisibility(prev => ({ ...prev, [column.id]: value }))
+                      }
+                    >
+                      {column.label}
+                    </DropdownMenuCheckboxItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+
+            {/* Action Buttons for Forms */}
+            {selectedTab === 'forms' && (
+              <div className="mb-6 flex gap-4">
+                <Button className="flex items-center gap-2">
+                  <Plus className="h-4 w-4" />
+                  Create New Form
+                </Button>
+                <Button variant="outline" className="flex items-center gap-2">
+                  <Upload className="h-4 w-4" />
+                  Import Template
+                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span>
+                      <Button variant="outline" className="flex items-center gap-2" disabled>
+                        <Download className="h-4 w-4" />
+                        Bulk Export
+                      </Button>
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Downloads disabled pending login verification</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span>
+                      <Button variant="outline" className="flex items-center gap-2" disabled>
+                        <Printer className="h-4 w-4" />
+                        Print Batch
+                      </Button>
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Downloads disabled pending login verification</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            )}
+
+            {/* Table */}
+            <Card className="border-0 shadow-sm">
+              <CardContent className="p-0">
+                <DataTable
+                  columns={columns}
+                  data={filteredItems}
+                  showColumnVisibility={false}
+                  showPagination={true}
+                  pageSize={20}
+                  columnVisibility={columnVisibility}
+                  onColumnVisibilityChange={setColumnVisibility}
+                  onRowClick={(item) => {
+                    if (item.itemType === 'form' && item.id) {
+                      handleFormSelect(typeof item.id === 'string' ? parseInt(item.id) : item.id);
+                    } else if (item.itemType === 'document') {
+                      // Open details sheet for document
+                      const category = item.category;
+                      
+                      setSelectedCategoryDetails({
+                        name: `${item.name}`,
+                        type: 'documents',
+                        description: `Document in ${category} category`,
+                        count: 1,
+                        totalSize: item.size,
+                        lastUpdated: item.lastUpdated || '2025-01-04',
+                        items: [{
+                          id: '0',
+                          name: item.name,
+                          size: item.size,
+                          date: item.lastUpdated || '2025-01-04'
+                        }]
+                      });
+                      
+                      setIsDetailsOpen(true);
+                    }
+                  }}
+                />
+              </CardContent>
+            </Card>
+            
+            {selectedTab === 'forms' && (
+              <div className={`mt-8 p-6 rounded-lg ${getThemeColor('info')}`}>
+                <h2 className="text-lg font-semibold mb-2 flex items-center gap-2">
+                  <DollarSign className="h-6 w-6" />
+                  Self-Pay Form Automation
+                </h2>
+                <p className="text-sm mb-4">
+                  Streamline the self-pay process by automatically generating personalized forms based on patient data, 
+                  insurance status, and procedure type. Reduce manual entry errors and improve collection rates.
+                </p>
+                <Button className="flex items-center gap-2">
+                  <Settings className="h-4 w-4" />
+                  Configure Self-Pay Workflow
+                </Button>
+              </div>
+            )}
+          </>
+        )}
+      
+      {/* Details Sheet */}
+      {selectedCategoryDetails && (
+        <DetailsSheet
+          isOpen={isDetailsOpen}
+          onClose={() => setIsDetailsOpen(false)}
+          type="category"
+          data={selectedCategoryDetails}
+        />
       )}
-        </>
-      )}
-    </div>
+      </div>
+    </TooltipProvider>
   );
 }

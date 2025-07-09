@@ -87,9 +87,9 @@ export function FormBuilderUI() {
             <form className="space-y-4">
               {fields.map(field => (
                 <div key={field.id}>
-                  <label className="block text-sm font-medium mb-1">
+                  <label className="block text-sm font-semibold mb-1">
                     {field.label}
-                    {field.required && <span className="text-red-500 ml-1">*</span>}
+                    {field.required && <span className="text-destructive ml-1">*</span>}
                   </label>
                   {field.type === 'textarea' ? (
                     <textarea 
@@ -130,27 +130,27 @@ export function FormBuilderUI() {
   return (
     <div className="space-y-6">
       {/* Form Settings */}
-      <Card>
+      <Card className="border-border-strong bg-gradient-to-br from-background to-muted-lighter">
         <CardHeader>
           <CardTitle>Form Settings</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Form Name</label>
+          <div className="p-4 rounded-lg bg-background border border-border">
+            <label className="block text-sm font-semibold mb-1">Form Name</label>
             <input
               type="text"
               value={formName}
               onChange={(e) => setFormName(e.target.value)}
-              className="w-full px-3 py-2 border rounded-md"
+              className="w-full px-3 py-2 border border-border rounded-md bg-muted-lighter/30 focus:bg-background transition-colors"
               placeholder="Enter form name"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Description</label>
+          <div className="p-4 rounded-lg bg-background border border-border">
+            <label className="block text-sm font-semibold mb-1">Description</label>
             <textarea
               value={formDescription}
               onChange={(e) => setFormDescription(e.target.value)}
-              className="w-full px-3 py-2 border rounded-md"
+              className="w-full px-3 py-2 border border-border rounded-md bg-muted-lighter/30 focus:bg-background transition-colors"
               placeholder="Enter form description"
               rows={3}
             />
@@ -159,14 +159,14 @@ export function FormBuilderUI() {
       </Card>
 
       {/* Form Fields */}
-      <Card>
+      <Card className="overflow-hidden">
         <CardHeader>
           <CardTitle>Form Fields</CardTitle>
           <CardDescription>Add and configure form fields</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 bg-muted-lighter/20">
           {fields.map((field, index) => (
-            <Card key={field.id} className="p-4">
+            <Card key={field.id} className="p-4 shadow-sm hover:shadow-md transition-all duration-200 border-l-4 border-l-primary">
               <div className="space-y-3">
                 <div className="flex gap-2">
                   <input
@@ -207,7 +207,7 @@ export function FormBuilderUI() {
                     />
                     <span className="text-sm">Required</span>
                   </label>
-                  <div className="flex gap-1">
+                  <div className="flex gap-2">
                     <Button
                       size="sm"
                       variant="ghost"
@@ -245,7 +245,7 @@ export function FormBuilderUI() {
       </Card>
 
       {/* Actions */}
-      <div className="flex gap-3">
+      <div className="flex gap-4">
         <Button onClick={() => setIsPreview(true)} variant="outline">
           <Eye className="h-4 w-4 mr-2" />
           Preview

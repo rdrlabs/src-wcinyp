@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neutral Theme Test</title>
+    <style>
+        /* Base theme variables */
+        :root {
+            --color-primary: oklch(69.8% 0.195 238.4);
+            --color-primary-foreground: oklch(98% 0 0);
+            --color-background: #ffffff;
+            --color-foreground: #0a0a0a;
+        }
+        
+        /* Dark mode base */
+        [data-theme="dark"] {
+            --color-background: oklch(10% 0 0);
+            --color-foreground: oklch(95% 0 0);
+        }
+        
+        /* Neutral theme - light mode */
+        .theme-neutral {
+            --color-primary: oklch(0% 0 0);  /* Pure black */
+            --color-primary-foreground: oklch(100% 0 0);  /* Pure white */
+        }
+        
+        /* Neutral theme - dark mode (original selector that doesn't work) */
+        [data-theme="dark"].theme-neutral {
+            --color-primary: oklch(100% 0 0);  /* Pure white */
+            --color-primary-foreground: oklch(0% 0 0);  /* Pure black */
+        }
+        
+        /* Neutral theme - dark mode (fixed selector) */
+        [data-theme="dark"] .theme-neutral {
+            --color-primary: oklch(100% 0 0);  /* Pure white */
+            --color-primary-foreground: oklch(0% 0 0);  /* Pure black */
+        }
+        
+        /* Styles */
+        body {
+            font-family: sans-serif;
+            padding: 2rem;
+            background-color: var(--color-background);
+            color: var(--color-foreground);
+        }
+        
+        .box {
+            padding: 2rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            background-color: var(--color-primary);
+            color: var(--color-primary-foreground);
+        }
+        
+        .controls {
+            margin: 2rem 0;
+            display: flex;
+            gap: 1rem;
+        }
+        
+        button {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--color-primary);
+            background: transparent;
+            color: var(--color-primary);
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        
+        button:hover {
+            background: var(--color-primary);
+            color: var(--color-primary-foreground);
+        }
+        
+        code {
+            background: rgba(0,0,0,0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        
+        [data-theme="dark"] code {
+            background: rgba(255,255,255,0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Neutral Theme CSS Test</h1>
+    
+    <div class="controls">
+        <button onclick="toggleTheme()">Toggle Light/Dark</button>
+        <button onclick="toggleNeutral()">Toggle Neutral Theme</button>
+    </div>
+    
+    <p>Current state: <code id="state">loading...</code></p>
+    
+    <h2>Test 1: Both selectors on same element</h2>
+    <div class="theme-neutral">
+        <div class="box">
+            This box uses .theme-neutral on the same element as [data-theme]
+        </div>
+    </div>
+    
+    <h2>Test 2: Selectors on different elements (like the app)</h2>
+    <div id="test2-container">
+        <div class="box">
+            This box uses .theme-neutral on body while [data-theme] is on html
+        </div>
+    </div>
+    
+    <script>
+        function updateState() {
+            const html = document.documentElement;
+            const body = document.body;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            const hasNeutral = body.classList.contains('theme-neutral');
+            
+            document.getElementById('state').textContent = 
+                `Dark mode: ${isDark}, Neutral theme: ${hasNeutral}`;
+                
+            // For test 1, add data-theme to the div directly
+            const test1 = document.querySelector('.theme-neutral');
+            if (isDark) {
+                test1.setAttribute('data-theme', 'dark');
+            } else {
+                test1.removeAttribute('data-theme');
+            }
+        }
+        
+        function toggleTheme() {
+            const html = document.documentElement;
+            if (html.getAttribute('data-theme') === 'dark') {
+                html.removeAttribute('data-theme');
+            } else {
+                html.setAttribute('data-theme', 'dark');
+            }
+            updateState();
+        }
+        
+        function toggleNeutral() {
+            document.body.classList.toggle('theme-neutral');
+            updateState();
+        }
+        
+        // Initialize
+        updateState();
+    </script>
+</body>
+</html>

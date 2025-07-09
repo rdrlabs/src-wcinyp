@@ -17,9 +17,9 @@ export default function Loading() {
         {[1, 2, 3, 4, 5, 6].map((i) => (
           <div
             key={i}
-            className="h-48 animate-pulse rounded-lg border dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-6"
+            className="h-48 animate-pulse rounded-lg border border-border bg-muted p-6"
           >
-            <Skeleton className="mb-3 h-5 w-3/4" />
+            <Skeleton className="mb-3 h-6 w-3/4" />
             <Skeleton className="mb-2 h-4 w-1/2" />
             <Skeleton className="mb-4 h-3 w-full" />
             <div className="flex gap-2">

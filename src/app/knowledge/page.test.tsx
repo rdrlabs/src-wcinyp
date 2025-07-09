@@ -7,14 +7,13 @@ describe('Knowledge Page', () => {
   it('renders page title and coming soon message', () => {
     render(<KnowledgePage />)
     
-    expect(screen.getByRole('heading', { name: 'Knowledge Base' })).toBeInTheDocument()
     expect(screen.getByText('Coming Soon')).toBeInTheDocument()
   })
 
-  it('displays placeholder description', () => {
+  it('displays coming soon description', () => {
     render(<KnowledgePage />)
     
-    expect(screen.getByText(/Our comprehensive documentation and guides are being prepared/)).toBeInTheDocument()
+    expect(screen.getByText('Comprehensive documentation and guides for using the imaging center portal')).toBeInTheDocument()
   })
 
   it('displays coming soon feature cards', () => {
@@ -23,26 +22,26 @@ describe('Knowledge Page', () => {
     // Check feature cards
     expect(screen.getByText('Getting Started Guide')).toBeInTheDocument()
     expect(screen.getByText('Documentation')).toBeInTheDocument()
-    expect(screen.getByText('Provider Resources')).toBeInTheDocument()
+    expect(screen.getByText('Contact Resources')).toBeInTheDocument()
     expect(screen.getByText('System Configuration')).toBeInTheDocument()
     expect(screen.getByText('FAQ & Troubleshooting')).toBeInTheDocument()
     expect(screen.getByText('Best Practices')).toBeInTheDocument()
   })
 
-  it('displays contact information', () => {
+  it('displays preview button', () => {
     render(<KnowledgePage />)
     
-    expect(screen.getByText(/Need immediate assistance/)).toBeInTheDocument()
-    const emailLink = screen.getByRole('link', { name: 'imaging@med.cornell.edu' })
-    expect(emailLink).toHaveAttribute('href', 'mailto:imaging@med.cornell.edu')
+    const previewButton = screen.getByRole('link', { name: /Preview Knowledge Base/i })
+    expect(previewButton).toBeInTheDocument()
+    expect(previewButton).toHaveAttribute('href', '/knowledge-preview')
   })
 
   it('renders feature card descriptions', () => {
     render(<KnowledgePage />)
     
-    expect(screen.getByText('Learn the basics of using the imaging center portal')).toBeInTheDocument()
-    expect(screen.getByText('Comprehensive guides for all features and workflows')).toBeInTheDocument()
-    expect(screen.getByText('Information for referring providers and staff')).toBeInTheDocument()
+    expect(screen.getByText('Learn the basics and become resourceful')).toBeInTheDocument()
+    expect(screen.getByText('Comprehensive guides and access to information')).toBeInTheDocument()
+    expect(screen.getByText('Resources on all our contacts and communication best practices')).toBeInTheDocument()
   })
 
   it('has no accessibility violations', async () => {

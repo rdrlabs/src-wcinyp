@@ -79,7 +79,8 @@
       "Bash(true)",
       "Bash(task-master init:*)",
       "Bash(task-master list:*)",
-      "Bash(task-master:*)"
+      "Bash(task-master:*)",
+      "Bash(curl:*)"
     ],
     "deny": []
   }

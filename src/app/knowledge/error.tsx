@@ -20,7 +20,7 @@ export default function Error({
       <div className="text-center">
         <div className="mb-8">
           <svg
-            className="mx-auto h-16 w-16 text-red-500"
+            className="mx-auto h-16 w-16 text-destructive"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -33,22 +33,22 @@ export default function Error({
             />
           </svg>
         </div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+        <h1 className="text-2xl font-semibold text-foreground mb-2">
           Knowledge Base Error
         </h1>
-        <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md">
+        <p className="text-muted-foreground mb-8 max-w-md">
           {error.message || 'An error occurred while loading the knowledge base'}
         </p>
         <div className="space-x-4">
           <button
             onClick={reset}
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700"
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-semibold rounded-md text-destructive-foreground bg-destructive hover:bg-destructive/90"
           >
             Try again
           </button>
           <Link
             href="/"
-            className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
+            className="inline-flex items-center px-4 py-2 border border-border text-sm font-semibold rounded-md text-secondary-foreground bg-secondary hover:bg-secondary/80"
           >
             Go home
           </Link>

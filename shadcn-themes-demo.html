@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shadcn Color Themes Demo</title>
+    <style>
+        :root {
+            --radius: 0.5rem;
+        }
+
+        /* Blue Theme */
+        .theme-blue {
+            --primary: 221.2 83.2% 53.3%;
+            --primary-foreground: 210 40% 98%;
+        }
+        .theme-blue.dark {
+            --primary: 217.2 91.2% 59.8%;
+            --primary-foreground: 222.2 47.4% 11.2%;
+        }
+
+        /* Red Theme */
+        .theme-red {
+            --primary: 0 84.2% 60.2%;
+            --primary-foreground: 0 0% 98%;
+        }
+        .theme-red.dark {
+            --primary: 0 72.2% 50.6%;
+            --primary-foreground: 0 85.7% 97.3%;
+        }
+
+        /* Rose Theme */
+        .theme-rose {
+            --primary: 346.8 77.2% 49.8%;
+            --primary-foreground: 355.7 100% 97.3%;
+        }
+        .theme-rose.dark {
+            --primary: 349.7 89.2% 60.2%;
+            --primary-foreground: 355.7 100% 97.3%;
+        }
+
+        /* Orange Theme */
+        .theme-orange {
+            --primary: 24.6 95% 53.1%;
+            --primary-foreground: 60 9.1% 97.8%;
+        }
+        .theme-orange.dark {
+            --primary: 20.5 90.2% 48.2%;
+            --primary-foreground: 60 9.1% 97.8%;
+        }
+
+        /* Green Theme */
+        .theme-green {
+            --primary: 142.1 70.6% 45.3%;
+            --primary-foreground: 144.9 80.4% 10%;
+        }
+        .theme-green.dark {
+            --primary: 142.1 76.2% 36.3%;
+            --primary-foreground: 143.8 61.2% 20.2%;
+        }
+
+        /* Yellow Theme */
+        .theme-yellow {
+            --primary: 45.4 93.4% 47.5%;
+            --primary-foreground: 26 83.3% 14.1%;
+        }
+        .theme-yellow.dark {
+            --primary: 40.6 96.1% 40.4%;
+            --primary-foreground: 26 83.3% 14.1%;
+        }
+
+        /* Violet Theme */
+        .theme-violet {
+            --primary: 262.1 83.3% 57.8%;
+            --primary-foreground: 210 20% 98%;
+        }
+        .theme-violet.dark {
+            --primary: 258.3 89.5% 66.3%;
+            --primary-foreground: 210 20% 98%;
+        }
+
+        /* Base styles */
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9fafb;
+        }
+
+        .dark body {
+            background-color: #0a0a0a;
+            color: #f9fafb;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .themes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .theme-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark .theme-card {
+            background: #18181b;
+            border-color: #27272a;
+        }
+
+        .theme-preview {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .color-box {
+            width: 100px;
+            height: 100px;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .primary {
+            background-color: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+        }
+
+        .color-values {
+            flex: 1;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .color-values div {
+            margin: 5px 0;
+        }
+
+        .controls {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        button {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Shadcn Color Themes Demo</h1>
+        
+        <div class="controls">
+            <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+        </div>
+
+        <div class="themes-grid">
+            <div class="theme-card theme-blue" id="blue">
+                <h2>Blue Theme</h2>
+                <div class="theme-preview">
+                    <div class="color-box primary">Primary</div>
+                    <div class="color-values">
+                        <div><strong>Light:</strong> 221.2 83.2% 53.3%</div>
+                        <div><strong>Dark:</strong> 217.2 91.2% 59.8%</div>
+                        <div><strong>Tailwind:</strong> blue-600 / blue-500</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="theme-card theme-red" id="red">
+                <h2>Red Theme</h2>
+                <div class="theme-preview">
+                    <div class="color-box primary">Primary</div>
+                    <div class="color-values">
+                        <div><strong>Light:</strong> 0 84.2% 60.2%</div>
+                        <div><strong>Dark:</strong> 0 72.2% 50.6%</div>
+                        <div><strong>Tailwind:</strong> red-500 / red-600</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="theme-card theme-rose" id="rose">
+                <h2>Rose Theme</h2>
+                <div class="theme-preview">
+                    <div class="color-box primary">Primary</div>
+                    <div class="color-values">
+                        <div><strong>Light:</strong> 346.8 77.2% 49.8%</div>
+                        <div><strong>Dark:</strong> 349.7 89.2% 60.2%</div>
+                        <div><strong>Tailwind:</strong> rose-600 / rose-500</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="theme-card theme-orange" id="orange">
+                <h2>Orange Theme</h2>
+                <div class="theme-preview">
+                    <div class="color-box primary">Primary</div>
+                    <div class="color-values">
+                        <div><strong>Light:</strong> 24.6 95% 53.1%</div>
+                        <div><strong>Dark:</strong> 20.5 90.2% 48.2%</div>
+                        <div><strong>Tailwind:</strong> orange-500 / orange-600</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="theme-card theme-green" id="green">
+                <h2>Green Theme</h2>
+                <div class="theme-preview">
+                    <div class="color-box primary">Primary</div>
+                    <div class="color-values">
+                        <div><strong>Light:</strong> 142.1 70.6% 45.3%</div>
+                        <div><strong>Dark:</strong> 142.1 76.2% 36.3%</div>
+                        <div><strong>Tailwind:</strong> green-500 / green-600</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="theme-card theme-yellow" id="yellow">
+                <h2>Yellow Theme</h2>
+                <div class="theme-preview">
+                    <div class="color-box primary">Primary</div>
+                    <div class="color-values">
+                        <div><strong>Light:</strong> 45.4 93.4% 47.5%</div>
+                        <div><strong>Dark:</strong> 40.6 96.1% 40.4%</div>
+                        <div><strong>Tailwind:</strong> yellow-500 / yellow-600</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="theme-card theme-violet" id="violet">
+                <h2>Violet Theme</h2>
+                <div class="theme-preview">
+                    <div class="color-box primary">Primary</div>
+                    <div class="color-values">
+                        <div><strong>Light:</strong> 262.1 83.3% 57.8%</div>
+                        <div><strong>Dark:</strong> 258.3 89.5% 66.3%</div>
+                        <div><strong>Tailwind:</strong> violet-600 / violet-500</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark');
+            const cards = document.querySelectorAll('.theme-card');
+            cards.forEach(card => card.classList.toggle('dark'));
+        }
+    </script>
+</body>
+</html>
