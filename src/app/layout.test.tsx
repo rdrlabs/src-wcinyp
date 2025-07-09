@@ -17,6 +17,18 @@ vi.mock('@/components/providers', () => ({
   Providers: ({ children }: { children: React.ReactNode }) => <div data-testid="providers">{children}</div>
 }))
 
+vi.mock('@/components/theme-body', () => ({
+  ThemeBody: ({ children }: { children: React.ReactNode }) => <>{children}</>
+}))
+
+vi.mock('@/components/command-menu', () => ({
+  CommandMenu: () => null
+}))
+
+vi.mock('sonner', () => ({
+  Toaster: () => null
+}))
+
 vi.mock('@/components/theme-selector', () => ({
   ThemeSelector: () => <button data-testid="theme-selector">Toggle Theme</button>
 }))
@@ -34,7 +46,7 @@ vi.mock('@/components/navbar', () => ({
         {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a href="/documents">Documents</a>
         {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-        <a href="/providers">Providers</a>
+        <a href="/updates">Updates</a>
       </div>
       <button data-testid="theme-selector">Toggle Theme</button>
     </nav>
@@ -70,7 +82,7 @@ describe('RootLayout', () => {
     // Check navigation links
     expect(screen.getByRole('link', { name: 'Knowledge Base' })).toHaveAttribute('href', '/knowledge')
     expect(screen.getByRole('link', { name: 'Directory' })).toHaveAttribute('href', '/directory')
-    expect(screen.getByRole('link', { name: 'Providers' })).toHaveAttribute('href', '/providers')
+    expect(screen.getByRole('link', { name: 'Updates' })).toHaveAttribute('href', '/updates')
     expect(screen.getByRole('link', { name: 'Documents' })).toHaveAttribute('href', '/documents')
   })
 

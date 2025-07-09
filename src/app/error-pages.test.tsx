@@ -77,7 +77,7 @@ describe('Error Pages', () => {
       render(<NotFound />)
       
       expect(screen.getByText('404')).toBeInTheDocument()
-      expect(screen.getByText('Page not found')).toBeInTheDocument()
+      expect(screen.getByText('Oh no! VIDA 1 is down!')).toBeInTheDocument()
     })
 
     it('includes helpful message', () => {

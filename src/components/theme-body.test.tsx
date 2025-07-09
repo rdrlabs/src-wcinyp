@@ -48,7 +48,7 @@ describe('ThemeBody', () => {
       </ThemeBody>
     )
 
-    expect(document.body.classList.contains('theme-default')).toBe(true)
+    expect(document.body.classList.contains('theme-blue')).toBe(true)
   })
 
   it('applies saved theme class from localStorage', () => {

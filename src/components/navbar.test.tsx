@@ -3,6 +3,7 @@ import { NavBar } from './navbar'
 import { vi } from 'vitest'
 import { AppProvider } from '@/contexts/app-context'
 import { ThemeProvider } from 'next-themes'
+import { SearchProvider } from '@/contexts/search-context'
 
 // Mock Next.js navigation
 vi.mock('next/navigation', () => ({
@@ -14,7 +15,9 @@ const renderWithProviders = (component: React.ReactElement) => {
   return render(
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <AppProvider>
-        {component}
+        <SearchProvider>
+          {component}
+        </SearchProvider>
       </AppProvider>
     </ThemeProvider>
   )
@@ -28,8 +31,10 @@ describe('NavBar', () => {
 
   it('renders WCI@NYP branding', () => {
     renderWithProviders(<NavBar />)
-    const branding = screen.getByText('WCI@NYP')
-    expect(branding).toBeInTheDocument()
+    // The brand name contains these text parts
+    const brandLink = screen.getByRole('link', { name: /WCI.*@.*NYP/i })
+    expect(brandLink).toBeInTheDocument()
+    expect(brandLink).toHaveAttribute('href', '/')
   })
 
   it('renders all navigation links in correct order', () => {
@@ -54,29 +59,31 @@ describe('NavBar', () => {
     renderWithProviders(<NavBar />)
     
     // The navbar should render without errors
-    expect(screen.getByText('WCI@NYP')).toBeInTheDocument()
+    const brandLink = screen.getByRole('link', { name: /WCI.*@.*NYP/i })
+    expect(brandLink).toBeInTheDocument()
     
     // All navigation links should be present
     expect(screen.getByRole('link', { name: /Knowledge Base/i })).toBeInTheDocument()
   })
 
-  it('does not render search functionality', () => {
+  it('renders search functionality', () => {
     renderWithProviders(<NavBar />)
     
-    // Search functionality has been removed
-    const searchButton = screen.queryByRole('button', { name: /Search/i })
-    expect(searchButton).not.toBeInTheDocument()
+    // Search functionality is present
+    const searchInput = screen.getByPlaceholderText('Search...')
+    expect(searchInput).toBeInTheDocument()
   })
 
-  it('does not respond to Command+K shortcut', () => {
+  it('shows Command+K shortcut in search', () => {
     renderWithProviders(<NavBar />)
     
-    // Trigger Command+K
-    fireEvent.keyDown(document, { key: 'k', metaKey: true })
+    // Should show keyboard shortcut in the search input area
+    const searchInput = screen.getByPlaceholderText('Search...')
+    expect(searchInput).toBeInTheDocument()
     
-    // Search dialog should not exist
-    const searchInput = screen.queryByPlaceholderText('Type a command or search...')
-    expect(searchInput).not.toBeInTheDocument()
+    // The shortcut is shown as a kbd element
+    const kbdElement = searchInput.parentElement?.querySelector('kbd')
+    expect(kbdElement).toBeInTheDocument()
   })
 
   it('does not render quick links dropdown', () => {
@@ -95,15 +102,13 @@ describe('NavBar', () => {
     expect(feedbackButton).not.toBeInTheDocument()
   })
 
-  it('does not render login functionality', () => {
+  it('renders login functionality', () => {
     renderWithProviders(<NavBar />)
     
-    // Login functionality has been removed
-    const loginButton = screen.queryByRole('button', { name: /Login/i })
-    expect(loginButton).not.toBeInTheDocument()
-    
-    // Should not show CWID
-    expect(screen.queryByText('AB12345')).not.toBeInTheDocument()
+    // Login functionality is present
+    const loginLink = screen.getByRole('link', { name: /Login/i })
+    expect(loginLink).toBeInTheDocument()
+    expect(loginLink).toHaveAttribute('href', '/login')
   })
 
   it('renders theme toggle', () => {
@@ -113,25 +118,26 @@ describe('NavBar', () => {
     expect(themeToggle).toBeInTheDocument()
   })
 
-  it('renders simplified navbar with only essential elements', () => {
+  it('renders navbar with all elements', () => {
     renderWithProviders(<NavBar />)
     
     // Should have logo
-    expect(screen.getByText('WCI@NYP')).toBeInTheDocument()
+    const brandLink = screen.getByRole('link', { name: /WCI.*@.*NYP/i })
+    expect(brandLink).toBeInTheDocument()
     
     // Should have navigation links
     expect(screen.getByRole('link', { name: /Knowledge Base/i })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /Directory/i })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /Documents/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Updates/i })).toBeInTheDocument()
     
     // Should have theme toggle
     expect(screen.getByRole('button', { name: /Toggle theme/i })).toBeInTheDocument()
     
-    // Should not have providers link
-    expect(screen.queryByRole('link', { name: /Providers/i })).not.toBeInTheDocument()
+    // Should have search
+    expect(screen.getByPlaceholderText('Search...')).toBeInTheDocument()
     
-    // Should have only theme toggle button
-    const buttons = screen.getAllByRole('button')
-    expect(buttons).toHaveLength(1) // Only theme toggle
+    // Should have login
+    expect(screen.getByRole('link', { name: /Login/i })).toBeInTheDocument()
   })
 })

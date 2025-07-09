@@ -37,12 +37,15 @@ describe('ThemeSelector', () => {
       expect(screen.getByText('Toggle theme')).toBeInTheDocument()
     })
 
-    it('opens dropdown menu on click', async () => {
+    it('opens dropdown menu on hover', async () => {
       const user = userEvent.setup()
       render(<ThemeSelector />)
       
       const button = screen.getByRole('button')
-      await user.click(button)
+      await user.hover(button)
+      
+      // Wait for hover delay
+      await new Promise(resolve => setTimeout(resolve, 250))
       
       // Check for dropdown content
       expect(screen.getByText('Appearance')).toBeInTheDocument()
@@ -57,9 +60,12 @@ describe('ThemeSelector', () => {
       render(<ThemeSelector />)
       
       const button = screen.getByRole('button')
-      await user.click(button)
+      await user.hover(button)
       
-      const darkOption = screen.getByRole('menuitemradio', { name: /dark/i })
+      // Wait for hover delay
+      await new Promise(resolve => setTimeout(resolve, 250))
+      
+      const darkOption = screen.getByText('Dark')
       await user.click(darkOption)
       
       expect(mockSetTheme).toHaveBeenCalledWith('dark')
@@ -70,9 +76,12 @@ describe('ThemeSelector', () => {
       render(<ThemeSelector />)
       
       const button = screen.getByRole('button')
-      await user.click(button)
+      await user.hover(button)
       
-      const redOption = screen.getByRole('menuitemradio', { name: /red/i })
+      // Wait for hover delay
+      await new Promise(resolve => setTimeout(resolve, 250))
+      
+      const redOption = screen.getByText('Red')
       await user.click(redOption)
       
       expect(mockSetColorTheme).toHaveBeenCalledWith('red')
@@ -142,15 +151,24 @@ describe('ThemeSelector', () => {
       expect(srText).toHaveClass('sr-only')
     })
 
-    it('uses semantic menu roles in dropdown', async () => {
+    it('uses semantic button elements in dropdown', async () => {
       const user = userEvent.setup()
       render(<ThemeSelector />)
       
       const button = screen.getByRole('button')
-      await user.click(button)
+      await user.hover(button)
       
-      // Check for proper menu roles
-      expect(screen.getAllByRole('menuitemradio')).toHaveLength(9) // 3 theme modes + 6 color themes
+      // Wait for hover delay
+      await new Promise(resolve => setTimeout(resolve, 250))
+      
+      // Check that all theme options are buttons
+      const lightButton = screen.getByText('Light').closest('button')
+      const darkButton = screen.getByText('Dark').closest('button')
+      const systemButton = screen.getByText('System').closest('button')
+      
+      expect(lightButton).toBeInTheDocument()
+      expect(darkButton).toBeInTheDocument()
+      expect(systemButton).toBeInTheDocument()
     })
   })
 })

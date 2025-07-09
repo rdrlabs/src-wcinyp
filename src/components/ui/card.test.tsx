@@ -15,7 +15,7 @@ describe('Card Components', () => {
       
       const card = container.firstChild
       expect(card).toHaveClass('custom-card')
-      expect(card).toHaveClass('rounded-xl', 'border', 'bg-card')
+      expect(card).toHaveClass('rounded-xl', 'text-card-foreground')
     })
   })
 
