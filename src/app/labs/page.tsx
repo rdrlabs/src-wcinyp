@@ -66,8 +66,6 @@ export default function LabsPage() {
 
   return (
     <ComingSoonCard
-      icon={Lightbulb}
-      title="Ideas"
       description="Experimental features and innovative tools where imaging meets imagination"
       sections={sections}
       footer={footer}
