@@ -65,7 +65,7 @@ export default function LabsPage() {
 
   return (
     <ComingSoonCard
-      description="Experimental features and innovative tools where imaging meets imagination"
+      description="Imaging meets imagination"
       sections={sections}
       footer={footer}
     />
