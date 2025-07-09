@@ -30,7 +30,6 @@ import {
   AlertCircle,
   XCircle,
   HelpCircle,
-  ChevronDown,
   Bell,
   Loader2,
   RotateCw,
@@ -38,8 +37,7 @@ import {
   Keyboard,
   Map,
   Info,
-  FileText,
-  Phone
+  FileText
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 

@@ -1,6 +1,5 @@
 'use client';
 
-import { useAppTheme } from '@/contexts/app-context';
 import { cn } from '@/lib/utils';
 
 interface BrandNameProps {

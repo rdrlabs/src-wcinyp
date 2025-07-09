@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { NavBar } from './navbar'
 import { vi } from 'vitest'
 import { AppProvider } from '@/contexts/app-context'

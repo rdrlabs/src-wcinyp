@@ -1,7 +1,6 @@
 'use client';
 
 import { 
-  Lightbulb,
   Box,
   CalendarSync,
   Magnet,
@@ -54,7 +53,7 @@ export default function LabsPage() {
   const footer = (
     <div className="text-center mt-12">
       <p className="text-sm text-muted-foreground">
-        🧲 Have ideas for experimental features? We're always looking for ways to improve!{" "}
+        🧲 Have ideas for experimental features? We&apos;re always looking for ways to improve!{" "}
         <br />
         Submit your suggestions to{" "}
         <a href="mailto:imaging-innovation@med.cornell.edu" className="text-primary hover:underline">

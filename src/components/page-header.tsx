@@ -4,7 +4,6 @@ import { Badge } from "@/components/ui/badge";
 import { TYPOGRAPHY } from "@/constants/typography";
 import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
-import { Brain } from "lucide-react";
 
 interface PageHeaderProps {
   icon: LucideIcon;
