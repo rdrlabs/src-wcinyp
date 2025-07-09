@@ -124,7 +124,7 @@ export function NavBar() {
                   }}
                 >
                   <div className="flex items-center gap-2">
-                    <AlertCircle className="h-4 w-4 text-yellow-500" />
+                    <AlertCircle className="h-4 w-4 text-accent-foreground" />
                     <p className="text-sm text-muted-foreground">Sign-in process in development</p>
                   </div>
                 </div>

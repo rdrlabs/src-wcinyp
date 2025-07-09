@@ -151,13 +151,13 @@ export function DetailsSheet({ isOpen, onClose, type, data }: DetailsSheetProps)
                   <>
                     <div className="space-y-1">
                       <p className="text-sm text-muted-foreground">Active</p>
-                      <p className="text-2xl font-bold text-green-600">
+                      <p className="text-2xl font-bold text-primary">
                         {(data as ContactTypeData).statistics!.active}
                       </p>
                     </div>
                     <div className="space-y-1">
                       <p className="text-sm text-muted-foreground">New This Month</p>
-                      <p className="text-2xl font-bold text-blue-600">
+                      <p className="text-2xl font-bold text-primary">
                         {(data as ContactTypeData).statistics!.newThisMonth}
                       </p>
                     </div>

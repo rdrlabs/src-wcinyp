@@ -1236,15 +1236,15 @@ function cn(...inputs: (string | undefined)[]) {
                   <Badge variant="outline">Outline</Badge>
                   <Badge variant="destructive">Destructive</Badge>
                   <div className="flex items-center gap-2 text-sm">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    <CheckCircle2 className="h-4 w-4 text-success" />
                     <span>Success</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
-                    <AlertCircle className="h-4 w-4 text-yellow-500" />
+                    <AlertCircle className="h-4 w-4 text-warning" />
                     <span>Warning</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
-                    <XCircle className="h-4 w-4 text-red-500" />
+                    <XCircle className="h-4 w-4 text-destructive" />
                     <span>Error</span>
                   </div>
                 </div>
@@ -2014,7 +2014,7 @@ function cn(...inputs: (string | undefined)[]) {
                       onClick={() => toast.success('Success message example')}
                       className="w-full justify-start"
                     >
-                      <CheckCircle2 className="h-4 w-4 mr-2 text-green-500" />
+                      <CheckCircle2 className="h-4 w-4 mr-2 text-success" />
                       Success Toast
                     </Button>
                     <Button 
@@ -2022,7 +2022,7 @@ function cn(...inputs: (string | undefined)[]) {
                       onClick={() => toast.error('Error message example')}
                       className="w-full justify-start"
                     >
-                      <XCircle className="h-4 w-4 mr-2 text-red-500" />
+                      <XCircle className="h-4 w-4 mr-2 text-destructive" />
                       Error Toast
                     </Button>
                     <Button 
@@ -2030,7 +2030,7 @@ function cn(...inputs: (string | undefined)[]) {
                       onClick={() => toast.info('Information message example')}
                       className="w-full justify-start"
                     >
-                      <Info className="h-4 w-4 mr-2 text-blue-500" />
+                      <Info className="h-4 w-4 mr-2 text-info" />
                       Info Toast
                     </Button>
                     <Button 
@@ -2038,7 +2038,7 @@ function cn(...inputs: (string | undefined)[]) {
                       onClick={() => toast.warning('Warning message example')}
                       className="w-full justify-start"
                     >
-                      <AlertCircle className="h-4 w-4 mr-2 text-yellow-500" />
+                      <AlertCircle className="h-4 w-4 mr-2 text-warning" />
                       Warning Toast
                     </Button>
                   </div>

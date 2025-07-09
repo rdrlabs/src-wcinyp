@@ -93,7 +93,7 @@ export function MobileNav() {
                   className={cn(
                     "flex items-center gap-3 px-2 py-3 rounded-lg transition-colors",
                     pathname === '/diagnostics'
-                      ? "bg-green-500/10 text-green-600 dark:text-green-400"
+                      ? "bg-primary/10 text-primary"
                       : "hover:bg-muted/50 text-muted-foreground hover:text-foreground"
                   )}
                 >
@@ -105,7 +105,7 @@ export function MobileNav() {
                   {pathname === '/diagnostics' && (
                     <Badge 
                       variant="secondary" 
-                      className="ml-auto px-1.5 py-0 text-[10px] font-medium bg-green-500/20 text-green-600 dark:text-green-400 animate-pulse"
+                      className="ml-auto px-1.5 py-0 text-[10px] font-medium bg-primary/20 text-primary animate-pulse"
                     >
                       Active
                     </Badge>

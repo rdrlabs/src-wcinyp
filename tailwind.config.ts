@@ -15,7 +15,10 @@ const config = {
     extend: {
       // Colors now reference CSS variables defined in @theme
       colors: {
-        border: "var(--color-border)",
+        border: {
+          DEFAULT: "var(--color-border)",
+          strong: "var(--color-border-strong)",
+        },
         input: "var(--color-input)",
         ring: "var(--color-ring)",
         background: "var(--color-background)",
@@ -35,6 +38,8 @@ const config = {
         muted: {
           DEFAULT: "var(--color-muted)",
           foreground: "var(--color-muted-foreground)",
+          lighter: "var(--color-muted-lighter)",
+          darker: "var(--color-muted-darker)",
         },
         accent: {
           DEFAULT: "var(--color-accent)",

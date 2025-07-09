@@ -6,6 +6,8 @@ import { useAppTheme, type ColorTheme } from "@/contexts/app-context"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
+// Direct colors are intentionally used here for theme preview swatches
+// These show the actual theme colors, not the current theme's semantic tokens
 const themes = [
   { name: "None", value: "neutral" as ColorTheme, color: "bg-gray-500 dark:bg-gray-400" },
   { name: "Blue", value: "blue" as ColorTheme, color: "bg-blue-500" },
