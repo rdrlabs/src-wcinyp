@@ -226,7 +226,7 @@ export default function DocumentsPage() {
     {
       id: 'updated',
       header: ({ column }) => createSortableHeader(column, 'Updated'),
-      accessorFn: (row) => row.lastUpdated || row.lastUsed,
+      accessorFn: (row) => row.itemType === 'document' ? row.lastUpdated : row.lastUsed,
       cell: ({ row }) => {
         const value = row.getValue('updated') as string;
         return (
@@ -434,7 +434,7 @@ export default function DocumentsPage() {
                   onRowClick={(item) => {
                     if (item.itemType === 'form' && item.id) {
                       handleFormSelect(typeof item.id === 'string' ? parseInt(item.id) : item.id);
-                    } else {
+                    } else if (item.itemType === 'document') {
                       // Open details sheet for document
                       const category = item.category;
                       

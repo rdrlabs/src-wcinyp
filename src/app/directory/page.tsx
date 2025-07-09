@@ -211,18 +211,18 @@ export default function DirectoryPage() {
         </div>
       )
     },
-    createActionsColumn<Contact>([
+    createActionsColumn<UnifiedItem>([
       {
         label: 'View Details',
-        onClick: (contact) => console.log('View', contact),
+        onClick: (item) => console.log('View', item),
       },
       {
         label: 'Edit',
-        onClick: (contact) => console.log('Edit', contact),
+        onClick: (item) => console.log('Edit', item),
       },
       {
         label: 'Export',
-        onClick: (contact) => console.log('Export', contact),
+        onClick: (item) => console.log('Export', item),
         icon: <Download className="h-4 w-4" />
       }
     ])
@@ -343,7 +343,7 @@ export default function DirectoryPage() {
                 recentContacts: [{
                   id: item.id.toString(),
                   name: item.name,
-                  department: item.department || item.specialty,
+                  department: item.itemType === 'provider' ? (item.department || item.specialty) : item.department,
                   email: item.email,
                   phone: item.phone
                 }],
