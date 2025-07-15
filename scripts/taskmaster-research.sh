@@ -10,7 +10,7 @@ BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-# Function to display usage
+# usage displays usage instructions, available options, and example commands for the Taskmaster Research Tool script.
 usage() {
     echo "Usage: $0 \"research query\" [options]"
     echo ""

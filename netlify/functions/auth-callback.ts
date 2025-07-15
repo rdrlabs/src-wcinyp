@@ -3,6 +3,12 @@ import type { Handler } from '@netlify/functions'
 // Import the server client code directly since Netlify Functions don't support path aliases
 const { createClient } = require('@supabase/supabase-js')
 
+/**
+ * Creates and returns a Supabase client using environment variables for configuration.
+ *
+ * Throws an error if required Supabase environment variables are missing. The client is configured with token auto-refresh and session persistence disabled.
+ * @returns A configured Supabase client instance
+ */
 function createServerClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -19,6 +25,14 @@ function createServerClient() {
   })
 }
 
+/**
+ * Determines whether the specified email address is authorized to authenticate.
+ *
+ * Checks the email against multiple authorization criteria: valid Cornell Medical CWID format, membership in an active approved domain, presence of an approved access request, or availability of a valid invitation code. Returns an object indicating whether authentication is allowed, the reason, and whether an invitation code is required.
+ *
+ * @param email - The email address to check for authentication eligibility
+ * @returns An object with `allowed` (boolean), `reason` (string), and optionally `requiresInvitationCode` (boolean) if an invitation code is required
+ */
 async function isEmailAllowedToAuthenticate(email: string, supabase: ReturnType<typeof createClient>) {
   const emailLower = email.toLowerCase()
   const domain = emailLower.split('@')[1] || ''
@@ -83,6 +97,12 @@ async function isEmailAllowedToAuthenticate(email: string, supabase: ReturnType<
   }
 }
 
+/**
+ * Verifies a Supabase authentication token and checks if the associated user's email is authorized to authenticate.
+ *
+ * @param token - The Supabase authentication token to verify
+ * @returns An object containing the authenticated user if verification and authorization succeed, or an error message if not
+ */
 async function verifyAuthToken(token: string | null) {
   if (!token) {
     return { user: null, error: 'No token provided' }

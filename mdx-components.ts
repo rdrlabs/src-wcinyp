@@ -11,7 +11,12 @@ import { Banner } from 'fumadocs-ui/components/banner';
 import { InlineTOC } from 'fumadocs-ui/components/inline-toc';
 import { ImageZoom } from 'fumadocs-ui/components/image-zoom';
 
-// This file ensures MDX components are available globally for all MDX files
+/**
+ * Merges default MDX components, user-provided components, and Fumadocs UI components into a single object for global MDX usage.
+ *
+ * @param components - Additional MDX components to include in the merged set
+ * @returns An object containing all default, user-provided, and Fumadocs UI MDX components
+ */
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     ...defaultMdxComponents,

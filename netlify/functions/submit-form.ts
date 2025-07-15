@@ -3,6 +3,12 @@ import type { Handler } from '@netlify/functions'
 // Import the server client code directly since Netlify Functions don't support path aliases
 const { createClient } = require('@supabase/supabase-js')
 
+/**
+ * Creates and returns a Supabase client using environment variables for configuration.
+ *
+ * @returns A Supabase client instance configured with service role key and no session persistence.
+ * @throws If required Supabase environment variables are missing.
+ */
 function createServerClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -19,6 +25,14 @@ function createServerClient() {
   })
 }
 
+/**
+ * Verifies a Supabase authentication token and enforces an email domain restriction.
+ *
+ * Checks if the provided token is valid and corresponds to a user with an email ending in `@med.cornell.edu`.
+ *
+ * @param token - The authentication token to verify, or null if not provided.
+ * @returns An object containing the authenticated user (or null) and an error message (or null).
+ */
 async function verifyAuthToken(token: string | null) {
   if (!token) {
     return { user: null, error: 'No token provided' }

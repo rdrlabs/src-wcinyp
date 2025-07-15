@@ -6,6 +6,13 @@ import { getSupabaseClient } from '@/lib/supabase-client'
 import { authSessionManager } from '@/lib/auth-session'
 import { logger } from '@/lib/logger'
 
+/**
+ * React component that handles authentication callbacks for both cross-device and same-device flows.
+ *
+ * Displays authentication status, manages session authentication based on URL parameters, and provides user feedback with appropriate messages and icons. Redirects to the home page after successful same-device authentication.
+ *
+ * @returns The rendered authentication callback page UI.
+ */
 export default function AuthCallbackPage() {
   const router = useRouter()
   const searchParams = useSearchParams()

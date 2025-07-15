@@ -7,6 +7,14 @@
 const fs = require('fs');
 const path = require('path');
 
+/**
+ * Generates a complete HTML dashboard displaying test health metrics, trends, recent failures, and flaky tests.
+ * 
+ * The returned HTML includes styled metric cards, trend charts, and tables summarizing test results, with dynamic color coding and trend indicators based on the provided data.
+ * 
+ * @param {Object} data - The dashboard data, including metrics, trends, recentFailures, and flakyTests.
+ * @return {string} The generated HTML document as a string.
+ */
 function generateDashboardHTML(data) {
   const { metrics, trends, recentFailures, flakyTests } = data;
   
@@ -390,7 +398,14 @@ function generateDashboardHTML(data) {
 </html>`;
 }
 
-// Collect dashboard data
+/**
+ * Collects and returns test dashboard data including metrics, trends, recent failures, and flaky tests.
+ *
+ * The returned object contains key test health metrics, weekly trends, recent failure details, and flaky test summaries.
+ * The overall health score is computed as a weighted sum of pass rate, coverage, CI success, and a penalty for flaky test count.
+ *
+ * @returns {Object} An object with `metrics`, `trends`, `recentFailures`, and `flakyTests` describing the current test health state.
+ */
 function collectDashboardData() {
   // Mock data - replace with actual data collection
   const data = {
@@ -452,7 +467,12 @@ function collectDashboardData() {
   return data;
 }
 
-// Main function
+/**
+ * Generates the test health dashboard HTML file and saves it to the test-results directory.
+ *
+ * Collects test metrics and trends, generates a styled HTML dashboard summarizing the data, writes the output to `test-results/test-dashboard.html`, and logs key metrics to the console.
+ * @returns {string} The file path of the generated dashboard HTML.
+ */
 function generateDashboard() {
   console.log('📊 Generating Test Health Dashboard...\n');
 
@@ -472,7 +492,11 @@ function generateDashboard() {
   return outputPath;
 }
 
-// Helper functions in template
+/**
+ * Returns a CSS class name representing the quality of a health score.
+ * @param {number} score - The health score to evaluate.
+ * @return {string} The CSS class corresponding to the score range.
+ */
 function getScoreClass(score) {
   if (score >= 90) return 'score-excellent';
   if (score >= 75) return 'score-good';
@@ -480,12 +504,22 @@ function getScoreClass(score) {
   return 'score-poor';
 }
 
+/**
+ * Returns a status badge class name based on the provided health score.
+ * @param {number} score - The overall health score.
+ * @return {string} The status class: 'status-passing', 'status-flaky', or 'status-failing'.
+ */
 function getHealthStatus(score) {
   if (score >= 90) return 'status-passing';
   if (score >= 75) return 'status-flaky';
   return 'status-failing';
 }
 
+/**
+ * Returns a textual label describing the overall health based on the given score.
+ * @param {number} score - The health score as a percentage.
+ * @return {string} The health label: 'Excellent', 'Good', 'Fair', or 'Needs Attention'.
+ */
 function getHealthLabel(score) {
   if (score >= 90) return 'Excellent';
   if (score >= 75) return 'Good';
@@ -493,12 +527,23 @@ function getHealthLabel(score) {
   return 'Needs Attention';
 }
 
+/**
+ * Returns a CSS class name representing the direction of a trend value.
+ * @param {number} trend - The trend value to evaluate.
+ * @return {string} 'trend-up' if positive, 'trend-down' if negative, or 'trend-neutral' if zero.
+ */
 function getTrendClass(trend) {
   if (trend > 0) return 'trend-up';
   if (trend < 0) return 'trend-down';
   return 'trend-neutral';
 }
 
+/**
+ * Formats a trend value as a percentage string with an optional prefix and sign.
+ * @param {number} trend - The trend value to format.
+ * @param {string} [prefix] - Optional prefix to prepend to positive trends.
+ * @return {string} The formatted trend string, or 'No change' if the trend is zero.
+ */
 function formatTrend(trend, prefix = '') {
   if (trend > 0) return (prefix || '') + '+' + Math.abs(trend) + '%';
   if (trend < 0) return '-' + Math.abs(trend) + '%';

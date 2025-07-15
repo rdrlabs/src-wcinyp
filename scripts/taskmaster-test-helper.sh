@@ -19,7 +19,7 @@ fi
 echo "📋 Current Task: $CURRENT_TASK"
 echo ""
 
-# Function to run tests based on task phase
+# run_phase_tests runs the appropriate set of tests for the given task phase, selecting E2E, visual, coverage, or all tests based on the task ID.
 run_phase_tests() {
     local task_id=$1
     
@@ -51,7 +51,7 @@ run_phase_tests() {
     esac
 }
 
-# Function to check task acceptance criteria
+# check_acceptance verifies whether the acceptance criteria for a given task ID are met, including Playwright installation, configuration, and Fumadocs test presence and execution. Returns 0 if criteria are satisfied, or 1 if not. For tasks without automated checks, indicates manual verification is required.
 check_acceptance() {
     local task_id=$1
     

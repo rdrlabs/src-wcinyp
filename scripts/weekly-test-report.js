@@ -8,7 +8,10 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-// Utilities
+/**
+ * Returns the ISO date strings for the start and end of the past 7-day period.
+ * @return {{start: string, end: string}} An object with `start` and `end` properties representing the date range.
+ */
 function getWeekDates() {
   const now = new Date();
   const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -18,6 +21,11 @@ function getWeekDates() {
   };
 }
 
+/**
+ * Reads and parses a JSON file from the specified path.
+ * @param {string} filePath - Path to the JSON file.
+ * @return {Object|null} The parsed JSON object, or null if reading or parsing fails.
+ */
 function readJsonFile(filePath) {
   try {
     return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
@@ -26,12 +34,24 @@ function readJsonFile(filePath) {
   }
 }
 
+/**
+ * Calculates the percentage change from a previous value to a current value.
+ * @param {number} current - The current value.
+ * @param {number} previous - The previous value to compare against.
+ * @return {string|number} The percentage change rounded to one decimal place, or 0 if the previous value is missing or zero.
+ */
 function calculateTrend(current, previous) {
   if (!previous || previous === 0) return 0;
   return ((current - previous) / previous * 100).toFixed(1);
 }
 
-// Data collectors
+/**
+ * Aggregates weekly test metrics from test result summaries, coverage data, and flaky test reports.
+ * 
+ * Collects total test runs, total tests, passed and failed test counts, flaky test count, and coverage percentage from the past week. Calculates the overall pass rate as a percentage.
+ * 
+ * @returns {Object} An object containing totalRuns, totalTests, passedTests, failedTests, flakyTests, averageDuration, coveragePercent, and passRate.
+ */
 function collectTestMetrics() {
   const metrics = {
     totalRuns: 0,
@@ -80,6 +100,10 @@ function collectTestMetrics() {
   return metrics;
 }
 
+/**
+ * Collects and summarizes performance testing metrics from the performance report.
+ * @return {Object|null} An object containing average metrics, any budget violations, and budget compliance status, or `null` if the report is unavailable.
+ */
 function collectPerformanceMetrics() {
   const perfReport = readJsonFile('test-results/performance/performance-report.json');
   if (!perfReport) return null;
@@ -94,6 +118,12 @@ function collectPerformanceMetrics() {
   };
 }
 
+/**
+ * Collects CI run metrics from the past week using the GitHub CLI.
+ *
+ * Retrieves recent CI runs, filters them to include only those from the last 7 days, and calculates the total number of runs, success rate, failed runs, and average duration in minutes.
+ * @returns {Object|null} An object containing CI metrics, or `null` if data could not be retrieved.
+ */
 function collectCIMetrics() {
   try {
     // Get CI runs from the past week
@@ -120,6 +150,16 @@ function collectCIMetrics() {
   }
 }
 
+/**
+ * Identifies issues in test, performance, and CI metrics based on predefined thresholds.
+ *
+ * Evaluates metrics for failing tests, low coverage, excessive flaky tests, performance budget violations, and high CI failure rates, returning a list of issue descriptions.
+ *
+ * @param {Object} metrics - Aggregated test metrics for the week.
+ * @param {Object} [perfMetrics] - Performance metrics, including budget violations.
+ * @param {Object} [ciMetrics] - CI metrics, including failed run counts.
+ * @return {string[]} List of identified issue descriptions.
+ */
 function identifyIssues(metrics, perfMetrics, ciMetrics) {
   const issues = [];
 
@@ -151,6 +191,14 @@ function identifyIssues(metrics, perfMetrics, ciMetrics) {
   return issues;
 }
 
+/**
+ * Generates a Markdown-formatted weekly test report summarizing test, CI/CD, and performance metrics.
+ * 
+ * The report includes tables for test metrics, CI/CD performance, and performance testing results, as well as lists of identified issues, improvements, and recommended actions. It conditionally displays sections based on the availability of CI and performance data, and provides placeholders for historical trends and the next report due date.
+ * 
+ * @param {Object} data - The aggregated report data, including week dates, metrics, performance metrics, CI metrics, issues, and improvements.
+ * @return {string} The complete Markdown report as a string.
+ */
 function generateMarkdownReport(data) {
   const { week, metrics, perfMetrics, ciMetrics, issues, improvements } = data;
 
@@ -234,7 +282,13 @@ Week-over-week changes:
 `;
 }
 
-// Main function
+/**
+ * Generates a comprehensive weekly test report by aggregating test, performance, and CI metrics from the past week.
+ *
+ * Collects data from test result files, coverage summaries, performance reports, and CI run history. Identifies issues based on predefined thresholds, generates a Markdown and JSON report, saves them to the reports directory, and prints a summary to the console.
+ *
+ * @returns {Object} The complete report data object containing week dates, metrics, performance metrics, CI metrics, identified issues, and improvements.
+ */
 function generateWeeklyReport() {
   console.log('📊 Generating Weekly Test Report...\n');
 

@@ -15,7 +15,7 @@ echo -e "${BLUE}=== Daily Test Health Check ===${NC}"
 echo -e "Date: $(date)"
 echo "======================================"
 
-# Function to check if command exists
+# command_exists checks if a given command is available in the system PATH.
 command_exists() {
     command -v "$1" >/dev/null 2>&1
 }

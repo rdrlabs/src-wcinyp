@@ -36,7 +36,12 @@ const components: MDXComponents = {
 // Default export for static build process
 export default components;
 
-// Named export function for runtime compatibility
+/**
+ * Returns a merged MDX components object, combining the default components with any provided overrides.
+ *
+ * @param overrides - Optional component overrides to customize or extend the default MDX components
+ * @returns The resulting MDX components object with applied overrides
+ */
 export function useMDXComponents(overrides: MDXComponents = {}): MDXComponents {
   return {
     ...components,

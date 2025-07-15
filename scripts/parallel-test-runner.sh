@@ -19,7 +19,7 @@ START_TIME=$(date +%s)
 # Create results directory
 mkdir -p test-results/parallel
 
-# Function to run test suite
+# run_suite executes a test suite command, logs its output to a file, and prints a color-coded pass or fail status.
 run_suite() {
   local suite_name=$1
   local test_command=$2

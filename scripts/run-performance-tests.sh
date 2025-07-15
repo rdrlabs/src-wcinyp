@@ -58,7 +58,7 @@ done
 # Create results directory
 mkdir -p test-results/performance
 
-# Function to run tests
+# run_tests runs performance tests for the specified profile in either headless or headed mode.
 run_tests() {
   local profile=$1
   echo -e "\n${YELLOW}Running $profile performance tests...${NC}"

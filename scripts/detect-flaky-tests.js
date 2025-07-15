@@ -12,7 +12,11 @@ const FLAKY_THRESHOLD = 0.8; // Test is flaky if it fails 20%+ of the time
 const MIN_RUNS = 3; // Minimum runs needed to determine flakiness
 
 /**
- * Analyze test results to find flaky tests
+ * Analyzes JSON test result files to identify flaky tests based on pass rates and run counts.
+ *
+ * Reads all test result files in the "test-results" directory (excluding the flaky test report), aggregates test outcomes, and determines which tests are flaky—defined as having a pass rate below the configured threshold but above zero, with a minimum number of runs. Generates a report summarizing flaky tests, writes it to "flaky-tests.json", and outputs a summary to the console.
+ *
+ * @returns {Object} The report object containing the analysis results, including details of detected flaky tests.
  */
 function analyzeFlakyTests() {
   const resultsDir = path.join(process.cwd(), 'test-results');
@@ -100,7 +104,11 @@ function analyzeFlakyTests() {
 }
 
 /**
- * Process test results recursively
+ * Recursively traverses test suites to aggregate individual test run results into a map keyed by a unique test identifier.
+ *
+ * @param {Array} suites - The array of test suite objects to process.
+ * @param {Map} testRuns - Map used to collect test run data, keyed by a composite test identifier.
+ * @param {string} [parentFile] - The file name inherited from the parent suite, if not specified in the current suite.
  */
 function processResults(suites, testRuns, parentFile = '') {
   suites.forEach(suite => {

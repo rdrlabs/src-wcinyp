@@ -23,9 +23,12 @@ const ratelimit = new Ratelimit({
 })
 
 /**
- * Check rate limit for authentication attempts
- * @param identifier - IP address or user identifier
- * @returns Rate limit result with allowed status and metadata
+ * Checks if an identifier is allowed to make an authentication attempt under the rate limit.
+ *
+ * Returns an object indicating whether the attempt is permitted, how many attempts remain, when the limit resets, and if disallowed, how many seconds to wait before retrying.
+ *
+ * @param identifier - The IP address or user identifier to check against the rate limit
+ * @returns An object with the rate limit status, remaining attempts, reset timestamp, and optional retry-after duration
  */
 export async function checkRateLimit(identifier: string): Promise<RateLimitResult> {
   try {
@@ -59,9 +62,10 @@ export async function checkRateLimit(identifier: string): Promise<RateLimitResul
 }
 
 /**
- * Get current rate limit status without consuming an attempt
- * @param identifier - IP address or user identifier
- * @returns Current rate limit status
+ * Retrieves the current rate limit usage and reset time for the given identifier without incrementing the attempt count.
+ *
+ * @param identifier - The IP address or user identifier to check rate limit status for.
+ * @returns An object containing the current number of attempts, the maximum allowed attempts, and the timestamp when the rate limit resets.
  */
 export async function getRateLimitStatus(identifier: string): Promise<{
   current: number

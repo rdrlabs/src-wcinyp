@@ -41,6 +41,13 @@ interface AccessRequestStats {
   last_month_count: number
 }
 
+/**
+ * Renders the admin interface for managing user access requests in the WCI@NYP application.
+ *
+ * This page allows authorized admins to view, search, filter, review, approve, and reject user access requests. It displays request details, statistics, and provides a dialog for reviewing pending requests with optional notes. Only users with admin privileges can access this page; unauthorized users are redirected.
+ *
+ * @returns The React component for the access requests admin page.
+ */
 export default function AccessRequestsPage() {
   const { user, loading: authLoading } = useAuth()
   const router = useRouter()
