@@ -143,8 +143,9 @@ describe('Directory Page', () => {
       
       // Check the first badge has proper styling
       const firstBadge = providerBadges[0]
-      // Badge should have some styling classes - check for Badge component classes
-      expect(firstBadge.className).toMatch(/inline-flex|items-center|gap-2/)
+      // Badge should have flex-1 text-center classes for the current implementation
+      expect(firstBadge.className).toContain('flex-1')
+      expect(firstBadge.className).toContain('text-center')
     })
   })
 

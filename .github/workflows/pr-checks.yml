@@ -1,0 +1,260 @@
+name: PR Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  # Code Quality Checks
+  code-quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for better analysis
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Check formatting
+        run: npm run format:check
+        
+      - name: Run linter with annotations
+        uses: ataylorme/eslint-annotate-action@v2
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          report-json: "eslint-report.json"
+        
+      - name: TypeScript strict check
+        run: npm run type-check
+        
+      - name: Check for console.log statements
+        run: |
+          if grep -r "console\.log" --include="*.ts" --include="*.tsx" src/ | grep -v "// eslint-disable-line"; then
+            echo "::error::Found console.log statements. Please remove them."
+            exit 1
+          fi
+
+  # Bundle Size Check
+  bundle-size:
+    name: Bundle Size Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build PR bundle
+        run: npm run build
+        
+      - name: Analyze bundle size
+        run: |
+          # Get bundle sizes
+          PR_SIZE=$(du -sb out | cut -f1)
+          echo "PR bundle size: $PR_SIZE bytes"
+          echo "pr_size=$PR_SIZE" >> $GITHUB_ENV
+          
+      - name: Checkout base branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.base_ref }}
+          path: base
+          
+      - name: Build base bundle
+        run: |
+          cd base
+          npm ci
+          npm run build
+          BASE_SIZE=$(du -sb out | cut -f1)
+          echo "Base bundle size: $BASE_SIZE bytes"
+          echo "base_size=$BASE_SIZE" >> $GITHUB_ENV
+          
+      - name: Comment bundle size change
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prSize = parseInt(process.env.pr_size);
+            const baseSize = parseInt(process.env.base_size);
+            const diff = prSize - baseSize;
+            const percentChange = ((diff / baseSize) * 100).toFixed(2);
+            
+            const formatBytes = (bytes) => {
+              const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+              if (bytes === 0) return '0 Bytes';
+              const i = Math.floor(Math.log(bytes) / Math.log(1024));
+              return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i];
+            };
+            
+            let emoji = '📦';
+            if (diff > 50000) emoji = '🚨';  // > 50KB increase
+            else if (diff > 10000) emoji = '⚠️';  // > 10KB increase
+            else if (diff < -10000) emoji = '🎉';  // > 10KB decrease
+            
+            const comment = `${emoji} **Bundle Size Report**
+            
+            | Metric | Base | PR | Change |
+            |--------|------|-----|--------|
+            | Bundle Size | ${formatBytes(baseSize)} | ${formatBytes(prSize)} | ${diff >= 0 ? '+' : ''}${formatBytes(Math.abs(diff))} (${percentChange}%) |
+            
+            ${diff > 50000 ? '⚠️ Large bundle size increase detected. Please review your changes.' : ''}
+            ${diff < -10000 ? '🎉 Great job reducing the bundle size!' : ''}`;
+            
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  # Accessibility Check
+  accessibility:
+    name: Accessibility Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install Playwright
+        run: npx playwright install chromium
+        
+      - name: Run accessibility tests
+        run: |
+          npx playwright test tests/e2e/accessibility --reporter=json --reporter-options="outputFile=a11y-results.json"
+        continue-on-error: true
+        
+      - name: Parse accessibility results
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            try {
+              const results = JSON.parse(fs.readFileSync('a11y-results.json', 'utf8'));
+              const violations = results.suites.flatMap(s => 
+                s.specs.filter(spec => spec.tests.some(t => t.status === 'failed'))
+              );
+              
+              if (violations.length > 0) {
+                let comment = '## ♿ Accessibility Issues Found\n\n';
+                comment += 'The following accessibility violations were detected:\n\n';
+                violations.forEach(v => {
+                  comment += `- ${v.title}\n`;
+                });
+                comment += '\nPlease fix these issues before merging.';
+                
+                await github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: comment
+                });
+              }
+            } catch (error) {
+              console.log('No accessibility violations found or unable to parse results');
+            }
+
+  # Documentation Check
+  docs-check:
+    name: Documentation Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v40
+        with:
+          files: |
+            src/**/*.ts
+            src/**/*.tsx
+            
+      - name: Check for missing JSDoc
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: |
+          echo "Checking for missing JSDoc comments in changed files..."
+          MISSING_DOCS=0
+          
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            # Check for exported functions without JSDoc
+            if grep -E "^export (async )?function|^export const.*=.*function" "$file" | grep -B1 -v "^/\*\*"; then
+              echo "::warning file=$file::Missing JSDoc comment for exported function"
+              MISSING_DOCS=$((MISSING_DOCS + 1))
+            fi
+          done
+          
+          if [ $MISSING_DOCS -gt 0 ]; then
+            echo "::warning::Found $MISSING_DOCS functions without JSDoc comments"
+          fi
+          
+      - name: Check README updates
+        run: |
+          # Check if significant changes were made without README update
+          if git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E "^src/(components|hooks|lib)/.*\.tsx?$" > /dev/null; then
+            if ! git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E "README|CLAUDE\.md|docs/" > /dev/null; then
+              echo "::warning::Significant code changes detected. Consider updating documentation."
+            fi
+          fi
+
+  # PR Labels
+  label-pr:
+    name: Auto Label PR
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      
+    steps:
+      - name: Label PR based on files
+        uses: actions/labeler@v4
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          configuration-path: .github/labeler.yml
+          
+      - name: Label PR size
+        uses: codelytv/pr-size-labeler@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          xs_label: 'size/XS'
+          xs_max_size: 10
+          s_label: 'size/S'
+          s_max_size: 100
+          m_label: 'size/M'
+          m_max_size: 500
+          l_label: 'size/L'
+          l_max_size: 1000
+          xl_label: 'size/XL'

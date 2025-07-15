@@ -108,20 +108,22 @@ describe('Directory Page Badge Implementation', () => {
     
     const allElements = screen.getAllByText(/Provider|Insurance|Lab/)
     // Filter to only get the table badges (not buttons)
+    // Table badges are spans with flex-1 text-center classes inside a parent with ring-1
     const badges = allElements.filter(el => {
       const parent = el.parentElement
-      // Look for elements that are either the badge itself or inside a badge
-      return (el.className.includes('inline-flex') && el.className.includes('rounded')) ||
-             (parent?.className.includes('inline-flex') && parent?.className.includes('rounded'))
+      // Check if the element is a span with the badge classes
+      return el.tagName === 'SPAN' && 
+             el.className.includes('flex-1') && 
+             el.className.includes('text-center') &&
+             parent?.className.includes('ring-1')
     })
     
     expect(badges.length).toBeGreaterThan(0)
     
     badges.forEach(badge => {
-      // Badge component should have proper structure
-      expect(badge.className).toContain('text-sm')
-      // Should have rounded corners
-      expect(badge.className).toContain('rounded')
+      // Badge component should have proper structure - check for the flex-1 text-center classes
+      expect(badge.className).toContain('flex-1')
+      expect(badge.className).toContain('text-center')
     })
   })
 })

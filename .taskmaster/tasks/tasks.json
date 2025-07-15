@@ -1,0 +1,1530 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Install Playwright for Browser Automation",
+        "description": "Install @playwright/test and create initial configuration for E2E testing",
+        "status": "done",
+        "priority": "critical",
+        "dependencies": [],
+        "phase": "1",
+        "week": "1",
+        "commands": [
+          "npm install --save-dev @playwright/test",
+          "npx playwright install"
+        ],
+        "acceptance": {
+          "criteria": [
+            "Playwright installed successfully",
+            "Browsers downloaded",
+            "Can run: npx playwright test --help"
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "title": "Create Playwright Configuration",
+        "description": "Set up playwright.config.ts with AI-friendly defaults (headless, screenshots on failure)",
+        "status": "done",
+        "priority": "critical",
+        "dependencies": [
+          1
+        ],
+        "phase": "1",
+        "week": "1",
+        "files": [
+          "playwright.config.ts"
+        ],
+        "acceptance": {
+          "criteria": [
+            "Config file created",
+            "Headless mode enabled",
+            "Screenshot on failure configured",
+            "Test directory set to ./tests/e2e"
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "title": "Create Fumadocs Validation Tests",
+        "description": "Write E2E tests to validate MDX components, KaTeX math, and syntax highlighting",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          2
+        ],
+        "phase": "1",
+        "week": "1",
+        "files": [
+          "tests/e2e/fumadocs/validate-rendering.spec.ts",
+          "tests/e2e/fumadocs/search.spec.ts"
+        ],
+        "acceptance": {
+          "criteria": [
+            "MDX component tests written",
+            "Math formula tests written",
+            "Syntax highlighting tests written",
+            "All tests pass locally"
+          ],
+          "command": "npm run test:fumadocs"
+        }
+      },
+      {
+        "id": 4,
+        "title": "Create Test Utilities for AI Development",
+        "description": "Build helper functions for common Fumadocs validation patterns",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          2
+        ],
+        "phase": "1",
+        "week": "1",
+        "files": [
+          "src/test/fumadocs-validator.ts"
+        ],
+        "acceptance": {
+          "criteria": [
+            "validateFumadocsPage function created",
+            "waitForMDXHydration helper created",
+            "Utilities properly typed",
+            "Can be imported in tests"
+          ]
+        }
+      },
+      {
+        "id": 5,
+        "title": "Add E2E Test Scripts to package.json",
+        "description": "Update package.json with new test commands for E2E and Fumadocs testing",
+        "status": "done",
+        "priority": "medium",
+        "dependencies": [
+          3
+        ],
+        "phase": "1",
+        "week": "1",
+        "files": [
+          "package.json"
+        ],
+        "acceptance": {
+          "criteria": [
+            "test:e2e script added",
+            "test:fumadocs script added",
+            "test:e2e:debug script added",
+            "Scripts work correctly"
+          ]
+        }
+      },
+      {
+        "id": 6,
+        "title": "Install Visual Testing Dependencies",
+        "description": "Add pixelmatch and pngjs for local visual regression testing",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          5
+        ],
+        "phase": "2",
+        "week": "2",
+        "commands": [
+          "npm install --save-dev pixelmatch pngjs @types/pixelmatch @types/pngjs"
+        ],
+        "acceptance": {
+          "criteria": [
+            "Dependencies installed",
+            "TypeScript types available",
+            "No dependency conflicts"
+          ]
+        }
+      },
+      {
+        "id": 7,
+        "title": "Create Visual Test Helper",
+        "description": "Build captureAndCompare function for screenshot comparison",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          6
+        ],
+        "phase": "2",
+        "week": "2",
+        "files": [
+          "src/test/visual-validator.ts"
+        ],
+        "acceptance": {
+          "criteria": [
+            "captureAndCompare function implemented",
+            "Baseline/current/diff directories created",
+            "Threshold configuration works",
+            "TypeScript types correct"
+          ]
+        }
+      },
+      {
+        "id": 8,
+        "title": "Create Visual Regression Tests",
+        "description": "Write visual tests for key Fumadocs pages",
+        "status": "done",
+        "priority": "medium",
+        "dependencies": [
+          7
+        ],
+        "phase": "2",
+        "week": "2",
+        "files": [
+          "tests/e2e/visual/fumadocs-visual.spec.ts"
+        ],
+        "acceptance": {
+          "criteria": [
+            "Documentation page visual test",
+            "MDX playground visual test",
+            "Baseline images captured",
+            "Tests pass with current UI"
+          ],
+          "command": "npm run test:visual"
+        }
+      },
+      {
+        "id": 9,
+        "title": "Document Visual Testing Process",
+        "description": "Create documentation for maintaining visual tests and updating baselines",
+        "status": "done",
+        "priority": "low",
+        "dependencies": [
+          8
+        ],
+        "phase": "2",
+        "week": "2",
+        "files": [
+          "docs/VISUAL_TESTING.md"
+        ],
+        "acceptance": {
+          "criteria": [
+            "Baseline update process documented",
+            "Troubleshooting guide included",
+            "Best practices listed"
+          ]
+        }
+      },
+      {
+        "id": 10,
+        "title": "Add Coverage Reporting",
+        "description": "Install and configure @vitest/coverage-v8 for code coverage",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          9
+        ],
+        "phase": "3",
+        "week": "3",
+        "commands": [
+          "npm install --save-dev @vitest/coverage-v8 @vitest/ui"
+        ],
+        "acceptance": {
+          "criteria": [
+            "Coverage reporter installed",
+            "Coverage thresholds set to 80%",
+            "HTML reports generated",
+            "test:coverage script works"
+          ]
+        }
+      },
+      {
+        "id": 11,
+        "title": "Create Performance Benchmarks",
+        "description": "Parent task for implementing comprehensive performance testing with Web Vitals measurement",
+        "status": "done",
+        "priority": "medium",
+        "dependencies": [
+          10
+        ],
+        "phase": "3",
+        "week": "3",
+        "subtasks": [
+          111,
+          112,
+          113,
+          114,
+          115,
+          116,
+          117,
+          118
+        ],
+        "acceptance": {
+          "criteria": [
+            "All subtasks completed",
+            "Performance testing infrastructure in place",
+            "Web Vitals measurement implemented",
+            "Performance budgets defined and enforced"
+          ]
+        }
+      },
+      {
+        "id": 111,
+        "title": "Create Performance Helper Utilities",
+        "description": "Build core utilities for measuring Web Vitals (FCP, LCP, TTI, TBT, CLS, INP) and performance metrics",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          10
+        ],
+        "parentId": 11,
+        "phase": "3",
+        "week": "3",
+        "files": [
+          "tests/e2e/performance/utils/performance-helpers.ts",
+          "tests/e2e/performance/utils/network-emulation.ts"
+        ],
+        "acceptance": {
+          "criteria": [
+            "Web Vitals measurement functions implemented",
+            "Network throttling utilities created",
+            "CPU throttling helpers added",
+            "Performance budget assertion functions",
+            "TypeScript fully typed"
+          ]
+        }
+      },
+      {
+        "id": 112,
+        "title": "Define Performance Budgets",
+        "description": "Create performance budget configuration with thresholds for different page types and network conditions",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          111
+        ],
+        "parentId": 11,
+        "phase": "3",
+        "week": "3",
+        "files": [
+          "performance-budgets.json",
+          "tests/e2e/performance/budgets/mobile-budgets.json",
+          "tests/e2e/performance/budgets/desktop-budgets.json"
+        ],
+        "acceptance": {
+          "criteria": [
+            "Budgets for homepage, docs, admin pages",
+            "Mobile vs desktop thresholds",
+            "Network-specific budgets (3G, 4G)",
+            "75th percentile targets defined",
+            "JSON schema validated"
+          ]
+        }
+      },
+      {
+        "id": 113,
+        "title": "Implement Core Performance Tests",
+        "description": "Create fundamental performance tests for critical user paths with Web Vitals assertions",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          111,
+          112
+        ],
+        "parentId": 11,
+        "phase": "3",
+        "week": "3",
+        "files": [
+          "tests/e2e/performance/fumadocs-perf.spec.ts",
+          "tests/e2e/performance/homepage-perf.spec.ts",
+          "tests/e2e/performance/search-perf.spec.ts"
+        ],
+        "acceptance": {
+          "criteria": [
+            "Homepage performance tests",
+            "Documentation page tests",
+            "Search functionality timing",
+            "Authentication flow performance",
+            "Budget assertions working"
+          ]
+        }
+      },
+      {
+        "id": 114,
+        "title": "Configure Playwright for Performance",
+        "description": "Update Playwright configuration with performance-specific settings and device emulation",
+        "status": "done",
+        "priority": "medium",
+        "dependencies": [
+          113
+        ],
+        "parentId": 11,
+        "phase": "3",
+        "week": "3",
+        "files": [
+          "playwright.config.ts"
+        ],
+        "acceptance": {
+          "criteria": [
+            "Performance test projects added",
+            "Network emulation profiles",
+            "Device emulation configured",
+            "Trace collection enabled",
+            "Performance reporter added"
+          ]
+        }
+      },
+      {
+        "id": 115,
+        "title": "Add Advanced Performance Metrics",
+        "description": "Implement advanced performance measurements including resource loading, JS execution, and memory usage",
+        "status": "done",
+        "priority": "medium",
+        "dependencies": [
+          113
+        ],
+        "parentId": 11,
+        "phase": "3",
+        "week": "3",
+        "files": [
+          "tests/e2e/performance/advanced-perf.spec.ts",
+          "tests/e2e/performance/resource-loading.spec.ts",
+          "tests/e2e/performance/memory-usage.spec.ts"
+        ],
+        "acceptance": {
+          "criteria": [
+            "Resource loading analysis",
+            "JavaScript execution timing",
+            "Memory usage tracking",
+            "Bundle size impact tests",
+            "Third-party script analysis"
+          ]
+        }
+      },
+      {
+        "id": 116,
+        "title": "Create Performance Reporting",
+        "description": "Build comprehensive performance reporting with trend analysis and regression detection",
+        "status": "done",
+        "priority": "medium",
+        "dependencies": [
+          115
+        ],
+        "parentId": 11,
+        "phase": "3",
+        "week": "3",
+        "files": [
+          "tests/e2e/performance/utils/performance-reporter.ts",
+          "tests/e2e/performance/utils/trend-analyzer.ts"
+        ],
+        "acceptance": {
+          "criteria": [
+            "JSON report generation",
+            "HTML dashboard creation",
+            "Trend analysis over time",
+            "Regression detection alerts",
+            "Baseline comparison logic"
+          ]
+        }
+      },
+      {
+        "id": 117,
+        "title": "Add Performance Testing Scripts",
+        "description": "Create automation scripts and npm commands for running performance tests",
+        "status": "done",
+        "priority": "low",
+        "dependencies": [
+          116
+        ],
+        "parentId": 11,
+        "phase": "3",
+        "week": "3",
+        "files": [
+          "scripts/run-performance-tests.sh",
+          "scripts/update-performance-baseline.sh",
+          "package.json"
+        ],
+        "acceptance": {
+          "criteria": [
+            "test:performance npm script",
+            "test:performance:ci script",
+            "Baseline update script",
+            "Report generation automation",
+            "CI/CD integration ready"
+          ]
+        }
+      },
+      {
+        "id": 118,
+        "title": "Document Performance Testing",
+        "description": "Create comprehensive documentation for performance testing practices and troubleshooting",
+        "status": "done",
+        "priority": "low",
+        "dependencies": [
+          117
+        ],
+        "parentId": 11,
+        "phase": "3",
+        "week": "3",
+        "files": [
+          "docs/PERFORMANCE_TESTING.md",
+          "docs/WEB_VITALS_GUIDE.md"
+        ],
+        "acceptance": {
+          "criteria": [
+            "Metric explanations (all Web Vitals)",
+            "Budget setting guidelines",
+            "Troubleshooting performance issues",
+            "Best practices documented",
+            "Example test patterns"
+          ]
+        }
+      },
+      {
+        "id": 12,
+        "title": "Create CI Workflow",
+        "description": "Set up GitHub Actions workflow for automated testing",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          11
+        ],
+        "phase": "3",
+        "week": "3",
+        "files": [
+          ".github/workflows/test.yml"
+        ],
+        "acceptance": {
+          "criteria": [
+            "Workflow runs on PR",
+            "Installs Playwright browsers",
+            "Runs all test suites",
+            "Reports results clearly"
+          ]
+        }
+      },
+      {
+        "id": 13,
+        "title": "Optimize Test Execution",
+        "description": "Configure parallel execution and test sharding for speed",
+        "status": "done",
+        "priority": "medium",
+        "dependencies": [
+          12
+        ],
+        "phase": "3",
+        "week": "3",
+        "acceptance": {
+          "criteria": [
+            "Tests run in parallel",
+            "CI completes in < 5 minutes",
+            "Flaky tests identified",
+            "Retry logic configured"
+          ]
+        }
+      },
+      {
+        "id": 14,
+        "title": "Create Test Maintenance Documentation",
+        "description": "Document daily, weekly, and monthly test maintenance tasks",
+        "status": "done",
+        "priority": "low",
+        "dependencies": [
+          13
+        ],
+        "phase": "3",
+        "week": "3",
+        "files": [
+          "docs/TEST_MAINTENANCE.md"
+        ],
+        "acceptance": {
+          "criteria": [
+            "Daily tasks documented",
+            "Weekly review process defined",
+            "Monthly audit checklist created",
+            "Troubleshooting guide included"
+          ]
+        }
+      },
+      {
+        "id": 15,
+        "title": "Remove Duplicate DataTable Implementation",
+        "description": "Remove the duplicate DataTable in /src/components/shared/data-table.tsx and standardize on the ui/data-table.tsx implementation",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          14
+        ],
+        "phase": "4",
+        "week": "4",
+        "files": [
+          "src/components/shared/data-table.tsx",
+          "src/components/ui/data-table.tsx"
+        ],
+        "acceptance": {
+          "criteria": [
+            "Duplicate DataTable removed from shared folder",
+            "All imports updated to use ui/data-table",
+            "No functionality lost",
+            "Tests still pass"
+          ]
+        }
+      },
+      {
+        "id": 16,
+        "title": "Create Shared Table Utilities",
+        "description": "Extract common table patterns (column definitions, search inputs, action buttons) into reusable utilities",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          15
+        ],
+        "phase": "4",
+        "week": "4",
+        "files": [
+          "src/lib/table-utilities.ts",
+          "src/components/ui/table-columns.tsx"
+        ],
+        "acceptance": {
+          "criteria": [
+            "Common column patterns extracted",
+            "Search input wrapper component created",
+            "Action button patterns standardized",
+            "Filter components consolidated"
+          ]
+        }
+      },
+      {
+        "id": 17,
+        "title": "Standardize Component Imports",
+        "description": "Update all admin pages to use consistent @/components/ui/* import patterns",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [
+          16
+        ],
+        "phase": "4",
+        "week": "4",
+        "files": [
+          "src/app/documents/page.tsx",
+          "src/app/directory/page.tsx",
+          "src/app/providers/page.tsx",
+          "src/app/admin/**/*.tsx"
+        ],
+        "acceptance": {
+          "criteria": [
+            "All imports use @/components/ui/* pattern",
+            "No relative imports for UI components",
+            "Import aliases consistent",
+            "ESLint rule added to enforce pattern"
+          ]
+        }
+      },
+      {
+        "id": 18,
+        "title": "Create useDataTable Hook",
+        "description": "Build a custom hook for common table state management, column visibility, and filtering",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [
+          17
+        ],
+        "phase": "4",
+        "week": "4",
+        "files": [
+          "src/hooks/use-data-table.ts"
+        ],
+        "acceptance": {
+          "criteria": [
+            "Hook manages table state",
+            "Column visibility controls included",
+            "Filter state management",
+            "TypeScript fully typed",
+            "Used in at least 2 tables"
+          ]
+        }
+      },
+      {
+        "id": 19,
+        "title": "Document shadcn/ui Usage Patterns",
+        "description": "Create documentation for consistent shadcn/ui component usage across the team",
+        "status": "pending",
+        "priority": "low",
+        "dependencies": [
+          18
+        ],
+        "phase": "4",
+        "week": "4",
+        "files": [
+          "docs/SHADCN_PATTERNS.md"
+        ],
+        "acceptance": {
+          "criteria": [
+            "Component usage guidelines documented",
+            "Common patterns explained",
+            "Do's and don'ts listed",
+            "Code examples provided"
+          ]
+        }
+      },
+      {
+        "id": 20,
+        "title": "Create Landing Page Route Structure with React 19 Patterns",
+        "description": "Extract current home page to /landing route with proper React 19 Suspense boundaries, error boundaries, and Next.js 15 app router structure. Implement progressive loading with nested Suspense as per Context7 React documentation.",
+        "status": "pending",
+        "priority": "critical",
+        "dependencies": [
+          19
+        ],
+        "phase": "5",
+        "week": "5",
+        "subtasks": [
+          201,
+          202,
+          203,
+          204
+        ],
+        "files": [
+          "src/app/landing/page.tsx",
+          "src/app/landing/layout.tsx",
+          "src/app/landing/loading.tsx",
+          "src/app/landing/error.tsx",
+          "src/app/page.tsx",
+          "src/app/landing/landing.css"
+        ],
+        "commands": [
+          "mkdir -p src/app/landing",
+          "mv src/app/page.tsx src/app/landing/page.tsx",
+          "mv src/app/landing.css src/app/landing/",
+          "npm run type-check",
+          "npm run lint"
+        ],
+        "implementation": {
+          "layout.tsx": "'use client';\n\nimport { Suspense } from 'react';\nimport { ErrorBoundary } from 'react-error-boundary';\n\n// React 19 pattern: Nested error boundary with custom error handling\nexport default function LandingLayout({\n  children,\n}: {\n  children: React.ReactNode;\n}) {\n  return (\n    <ErrorBoundary\n      fallback={<LandingErrorFallback />}\n      onError={(error, errorInfo) => {\n        // Log to error tracking service\n        console.error('Landing page error:', error, errorInfo);\n      }}\n    >\n      {/* No navbar or footer for landing page */}\n      <main className=\"min-h-screen\">\n        {children}\n      </main>\n    </ErrorBoundary>\n  );\n}\n\nfunction LandingErrorFallback() {\n  return (\n    <div className=\"flex min-h-screen items-center justify-center\">\n      <div className=\"text-center\">\n        <h1 className=\"text-2xl font-bold\">Something went wrong</h1>\n        <p className=\"mt-2 text-muted-foreground\">\n          Please refresh the page or try again later.\n        </p>\n      </div>\n    </div>\n  );\n}",
+          "loading.tsx": "'use client';\n\n// React 19 pattern: Loading skeleton for Suspense fallback\nexport default function LandingLoading() {\n  return (\n    <div className=\"min-h-screen bg-background\">\n      {/* Hero skeleton */}\n      <div className=\"relative h-screen\">\n        <div className=\"absolute inset-0 bg-gradient-to-b from-background/50 to-background animate-pulse\" />\n        <div className=\"relative z-10 flex h-full items-center justify-center\">\n          <div className=\"space-y-4 text-center\">\n            <div className=\"h-16 w-96 bg-muted rounded-lg animate-pulse\" />\n            <div className=\"h-6 w-64 bg-muted rounded-lg animate-pulse mx-auto\" />\n            <div className=\"flex gap-4 justify-center mt-8\">\n              <div className=\"h-12 w-32 bg-muted rounded-lg animate-pulse\" />\n              <div className=\"h-12 w-32 bg-muted rounded-lg animate-pulse\" />\n            </div>\n          </div>\n        </div>\n      </div>\n      \n      {/* Feature sections skeleton */}\n      <div className=\"container mx-auto py-16\">\n        <div className=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8\">\n          {[1, 2, 3].map((i) => (\n            <div key={i} className=\"h-64 bg-muted rounded-lg animate-pulse\" />\n          ))}\n        </div>\n      </div>\n    </div>\n  );\n}",
+          "error.tsx": "'use client';\n\nimport { useEffect } from 'react';\nimport { Button } from '@/components/ui/button';\n\n// React 19 pattern: Error boundary with recovery\nexport default function LandingError({\n  error,\n  reset,\n}: {\n  error: Error & { digest?: string };\n  reset: () => void;\n}) {\n  useEffect(() => {\n    // Log error to error reporting service\n    console.error('Landing page error:', error);\n  }, [error]);\n\n  return (\n    <div className=\"flex min-h-screen items-center justify-center\">\n      <div className=\"text-center space-y-4\">\n        <h2 className=\"text-2xl font-bold\">Oops! Something went wrong</h2>\n        <p className=\"text-muted-foreground max-w-md\">\n          We encountered an error while loading the page. This could be temporary.\n        </p>\n        <div className=\"flex gap-4 justify-center\">\n          <Button onClick={reset}>Try Again</Button>\n          <Button variant=\"outline\" onClick={() => window.location.href = '/'}>\n            Go Home\n          </Button>\n        </div>\n        {process.env.NODE_ENV === 'development' && (\n          <details className=\"mt-4 text-left max-w-2xl mx-auto\">\n            <summary className=\"cursor-pointer text-sm\">Error details</summary>\n            <pre className=\"mt-2 text-xs bg-muted p-4 rounded overflow-auto\">\n              {error.stack}\n            </pre>\n          </details>\n        )}\n      </div>\n    </div>\n  );\n}",
+          "new-home-page.tsx": "'use client';\n\nimport { useEffect } from 'react';\nimport { useRouter } from 'next/navigation';\nimport { useAuth } from '@/contexts/auth-context';\n\n// New home page with smart routing\nexport default function HomePage() {\n  const router = useRouter();\n  const { user, loading } = useAuth();\n\n  useEffect(() => {\n    if (!loading) {\n      if (user) {\n        // Authenticated users go to dashboard\n        router.replace('/dashboard');\n      } else {\n        // Unauthenticated users go to landing\n        router.replace('/landing');\n      }\n    }\n  }, [user, loading, router]);\n\n  // Show nothing while redirecting\n  return null;\n}"
+        },
+        "validation": {
+          "commands": [
+            "test -f src/app/landing/page.tsx",
+            "test -f src/app/landing/layout.tsx",
+            "test -f src/app/landing/loading.tsx",
+            "test -f src/app/landing/error.tsx",
+            "npm run type-check",
+            "npm test -- landing"
+          ],
+          "expectedOutput": "All landing page files created, TypeScript passes, tests pass"
+        },
+        "acceptance": {
+          "criteria": [
+            "Landing page accessible at /landing route",
+            "Original home page moved successfully",
+            "Loading boundary shows skeleton UI",
+            "Error boundary catches and displays errors gracefully",
+            "New home page redirects based on auth status",
+            "CSS properly scoped to landing route",
+            "No TypeScript errors",
+            "React 19 Suspense patterns implemented",
+            "Follows Next.js 15 app router conventions"
+          ]
+        }
+      },
+      {
+        "id": 201,
+        "title": "Implement Nested Suspense Boundaries",
+        "description": "Add React 19 nested Suspense boundaries for progressive content loading in landing page sections",
+        "status": "pending",
+        "priority": "high",
+        "dependencies": [
+          20
+        ],
+        "parentId": 20,
+        "phase": "5",
+        "week": "5",
+        "implementation": {
+          "progressive-loading.tsx": "import { Suspense } from 'react';\n\n// React 19 pattern from Context7: Nested Suspense for progressive loading\nexport function LandingPageContent() {\n  return (\n    <>\n      {/* Hero loads immediately */}\n      <HeroSection />\n      \n      {/* Features load progressively */}\n      <Suspense fallback={<FeaturesSkeleton />}>\n        <FeaturesSection />\n        \n        {/* Innovation section loads last */}\n        <Suspense fallback={<InnovationSkeleton />}>\n          <InnovationSection />\n        </Suspense>\n      </Suspense>\n    </>\n  );\n}"
+        }
+      },
+      {
+        "id": 202,
+        "title": "Add Performance Monitoring",
+        "description": "Implement Web Vitals tracking and performance monitoring for landing page",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [
+          20
+        ],
+        "parentId": 20,
+        "phase": "5",
+        "week": "5",
+        "implementation": {
+          "performance.ts": "import { onCLS, onFCP, onLCP, onTTFB, onINP } from 'web-vitals';\n\nexport function reportWebVitals() {\n  onCLS(console.log);\n  onFCP(console.log);\n  onLCP(console.log);\n  onTTFB(console.log);\n  onINP(console.log);\n}"
+        }
+      },
+      {
+        "id": 203,
+        "title": "Setup Client-Side Analytics",
+        "description": "Configure analytics for landing page sections and user interactions",
+        "status": "pending",
+        "priority": "low",
+        "dependencies": [
+          20
+        ],
+        "parentId": 20,
+        "phase": "5",
+        "week": "5"
+      },
+      {
+        "id": 204,
+        "title": "Optimize Bundle Size",
+        "description": "Implement code splitting for Framer Motion and heavy dependencies",
+        "status": "pending",
+        "priority": "high",
+        "dependencies": [
+          20
+        ],
+        "parentId": 20,
+        "phase": "5",
+        "week": "5"
+      },
+      {
+        "id": 21,
+        "title": "Update Authentication Flow for Static Export",
+        "description": "Configure client-side auth for landing page access in Next.js 15 static export. Since middleware runs at build time for static exports, implement client-side auth checks.",
+        "status": "pending",
+        "priority": "critical",
+        "dependencies": [
+          20
+        ],
+        "phase": "5",
+        "week": "5",
+        "files": [
+          "src/components/auth-guard.tsx",
+          "src/components/layout-wrapper.tsx",
+          "src/lib/auth-session.ts",
+          "src/lib/auth-constants.ts"
+        ],
+        "implementation": {
+          "auth-constants.ts": "// Centralized auth configuration for static export\nexport const PUBLIC_PATHS = [\n  '/',\n  '/landing',\n  '/login',\n  '/auth/callback',\n  '/auth/error',\n] as const;\n\nexport const STANDALONE_ROUTES = [\n  '/landing',\n  '/login',\n  '/knowledge/docs',\n] as const;\n\nexport const AUTH_REDIRECT_PATHS = {\n  afterLogin: '/dashboard',\n  afterLogout: '/landing',\n  unauthorized: '/login',\n} as const;",
+          "updated-auth-guard.tsx": "'use client';\n\nimport { useEffect, useState } from 'react';\nimport { usePathname, useRouter } from 'next/navigation';\nimport { useAuth } from '@/contexts/auth-context';\nimport { PUBLIC_PATHS } from '@/lib/auth-constants';\n\nexport function AuthGuard({ children }: { children: React.ReactNode }) {\n  const pathname = usePathname();\n  const router = useRouter();\n  const { user, loading } = useAuth();\n  const [isAuthorized, setIsAuthorized] = useState(false);\n\n  useEffect(() => {\n    // Check if current path is public\n    const isPublicPath = PUBLIC_PATHS.some(path => \n      pathname === path || pathname.startsWith(`${path}/`)\n    );\n\n    if (isPublicPath) {\n      setIsAuthorized(true);\n      return;\n    }\n\n    // For protected routes, check auth\n    if (!loading) {\n      if (!user) {\n        router.replace('/login');\n      } else {\n        setIsAuthorized(true);\n      }\n    }\n  }, [pathname, user, loading, router]);\n\n  // Show nothing while checking auth for protected routes\n  if (!isAuthorized && !loading) {\n    return null;\n  }\n\n  return <>{children}</>;\n}",
+          "updated-layout-wrapper.tsx": "'use client';\n\nimport { usePathname } from 'next/navigation';\nimport { NavBar } from '@/components/navbar';\nimport { STANDALONE_ROUTES } from '@/lib/auth-constants';\n\nexport function LayoutWrapper({ children }: { children: React.ReactNode }) {\n  const pathname = usePathname();\n  \n  // Check if current route should show navbar/footer\n  const isStandalonePage = STANDALONE_ROUTES.some(route => \n    pathname === route || pathname.startsWith(`${route}/`)\n  );\n\n  if (isStandalonePage) {\n    return <>{children}</>;\n  }\n\n  return (\n    <>\n      <NavBar />\n      <main className=\"min-h-screen\">{children}</main>\n      {/* Footer removed as per requirements */}\n    </>\n  );\n}"
+        },
+        "validation": {
+          "commands": [
+            "grep -r 'PUBLIC_PATHS.*landing' src/",
+            "grep -r 'STANDALONE_ROUTES.*landing' src/",
+            "npm run type-check",
+            "npm test -- auth"
+          ],
+          "expectedOutput": "Landing route added to public paths, auth flow updated"
+        },
+        "acceptance": {
+          "criteria": [
+            "/landing added to PUBLIC_PATHS",
+            "STANDALONE_ROUTES includes /landing",
+            "Landing page accessible without authentication",
+            "Auth redirects work correctly",
+            "No layout/footer shown on landing page",
+            "Client-side auth checks implemented",
+            "Works with Next.js static export",
+            "TypeScript types satisfied"
+          ]
+        }
+      },
+      {
+        "id": 22,
+        "title": "Create Comprehensive Type Definitions for Landing Page",
+        "description": "Add TypeScript types for all landing page components, animations, and navigation following React 19 patterns",
+        "status": "pending",
+        "priority": "high",
+        "dependencies": [
+          20
+        ],
+        "phase": "5",
+        "week": "5",
+        "files": [
+          "src/types/landing.ts",
+          "src/types/index.ts"
+        ],
+        "implementation": {
+          "landing.ts": "import { ComponentPropsWithoutRef, ReactNode } from 'react';\nimport { MotionProps } from 'framer-motion';\n\n// Landing page component props\nexport interface LandingPageProps {\n  initialSection?: string;\n  onSectionChange?: (section: string) => void;\n}\n\n// Section navigation types\nexport interface SectionNavigation {\n  id: string;\n  label: string;\n  href: string;\n  icon?: ReactNode;\n  description?: string;\n}\n\n// Animation configuration\nexport interface AnimationConfig {\n  duration?: number;\n  delay?: number;\n  easing?: string | number[];\n  repeat?: number;\n  repeatType?: 'loop' | 'reverse' | 'mirror';\n}\n\n// Feature card types\nexport interface FeatureCard {\n  id: string;\n  title: string;\n  description: string;\n  icon: ReactNode;\n  href?: string;\n  gradient?: string;\n  delay?: number;\n}\n\n// Glass morphism component props\nexport interface GlassCardProps extends ComponentPropsWithoutRef<'div'> {\n  blur?: 'sm' | 'md' | 'lg' | 'xl';\n  opacity?: number;\n  gradient?: boolean;\n  hoverEffect?: boolean;\n}\n\n// Glow button props\nexport interface GlowButtonProps extends ComponentPropsWithoutRef<'button'> {\n  glowColor?: string;\n  glowSize?: 'sm' | 'md' | 'lg';\n  variant?: 'primary' | 'secondary' | 'ghost';\n}\n\n// Section props with animation\nexport interface AnimatedSectionProps extends MotionProps {\n  children: ReactNode;\n  className?: string;\n  id?: string;\n  threshold?: number;\n  animationConfig?: AnimationConfig;\n}\n\n// Scroll progress types\nexport interface ScrollProgress {\n  scrollY: number;\n  scrollYProgress: number;\n  velocity: number;\n}\n\n// Performance metrics\nexport interface PerformanceMetrics {\n  fcp?: number;\n  lcp?: number;\n  ttfb?: number;\n  cls?: number;\n  inp?: number;\n}\n\n// SEO metadata\nexport interface LandingMetadata {\n  title: string;\n  description: string;\n  keywords: string[];\n  ogImage?: string;\n  jsonLd?: Record<string, any>;\n}"
+        },
+        "validation": {
+          "commands": [
+            "npm run type-check",
+            "grep -r 'LandingPageProps\\|FeatureCard' src/app/landing/",
+            "grep -r 'import.*types/landing' src/"
+          ],
+          "expectedOutput": "Types defined and used in landing components"
+        },
+        "acceptance": {
+          "criteria": [
+            "LandingPageProps interface defined",
+            "SectionNavigation types created",
+            "AnimationConfig types added",
+            "FeatureCard types implemented",
+            "GlassCard/GlowButton props typed",
+            "All landing components fully typed",
+            "No any types used",
+            "Export types properly indexed"
+          ]
+        }
+      },
+      {
+        "id": 23,
+        "title": "Create Landing-Specific Header Component",
+        "description": "Build minimal header with login button and theme selector for landing page only, using shadcn/ui components",
+        "status": "pending",
+        "priority": "high",
+        "dependencies": [
+          21,
+          22
+        ],
+        "phase": "5",
+        "week": "5",
+        "files": [
+          "src/components/landing/header.tsx",
+          "src/components/landing/header.test.tsx"
+        ],
+        "implementation": {
+          "header.tsx": "'use client';\n\nimport { Button } from '@/components/ui/button';\nimport { ThemeSelector } from '@/components/theme-selector';\nimport { useRouter } from 'next/navigation';\nimport { cn } from '@/lib/utils';\nimport { useEffect, useState } from 'react';\n\nexport function LandingHeader() {\n  const router = useRouter();\n  const [isScrolled, setIsScrolled] = useState(false);\n\n  useEffect(() => {\n    const handleScroll = () => {\n      setIsScrolled(window.scrollY > 10);\n    };\n\n    window.addEventListener('scroll', handleScroll);\n    return () => window.removeEventListener('scroll', handleScroll);\n  }, []);\n\n  return (\n    <header\n      className={cn(\n        'fixed top-0 z-50 w-full transition-all duration-300',\n        isScrolled\n          ? 'bg-background/80 backdrop-blur-md border-b'\n          : 'bg-transparent'\n      )}\n    >\n      <div className=\"container mx-auto px-4\">\n        <div className=\"flex h-16 items-center justify-between\">\n          {/* Logo/Brand */}\n          <div className=\"flex items-center space-x-2\">\n            <span className=\"text-xl font-bold\">WCINYP</span>\n          </div>\n\n          {/* Actions */}\n          <div className=\"flex items-center space-x-4\">\n            <ThemeSelector />\n            <Button\n              onClick={() => router.push('/login')}\n              variant={isScrolled ? 'default' : 'outline'}\n              className={cn(\n                'transition-colors',\n                !isScrolled && 'border-white/20 text-white hover:bg-white/10'\n              )}\n            >\n              Sign In\n            </Button>\n          </div>\n        </div>\n      </div>\n    </header>\n  );\n}",
+          "header.test.tsx": "import { render, screen, fireEvent } from '@testing-library/react';\nimport { LandingHeader } from './header';\nimport { useRouter } from 'next/navigation';\n\njest.mock('next/navigation', () => ({\n  useRouter: jest.fn(),\n}));\n\ndescribe('LandingHeader', () => {\n  const mockPush = jest.fn();\n\n  beforeEach(() => {\n    (useRouter as jest.Mock).mockReturnValue({\n      push: mockPush,\n    });\n  });\n\n  it('renders header with login button and theme selector', () => {\n    render(<LandingHeader />);\n    \n    expect(screen.getByText('WCINYP')).toBeInTheDocument();\n    expect(screen.getByText('Sign In')).toBeInTheDocument();\n    expect(screen.getByRole('button', { name: /theme/i })).toBeInTheDocument();\n  });\n\n  it('navigates to login when sign in clicked', () => {\n    render(<LandingHeader />);\n    \n    fireEvent.click(screen.getByText('Sign In'));\n    expect(mockPush).toHaveBeenCalledWith('/login');\n  });\n\n  it('changes style when scrolled', () => {\n    render(<LandingHeader />);\n    const header = screen.getByRole('banner');\n    \n    expect(header).toHaveClass('bg-transparent');\n    \n    // Simulate scroll\n    fireEvent.scroll(window, { target: { scrollY: 100 } });\n    \n    expect(header).toHaveClass('bg-background/80');\n  });\n});"
+        },
+        "validation": {
+          "commands": [
+            "npm test -- landing/header",
+            "npm run type-check",
+            "grep -r 'LandingHeader' src/app/landing/"
+          ],
+          "expectedOutput": "Header tests pass, used in landing page"
+        },
+        "acceptance": {
+          "criteria": [
+            "Header shows only on landing page",
+            "Login button navigates to /login",
+            "Theme selector functional",
+            "Responsive design working",
+            "Accessibility compliant (ARIA labels)",
+            "Scroll effect implemented",
+            "Tests passing",
+            "TypeScript satisfied"
+          ]
+        }
+      },
+      {
+        "id": 24,
+        "title": "Extract and Organize Landing Components",
+        "description": "Move all landing-specific components to dedicated folder, isolate custom UI components using React 19 patterns",
+        "status": "pending",
+        "priority": "high",
+        "dependencies": [
+          23
+        ],
+        "phase": "6",
+        "week": "6",
+        "subtasks": [
+          241,
+          242,
+          243
+        ],
+        "files": [
+          "src/components/landing/hero-section.tsx",
+          "src/components/landing/feature-section.tsx",
+          "src/components/landing/innovation-section.tsx",
+          "src/components/ui/glass-card.tsx",
+          "src/components/ui/glow-button.tsx"
+        ],
+        "implementation": {
+          "glass-card.tsx": "'use client';\n\nimport { forwardRef } from 'react';\nimport { cn } from '@/lib/utils';\nimport { GlassCardProps } from '@/types/landing';\n\n// Glass morphism card component\nexport const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>((\n  { \n    className, \n    blur = 'md', \n    opacity = 0.1, \n    gradient = false,\n    hoverEffect = true,\n    children, \n    ...props \n  }, \n  ref\n) => {\n  const blurClasses = {\n    sm: 'backdrop-blur-sm',\n    md: 'backdrop-blur-md',\n    lg: 'backdrop-blur-lg',\n    xl: 'backdrop-blur-xl',\n  };\n\n  return (\n    <div\n      ref={ref}\n      className={cn(\n        'relative overflow-hidden rounded-lg border',\n        blurClasses[blur],\n        hoverEffect && 'transition-all duration-300 hover:scale-[1.02]',\n        className\n      )}\n      style={{\n        backgroundColor: `rgba(255, 255, 255, ${opacity})`,\n        borderColor: `rgba(255, 255, 255, ${opacity * 2})`,\n      }}\n      {...props}\n    >\n      {gradient && (\n        <div className=\"absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none\" />\n      )}\n      {children}\n    </div>\n  );\n});\n\nGlassCard.displayName = 'GlassCard';",
+          "glow-button.tsx": "'use client';\n\nimport { forwardRef } from 'react';\nimport { cn } from '@/lib/utils';\nimport { GlowButtonProps } from '@/types/landing';\nimport { Button } from '@/components/ui/button';\n\n// Glow effect button component\nexport const GlowButton = forwardRef<HTMLButtonElement, GlowButtonProps>((\n  { \n    className,\n    glowColor = 'primary',\n    glowSize = 'md',\n    variant = 'primary',\n    children,\n    ...props \n  }, \n  ref\n) => {\n  const glowSizes = {\n    sm: 'hover:shadow-[0_0_20px_rgba(var(--glow-color),0.5)]',\n    md: 'hover:shadow-[0_0_30px_rgba(var(--glow-color),0.6)]',\n    lg: 'hover:shadow-[0_0_40px_rgba(var(--glow-color),0.7)]',\n  };\n\n  const glowColors = {\n    primary: '59, 130, 246', // blue\n    secondary: '168, 85, 247', // purple\n    success: '34, 197, 94', // green\n    danger: '239, 68, 68', // red\n  };\n\n  return (\n    <Button\n      ref={ref}\n      variant={variant === 'primary' ? 'default' : variant as any}\n      className={cn(\n        'relative transition-all duration-300',\n        glowSizes[glowSize],\n        className\n      )}\n      style={{\n        '--glow-color': glowColors[glowColor] || glowColors.primary,\n      } as React.CSSProperties}\n      {...props}\n    >\n      {children}\n    </Button>\n  );\n});\n\nGlowButton.displayName = 'GlowButton';"
+        },
+        "validation": {
+          "commands": [
+            "ls -la src/components/landing/",
+            "grep -r 'GlassCard\\|GlowButton' src/app/landing/",
+            "npm run type-check"
+          ],
+          "expectedOutput": "All components extracted and properly imported"
+        },
+        "acceptance": {
+          "criteria": [
+            "All sections extracted as components",
+            "GlassCard/GlowButton properly isolated",
+            "Props interfaces defined",
+            "No circular dependencies",
+            "Components reusable",
+            "React 19 forwardRef pattern used",
+            "Proper display names set",
+            "TypeScript fully satisfied"
+          ]
+        }
+      },
+      {
+        "id": 241,
+        "title": "Extract Hero Section with Animations",
+        "description": "Create hero section component with Framer Motion animations",
+        "status": "pending",
+        "priority": "high",
+        "dependencies": [
+          24
+        ],
+        "parentId": 24,
+        "phase": "6",
+        "week": "6"
+      },
+      {
+        "id": 242,
+        "title": "Extract Feature Cards Section",
+        "description": "Create reusable feature cards with glass morphism effect",
+        "status": "pending",
+        "priority": "high",
+        "dependencies": [
+          24
+        ],
+        "parentId": 24,
+        "phase": "6",
+        "week": "6"
+      },
+      {
+        "id": 243,
+        "title": "Extract Innovation Section",
+        "description": "Create innovation section with 3D brain visualization placeholder",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [
+          24
+        ],
+        "parentId": 24,
+        "phase": "6",
+        "week": "6"
+      },
+      {
+        "id": 25,
+        "title": "Implement Accessibility Improvements with WCAG 2.1 AA Compliance",
+        "description": "Fix critical accessibility issues including low contrast (0.06 opacity), missing ARIA labels, keyboard navigation, and implement animation controls per React 19 accessibility patterns",
+        "status": "pending",
+        "priority": "critical",
+        "dependencies": [
+          24
+        ],
+        "phase": "6",
+        "week": "6",
+        "files": [
+          "src/app/landing/page.tsx",
+          "src/components/landing/",
+          "src/hooks/useReducedMotion.ts",
+          "src/hooks/useAnimationControls.ts",
+          "src/components/landing/skip-links.tsx"
+        ],
+        "implementation": {
+          "useReducedMotion.ts": "import { useEffect, useState } from 'react';\n\n// React 19 pattern: Respect user's motion preferences\nexport function useReducedMotion() {\n  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);\n\n  useEffect(() => {\n    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');\n    \n    setPrefersReducedMotion(mediaQuery.matches);\n\n    const handleChange = (event: MediaQueryListEvent) => {\n      setPrefersReducedMotion(event.matches);\n    };\n\n    mediaQuery.addEventListener('change', handleChange);\n    return () => mediaQuery.removeEventListener('change', handleChange);\n  }, []);\n\n  return prefersReducedMotion;\n}",
+          "useAnimationControls.ts": "import { useState, useCallback } from 'react';\nimport { useReducedMotion } from './useReducedMotion';\n\nexport function useAnimationControls() {\n  const prefersReducedMotion = useReducedMotion();\n  const [animationsPaused, setAnimationsPaused] = useState(false);\n\n  const toggleAnimations = useCallback(() => {\n    setAnimationsPaused(prev => !prev);\n  }, []);\n\n  const shouldAnimate = !prefersReducedMotion && !animationsPaused;\n\n  return {\n    shouldAnimate,\n    animationsPaused,\n    toggleAnimations,\n    prefersReducedMotion,\n  };\n}",
+          "skip-links.tsx": "'use client';\n\n// WCAG 2.1 compliant skip links\nexport function SkipLinks() {\n  return (\n    <div className=\"sr-only focus-within:not-sr-only\">\n      <div className=\"absolute top-4 left-4 z-[100]\">\n        <a\n          href=\"#main-content\"\n          className=\"bg-background text-foreground px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary\"\n        >\n          Skip to main content\n        </a>\n        <a\n          href=\"#features\"\n          className=\"ml-2 bg-background text-foreground px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary\"\n        >\n          Skip to features\n        </a>\n      </div>\n    </div>\n  );\n}",
+          "accessibility-fixes.css": "/* Fix low contrast issues */\n.glass-card {\n  /* Increase opacity from 0.06 to meet WCAG AA */\n  background-color: rgba(255, 255, 255, 0.15);\n  border-color: rgba(255, 255, 255, 0.3);\n}\n\n/* Focus indicators */\n*:focus-visible {\n  outline: 2px solid rgb(var(--primary));\n  outline-offset: 2px;\n}\n\n/* Animation pause button */\n.animation-control {\n  position: fixed;\n  bottom: 20px;\n  right: 20px;\n  z-index: 50;\n}\n\n/* High contrast mode support */\n@media (prefers-contrast: high) {\n  .glass-card {\n    background-color: rgba(255, 255, 255, 0.9);\n    border-width: 2px;\n  }\n}"
+        },
+        "validation": {
+          "commands": [
+            "npx axe-playwright src/app/landing/page.tsx",
+            "grep -r 'aria-label\\|aria-describedby' src/components/landing/",
+            "npm test -- accessibility"
+          ],
+          "expectedOutput": "Zero accessibility violations, all interactive elements labeled"
+        },
+        "acceptance": {
+          "criteria": [
+            "Contrast ratio >= 4.5:1 for all text (WCAG AA)",
+            "Skip navigation links added and functional",
+            "Animation pause controls implemented",
+            "All interactive elements have ARIA labels",
+            "Keyboard navigation fully functional",
+            "Focus indicators visible and clear",
+            "Reduced motion preference respected",
+            "Screen reader announcements for section changes",
+            "No accessibility violations in automated tests"
+          ]
+        }
+      },
+      {
+        "id": 26,
+        "title": "Optimize Landing Page Performance with React 19 Patterns",
+        "description": "Implement lazy loading with React.lazy, code splitting for Framer Motion, add Suspense boundaries, and optimize for Core Web Vitals using React 19 performance patterns",
+        "status": "pending",
+        "priority": "high",
+        "dependencies": [
+          25
+        ],
+        "phase": "6",
+        "week": "6",
+        "files": [
+          "src/app/landing/page.tsx",
+          "src/components/landing/lazy-imports.ts",
+          "src/lib/performance-monitor.ts",
+          "next.config.mjs"
+        ],
+        "commands": [
+          "npm install --save-dev @next/bundle-analyzer",
+          "npm install web-vitals"
+        ],
+        "implementation": {
+          "lazy-imports.ts": "import { lazy } from 'react';\n\n// React 19 pattern: Lazy load heavy components\nexport const HeroSection = lazy(() => \n  import('./hero-section').then(mod => ({ default: mod.HeroSection }))\n);\n\nexport const FeatureSection = lazy(() =>\n  import('./feature-section').then(mod => ({ default: mod.FeatureSection }))\n);\n\nexport const InnovationSection = lazy(() =>\n  import('./innovation-section').then(mod => ({ default: mod.InnovationSection }))\n);\n\n// Lazy load Framer Motion\nexport const motion = lazy(() => \n  import('framer-motion').then(mod => ({ default: mod.motion }))\n);",
+          "optimized-page.tsx": "'use client';\n\nimport { Suspense, useDeferredValue, startTransition } from 'react';\nimport { HeroSection, FeatureSection, InnovationSection } from './lazy-imports';\nimport { LandingHeader } from '@/components/landing/header';\nimport { useAnimationControls } from '@/hooks/useAnimationControls';\n\n// React 19 pattern: Progressive loading with nested Suspense\nexport default function LandingPage() {\n  const { shouldAnimate } = useAnimationControls();\n  \n  return (\n    <>\n      <LandingHeader />\n      \n      {/* Hero loads immediately */}\n      <Suspense fallback={<HeroSkeleton />}>\n        <HeroSection animate={shouldAnimate} />\n      </Suspense>\n      \n      {/* Features load progressively */}\n      <Suspense fallback={<FeaturesSkeleton />}>\n        <FeatureSection animate={shouldAnimate} />\n        \n        {/* Innovation section loads last */}\n        <Suspense fallback={<InnovationSkeleton />}>\n          <InnovationSection animate={shouldAnimate} />\n        </Suspense>\n      </Suspense>\n    </>\n  );\n}",
+          "performance-monitor.ts": "import { onCLS, onFCP, onLCP, onTTFB, onINP, Metric } from 'web-vitals';\n\n// Performance budgets\nconst PERFORMANCE_BUDGETS = {\n  FCP: 1800, // First Contentful Paint\n  LCP: 2500, // Largest Contentful Paint\n  CLS: 0.1,  // Cumulative Layout Shift\n  INP: 200,  // Interaction to Next Paint\n  TTFB: 800, // Time to First Byte\n};\n\nfunction sendToAnalytics(metric: Metric) {\n  const { name, value, id } = metric;\n  \n  // Check against budget\n  const budget = PERFORMANCE_BUDGETS[name as keyof typeof PERFORMANCE_BUDGETS];\n  const isWithinBudget = value <= budget;\n  \n  console.log(`${name}: ${value}ms (Budget: ${budget}ms) - ${isWithinBudget ? '✅' : '❌'}`);\n  \n  // Send to analytics service\n  if (typeof window !== 'undefined' && window.gtag) {\n    window.gtag('event', name, {\n      value: Math.round(name === 'CLS' ? value * 1000 : value),\n      metric_id: id,\n      metric_value: value,\n      metric_delta: metric.delta,\n    });\n  }\n}\n\nexport function reportWebVitals() {\n  onFCP(sendToAnalytics);\n  onLCP(sendToAnalytics);\n  onCLS(sendToAnalytics);\n  onTTFB(sendToAnalytics);\n  onINP(sendToAnalytics);\n}"
+        },
+        "validation": {
+          "commands": [
+            "npm run build",
+            "npm run analyze",
+            "npx lighthouse http://localhost:3000/landing --output=json --output-path=./lighthouse-report.json",
+            "node -e \"const report = require('./lighthouse-report.json'); console.log('Performance:', report.categories.performance.score * 100)\""
+          ],
+          "expectedOutput": "Bundle size < 200KB, Lighthouse performance > 90"
+        },
+        "acceptance": {
+          "criteria": [
+            "Framer Motion lazy loaded",
+            "Suspense boundaries implemented",
+            "Mobile animations throttled",
+            "Bundle size < 200KB for landing page",
+            "LCP < 2.5s on 3G network",
+            "CLS < 0.1",
+            "FCP < 1.8s",
+            "All Core Web Vitals in green",
+            "Progressive enhancement working"
+          ]
+        }
+      },
+      {
+        "id": 27,
+        "title": "Add SEO and Metadata with Next.js 15 Metadata API",
+        "description": "Implement comprehensive SEO using Next.js 15 metadata API, add structured data, Open Graph tags, and sitemap generation",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [
+          26
+        ],
+        "phase": "6",
+        "week": "6",
+        "files": [
+          "src/app/landing/metadata.ts",
+          "src/lib/landing/seo.ts",
+          "public/sitemap.xml",
+          "public/robots.txt",
+          "src/app/landing/opengraph-image.tsx"
+        ],
+        "implementation": {
+          "metadata.ts": "import type { Metadata } from 'next';\n\n// Next.js 15 metadata API\nexport const landingMetadata: Metadata = {\n  title: 'WCINYP - Weill Cornell Imaging at NewYork-Presbyterian',\n  description: 'Advanced radiology administration platform providing document management, provider directory, and innovative healthcare solutions.',\n  keywords: ['radiology', 'healthcare', 'medical imaging', 'administration', 'WCINYP'],\n  authors: [{ name: 'WCINYP Team' }],\n  creator: 'WCINYP',\n  publisher: 'Weill Cornell Medicine',\n  \n  // Open Graph\n  openGraph: {\n    type: 'website',\n    locale: 'en_US',\n    url: 'https://wcinyp.com/landing',\n    siteName: 'WCINYP',\n    title: 'WCINYP - Advanced Radiology Administration',\n    description: 'Streamline your radiology workflow with our comprehensive administration platform.',\n    images: [\n      {\n        url: '/og-image.png',\n        width: 1200,\n        height: 630,\n        alt: 'WCINYP Platform',\n      },\n    ],\n  },\n  \n  // Twitter\n  twitter: {\n    card: 'summary_large_image',\n    title: 'WCINYP - Radiology Administration Platform',\n    description: 'Advanced healthcare solutions for radiology departments',\n    images: ['/twitter-image.png'],\n  },\n  \n  // Verification\n  verification: {\n    google: 'google-site-verification-code',\n  },\n  \n  // Canonical\n  alternates: {\n    canonical: 'https://wcinyp.com/landing',\n  },\n  \n  // Robots\n  robots: {\n    index: true,\n    follow: true,\n    googleBot: {\n      index: true,\n      follow: true,\n      'max-video-preview': -1,\n      'max-image-preview': 'large',\n      'max-snippet': -1,\n    },\n  },\n};",
+          "seo.ts": "// JSON-LD structured data generator\nexport function generateLandingJsonLd() {\n  return {\n    '@context': 'https://schema.org',\n    '@type': 'MedicalOrganization',\n    name: 'WCINYP',\n    description: 'Weill Cornell Imaging at NewYork-Presbyterian',\n    url: 'https://wcinyp.com',\n    logo: 'https://wcinyp.com/logo.png',\n    sameAs: [\n      'https://weillcornell.org',\n      'https://nyp.org',\n    ],\n    address: {\n      '@type': 'PostalAddress',\n      streetAddress: '525 East 68th Street',\n      addressLocality: 'New York',\n      addressRegion: 'NY',\n      postalCode: '10065',\n      addressCountry: 'US',\n    },\n    medicalSpecialty: [\n      'Radiology',\n      'Medical Imaging',\n      'Diagnostic Imaging',\n    ],\n    hasOfferCatalog: {\n      '@type': 'OfferCatalog',\n      name: 'Radiology Services',\n      itemListElement: [\n        {\n          '@type': 'Offer',\n          itemOffered: {\n            '@type': 'MedicalProcedure',\n            name: 'MRI Scanning',\n            description: 'Advanced MRI imaging services',\n          },\n        },\n        {\n          '@type': 'Offer',\n          itemOffered: {\n            '@type': 'MedicalProcedure',\n            name: 'CT Scanning',\n            description: 'High-resolution CT imaging',\n          },\n        },\n      ],\n    },\n  };\n}",
+          "opengraph-image.tsx": "// Next.js 15 dynamic OG image generation\nimport { ImageResponse } from 'next/og';\n\nexport const runtime = 'edge';\n\nexport const alt = 'WCINYP - Advanced Radiology Administration Platform';\nexport const size = {\n  width: 1200,\n  height: 630,\n};\n\nexport default async function Image() {\n  return new ImageResponse(\n    (\n      <div\n        style={{\n          fontSize: 128,\n          background: 'linear-gradient(to bottom right, #1e40af, #3b82f6)',\n          width: '100%',\n          height: '100%',\n          display: 'flex',\n          flexDirection: 'column',\n          alignItems: 'center',\n          justifyContent: 'center',\n          color: 'white',\n        }}\n      >\n        <div style={{ fontSize: 64, marginBottom: 20 }}>WCINYP</div>\n        <div style={{ fontSize: 32, opacity: 0.8 }}>\n          Advanced Radiology Administration\n        </div>\n      </div>\n    ),\n    {\n      ...size,\n    }\n  );\n}"
+        },
+        "validation": {
+          "commands": [
+            "npm run build",
+            "curl -s http://localhost:3000/landing | grep -E 'og:title|og:description'",
+            "curl -s http://localhost:3000/sitemap.xml | grep landing",
+            "npx schema-dts-validator"
+          ],
+          "expectedOutput": "Metadata present, sitemap includes landing, structured data valid"
+        },
+        "acceptance": {
+          "criteria": [
+            "Dynamic metadata generation working",
+            "Open Graph tags implemented",
+            "Twitter card tags added",
+            "JSON-LD structured data valid",
+            "Sitemap includes /landing",
+            "Canonical URLs set correctly",
+            "Dynamic OG image generation working",
+            "Robots.txt properly configured",
+            "Google site verification added"
+          ]
+        }
+      },
+      {
+        "id": 28,
+        "title": "Remove Footer and Simplify Navigation",
+        "description": "Remove footer component completely from application, convert navbar to direct links only without dropdown menus",
+        "status": "pending",
+        "priority": "high",
+        "dependencies": [
+          23
+        ],
+        "phase": "7",
+        "week": "7",
+        "files": [
+          "src/components/layout-wrapper.tsx",
+          "src/components/navbar.tsx",
+          "src/components/footer.tsx",
+          "src/config/navigation.ts"
+        ],
+        "commands": [
+          "rm src/components/footer.tsx",
+          "grep -r 'Footer\\|footer' src/ | grep -v node_modules"
+        ],
+        "implementation": {
+          "simplified-navbar.tsx": "'use client';\n\nimport Link from 'next/link';\nimport { usePathname } from 'next/navigation';\nimport { cn } from '@/lib/utils';\nimport { ThemeSelector } from '@/components/theme-selector';\nimport { CommandMenu } from '@/components/command-menu';\nimport { Button } from '@/components/ui/button';\nimport { useAuth } from '@/contexts/auth-context';\n\nconst navigation = [\n  { name: 'Dashboard', href: '/dashboard' },\n  { name: 'Documents', href: '/documents' },\n  { name: 'Directory', href: '/directory' },\n  { name: 'Knowledge', href: '/knowledge' },\n];\n\nexport function NavBar() {\n  const pathname = usePathname();\n  const { user, logout } = useAuth();\n\n  return (\n    <header className=\"sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60\">\n      <div className=\"container flex h-14 items-center\">\n        <div className=\"mr-4 flex\">\n          <Link href=\"/\" className=\"mr-6 flex items-center space-x-2\">\n            <span className=\"font-bold\">WCINYP</span>\n          </Link>\n          <nav className=\"flex items-center space-x-6 text-sm font-medium\">\n            {navigation.map((item) => (\n              <Link\n                key={item.href}\n                href={item.href}\n                className={cn(\n                  'transition-colors hover:text-foreground/80',\n                  pathname === item.href\n                    ? 'text-foreground'\n                    : 'text-foreground/60'\n                )}\n              >\n                {item.name}\n              </Link>\n            ))}\n          </nav>\n        </div>\n        <div className=\"flex flex-1 items-center justify-end space-x-2\">\n          <CommandMenu />\n          <ThemeSelector />\n          {user && (\n            <Button variant=\"ghost\" size=\"sm\" onClick={logout}>\n              Sign Out\n            </Button>\n          )}\n        </div>\n      </div>\n    </header>\n  );\n}",
+          "updated-navigation.ts": "// Simplified navigation configuration\nexport const mainNavigation = [\n  {\n    name: 'Dashboard',\n    href: '/dashboard',\n    description: 'Overview and analytics',\n  },\n  {\n    name: 'Documents',\n    href: '/documents',\n    description: 'Document management and forms',\n  },\n  {\n    name: 'Directory',\n    href: '/directory',\n    description: 'Contact and provider directory',\n  },\n  {\n    name: 'Knowledge',\n    href: '/knowledge',\n    description: 'Documentation and resources',\n  },\n] as const;\n\n// Command menu items\nexport const commandMenuItems = [\n  ...mainNavigation,\n  {\n    name: 'Settings',\n    href: '/settings',\n    description: 'Application settings',\n  },\n  {\n    name: 'Admin',\n    href: '/admin',\n    description: 'Administration panel',\n  },\n] as const;"
+        },
+        "validation": {
+          "commands": [
+            "test ! -f src/components/footer.tsx",
+            "grep -r 'AnimatedNavMenu' src/ || echo 'AnimatedNavMenu removed ✅'",
+            "npm run type-check"
+          ],
+          "expectedOutput": "Footer removed, AnimatedNavMenu removed, no type errors"
+        },
+        "acceptance": {
+          "criteria": [
+            "Footer component completely removed",
+            "All footer imports cleaned up",
+            "AnimatedNavMenu removed",
+            "Direct navigation links only",
+            "No dropdown menus",
+            "No placeholder content",
+            "Command menu still functional",
+            "Mobile navigation updated"
+          ]
+        }
+      },
+      {
+        "id": 29,
+        "title": "Update App-Wide Routing and Navigation Flow",
+        "description": "Fix all internal links to use new routing structure, update navigation configuration, ensure coherent user flow throughout application",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [
+          28
+        ],
+        "phase": "7",
+        "week": "7",
+        "files": [
+          "src/config/navigation.ts",
+          "src/components/",
+          "src/app/",
+          "src/lib/navigation-utils.ts"
+        ],
+        "implementation": {
+          "navigation-utils.ts": "// Centralized navigation utilities\nexport const routes = {\n  home: '/',\n  landing: '/landing',\n  login: '/login',\n  dashboard: '/dashboard',\n  documents: '/documents',\n  directory: '/directory',\n  knowledge: '/knowledge',\n  settings: '/settings',\n  admin: '/admin',\n  auth: {\n    callback: '/auth/callback',\n    error: '/auth/error',\n  },\n} as const;\n\nexport function getDefaultRouteForUser(isAuthenticated: boolean): string {\n  return isAuthenticated ? routes.dashboard : routes.landing;\n}\n\nexport function isProtectedRoute(pathname: string): boolean {\n  const publicRoutes = [routes.landing, routes.login, routes.auth.callback];\n  return !publicRoutes.some(route => pathname.startsWith(route));\n}\n\nexport function getRedirectUrl(from: string, isAuthenticated: boolean): string {\n  if (!isAuthenticated && isProtectedRoute(from)) {\n    return `${routes.login}?redirect=${encodeURIComponent(from)}`;\n  }\n  return from;\n}",
+          "update-links-script.js": "const fs = require('fs');\nconst path = require('path');\nconst glob = require('glob');\n\n// Script to update all home links to new routing\nconst files = glob.sync('src/**/*.{ts,tsx}', {\n  ignore: ['**/node_modules/**']\n});\n\nlet updatedCount = 0;\nconst replacements = [\n  // Update home links in navigation\n  { from: 'href=\"/\"', to: 'href=\"/dashboard\"' },\n  { from: \"href='/'>\", to: \"href='/dashboard'>\" },\n  \n  // Update router.push calls\n  { from: \"router.push('/');\", to: \"router.push('/dashboard');\" },\n  { from: 'router.push(\"/\");', to: 'router.push(\"/dashboard\");' },\n  \n  // Update Link components\n  { from: '<Link href=\"/\">', to: '<Link href=\"/dashboard\">' },\n  \n  // Landing CTAs\n  { from: 'Get Started', to: 'Sign In' },\n  { from: 'href=\"#demo\"', to: 'href=\"/login\"' },\n];\n\nfiles.forEach(file => {\n  let content = fs.readFileSync(file, 'utf8');\n  const originalContent = content;\n  \n  replacements.forEach(({ from, to }) => {\n    if (content.includes(from)) {\n      content = content.replace(new RegExp(from, 'g'), to);\n    }\n  });\n  \n  if (content !== originalContent) {\n    fs.writeFileSync(file, content);\n    console.log(`✅ Updated: ${file}`);\n    updatedCount++;\n  }\n});\n\nconsole.log(`\\n🎉 Updated ${updatedCount} files with new routing structure.`);"
+        },
+        "validation": {
+          "commands": [
+            "node scripts/update-links-script.js",
+            "grep -r 'href=\"/\"' src/ | grep -v 'landing\\|login' || echo 'No root links found ✅'",
+            "npm test -- navigation"
+          ],
+          "expectedOutput": "All links updated, navigation tests pass"
+        },
+        "acceptance": {
+          "criteria": [
+            "All home links point to /dashboard for auth users",
+            "Landing CTAs point to /login",
+            "Navigation config cleaned up",
+            "No broken internal links",
+            "Consistent routing patterns",
+            "Redirect logic working",
+            "Deep linking preserved",
+            "Back button behavior correct"
+          ]
+        }
+      },
+      {
+        "id": 30,
+        "title": "Create Comprehensive Test Suite for Landing Page",
+        "description": "Add unit tests, integration tests, accessibility tests, and E2E tests for landing page using Vitest and Playwright",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [
+          27,
+          29
+        ],
+        "phase": "7",
+        "week": "7",
+        "files": [
+          "src/app/landing/page.test.tsx",
+          "src/components/landing/*.test.tsx",
+          "tests/e2e/landing.spec.ts",
+          "tests/e2e/landing-accessibility.spec.ts",
+          "tests/e2e/landing-performance.spec.ts"
+        ],
+        "implementation": {
+          "page.test.tsx": "import { render, screen, waitFor } from '@testing-library/react';\nimport { vi } from 'vitest';\nimport LandingPage from './page';\nimport { useRouter } from 'next/navigation';\n\n// Mock next/navigation\nvi.mock('next/navigation', () => ({\n  useRouter: vi.fn(),\n  usePathname: () => '/landing',\n}));\n\n// Mock Framer Motion\nvi.mock('framer-motion', () => ({\n  motion: {\n    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,\n  },\n  AnimatePresence: ({ children }: any) => children,\n}));\n\ndescribe('LandingPage', () => {\n  const mockPush = vi.fn();\n\n  beforeEach(() => {\n    (useRouter as any).mockReturnValue({\n      push: mockPush,\n    });\n  });\n\n  it('renders landing page with all sections', async () => {\n    render(<LandingPage />);\n    \n    // Check for hero section\n    await waitFor(() => {\n      expect(screen.getByText(/Advanced Radiology/i)).toBeInTheDocument();\n    });\n    \n    // Check for feature sections\n    expect(screen.getByText(/Knowledge Base/i)).toBeInTheDocument();\n    expect(screen.getByText(/Documents/i)).toBeInTheDocument();\n  });\n\n  it('has proper accessibility attributes', () => {\n    render(<LandingPage />);\n    \n    // Check for skip links\n    expect(screen.getByText('Skip to main content')).toBeInTheDocument();\n    \n    // Check for ARIA labels\n    const buttons = screen.getAllByRole('button');\n    buttons.forEach(button => {\n      expect(button).toHaveAttribute('aria-label');\n    });\n  });\n\n  it('respects reduced motion preference', () => {\n    // Mock reduced motion\n    window.matchMedia = vi.fn().mockImplementation(query => ({\n      matches: query === '(prefers-reduced-motion: reduce)',\n      addEventListener: vi.fn(),\n      removeEventListener: vi.fn(),\n    }));\n    \n    render(<LandingPage />);\n    \n    // Animations should be disabled\n    expect(screen.queryByTestId('animation-control')).toBeInTheDocument();\n  });\n});",
+          "landing.spec.ts": "import { test, expect } from '@playwright/test';\n\ntest.describe('Landing Page', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/landing');\n  });\n\n  test('has correct title and metadata', async ({ page }) => {\n    await expect(page).toHaveTitle(/WCINYP.*Radiology/i);\n    \n    // Check meta tags\n    const description = await page.locator('meta[name=\"description\"]').getAttribute('content');\n    expect(description).toContain('radiology administration');\n  });\n\n  test('navigation works correctly', async ({ page }) => {\n    // Click sign in\n    await page.click('text=Sign In');\n    await expect(page).toHaveURL('/login');\n    \n    // Go back\n    await page.goBack();\n    await expect(page).toHaveURL('/landing');\n  });\n\n  test('smooth scrolling works', async ({ page }) => {\n    // Click on a section link\n    await page.click('a[href=\"#features\"]');\n    \n    // Check scroll position\n    const scrollY = await page.evaluate(() => window.scrollY);\n    expect(scrollY).toBeGreaterThan(0);\n  });\n\n  test('theme switcher works', async ({ page }) => {\n    // Get initial theme\n    const initialTheme = await page.evaluate(() => \n      document.documentElement.getAttribute('data-theme')\n    );\n    \n    // Click theme switcher\n    await page.click('[aria-label=\"Toggle theme\"]');\n    await page.click('text=Dark');\n    \n    // Check theme changed\n    const newTheme = await page.evaluate(() => \n      document.documentElement.getAttribute('data-theme')\n    );\n    expect(newTheme).not.toBe(initialTheme);\n  });\n});",
+          "landing-accessibility.spec.ts": "import { test, expect } from '@playwright/test';\nimport { injectAxe, checkA11y } from 'axe-playwright';\n\ntest.describe('Landing Page Accessibility', () => {\n  test('has no accessibility violations', async ({ page }) => {\n    await page.goto('/landing');\n    await injectAxe(page);\n    await checkA11y(page, undefined, {\n      detailedReport: true,\n      detailedReportOptions: {\n        html: true,\n      },\n    });\n  });\n\n  test('keyboard navigation works', async ({ page }) => {\n    await page.goto('/landing');\n    \n    // Tab through interactive elements\n    await page.keyboard.press('Tab');\n    const firstFocused = await page.evaluate(() => \n      document.activeElement?.tagName\n    );\n    expect(firstFocused).toBe('A'); // Skip link\n    \n    // Continue tabbing\n    for (let i = 0; i < 5; i++) {\n      await page.keyboard.press('Tab');\n    }\n    \n    // Should reach sign in button\n    const focused = await page.evaluate(() => \n      document.activeElement?.textContent\n    );\n    expect(focused).toContain('Sign In');\n  });\n\n  test('animations can be paused', async ({ page }) => {\n    await page.goto('/landing');\n    \n    // Find and click animation control\n    await page.click('[aria-label=\"Pause animations\"]');\n    \n    // Check animations are paused\n    const isPaused = await page.evaluate(() => \n      document.documentElement.getAttribute('data-animations-paused')\n    );\n    expect(isPaused).toBe('true');\n  });\n});"
+        },
+        "validation": {
+          "commands": [
+            "npm test -- landing",
+            "npm run test:e2e -- landing",
+            "npm run test:a11y -- landing"
+          ],
+          "expectedOutput": "All tests pass, 100% coverage for landing components"
+        },
+        "acceptance": {
+          "criteria": [
+            "Unit tests for all landing components",
+            "Animation behavior tested",
+            "Accessibility tests passing (axe-core)",
+            "Mobile viewport tests included",
+            "Error boundary tests working",
+            "E2E user flow tests complete",
+            "Performance tests implemented",
+            "Test coverage > 90%",
+            "All tests passing in CI"
+          ]
+        }
+      },
+      {
+        "id": 31,
+        "title": "Relocate and Upgrade Niivue Test Page with shadcn/ui",
+        "description": "Move volumetric test page to /admin/volumetric, implement access control, and upgrade UI with shadcn/ui components",
+        "status": "pending",
+        "priority": "low",
+        "dependencies": [
+          30
+        ],
+        "phase": "8",
+        "week": "8",
+        "files": [
+          "src/app/admin/volumetric/page.tsx",
+          "src/components/niivue-viewer.tsx",
+          "src/app/admin/layout.tsx"
+        ],
+        "commands": [
+          "npm install @niivue/niivue",
+          "rm -rf src/app/test-niivue-volumetric"
+        ],
+        "implementation": {
+          "admin-layout.tsx": "'use client';\n\nimport { useAuth } from '@/contexts/auth-context';\nimport { useRouter } from 'next/navigation';\nimport { useEffect } from 'react';\n\n// Admin layout with access control\nexport default function AdminLayout({\n  children,\n}: {\n  children: React.ReactNode;\n}) {\n  const { user, loading } = useAuth();\n  const router = useRouter();\n\n  useEffect(() => {\n    if (!loading && (!user || user.role !== 'admin')) {\n      router.replace('/unauthorized');\n    }\n  }, [user, loading, router]);\n\n  if (loading) {\n    return <div>Loading...</div>;\n  }\n\n  if (!user || user.role !== 'admin') {\n    return null;\n  }\n\n  return (\n    <div className=\"container mx-auto py-8\">\n      <h1 className=\"text-2xl font-bold mb-6\">Admin Panel</h1>\n      {children}\n    </div>\n  );\n}",
+          "volumetric-page.tsx": "'use client';\n\nimport { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';\nimport { Button } from '@/components/ui/button';\nimport { Slider } from '@/components/ui/slider';\nimport { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';\nimport { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';\nimport { NiivueViewer } from '@/components/niivue-viewer';\nimport { useState } from 'react';\n\nexport default function VolumetricTestPage() {\n  const [opacity, setOpacity] = useState([0.8]);\n  const [colormap, setColormap] = useState('gray');\n  const [viewMode, setViewMode] = useState('3d');\n\n  return (\n    <div className=\"space-y-6\">\n      <Card>\n        <CardHeader>\n          <CardTitle>Volumetric Rendering Test</CardTitle>\n          <CardDescription>\n            3D brain visualization using Niivue with shadcn/ui controls\n          </CardDescription>\n        </CardHeader>\n        <CardContent>\n          <Tabs value={viewMode} onValueChange={setViewMode}>\n            <TabsList className=\"grid w-full grid-cols-3\">\n              <TabsTrigger value=\"3d\">3D View</TabsTrigger>\n              <TabsTrigger value=\"axial\">Axial</TabsTrigger>\n              <TabsTrigger value=\"sagittal\">Sagittal</TabsTrigger>\n            </TabsList>\n            \n            <TabsContent value=\"3d\" className=\"space-y-4\">\n              <div className=\"h-[600px] w-full rounded-lg border bg-black\">\n                <NiivueViewer \n                  mode=\"3d\"\n                  opacity={opacity[0]}\n                  colormap={colormap}\n                />\n              </div>\n              \n              {/* Controls */}\n              <div className=\"grid gap-4 md:grid-cols-2\">\n                <div className=\"space-y-2\">\n                  <label className=\"text-sm font-medium\">Opacity</label>\n                  <Slider\n                    value={opacity}\n                    onValueChange={setOpacity}\n                    min={0}\n                    max={1}\n                    step={0.1}\n                  />\n                </div>\n                \n                <div className=\"space-y-2\">\n                  <label className=\"text-sm font-medium\">Colormap</label>\n                  <Select value={colormap} onValueChange={setColormap}>\n                    <SelectTrigger>\n                      <SelectValue />\n                    </SelectTrigger>\n                    <SelectContent>\n                      <SelectItem value=\"gray\">Grayscale</SelectItem>\n                      <SelectItem value=\"hot\">Hot</SelectItem>\n                      <SelectItem value=\"cool\">Cool</SelectItem>\n                      <SelectItem value=\"rainbow\">Rainbow</SelectItem>\n                    </SelectContent>\n                  </Select>\n                </div>\n              </div>\n              \n              <div className=\"flex gap-2\">\n                <Button variant=\"outline\">Reset View</Button>\n                <Button variant=\"outline\">Screenshot</Button>\n                <Button>Export</Button>\n              </div>\n            </TabsContent>\n            \n            <TabsContent value=\"axial\">\n              <div className=\"h-[600px] w-full rounded-lg border bg-black\">\n                <NiivueViewer mode=\"axial\" />\n              </div>\n            </TabsContent>\n            \n            <TabsContent value=\"sagittal\">\n              <div className=\"h-[600px] w-full rounded-lg border bg-black\">\n                <NiivueViewer mode=\"sagittal\" />\n              </div>\n            </TabsContent>\n          </Tabs>\n        </CardContent>\n      </Card>\n    </div>\n  );\n}",
+          "niivue-viewer.tsx": "'use client';\n\nimport { useEffect, useRef } from 'react';\nimport { Niivue } from '@niivue/niivue';\n\ninterface NiivueViewerProps {\n  mode?: '3d' | 'axial' | 'sagittal' | 'coronal';\n  opacity?: number;\n  colormap?: string;\n}\n\nexport function NiivueViewer({ \n  mode = '3d', \n  opacity = 0.8, \n  colormap = 'gray' \n}: NiivueViewerProps) {\n  const canvasRef = useRef<HTMLCanvasElement>(null);\n  const nvRef = useRef<Niivue | null>(null);\n\n  useEffect(() => {\n    if (!canvasRef.current) return;\n\n    // Initialize Niivue\n    const nv = new Niivue({\n      backColor: [0, 0, 0, 1],\n      show3Dcrosshair: true,\n    });\n    \n    nvRef.current = nv;\n    nv.attachToCanvas(canvasRef.current);\n    \n    // Load demo volume\n    nv.loadVolumes([{\n      url: '/brain-scans/mni152.nii.gz',\n      opacity: opacity,\n      colormap: colormap,\n    }]);\n    \n    // Set view mode\n    if (mode === '3d') {\n      nv.setRenderAzimuthElevation(120, 15);\n    } else {\n      nv.setSliceType(mode === 'axial' ? 0 : mode === 'sagittal' ? 1 : 2);\n    }\n    \n    return () => {\n      nv.removeCanvas();\n    };\n  }, []);\n  \n  // Update properties\n  useEffect(() => {\n    if (nvRef.current && nvRef.current.volumes.length > 0) {\n      nvRef.current.setOpacity(0, opacity);\n      nvRef.current.setColormap(colormap);\n    }\n  }, [opacity, colormap]);\n\n  return (\n    <canvas \n      ref={canvasRef} \n      className=\"h-full w-full\"\n      style={{ touchAction: 'none' }}\n    />\n  );\n}"
+        },
+        "validation": {
+          "commands": [
+            "test -f src/app/admin/volumetric/page.tsx",
+            "test ! -d src/app/test-niivue-volumetric",
+            "npm run type-check",
+            "npm test -- volumetric"
+          ],
+          "expectedOutput": "Page moved to admin, old location removed, types pass"
+        },
+        "acceptance": {
+          "criteria": [
+            "Page moved to /admin/volumetric",
+            "Access control implemented (admin only)",
+            "shadcn/ui components used throughout",
+            "Consistent styling with rest of app",
+            "Performance optimized (lazy loading)",
+            "Controls functional (opacity, colormap)",
+            "Multiple view modes working",
+            "Old test page removed"
+          ]
+        }
+      },
+      {
+        "id": 244,
+        "title": "Create Table Column Components",
+        "description": "Create reusable table column components for consistent table layouts across the application",
+        "details": "",
+        "testStrategy": "",
+        "status": "in-progress",
+        "dependencies": [],
+        "priority": "medium",
+        "subtasks": []
+      },
+      {
+        "id": 32,
+        "title": "Document CodeRabbit GitHub Integration",
+        "description": "Add existing CodeRabbit automated PR review integration to Taskmaster for tracking. CodeRabbit provides AI-powered code reviews with healthcare compliance checks.",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          12
+        ],
+        "phase": "9",
+        "week": "9",
+        "files": [
+          ".github/workflows/coderabbit.yml",
+          ".coderabbit.yaml",
+          "CODERABBIT_WORKFLOW.md",
+          "CODERABBIT_MCP_GUIDE.md",
+          "CODERABBIT_LOCAL_GUIDE.md"
+        ],
+        "implementation": {
+          "coderabbit.yml": "name: CodeRabbit\n\non:\n  pull_request:\n    types: [opened, synchronize, reopened]\n  pull_request_review_comment:\n    types: [created, updated]\n  issue_comment:\n    types: [created, updated]\n\npermissions:\n  contents: read\n  issues: write\n  pull-requests: write\n\njobs:\n  review:\n    runs-on: ubuntu-latest\n    steps:\n      - name: AI Code Review\n        uses: coderabbitai/ai-pr-reviewer@latest\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}\n        with:\n          debug: false\n          review_simple_changes: false\n          review_comment_lgtm: false",
+          "coderabbit.yaml": "language: \"en-US\"\nearly_access: false\nreviews:\n  request_changes_workflow: true\n  high_level_summary: true\n  poem: false\n  review_status: true\n  collapse_walkthrough: false\n  path_instructions:\n    - path: \"**/*.tsx\"\n      instructions: \"Check for proper TypeScript types, React best practices, and accessibility compliance\"\n    - path: \"**/*.ts\"\n      instructions: \"Ensure strict TypeScript compliance and proper error handling\"\n    - path: \"src/app/**\"\n      instructions: \"Verify Next.js 15 App Router patterns and React Server Components usage\"\n  auto_review:\n    enabled: true\n    drafts: false\n  path_filters:\n    - \"!**/*.md\"\n    - \"!**/*.json\"\n    - \"!**/test-data/**\"\nchat:\n  auto_reply: true"
+        },
+        "validation": {
+          "commands": [
+            "test -f .github/workflows/coderabbit.yml",
+            "test -f .coderabbit.yaml",
+            "grep -q 'CodeRabbit' CODERABBIT_WORKFLOW.md"
+          ],
+          "expectedOutput": "CodeRabbit configuration files exist and are properly set up"
+        },
+        "acceptance": {
+          "criteria": [
+            "CodeRabbit workflow file exists",
+            "Configuration properly set for healthcare compliance",
+            "Documentation explains the workflow",
+            "Integration with Claude Code MCP documented",
+            "PR review automation working"
+          ]
+        }
+      },
+      {
+        "id": 33,
+        "title": "Configure GitHub Branch Protection Rules",
+        "description": "Set up branch protection rules for main branch to require PR reviews, passing tests, and prevent direct pushes",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          32
+        ],
+        "phase": "9",
+        "week": "9",
+        "files": [
+          ".github/branch-protection.json",
+          "docs/GITHUB_BRANCH_PROTECTION.md"
+        ],
+        "commands": [
+          "gh api repos/:owner/:repo/branches/main/protection --method PUT --input .github/branch-protection.json"
+        ],
+        "implementation": {
+          "branch-protection.json": "{\n  \"required_status_checks\": {\n    \"strict\": true,\n    \"contexts\": [\n      \"test\",\n      \"lint\",\n      \"type-check\",\n      \"CodeRabbit\"\n    ]\n  },\n  \"enforce_admins\": false,\n  \"required_pull_request_reviews\": {\n    \"dismissal_restrictions\": {},\n    \"dismiss_stale_reviews\": true,\n    \"require_code_owner_reviews\": false,\n    \"required_approving_review_count\": 1,\n    \"require_last_push_approval\": false\n  },\n  \"restrictions\": null,\n  \"allow_force_pushes\": false,\n  \"allow_deletions\": false,\n  \"block_creations\": false,\n  \"required_conversation_resolution\": true,\n  \"lock_branch\": false,\n  \"allow_fork_syncing\": true\n}",
+          "GITHUB_BRANCH_PROTECTION.md": "# GitHub Branch Protection Rules\n\n## Overview\nBranch protection rules ensure code quality and prevent accidental changes to the main branch.\n\n## Current Rules\n\n### Required Status Checks\n- ✅ All tests must pass\n- ✅ Linting must pass\n- ✅ Type checking must pass\n- ✅ CodeRabbit review must complete\n\n### Pull Request Requirements\n- At least 1 approving review required\n- Stale reviews dismissed on new commits\n- All conversations must be resolved\n\n### Restrictions\n- No direct pushes to main (except via PR merge)\n- No force pushes allowed\n- No branch deletions allowed\n\n## Workflow\n1. Create feature branch from main\n2. Make changes and push to feature branch\n3. Open PR to main\n4. Wait for automated checks and CodeRabbit review\n5. Address any feedback\n6. Get approval from reviewer\n7. Merge PR (squash and merge recommended)\n\n## Emergency Override\nAdmins can bypass these rules if absolutely necessary, but this should be avoided."
+        },
+        "validation": {
+          "commands": [
+            "gh api repos/:owner/:repo/branches/main/protection | jq '.required_status_checks.contexts'",
+            "test -f docs/GITHUB_BRANCH_PROTECTION.md"
+          ],
+          "expectedOutput": "Branch protection rules are active with required checks"
+        },
+        "acceptance": {
+          "criteria": [
+            "Main branch protected",
+            "PR reviews required",
+            "Status checks must pass",
+            "Direct pushes blocked",
+            "Documentation created",
+            "Team informed of new rules"
+          ]
+        }
+      },
+      {
+        "id": 34,
+        "title": "Setup GitHub Environments",
+        "description": "Configure GitHub environments for staging and production with deployment protections and secrets management",
+        "status": "done",
+        "priority": "medium",
+        "dependencies": [
+          33
+        ],
+        "phase": "9",
+        "week": "9",
+        "files": [
+          ".github/environments/staging.json",
+          ".github/environments/production.json",
+          ".github/workflows/deploy.yml"
+        ],
+        "implementation": {
+          "deploy.yml": "name: Deploy\n\non:\n  push:\n    branches: [main]\n  workflow_dispatch:\n    inputs:\n      environment:\n        description: 'Environment to deploy to'\n        required: true\n        default: 'staging'\n        type: choice\n        options:\n          - staging\n          - production\n\njobs:\n  deploy:\n    runs-on: ubuntu-latest\n    environment:\n      name: ${{ github.event.inputs.environment || 'staging' }}\n      url: ${{ steps.deploy.outputs.url }}\n    \n    steps:\n      - uses: actions/checkout@v4\n      \n      - name: Setup Node.js\n        uses: actions/setup-node@v4\n        with:\n          node-version: '20'\n          cache: 'npm'\n      \n      - name: Install dependencies\n        run: npm ci\n      \n      - name: Run tests\n        run: npm test -- --run\n      \n      - name: Build\n        run: npm run build\n        env:\n          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}\n          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}\n      \n      - name: Deploy to Netlify\n        id: deploy\n        uses: netlify/actions/deploy@v2\n        with:\n          prod: ${{ github.event.inputs.environment == 'production' }}\n          github-token: ${{ secrets.GITHUB_TOKEN }}\n          netlify-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}\n          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}",
+          "staging.json": "{\n  \"name\": \"staging\",\n  \"wait_timer\": 0,\n  \"reviewers\": {\n    \"users\": [],\n    \"teams\": []\n  },\n  \"deployment_branch_policy\": {\n    \"protected_branches\": false,\n    \"custom_branch_policies\": true\n  },\n  \"secrets\": [\n    \"SUPABASE_URL\",\n    \"SUPABASE_ANON_KEY\",\n    \"NETLIFY_AUTH_TOKEN\",\n    \"NETLIFY_SITE_ID\"\n  ]\n}",
+          "production.json": "{\n  \"name\": \"production\",\n  \"wait_timer\": 5,\n  \"reviewers\": {\n    \"users\": [],\n    \"teams\": [\"admins\"]\n  },\n  \"deployment_branch_policy\": {\n    \"protected_branches\": true,\n    \"custom_branch_policies\": false\n  },\n  \"protection_rules\": [\n    {\n      \"type\": \"required_reviewers\",\n      \"reviewers\": [\n        {\n          \"type\": \"Team\",\n          \"id\": 1\n        }\n      ]\n    },\n    {\n      \"type\": \"wait_timer\",\n      \"wait_timer\": 5\n    }\n  ],\n  \"secrets\": [\n    \"SUPABASE_URL\",\n    \"SUPABASE_ANON_KEY\",\n    \"NETLIFY_AUTH_TOKEN\",\n    \"NETLIFY_SITE_ID\",\n    \"SENTRY_DSN\"\n  ]\n}"
+        },
+        "validation": {
+          "commands": [
+            "gh api repos/:owner/:repo/environments",
+            "test -f .github/workflows/deploy.yml"
+          ],
+          "expectedOutput": "Staging and production environments configured"
+        },
+        "acceptance": {
+          "criteria": [
+            "Staging environment created",
+            "Production environment with protections",
+            "Deployment workflow created",
+            "Secrets properly configured",
+            "Manual approval for production",
+            "Deployment URLs tracked"
+          ]
+        }
+      },
+      {
+        "id": 35,
+        "title": "Configure Dependabot for Automated Updates",
+        "description": "Set up Dependabot to automatically check for dependency updates and security vulnerabilities",
+        "status": "in-progress",
+        "priority": "medium",
+        "dependencies": [
+          33
+        ],
+        "phase": "9",
+        "week": "9",
+        "files": [
+          ".github/dependabot.yml",
+          ".github/workflows/auto-merge-dependabot.yml"
+        ],
+        "implementation": {
+          "dependabot.yml": "version: 2\nupdates:\n  # NPM dependencies\n  - package-ecosystem: \"npm\"\n    directory: \"/\"\n    schedule:\n      interval: \"weekly\"\n      day: \"monday\"\n      time: \"03:00\"\n    open-pull-requests-limit: 10\n    reviewers:\n      - \"tim\"\n    labels:\n      - \"dependencies\"\n      - \"npm\"\n    groups:\n      production:\n        patterns:\n          - \"*\"\n        exclude-patterns:\n          - \"*eslint*\"\n          - \"*prettier*\"\n          - \"*test*\"\n          - \"*dev*\"\n      development:\n        patterns:\n          - \"*eslint*\"\n          - \"*prettier*\"\n          - \"*test*\"\n          - \"*dev*\"\n    ignore:\n      # Don't update major versions automatically\n      - dependency-name: \"*\"\n        update-types: [\"version-update:semver-major\"]\n      # Specific ignores for breaking changes\n      - dependency-name: \"@types/node\"\n        versions: [\"21.x\", \"22.x\"]\n    \n  # GitHub Actions\n  - package-ecosystem: \"github-actions\"\n    directory: \"/\"\n    schedule:\n      interval: \"weekly\"\n    labels:\n      - \"dependencies\"\n      - \"github-actions\"",
+          "auto-merge-dependabot.yml": "name: Auto-merge Dependabot PRs\n\non:\n  pull_request:\n    types: [opened, synchronize, reopened]\n\npermissions:\n  contents: write\n  pull-requests: write\n\njobs:\n  dependabot:\n    runs-on: ubuntu-latest\n    if: github.actor == 'dependabot[bot]'\n    steps:\n      - name: Dependabot metadata\n        id: metadata\n        uses: dependabot/fetch-metadata@v2\n        with:\n          github-token: \"${{ secrets.GITHUB_TOKEN }}\"\n      \n      - name: Auto-approve patch and minor updates\n        if: steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor'\n        run: gh pr review --approve \"$PR_URL\"\n        env:\n          PR_URL: ${{ github.event.pull_request.html_url }}\n          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n      \n      - name: Auto-merge patch updates\n        if: steps.metadata.outputs.update-type == 'version-update:semver-patch'\n        run: gh pr merge --auto --squash \"$PR_URL\"\n        env:\n          PR_URL: ${{ github.event.pull_request.html_url }}\n          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
+        },
+        "validation": {
+          "commands": [
+            "test -f .github/dependabot.yml",
+            "gh api repos/:owner/:repo/vulnerability-alerts | jq '.enabled'"
+          ],
+          "expectedOutput": "Dependabot configuration exists and vulnerability alerts enabled"
+        },
+        "acceptance": {
+          "criteria": [
+            "Dependabot configuration file created",
+            "Weekly update schedule configured",
+            "Security updates enabled",
+            "Auto-merge for patches enabled",
+            "PR grouping configured",
+            "Major version updates require manual review"
+          ]
+        }
+      },
+      {
+        "id": 36,
+        "title": "Add GitHub Security Scanning",
+        "description": "Enable GitHub Advanced Security features including code scanning, secret scanning, and dependency review",
+        "status": "pending",
+        "priority": "high",
+        "dependencies": [
+          35
+        ],
+        "phase": "9",
+        "week": "9",
+        "files": [
+          ".github/workflows/codeql.yml",
+          ".github/workflows/security.yml",
+          ".github/secret-scanning.yml"
+        ],
+        "implementation": {
+          "codeql.yml": "name: CodeQL Analysis\n\non:\n  push:\n    branches: [ main, develop ]\n  pull_request:\n    branches: [ main ]\n  schedule:\n    - cron: '30 5 * * 1'\n\njobs:\n  analyze:\n    name: Analyze\n    runs-on: ubuntu-latest\n    permissions:\n      actions: read\n      contents: read\n      security-events: write\n\n    strategy:\n      fail-fast: false\n      matrix:\n        language: [ 'javascript', 'typescript' ]\n\n    steps:\n    - name: Checkout repository\n      uses: actions/checkout@v4\n\n    - name: Initialize CodeQL\n      uses: github/codeql-action/init@v3\n      with:\n        languages: ${{ matrix.language }}\n        queries: security-extended,security-and-quality\n\n    - name: Autobuild\n      uses: github/codeql-action/autobuild@v3\n\n    - name: Perform CodeQL Analysis\n      uses: github/codeql-action/analyze@v3\n      with:\n        category: \"/language:${{matrix.language}}\"",
+          "security.yml": "name: Security Audit\n\non:\n  push:\n    branches: [ main ]\n  pull_request:\n    branches: [ main ]\n  schedule:\n    - cron: '0 0 * * *'\n\njobs:\n  audit:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      \n      - name: Setup Node.js\n        uses: actions/setup-node@v4\n        with:\n          node-version: '20'\n          cache: 'npm'\n      \n      - name: Run npm audit\n        run: |\n          npm audit --audit-level=high\n          npm audit --json > audit-report.json\n        continue-on-error: true\n      \n      - name: Check for secrets\n        uses: trufflesecurity/trufflehog@main\n        with:\n          path: ./\n          base: ${{ github.event.repository.default_branch }}\n          head: HEAD\n      \n      - name: Run Snyk Security Scan\n        uses: snyk/actions/node@master\n        env:\n          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}\n        with:\n          args: --severity-threshold=high\n      \n      - name: Upload results\n        uses: github/codeql-action/upload-sarif@v3\n        if: always()\n        with:\n          sarif_file: snyk.sarif",
+          "secret-scanning.yml": "# Secret Scanning Custom Patterns\n# This file defines custom patterns for GitHub secret scanning\n\npatterns:\n  - name: Supabase Service Key\n    pattern: 'sbp_[a-f0-9]{40}'\n    \n  - name: Netlify Access Token\n    pattern: 'nf_[A-Za-z0-9]{40}'\n    \n  - name: Healthcare API Key\n    pattern: 'hc_[A-Za-z0-9]{32}'\n    \n  - name: Internal Service Token\n    pattern: 'wcinyp_[A-Za-z0-9]{24}'\n\n# Push protection\npush_protection_enabled: true\npush_protection_bypasses_enabled: false\n\n# Alert settings\nalerts:\n  - high_confidence_alerts_enabled: true\n  - notify_on_alert: true"
+        },
+        "validation": {
+          "commands": [
+            "gh api repos/:owner/:repo/code-scanning/alerts | jq length",
+            "test -f .github/workflows/codeql.yml"
+          ],
+          "expectedOutput": "Security scanning workflows configured and running"
+        },
+        "acceptance": {
+          "criteria": [
+            "CodeQL analysis enabled",
+            "Secret scanning configured",
+            "Security audit workflow created",
+            "Custom secret patterns defined",
+            "Push protection enabled",
+            "Scheduled scans configured",
+            "SARIF results uploaded"
+          ]
+        }
+      }
+    ],
+    "metadata": {
+      "created": "2025-07-15T03:25:20.597Z",
+      "updated": "2025-07-15T21:07:47.117Z",
+      "description": "Tasks for master context including landing page extraction and GitHub integrations"
+    }
+  }
+}

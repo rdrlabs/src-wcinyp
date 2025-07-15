@@ -1,0 +1,113 @@
+# CodeRabbit Configuration for WCINYP Project
+
+# Enable automatic code reviews on pull requests
+reviews:
+  # Request changes workflow - set to false for less strict reviews
+  request_changes_workflow: false
+  
+  # Summary settings
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: true
+  
+  # Auto-review settings
+  auto_review:
+    enabled: true
+    drafts: true  # Review draft PRs to get early feedback
+  
+  # Custom review instructions
+  instructions: |
+    This is a healthcare administrative platform for WCINYP (Weill Cornell Imaging at New York Presbyterian).
+    Please pay special attention to:
+    - Security and privacy considerations for healthcare data
+    - Accessibility compliance (WCAG 2.1 AA)
+    - Performance optimizations for document handling
+    - Type safety and proper error handling
+    - Design system consistency using shadcn/ui components
+    - Proper use of Supabase for authentication and data management
+  
+  # Path-specific instructions
+  path_instructions:
+    - path: "**/*.tsx"
+      instructions: "Ensure React components follow best practices, use proper TypeScript types, and maintain consistency with the design system"
+    - path: "**/*.test.tsx"
+      instructions: "Verify test coverage is comprehensive and follows testing best practices"
+    - path: "src/components/ui/**"
+      instructions: "Ensure UI components maintain design system consistency and accessibility standards"
+    - path: "netlify/functions/**"
+      instructions: "Check for proper error handling, security headers, and rate limiting"
+    - path: "src/lib/supabase-*.ts"
+      instructions: "Verify secure authentication patterns and proper data access controls"
+
+# Language-specific settings
+languages:
+  typescript:
+    enabled: true
+  javascript:
+    enabled: true
+  markdown:
+    enabled: true
+
+# Tools configuration
+tools:
+  # ESLint for code quality
+  eslint:
+    enabled: true
+  
+  # Prettier for code formatting
+  prettier:
+    enabled: true
+  
+  # TypeScript compiler checks
+  typescript:
+    enabled: true
+    strict_mode: true
+
+# Security scanning
+security:
+  enabled: true
+  dependency_scanning: true
+  secrets_scanning: true
+
+# Performance checks
+performance:
+  enabled: true
+  bundle_size_check: true
+  lighthouse_audits: false  # Set to true if you want performance audits
+
+# Documentation requirements
+documentation:
+  require_descriptions: true
+  require_examples_for_complex_code: true
+
+# Ignore patterns
+ignore_patterns:
+  - "**/*.min.js"
+  - "**/*.min.css"
+  - "**/node_modules/**"
+  - "**/build/**"
+  - "**/dist/**"
+  - "**/out/**"
+  - "**/.next/**"
+  - "**/coverage/**"
+
+# Custom checks
+custom_checks:
+  - name: "Healthcare Compliance"
+    pattern: "**/*.tsx"
+    check: "Ensure no PHI (Protected Health Information) is logged or exposed"
+  - name: "Accessibility"
+    pattern: "src/components/**/*.tsx"
+    check: "Verify ARIA labels and keyboard navigation support"
+
+# Integration with other tools
+integrations:
+  # Link to Linear or Jira tickets if mentioned in PR
+  issue_tracking:
+    enabled: true
+    
+  # Create follow-up issues for TODOs
+  todo_tracking:
+    enabled: true
+    create_issues: false  # Set to true to auto-create issues

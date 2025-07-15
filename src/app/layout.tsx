@@ -3,10 +3,10 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { Toaster } from "sonner";
-import { Footer } from "@/components/footer";
-import { NavBar } from "@/components/navbar";
 import { ThemeBody } from "@/components/theme-body";
 import { CommandMenu } from "@/components/command-menu";
+import { AuthGuard } from "@/components/auth-guard";
+import { LayoutWrapper } from "@/components/layout-wrapper";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -44,18 +44,18 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <ThemeBody>
-            <div className="min-h-screen bg-background flex flex-col">
-              <NavBar />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </div>
-            <Toaster 
-              position="top-right"
-              richColors
-              closeButton
-              theme="system"
-            />
-            <CommandMenu />
+            <AuthGuard>
+              <LayoutWrapper>
+                {children}
+              </LayoutWrapper>
+              <Toaster 
+                position="top-right"
+                richColors
+                closeButton
+                theme="system"
+              />
+              <CommandMenu />
+            </AuthGuard>
           </ThemeBody>
         </Providers>
       </body>

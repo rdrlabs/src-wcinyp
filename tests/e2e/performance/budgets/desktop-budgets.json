@@ -1,0 +1,260 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Desktop Performance Budgets",
+  "description": "Performance budgets for desktop devices with stricter thresholds",
+  "type": "object",
+  "properties": {
+    "networkConditions": {
+      "Cable": {
+        "description": "Budgets for cable internet connections",
+        "webVitals": {
+          "FCP": 1200,
+          "LCP": 1800,
+          "TTI": 2500,
+          "TBT": 100,
+          "CLS": 0.05,
+          "INP": 100,
+          "TTFB": 400
+        },
+        "resources": {
+          "totalSize": 3145728,
+          "scriptSize": 786432,
+          "styleSize": 393216,
+          "imageSize": 1572864,
+          "fontSize": 393216
+        }
+      },
+      "DSL": {
+        "description": "Budgets for DSL connections",
+        "webVitals": {
+          "FCP": 1600,
+          "LCP": 2400,
+          "TTI": 3500,
+          "TBT": 150,
+          "CLS": 0.08,
+          "INP": 150,
+          "TTFB": 600
+        },
+        "resources": {
+          "totalSize": 2621440,
+          "scriptSize": 655360,
+          "styleSize": 327680,
+          "imageSize": 1310720,
+          "fontSize": 327680
+        }
+      },
+      "WiFi": {
+        "description": "Budgets for WiFi connections on desktop",
+        "webVitals": {
+          "FCP": 1000,
+          "LCP": 1500,
+          "TTI": 2000,
+          "TBT": 50,
+          "CLS": 0.02,
+          "INP": 80,
+          "TTFB": 300
+        },
+        "resources": {
+          "totalSize": 4194304,
+          "scriptSize": 1048576,
+          "styleSize": 524288,
+          "imageSize": 2097152,
+          "fontSize": 524288
+        }
+      },
+      "Fiber": {
+        "description": "Budgets for fiber optic connections",
+        "webVitals": {
+          "FCP": 800,
+          "LCP": 1200,
+          "TTI": 1500,
+          "TBT": 30,
+          "CLS": 0.01,
+          "INP": 50,
+          "TTFB": 200
+        },
+        "resources": {
+          "totalSize": 5242880,
+          "scriptSize": 1310720,
+          "styleSize": 655360,
+          "imageSize": 2621440,
+          "fontSize": 655360
+        }
+      }
+    },
+    "screenResolutions": {
+      "HD": {
+        "description": "1920x1080 resolution",
+        "webVitals": {
+          "FCP": 1200,
+          "LCP": 1800,
+          "TTI": 2500,
+          "TBT": 100,
+          "CLS": 0.05,
+          "INP": 100,
+          "TTFB": 400
+        }
+      },
+      "2K": {
+        "description": "2560x1440 resolution",
+        "webVitals": {
+          "FCP": 1400,
+          "LCP": 2100,
+          "TTI": 3000,
+          "TBT": 120,
+          "CLS": 0.06,
+          "INP": 120,
+          "TTFB": 500
+        }
+      },
+      "4K": {
+        "description": "3840x2160 resolution",
+        "webVitals": {
+          "FCP": 1600,
+          "LCP": 2400,
+          "TTI": 3500,
+          "TBT": 150,
+          "CLS": 0.08,
+          "INP": 150,
+          "TTFB": 600
+        }
+      }
+    },
+    "pages": {
+      "homepage": {
+        "strict": {
+          "FCP": 800,
+          "LCP": 1200,
+          "TTI": 1800,
+          "TBT": 50,
+          "CLS": 0.02,
+          "INP": 80,
+          "TTFB": 300
+        },
+        "standard": {
+          "FCP": 1200,
+          "LCP": 1800,
+          "TTI": 2500,
+          "TBT": 100,
+          "CLS": 0.05,
+          "INP": 100,
+          "TTFB": 400
+        }
+      },
+      "documents": {
+        "strict": {
+          "FCP": 1000,
+          "LCP": 1500,
+          "TTI": 2200,
+          "TBT": 80,
+          "CLS": 0.04,
+          "INP": 100,
+          "TTFB": 400
+        },
+        "standard": {
+          "FCP": 1500,
+          "LCP": 2200,
+          "TTI": 3000,
+          "TBT": 150,
+          "CLS": 0.08,
+          "INP": 150,
+          "TTFB": 600
+        }
+      },
+      "providers": {
+        "strict": {
+          "FCP": 1200,
+          "LCP": 2000,
+          "TTI": 3000,
+          "TBT": 150,
+          "CLS": 0.08,
+          "INP": 150,
+          "TTFB": 600
+        },
+        "standard": {
+          "FCP": 1800,
+          "LCP": 2800,
+          "TTI": 4000,
+          "TBT": 250,
+          "CLS": 0.12,
+          "INP": 200,
+          "TTFB": 800
+        }
+      },
+      "directory": {
+        "strict": {
+          "FCP": 1200,
+          "LCP": 2000,
+          "TTI": 3000,
+          "TBT": 150,
+          "CLS": 0.08,
+          "INP": 150,
+          "TTFB": 600
+        },
+        "standard": {
+          "FCP": 1800,
+          "LCP": 2800,
+          "TTI": 4000,
+          "TBT": 250,
+          "CLS": 0.12,
+          "INP": 200,
+          "TTFB": 800
+        }
+      },
+      "knowledge": {
+        "strict": {
+          "FCP": 900,
+          "LCP": 1400,
+          "TTI": 2000,
+          "TBT": 60,
+          "CLS": 0.03,
+          "INP": 90,
+          "TTFB": 350
+        },
+        "standard": {
+          "FCP": 1400,
+          "LCP": 2000,
+          "TTI": 2800,
+          "TBT": 120,
+          "CLS": 0.06,
+          "INP": 140,
+          "TTFB": 550
+        }
+      }
+    },
+    "interactionBudgets": {
+      "description": "Desktop-specific interaction performance budgets",
+      "click": {
+        "good": 50,
+        "needsImprovement": 150,
+        "poor": 300
+      },
+      "hover": {
+        "good": 30,
+        "needsImprovement": 100,
+        "poor": 200
+      },
+      "keypress": {
+        "good": 30,
+        "needsImprovement": 100,
+        "poor": 200
+      },
+      "scroll": {
+        "good": 16,
+        "needsImprovement": 50,
+        "poor": 100
+      }
+    },
+    "animations": {
+      "description": "Animation performance budgets",
+      "fps": {
+        "target": 60,
+        "minimum": 30
+      },
+      "jank": {
+        "maxFrameDrops": 2,
+        "maxDuration": 50
+      }
+    }
+  }
+}

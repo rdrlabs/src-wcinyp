@@ -80,8 +80,31 @@
       "Bash(task-master init:*)",
       "Bash(task-master list:*)",
       "Bash(task-master:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "WebFetch(domain:niivue.github.io)",
+      "WebFetch(domain:fumadocs.vercel.app)",
+      "mcp__context7__get-library-docs",
+      "mcp__context7__resolve-library-id"
     ],
     "deny": []
+  },
+  "mcpServers": {
+    "coderabbitai": {
+      "command": "npx",
+      "args": [
+        "coderabbitai-mcp@latest"
+      ],
+      "env": {
+        "GITHUB_PAT": "${GITHUB_PAT}"
+      }
+    },
+    "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "--node-options=--experimental-fetch",
+        "@upstash/context7-mcp"
+      ]
+    }
   }
 }

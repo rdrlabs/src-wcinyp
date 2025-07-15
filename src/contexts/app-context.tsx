@@ -2,8 +2,9 @@
 
 import React, { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react';
 import { useTheme } from 'next-themes';
+import { logger } from '@/lib/logger';
 
-export type ColorTheme = 'blue' | 'red' | 'orange' | 'green' | 'yellow' | 'pink' | 'purple' | 'neutral';
+export type ColorTheme = 'blue' | 'red' | 'orange' | 'green' | 'pink' | 'purple';
 
 interface Notification {
   id: string;
@@ -85,7 +86,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         existingThemeClasses.forEach(cls => document.body.classList.remove(cls));
         
         // Apply the correct theme
-        if (savedTheme && ['blue', 'red', 'orange', 'green', 'yellow', 'pink', 'purple', 'neutral'].includes(savedTheme)) {
+        if (savedTheme && ['blue', 'red', 'orange', 'green', 'pink', 'purple'].includes(savedTheme)) {
           setColorThemeState(savedTheme);
           document.body.classList.add(`theme-${savedTheme}`);
         } else {
@@ -111,7 +112,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         setPreferences(JSON.parse(savedPrefs));
       }
     } catch (error) {
-      console.error('Failed to load preferences:', error);
+      logger.error('Failed to load preferences', error, 'AppContext');
     }
   }, []);
   
@@ -123,7 +124,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     try {
       localStorage.setItem(COLOR_THEME_KEY, theme);
     } catch (error) {
-      console.warn('Failed to save theme preference:', error);
+      logger.warn('Failed to save theme preference', error, 'AppContext');
     }
     
     // Update document classes

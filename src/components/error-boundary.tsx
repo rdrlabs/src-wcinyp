@@ -1,7 +1,8 @@
 'use client';
 
 import React, { Component, ReactNode } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button'
+import { logger } from '@/lib/logger';
 import { AlertCircle } from 'lucide-react';
 
 interface Props {
@@ -25,7 +26,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Error caught by boundary:', error, errorInfo);
+    logger.error('Error caught by boundary', { error, errorInfo }, 'ErrorBoundary');
   }
 
   reset = () => {

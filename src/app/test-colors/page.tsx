@@ -29,7 +29,7 @@ export default function TestColorsPage() {
       '--color-primary': computed.getPropertyValue('--color-primary').trim(),
       '--color-background': computed.getPropertyValue('--color-background').trim(),
       'htmlClasses': html.className,
-      'dataTheme': html.getAttribute('data-theme') || 'none',
+      'dataTheme': html.getAttribute('data-theme') || 'not set',
     }
     
     setCssValues(values)
@@ -97,7 +97,7 @@ export default function TestColorsPage() {
       <div className="space-y-4">
         <h2 className="text-2xl font-semibold">Theme Switch Test</h2>
         <div className="flex gap-2">
-          {['blue', 'red', 'orange', 'green', 'yellow', 'neutral'].map(theme => (
+          {['blue', 'red', 'orange', 'green', 'pink', 'purple'].map(theme => (
             <button
               key={theme}
               onClick={() => {

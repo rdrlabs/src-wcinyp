@@ -119,6 +119,96 @@
       "email": "compliance@health.nyc.gov",
       "location": "Downtown",
       "lastContact": "2025-06-20"
+    },
+    {
+      "id": 13,
+      "name": "Weill Greenberg Center - 1305 York Ave, 3rd Floor",
+      "type": "Location",
+      "department": "MRI, PET/CT, PET/MRI, X-ray, Bone Density",
+      "phone": "(212) 555-8001",
+      "email": "imaging.greenberg@wcinyp.org",
+      "location": "Upper East Side",
+      "lastContact": "2025-07-10"
+    },
+    {
+      "id": 14,
+      "name": "David H. Koch Center - 1283 York Ave, 7th Floor",
+      "type": "Location",
+      "department": "CT, MRI, PET/CT, PET/MRI, Ultrasound, X-ray",
+      "phone": "(212) 555-8002",
+      "email": "imaging.koch@wcinyp.org",
+      "location": "Upper East Side",
+      "lastContact": "2025-07-10"
+    },
+    {
+      "id": 15,
+      "name": "Starr Pavilion - 520 East 70th St, Ground Floor",
+      "type": "Location",
+      "department": "CT, Ultrasound, X-ray, Fluoroscopy",
+      "phone": "(212) 555-8003",
+      "email": "imaging.starr@wcinyp.org",
+      "location": "Upper East Side",
+      "lastContact": "2025-07-10"
+    },
+    {
+      "id": 16,
+      "name": "Iris Cantor Women's Health Center - 425 East 61st St, 9th Floor",
+      "type": "Location",
+      "department": "CT, Ultrasound, X-ray, Mammography, Image-Guided Breast Intervention & Biopsy",
+      "phone": "(212) 555-8004",
+      "email": "imaging.cantor@wcinyp.org",
+      "location": "Midtown",
+      "lastContact": "2025-07-10"
+    },
+    {
+      "id": 17,
+      "name": "Midtown East - 416 East 55th St, Ground Floor",
+      "type": "Location",
+      "department": "MRI",
+      "phone": "(212) 555-8005",
+      "email": "imaging.midtowneast@wcinyp.org",
+      "location": "Midtown",
+      "lastContact": "2025-07-10"
+    },
+    {
+      "id": 18,
+      "name": "The Spiral (Hudson Yards) - 504 West 35th St, 2nd Floor",
+      "type": "Location",
+      "department": "MRI, CT, X-ray, EOS",
+      "phone": "(212) 555-8006",
+      "email": "imaging.spiral@wcinyp.org",
+      "location": "Midtown",
+      "lastContact": "2025-07-10"
+    },
+    {
+      "id": 19,
+      "name": "Upper West Side - 2315 Broadway, 4th Floor",
+      "type": "Location",
+      "department": "CT, MRI, Ultrasound, X-ray, Bone Density",
+      "phone": "(212) 555-8007",
+      "email": "imaging.uws@wcinyp.org",
+      "location": "Upper West Side",
+      "lastContact": "2025-07-10"
+    },
+    {
+      "id": 20,
+      "name": "Lower Manhattan - 53 Beekman St, Ground Floor",
+      "type": "Location",
+      "department": "CT, MRI, Ultrasound, X-ray, Mammography, Bone Density",
+      "phone": "(212) 555-8008",
+      "email": "imaging.downtown@wcinyp.org",
+      "location": "Lower Manhattan",
+      "lastContact": "2025-07-10"
+    },
+    {
+      "id": 21,
+      "name": "Long Island City - 28-25 Jackson Ave, 2nd Floor",
+      "type": "Location",
+      "department": "CT, MRI, X-ray, Ultrasound, Mammography",
+      "phone": "(718) 555-8009",
+      "email": "imaging.lic@wcinyp.org",
+      "location": "Long Island City",
+      "lastContact": "2025-07-10"
     }
   ]
 }

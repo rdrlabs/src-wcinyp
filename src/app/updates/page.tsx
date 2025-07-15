@@ -1,71 +1,34 @@
 'use client';
 
-import { 
-  Newspaper, 
-  Mail, 
-  Megaphone, 
-  Calendar,
-  FileText,
-  Bell
-} from "lucide-react";
-import { ComingSoonCard } from "@/components/coming-soon-card";
+import { Construction } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function UpdatesPage() {
-  const sections = [
-    {
-      icon: Newspaper,
-      title: "Marketing Blog Posts",
-      description: "Latest articles and blog posts from our marketing team highlighting new services, technology updates, and patient success stories",
-      isPlaceholder: false
-    },
-    {
-      icon: Mail,
-      title: "Operational Updates",
-      description: "Important departmental emails and operational announcements affecting daily workflows, schedules, and procedures",
-      isPlaceholder: false
-    },
-    {
-      icon: Megaphone,
-      title: "General Announcements",
-      description: "Facility-wide communications including policy changes, system maintenance notifications, and organizational news",
-      isPlaceholder: false
-    },
-    {
-      icon: Calendar,
-      title: "Upcoming Events",
-      description: "Department meetings, training sessions, and other scheduled events relevant to imaging center operations",
-      isPlaceholder: false
-    },
-    {
-      icon: FileText,
-      title: "Policy Updates",
-      description: "Changes to clinical protocols, administrative procedures, and compliance requirements",
-      isPlaceholder: false
-    },
-    {
-      icon: Bell,
-      title: "System Notifications",
-      description: "Technical updates, scheduled downtime, and IT-related communications affecting imaging systems",
-      isPlaceholder: false
-    }
-  ];
-
-  const footer = (
-    <div className="text-center mt-12">
-      <p className="text-sm text-muted-foreground">
-        Have news to share or need to post an update? Contact the Communications team at{" "}
-        <a href="mailto:imaging-comms@med.cornell.edu" className="text-primary hover:underline">
-          imaging-comms@med.cornell.edu
-        </a>
-      </p>
-    </div>
-  );
-
   return (
-    <ComingSoonCard
-      description="Stay informed with the latest news, operational updates, and important communications"
-      sections={sections}
-      footer={footer}
-    />
+    <div className="h-[calc(100vh-3rem)] flex items-center justify-center">
+      <motion.div
+        className="text-center space-y-4"
+        initial={{ opacity: 0.8 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      >
+        <motion.div
+          animate={{ 
+            rotate: [-1, 1, -1],
+          }}
+          transition={{ 
+            duration: 6,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        >
+          <Construction className="h-16 w-16 text-muted-foreground mx-auto" />
+        </motion.div>
+        <div className="space-y-1">
+          <h1 className="text-2xl font-semibold text-foreground/70">Updates Under Construction</h1>
+          <p className="text-muted-foreground">This section is being redesigned</p>
+        </div>
+      </motion.div>
+    </div>
   );
 }

@@ -1,4 +1,6 @@
-'use client';
+'use client'
+
+import { logger } from '@/lib/logger';
 
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 import type { FormTemplate, FormField, FormSubmission } from '@/types';
@@ -74,7 +76,7 @@ export function FormProvider({ children }: { children: ReactNode }) {
         setSavedTemplates(JSON.parse(saved));
       }
     } catch (error) {
-      console.error('Failed to load form templates:', error);
+      logger.error('Failed to load form templates', error, 'FormContext');
     }
   }, []);
   

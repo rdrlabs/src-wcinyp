@@ -91,7 +91,9 @@ describe('API Functions', () => {
 
       const result = await getDocumentStats()
 
-      expect(mockFetch).toHaveBeenCalledWith('/.netlify/functions/get-documents?')
+      expect(mockFetch).toHaveBeenCalledWith('/.netlify/functions/get-documents?', {
+        headers: {},
+      })
       expect(result).toEqual(mockResponse)
     })
 
@@ -110,7 +112,9 @@ describe('API Functions', () => {
 
       const result = await getDocumentStats('financial')
 
-      expect(mockFetch).toHaveBeenCalledWith('/.netlify/functions/get-documents?category=financial')
+      expect(mockFetch).toHaveBeenCalledWith('/.netlify/functions/get-documents?category=financial', {
+        headers: {},
+      })
       expect(result).toEqual(mockResponse)
     })
 

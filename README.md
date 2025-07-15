@@ -2,7 +2,7 @@
 
 **Developer Master Reference** - This README serves as the single source of truth for project status, architecture, and development progress.
 
-A modern Next.js 14 application for medical imaging administration, featuring document management, provider directories, and automated form generation.
+A modern Next.js 15 application for radiology administration, featuring document management, provider directories, and automated form generation.
 
 ## Features
 
@@ -14,12 +14,14 @@ A modern Next.js 14 application for medical imaging administration, featuring do
 
 ## Tech Stack
 
-- **Framework**: Next.js 14 with App Router
-- **Styling**: Tailwind CSS v3 + shadcn/ui
-- **Documentation**: Fumadocs (native MDX support) - Properly isolated from main app styling
+- **Framework**: Next.js 15.3.5 with App Router and React 19
+- **Styling**: Tailwind CSS v4 + shadcn/ui
+- **Documentation**: Fumadocs v15 (native MDX support) - Properly isolated from main app styling
 - **Theme**: Dark mode support with next-themes
-- **Language**: TypeScript
-- **Testing**: Vitest + React Testing Library (TDD approach, 287 tests)
+- **Authentication**: Supabase Auth
+- **Rate Limiting**: Upstash Redis
+- **Language**: TypeScript 5.x
+- **Testing**: Vitest 2.0 + React Testing Library (TDD approach, 387 tests)
 
 ## Getting Started
 
@@ -121,6 +123,10 @@ Design system compliance is enforced at multiple levels:
 3. **Pre-commit**: Consider adding a git hook to validate before commits
 
 See [DESIGN-SYSTEM-GUIDE.md](./DESIGN-SYSTEM-GUIDE.md) for complete documentation and examples.
+
+### UI Component Patterns
+
+For consistent usage of shadcn/ui components across the codebase, see [shadcn/ui Usage Patterns Guide](./docs/SHADCN_UI_PATTERNS.md).
 
 ## Testing
 
@@ -428,7 +434,7 @@ System architecture, migration notes, and implementation details
 - [**Netlify Architecture Considerations**](.project-docs/architecture/NETLIFY_ARCHITECTURE.md) 📊
   Netlify serves Next.js as a **static site** unless you use Netlify Functions. This means:
 - [**WCINYP Next.js Migration**](.project-docs/architecture/MIGRATION.md) 📊
-  This directory contains the migrated Next.js 14 version of WCINYP with:
+  This directory contains the migrated Next.js 15 version of WCINYP with:
 - [**Fumadocs Implementation Plan**](.project-docs/architecture/FUMADOCS_IMPLEMENTATION.md)
   This document outlines the complete implementation plan for integrating Fumadocs into the WCINYP application. Currently, the Knowledge Base page (`/knowledge`) is a static page with hardcoded links, but it should be a full Fumadocs-powered documentation system.
 
@@ -444,7 +450,7 @@ Development guides, testing strategies, and contribution guidelines
 - [**Contributing to WCINYP**](.project-docs/development/CONTRIBUTING.md)
   1. Ensure you have Node.js 20+ installed
 - [**WCINYP Next.js Application**](.project-docs/development/CLAUDE.md)
-  This is a medical imaging center application built with Next.js 14, TypeScript, and Tailwind CSS. It provides document management, provider directory, form generation, and contact management features.
+  This is a radiology administration application built with Next.js 15, TypeScript, and Tailwind CSS v4. It provides document management, provider directory, form generation, and contact management features.
 
 ### 📊 Project Status
 Current deployment status and project health
@@ -960,7 +966,7 @@ This approach maintains the educational value of failed attempts while ensuring 
 
 ## Migration Notes
 
-This application was migrated from React Router v7 to Next.js 14 to enable:
+This application was migrated from React Router v7 to Next.js 15 to enable:
 - Better documentation support with Fumadocs
 - Improved performance with static generation
 - Native MDX support

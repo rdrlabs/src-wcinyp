@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useState, useMemo } from "react";
@@ -9,7 +8,9 @@ import contactsData from "@/data/contacts.json";
 import providersData from "@/data/providers.json";
 import type { Contact, Provider } from "@/types";
 import { TYPOGRAPHY } from "@/constants/typography";
+import { logger } from '@/lib/logger';
 import { cn } from "@/lib/utils";
+import { getThemeColor } from "@/lib/theme";
 import { 
   User, 
   Shield, 
@@ -52,6 +53,7 @@ export default function DirectoryPage() {
   const insuranceCount = contacts.filter(c => c.type === 'Insurance').length;
   const labCount = contacts.filter(c => c.type === 'Lab').length;
   const governmentCount = contacts.filter(c => c.type === 'Government').length;
+  const locationCount = contacts.filter(c => c.type === 'Location').length;
   
   // Get count for contact type
   const getTypeCount = (type: string) => {
@@ -70,6 +72,8 @@ export default function DirectoryPage() {
         return vendorCount;
       case 'Government':
         return governmentCount;
+      case 'Location':
+        return locationCount;
       default:
         return 0;
     }
@@ -88,6 +92,10 @@ export default function DirectoryPage() {
         return <TestTube className="h-4 w-4" />;
       case 'Vendor':
         return <Package className="h-4 w-4" />;
+      case 'Government':
+        return <Building className="h-4 w-4" />;
+      case 'Location':
+        return <MapPin className="h-4 w-4" />;
       default:
         return null;
     }
@@ -161,25 +169,23 @@ export default function DirectoryPage() {
   type UnifiedItem = (Contact & { itemType: 'contact' }) | (Provider & { itemType: 'provider'; type: 'Provider' });
   const columns: ColumnDef<UnifiedItem>[] = useMemo(() => [
     {
-      accessorKey: 'name',
-      header: ({ column }) => createSortableHeader(column, 'Name'),
-      cell: ({ row }) => <span className="font-semibold">{row.getValue('name')}</span>
-    },
-    {
       accessorKey: 'type',
       header: ({ column }) => createSortableHeader(column, 'Type'),
       cell: ({ row }) => {
         const type = row.getValue('type') as string;
+        const Icon = getContactTypeIcon(type);
         return (
-          <Badge 
-            variant="secondary"
-            className="flex items-center gap-2 w-fit"
-          >
-            {getContactTypeIcon(type)}
-            {type}
-          </Badge>
+          <span className={`inline-flex items-center rounded-md px-2 py-2 text-sm font-semibold ring-1 ring-inset w-32 ${getThemeColor('blue')}`}>
+            <span className="w-5 flex-shrink-0">{Icon}</span>
+            <span className="flex-1 text-center">{type}</span>
+          </span>
         );
       }
+    },
+    {
+      accessorKey: 'name',
+      header: ({ column }) => createSortableHeader(column, 'Name'),
+      cell: ({ row }) => <span className="font-semibold">{row.getValue('name')}</span>
     },
     {
       accessorKey: 'department',
@@ -214,15 +220,15 @@ export default function DirectoryPage() {
     createActionsColumn<UnifiedItem>([
       {
         label: 'View Details',
-        onClick: (item) => console.log('View', item),
+        onClick: (item) => logger.debug('View action', { contact: item }, 'DirectoryPage'),
       },
       {
         label: 'Edit',
-        onClick: (item) => console.log('Edit', item),
+        onClick: (item) => logger.debug('Edit action', { contact: item }, 'DirectoryPage'),
       },
       {
         label: 'Export',
-        onClick: (item) => console.log('Export', item),
+        onClick: (item) => logger.debug('Export action', { contact: item }, 'DirectoryPage'),
         icon: <Download className="h-4 w-4" />
       }
     ])
@@ -290,6 +296,9 @@ export default function DirectoryPage() {
             </TabsTrigger>
             <TabsTrigger value="Government" onClick={() => handleTabClick('Government')} className="whitespace-nowrap">
               Government ({governmentCount})
+            </TabsTrigger>
+            <TabsTrigger value="Location" onClick={() => handleTabClick('Location')} className="whitespace-nowrap">
+              Locations ({locationCount})
             </TabsTrigger>
             <TabsTrigger value="providers" onClick={() => handleTabClick('providers')} className="whitespace-nowrap">
               Referring ({providers.length})

@@ -12,7 +12,7 @@ const separatorVariants = cva(
     variants: {
       variant: {
         default: "bg-border",
-        strong: "bg-border-strong",
+        strong: "bg-foreground/20",
         muted: "bg-muted",
         gradient: "bg-gradient-to-r from-transparent via-border to-transparent",
       },

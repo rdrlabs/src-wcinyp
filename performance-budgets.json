@@ -1,0 +1,185 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Performance Budgets Configuration",
+  "description": "Web Vitals and performance budgets for different page types and conditions",
+  "type": "object",
+  "properties": {
+    "global": {
+      "description": "Global performance budgets applied to all pages",
+      "type": "object",
+      "properties": {
+        "webVitals": {
+          "FCP": 1800,
+          "LCP": 2500,
+          "TTI": 3800,
+          "TBT": 200,
+          "CLS": 0.1,
+          "INP": 200,
+          "TTFB": 800
+        },
+        "resources": {
+          "totalSize": 2097152,
+          "scriptSize": 524288,
+          "styleSize": 262144,
+          "imageSize": 1048576,
+          "fontSize": 262144
+        }
+      }
+    },
+    "pages": {
+      "description": "Page-specific performance budgets",
+      "type": "object",
+      "properties": {
+        "homepage": {
+          "description": "Landing/Homepage budgets",
+          "webVitals": {
+            "FCP": 1500,
+            "LCP": 2000,
+            "TTI": 3000,
+            "TBT": 150,
+            "CLS": 0.05,
+            "INP": 150,
+            "TTFB": 600
+          },
+          "resources": {
+            "totalSize": 1572864,
+            "scriptSize": 393216,
+            "styleSize": 196608,
+            "imageSize": 786432,
+            "fontSize": 196608
+          }
+        },
+        "documents": {
+          "description": "Documents and forms page budgets",
+          "webVitals": {
+            "FCP": 1800,
+            "LCP": 2500,
+            "TTI": 3500,
+            "TBT": 200,
+            "CLS": 0.1,
+            "INP": 200,
+            "TTFB": 800
+          },
+          "resources": {
+            "totalSize": 2097152,
+            "scriptSize": 524288,
+            "styleSize": 262144,
+            "imageSize": 1048576,
+            "fontSize": 262144
+          }
+        },
+        "providers": {
+          "description": "Provider directory page budgets",
+          "webVitals": {
+            "FCP": 2000,
+            "LCP": 3000,
+            "TTI": 4000,
+            "TBT": 300,
+            "CLS": 0.15,
+            "INP": 250,
+            "TTFB": 1000
+          },
+          "resources": {
+            "totalSize": 2621440,
+            "scriptSize": 655360,
+            "styleSize": 327680,
+            "imageSize": 1310720,
+            "fontSize": 327680
+          }
+        },
+        "directory": {
+          "description": "Contact directory page budgets",
+          "webVitals": {
+            "FCP": 2000,
+            "LCP": 3000,
+            "TTI": 4000,
+            "TBT": 300,
+            "CLS": 0.15,
+            "INP": 250,
+            "TTFB": 1000
+          },
+          "resources": {
+            "totalSize": 2621440,
+            "scriptSize": 655360,
+            "styleSize": 327680,
+            "imageSize": 1310720,
+            "fontSize": 327680
+          }
+        },
+        "knowledge": {
+          "description": "Knowledge base/documentation page budgets",
+          "webVitals": {
+            "FCP": 1600,
+            "LCP": 2200,
+            "TTI": 3200,
+            "TBT": 150,
+            "CLS": 0.08,
+            "INP": 180,
+            "TTFB": 700
+          },
+          "resources": {
+            "totalSize": 1835008,
+            "scriptSize": 458752,
+            "styleSize": 229376,
+            "imageSize": 917504,
+            "fontSize": 229376
+          }
+        }
+      }
+    },
+    "percentiles": {
+      "description": "Percentile targets for performance metrics",
+      "p75": {
+        "description": "75th percentile targets (Core Web Vitals standard)",
+        "webVitals": {
+          "FCP": 1800,
+          "LCP": 2500,
+          "CLS": 0.1,
+          "INP": 200,
+          "TTFB": 800
+        }
+      },
+      "p90": {
+        "description": "90th percentile targets (stricter)",
+        "webVitals": {
+          "FCP": 2400,
+          "LCP": 3500,
+          "CLS": 0.15,
+          "INP": 300,
+          "TTFB": 1200
+        }
+      },
+      "p95": {
+        "description": "95th percentile targets (most lenient)",
+        "webVitals": {
+          "FCP": 3000,
+          "LCP": 4000,
+          "CLS": 0.25,
+          "INP": 500,
+          "TTFB": 1600
+        }
+      }
+    },
+    "thresholds": {
+      "description": "Performance rating thresholds",
+      "good": {
+        "FCP": 1800,
+        "LCP": 2500,
+        "TTI": 3800,
+        "TBT": 200,
+        "CLS": 0.1,
+        "INP": 200,
+        "TTFB": 800
+      },
+      "needsImprovement": {
+        "FCP": 3000,
+        "LCP": 4000,
+        "TTI": 7300,
+        "TBT": 600,
+        "CLS": 0.25,
+        "INP": 500,
+        "TTFB": 1800
+      }
+    }
+  }
+}

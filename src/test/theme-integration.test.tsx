@@ -100,10 +100,7 @@ describe('Theme Integration Tests', () => {
 
       // Open theme selector
       const themeButton = screen.getByRole('button', { name: /toggle theme/i })
-      await user.hover(themeButton)
-      
-      // Wait for hover delay
-      await new Promise(resolve => setTimeout(resolve, 250))
+      await user.click(themeButton)
 
       // Select red theme
       const redOption = screen.getByText('Red')
@@ -141,10 +138,7 @@ describe('Theme Integration Tests', () => {
 
       // Open theme selector
       const themeButton = screen.getByRole('button', { name: /toggle theme/i })
-      await user.hover(themeButton)
-      
-      // Wait for hover delay
-      await new Promise(resolve => setTimeout(resolve, 250))
+      await user.click(themeButton)
 
       // Switch to dark mode
       const darkOption = screen.getByText('Dark')
@@ -230,8 +224,7 @@ describe('Theme Integration Tests', () => {
       )
 
       // Open and select orange theme
-      await user.hover(screen.getByRole('button', { name: /toggle theme/i }))
-      await new Promise(resolve => setTimeout(resolve, 250))
+      await user.click(screen.getByRole('button', { name: /toggle theme/i }))
       await user.click(screen.getByText('Orange'))
 
       // Verify localStorage was updated
@@ -317,14 +310,13 @@ describe('Theme Integration Tests', () => {
       const initialRenderCount = renderSpy.mock.calls.length
 
       // Change theme
-      await user.hover(screen.getByRole('button', { name: /toggle theme/i }))
-      await new Promise(resolve => setTimeout(resolve, 250))
-      await user.click(screen.getByText('Yellow'))
+      await user.click(screen.getByRole('button', { name: /toggle theme/i }))
+      await user.click(screen.getByText('Purple'))
 
       // Component should not re-render just because theme changed
       // (unless it's using the theme context directly)
       await waitFor(() => {
-        expect(document.body.classList.contains('theme-yellow')).toBe(true)
+        expect(document.body.classList.contains('theme-purple')).toBe(true)
       })
       
       // Allow for some re-renders but not excessive

@@ -1,274 +1,332 @@
 ---
 title: Fumadocs Components Showcase
-description: Complete reference of all available Fumadocs UI components with examples
+description: Live examples of all Fumadocs UI components
 ---
 
 # Fumadocs Components Showcase
 
-> **Note**: Fumadocs UI components have been temporarily commented out to fix the build. The documentation structure and content has been preserved using standard Markdown. See TECHNICAL_DEBT.md for details.
-
-This guide demonstrates all available Fumadocs UI components with practical examples, variants, and best practices.
-
-## Table of Contents
-
-- Callout Component
-- Cards Component
-- Tabs Component
-- Steps Component
-- Accordion Component
-- File Tree Component
-- Type Table Component
-- Code Blocks
-- Banner Component
-- Dark Mode Behavior
-- Best Practices
+This page demonstrates all available Fumadocs UI components with live, interactive examples.
 
 ## Callout Component
 
-Callouts are used to highlight important information. They support different types and can include titles.
+Callouts highlight important information with different visual styles.
 
-### Basic Callouts
-
-```mdx
 <Callout>
-  This is a default callout with no type specified.
+  This is a default callout. It draws attention to important information without any specific type.
 </Callout>
-```
 
-### Callout Types
-
-- **Info callout**: Use for supplementary information that helps users understand the content better.
-- **Tip callout**: Share helpful tips and best practices. Great for optimization suggestions.
-- **Warning callout**: Alert users to potential issues or important considerations.
-- **Error callout**: Highlight critical problems or breaking changes that require immediate attention.
-
-```mdx
-<Callout type="info">Info message</Callout>
-<Callout type="tip">Helpful tip</Callout>
-<Callout type="warning">Warning message</Callout>
-<Callout type="error">Error message</Callout>
-```
-
-### Callouts with Titles
-
-```mdx
-<Callout type="info" title="Custom Title">
-  Callout content with a custom title
+<Callout type="info">
+  **Info callout**: Use this for supplementary information that helps users understand the content better. Perfect for additional context or clarifications.
 </Callout>
-```
 
-### When to Use Callouts
+<Callout type="tip">
+  **Pro tip**: Share helpful tips and best practices. This is great for optimization suggestions or workflow improvements.
+</Callout>
 
-- **Info**: API details, additional context, feature explanations
-- **Tip**: Performance optimizations, shortcuts, best practices
-- **Warning**: Deprecations, security concerns, compatibility issues
-- **Error**: Breaking changes, critical bugs, data loss risks
+<Callout type="warning">
+  **Warning**: Alert users to potential issues or important considerations. Use this for deprecations or compatibility notes.
+</Callout>
+
+<Callout type="error">
+  **Error**: Highlight critical problems or breaking changes that require immediate attention. Reserved for serious issues.
+</Callout>
+
+<Callout type="info" title="Custom Title Example">
+  You can also add custom titles to your callouts for better context. This helps organize information hierarchically.
+</Callout>
 
 ## Cards Component
 
-Cards create a grid layout for showcasing features, options, or related content.
+Cards create beautiful grid layouts for organizing related content.
 
-### Basic Cards
-
-```mdx
 <Cards>
-  <Card title="Card Title">
-    Card description text
+  <Card title="Basic Card">
+    This is a simple card with a title and description. Cards are great for feature showcases.
+  </Card>
+  <Card title="Another Card">
+    Cards automatically arrange themselves in a responsive grid layout.
   </Card>
 </Cards>
-```
 
-### Cards with Icons/Emojis
+### Cards with Icons
 
-```mdx
 <Cards>
   <Card title="🚀 Performance">
-    Lightning-fast response times
+    Lightning-fast response times with optimized builds and caching.
   </Card>
   <Card title="🔒 Security">
-    Enterprise-grade security
+    Enterprise-grade security with authentication and authorization built-in.
+  </Card>
+  <Card title="📱 Responsive">
+    Works perfectly on all devices from mobile to desktop.
+  </Card>
+  <Card title="🎨 Customizable">
+    Fully customizable themes and components to match your brand.
   </Card>
 </Cards>
-```
 
 ### Cards with Links
 
-```mdx
-<Card title="Linked Card" href="/path/to/page">
-  This card is clickable and navigates to another page
-</Card>
-```
-
-### When to Use Cards
-
-- Feature showcases on landing pages
-- Navigation menus for documentation sections
-- Comparison of options or plans
-- Quick links to important resources
+<Cards>
+  <Card title="Documentation" href="/knowledge/docs">
+    Browse the complete documentation with guides and API references.
+  </Card>
+  <Card title="Getting Started" href="/knowledge/docs/quickstart">
+    Quick start guide to get up and running in minutes.
+  </Card>
+</Cards>
 
 ## Tabs Component
 
-Tabs organize content into switchable panels, perfect for showing variations or platform-specific content.
+Organize content into switchable panels for better user experience.
 
-### Basic Tabs
-
-```mdx
-<Tabs>
-  <Tab value="tab1" label="First Tab">
-    Content for the first tab
+<Tabs items={['npm', 'yarn', 'pnpm', 'bun']}>
+  <Tab value="npm">
+    ```bash
+    npm install fumadocs-ui
+    npm install fumadocs-mdx
+    npm install fumadocs-core
+    ```
   </Tab>
-  <Tab value="tab2" label="Second Tab">
-    Content for the second tab
+  <Tab value="yarn">
+    ```bash
+    yarn add fumadocs-ui
+    yarn add fumadocs-mdx
+    yarn add fumadocs-core
+    ```
+  </Tab>
+  <Tab value="pnpm">
+    ```bash
+    pnpm add fumadocs-ui
+    pnpm add fumadocs-mdx
+    pnpm add fumadocs-core
+    ```
+  </Tab>
+  <Tab value="bun">
+    ```bash
+    bun add fumadocs-ui
+    bun add fumadocs-mdx
+    bun add fumadocs-core
+    ```
   </Tab>
 </Tabs>
-```
 
-### When to Use Tabs
+### Platform-Specific Content
 
-- Platform-specific installation instructions
-- Code examples in multiple languages
-- API endpoints for different environments
-- Configuration options for various scenarios
+<Tabs items={['Windows', 'macOS', 'Linux']}>
+  <Tab value="Windows">
+    **Windows Installation**
+    
+    1. Download the Windows installer from our releases page
+    2. Run the `.exe` file as Administrator
+    3. Follow the installation wizard
+    4. Add to PATH: `C:\Program Files\YourApp\bin`
+  </Tab>
+  <Tab value="macOS">
+    **macOS Installation**
+    
+    1. Download the macOS package
+    2. Open the `.dmg` file
+    3. Drag the app to Applications
+    4. Run from Terminal: `/Applications/YourApp.app/Contents/MacOS/yourapp`
+  </Tab>
+  <Tab value="Linux">
+    **Linux Installation**
+    
+    1. Download the appropriate package for your distribution
+    2. For Debian/Ubuntu: `sudo dpkg -i yourapp.deb`
+    3. For Fedora/RHEL: `sudo rpm -i yourapp.rpm`
+    4. For Arch: `sudo pacman -U yourapp.pkg.tar.xz`
+  </Tab>
+</Tabs>
 
 ## Steps Component
 
-Steps create numbered sequences for tutorials, workflows, or procedures.
+Perfect for tutorials and step-by-step guides.
 
-### Basic Steps
-
-```mdx
 <Steps>
-  <Step>First step description</Step>
-  <Step>Second step description</Step>
-  <Step>Third step description</Step>
+  <Step>
+    ### Install Dependencies
+    
+    First, install the required packages:
+    ```bash
+    npm install fumadocs-ui fumadocs-core
+    ```
+  </Step>
+  
+  <Step>
+    ### Configure Your Project
+    
+    Create a `source.config.ts` file in your project root:
+    ```typescript
+    import { defineDocs } from 'fumadocs-mdx/config';
+    
+    export const { docs, meta } = defineDocs({
+      dir: 'content/docs',
+    });
+    ```
+  </Step>
+  
+  <Step>
+    ### Create Your First Page
+    
+    Add your first documentation page at `content/docs/index.mdx`:
+    ```mdx
+    ---
+    title: Welcome
+    description: Getting started with Fumadocs
+    ---
+    
+    # Welcome to My Docs
+    ```
+  </Step>
+  
+  <Step>
+    ### Start Development Server
+    
+    Run your development server and see your documentation:
+    ```bash
+    npm run dev
+    ```
+  </Step>
 </Steps>
-```
-
-### When to Use Steps
-
-- Installation guides
-- Tutorial walkthroughs
-- Onboarding processes
-- Troubleshooting procedures
-- Recipe-style documentation
 
 ## Accordion Component
 
-Accordions collapse and expand content sections, perfect for FAQs or detailed explanations.
+Expandable sections for organizing detailed information.
 
-### Basic Accordion
-
-```mdx
 <Accordions>
-  <Accordion title="Question or Section Title">
-    Answer or content that expands when clicked
+  <Accordion title="What is Fumadocs?">
+    Fumadocs is a documentation framework for Next.js. It provides a complete solution for building beautiful documentation sites with MDX, full-text search, and internationalization support.
+  </Accordion>
+  
+  <Accordion title="Why should I use Fumadocs?">
+    - **Fast**: Built on Next.js with static generation
+    - **Beautiful**: Modern UI with dark mode support
+    - **Flexible**: Customizable themes and layouts
+    - **Developer-friendly**: Write in MDX with hot reload
+    - **Search**: Built-in full-text search
+    - **Type-safe**: Full TypeScript support
+  </Accordion>
+  
+  <Accordion title="How do I customize the theme?">
+    You can customize Fumadocs by:
+    1. Modifying CSS variables in your global styles
+    2. Creating custom components
+    3. Using the theme configuration options
+    4. Overriding default components with your own
+  </Accordion>
+  
+  <Accordion title="Can I use custom MDX components?">
+    Yes! You can register custom MDX components in your page configuration. Simply add them to the components object when rendering MDX content.
   </Accordion>
 </Accordions>
-```
-
-### When to Use Accordions
-
-- FAQ sections
-- Detailed specifications that might overwhelm at first glance
-- Optional or advanced information
-- Troubleshooting guides with multiple scenarios
-- API documentation with extensive details
 
 ## File Tree Component
 
-Display file and folder structures clearly in your documentation.
+Display project structures clearly.
 
-### Basic File Tree
-
-```mdx
 <Files>
-  <Folder name="folder-name" defaultOpen>
-    <File name="file.ts" />
+  <Folder name="src" defaultOpen>
+    <Folder name="app" defaultOpen>
+      <File name="layout.tsx" />
+      <File name="page.tsx" />
+      <Folder name="docs">
+        <File name="[[...slug]]/page.tsx" />
+        <File name="layout.tsx" />
+      </Folder>
+    </Folder>
+    <Folder name="components">
+      <File name="navbar.tsx" />
+      <File name="footer.tsx" />
+    </Folder>
   </Folder>
-  <File name="root-file.js" />
+  <Folder name="content" defaultOpen>
+    <Folder name="docs" defaultOpen>
+      <File name="index.mdx" />
+      <File name="getting-started.mdx" />
+      <File name="meta.json" />
+    </Folder>
+  </Folder>
+  <File name="package.json" />
+  <File name="next.config.js" />
 </Files>
-```
-
-### When to Use File Trees
-
-- Showing project structure
-- Explaining file organization
-- Installation instructions
-- Configuration file locations
-- Build output structure
 
 ## Type Table Component
 
-Document TypeScript types and API schemas with structured tables.
+Document your TypeScript interfaces and API schemas.
 
-### Basic Type Table
-
-```mdx
 <TypeTable
   type={{
-    propertyName: {
-      description: 'Property description',
-      type: 'string | number | boolean',
+    title: {
+      description: 'The title of the page',
+      type: 'string',
       required: true,
-      default: 'defaultValue',
+    },
+    description: {
+      description: 'SEO meta description',
+      type: 'string',
+      required: false,
+    },
+    date: {
+      description: 'Publication date',
+      type: 'Date',
+      required: false,
+    },
+    tags: {
+      description: 'Array of tags for categorization',
+      type: 'string[]',
+      required: false,
+      default: '[]',
+    },
+    draft: {
+      description: 'Whether the page is a draft',
+      type: 'boolean',
+      required: false,
+      default: 'false',
     },
   }}
 />
-```
 
-### When to Use Type Tables
+## Banner Component
 
-- TypeScript interface documentation
-- API request/response schemas
-- Configuration options
-- Component props documentation
-- Database schemas
+Display important announcements across your documentation.
+
+<Banner>
+  🎉 **New Release**: Version 2.0 is now available with improved performance and new components!
+</Banner>
 
 ## Code Blocks
 
-Fumadocs provides enhanced code blocks with syntax highlighting, line numbers, and copy functionality.
+Fumadocs provides enhanced code blocks with syntax highlighting.
 
-### Basic Code Block
-
-```javascript
-// Basic JavaScript function
-function calculateTotal(items) {
-  return items.reduce((sum, item) => sum + item.price, 0);
-}
-
-const items = [
-  { name: 'Apple', price: 1.99 },
-  { name: 'Banana', price: 0.99 },
-  { name: 'Orange', price: 2.49 }
-];
-
-console.log(`Total: $${calculateTotal(items).toFixed(2)}`);
-```
-
-### Code Block with Title
-
-```typescript title="user.types.ts"
-export interface User {
+```typescript title="example.ts"
+interface User {
   id: string;
   name: string;
   email: string;
-  role: 'admin' | 'user' | 'guest';
-  createdAt: Date;
-  updatedAt: Date;
+  role: 'admin' | 'user';
 }
 
-export interface CreateUserDto {
-  name: string;
-  email: string;
-  password: string;
-  role?: User['role'];
+function greetUser(user: User): string {
+  return `Hello, ${user.name}!`;
 }
+
+// Usage
+const user: User = {
+  id: '123',
+  name: 'John Doe',
+  email: 'john@example.com',
+  role: 'user'
+};
+
+console.log(greetUser(user));
 ```
 
-### Code Block with Line Highlighting
+### With Line Highlighting
 
-```jsx {3-5,8}
-function MyComponent() {
+```jsx {3-5,8} title="component.jsx"
+function Counter() {
   const [count, setCount] = useState(0);
   // These lines are highlighted
   const increment = () => setCount(count + 1);
@@ -284,132 +342,71 @@ function MyComponent() {
 }
 ```
 
-### When to Use Code Blocks
+## Inline Table of Contents
 
-- API examples
-- Configuration snippets
-- Installation commands
-- Code tutorials
-- Error examples
-- Query examples
+Use the `InlineTOC` component to add a table of contents within your content:
 
-## Banner Component
+<InlineTOC />
 
-Banners display important announcements or notifications at the top of pages.
+## Image Zoom
 
-```mdx
-<Banner>
-  Your banner message here
-</Banner>
-```
+The `ImageZoom` component allows users to zoom into images:
 
-### When to Use Banners
+<ImageZoom>
+  ![Fumadocs Architecture](/placeholder-image.svg)
+</ImageZoom>
 
-- Major announcements
-- Version updates
-- Maintenance notices
-- Important deadlines
-- Promotional messages
+## Combining Components
 
-## Dark Mode Behavior
+You can combine multiple components for rich documentation experiences:
 
-All Fumadocs components automatically adapt to dark mode. Here's how different components behave:
+<Callout type="tip">
+  **Best Practice**: Combine components to create engaging documentation!
+</Callout>
 
-### Component-Specific Dark Mode
-
-1. **Callouts**: Background colors adjust while maintaining contrast
-2. **Code Blocks**: Syntax highlighting themes switch automatically
-3. **Cards**: Borders become more prominent in dark mode
-4. **Tables**: Alternating row colors adapt to the theme
-5. **Accordions**: Hover states adjust for visibility
-
-### Testing Dark Mode
-
-1. Toggle your system theme or use the theme switcher
-2. Verify all text remains readable
-3. Check that interactive elements are clearly visible
-4. Ensure code syntax highlighting works correctly
-
-## Best Practices
-
-### Component Selection Guide
-
-- **Use Callouts When**: Highlighting warnings or tips, adding context to complex topics, drawing attention to important info, providing quick takeaways
-- **Use Cards When**: Creating feature grids, building navigation menus, showcasing options, making content scannable
-- **Use Tabs When**: Showing platform variations, organizing code examples, presenting alternatives, reducing page length
-- **Use Steps When**: Writing tutorials, documenting processes, creating guides, showing sequences
-
-### Accessibility Considerations
-
-All Fumadocs components are built with accessibility in mind:
-- Proper ARIA labels
-- Keyboard navigation support
-- Screen reader compatibility
-- High contrast ratios
-
-### Performance Tips
-
-1. **Lazy Loading**: Large code blocks and images are lazy-loaded
-2. **Component Bundling**: Only import components you use
-3. **Static Generation**: MDX content is pre-rendered for fast loading
-4. **Responsive Design**: All components work on mobile devices
-
-### Common Patterns
-
-**Tutorial Pattern**
-Combine Steps with Code Blocks:
-```mdx
 <Steps>
   <Step>
-    Install the package:
-    npm install package-name
+    ### Choose Your Components
+    
+    <Cards>
+      <Card title="📝 Content">
+        Use MDX for rich content with components
+      </Card>
+      <Card title="🎨 Styling">
+        Customize with CSS variables and themes
+      </Card>
+    </Cards>
+  </Step>
+  
+  <Step>
+    ### Implement Your Design
+    
+    <Tabs items={['React', 'Vue', 'Svelte']}>
+      <Tab value="React">
+        ```jsx
+        export default function Docs() {
+          return <YourContent />;
+        }
+        ```
+      </Tab>
+      <Tab value="Vue">
+        ```vue
+        <template>
+          <YourContent />
+        </template>
+        ```
+      </Tab>
+      <Tab value="Svelte">
+        ```svelte
+        <YourContent />
+        ```
+      </Tab>
+    </Tabs>
   </Step>
 </Steps>
-```
-
-**Feature Showcase Pattern**
-Use Cards with icons and links:
-```mdx
-<Cards>
-  <Card title="✨ Feature" href="/docs/feature">
-    Description of the feature
-  </Card>
-</Cards>
-```
-
-**Platform Docs Pattern**
-Tabs with platform-specific content:
-```mdx
-<Tabs>
-  <Tab value="windows" label="Windows">
-    Windows-specific instructions
-  </Tab>
-  <Tab value="mac" label="macOS">
-    macOS-specific instructions
-  </Tab>
-</Tabs>
-```
-
-## Summary
-
-Quick Reference:
-- **Callout**: Important notices and tips
-- **Cards**: Grid layouts and navigation
-- **Tabs**: Alternative content views
-- **Steps**: Sequential instructions
-- **Accordion**: Collapsible content
-- **Files**: File structure display
-- **TypeTable**: API documentation
-- **Code Blocks**: Syntax-highlighted code
-- **Banner**: Site-wide announcements
-
-### Need Help?
-
-- Check the [official Fumadocs documentation](https://fumadocs.dev)
-- Join the community discussions
-- Report issues on GitHub
-- Contribute your own examples
 
 ---
 
-**Pro Tip**: Combine multiple components to create rich, interactive documentation that engages your users and clearly communicates complex information.
+<Callout>
+  **Next Steps**: Now that you've seen all the components, try using them in your own documentation pages!
+</Callout>

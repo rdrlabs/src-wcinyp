@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { logger } from '@/lib/logger';
 
 type SetValue<T> = (value: T | ((prev: T) => T)) => void;
 
@@ -26,7 +27,7 @@ export function useLocalStorage<T>(
       const item = window.localStorage.getItem(key);
       return item ? deserialize(item) : initialValue;
     } catch (error) {
-      console.warn(`Error reading localStorage key "${key}":`, error);
+      logger.warn(`Error reading localStorage key "${key}"`, error, 'useLocalStorage');
       return initialValue;
     }
   }, [initialValue, key, deserialize]);
@@ -37,7 +38,7 @@ export function useLocalStorage<T>(
   const setValue: SetValue<T> = useCallback((value) => {
     // Prevent build error "window is undefined" but keep functionality
     if (typeof window === 'undefined') {
-      console.warn(`Tried setting localStorage key "${key}" during SSG. Ignoring.`);
+      logger.warn(`Tried setting localStorage key "${key}" during SSG. Ignoring.`, undefined, 'useLocalStorage');
       return;
     }
 
@@ -54,7 +55,7 @@ export function useLocalStorage<T>(
       // We dispatch a custom event so every useLocalStorage hook are notified
       window.dispatchEvent(new Event('local-storage'));
     } catch (error) {
-      console.warn(`Error setting localStorage key "${key}":`, error);
+      logger.warn(`Error setting localStorage key "${key}"`, error, 'useLocalStorage');
     }
   }, [key, serialize, storedValue]);
 
@@ -69,7 +70,7 @@ export function useLocalStorage<T>(
       setStoredValue(initialValue);
       window.dispatchEvent(new Event('local-storage'));
     } catch (error) {
-      console.warn(`Error removing localStorage key "${key}":`, error);
+      logger.warn(`Error removing localStorage key "${key}"`, error, 'useLocalStorage');
     }
   }, [key, initialValue]);
 

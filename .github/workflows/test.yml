@@ -1,0 +1,336 @@
+name: Tests
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  # Unit and Integration Tests
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run type check
+        run: npm run type-check
+        
+      - name: Run linter
+        run: npm run lint
+        
+      - name: Run unit tests
+        run: npm test -- --run
+        
+      - name: Generate coverage report
+        run: npm run test:coverage
+        
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/coverage-final.json
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+
+  # E2E Tests with Sharding
+  e2e-tests:
+    name: E2E Tests - ${{ matrix.project }} (Shard ${{ matrix.shard }}/${{ strategy.job-total }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium]
+        shard: [1, 2, 3, 4]
+        include:
+          # Run Firefox and WebKit without sharding
+          - project: firefox
+            shard: 1
+          - project: webkit
+            shard: 1
+        
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps ${{ matrix.project }}
+        
+      - name: Run E2E tests
+        run: |
+          if [ "${{ matrix.project }}" == "chromium" ]; then
+            SHARD=${{ matrix.shard }} TOTAL_SHARDS=4 npx playwright test --project=${{ matrix.project }}
+          else
+            npx playwright test --project=${{ matrix.project }}
+          fi
+        
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-results-${{ matrix.project }}
+          path: test-results/
+          retention-days: 7
+          
+      - name: Upload playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ matrix.project }}
+          path: playwright-report/
+          retention-days: 7
+
+  # Visual Regression Tests
+  visual-tests:
+    name: Visual Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install Playwright browsers
+        run: npx playwright install chromium
+        
+      - name: Download visual baselines
+        uses: actions/download-artifact@v4
+        with:
+          name: visual-baselines
+          path: tests/e2e/visual/baselines
+        continue-on-error: true
+        
+      - name: Run visual tests
+        run: npm run test:visual
+        
+      - name: Upload visual test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-test-failures
+          path: |
+            tests/e2e/visual/current/
+            tests/e2e/visual/diff/
+          retention-days: 7
+          
+      - name: Upload visual baselines
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-baselines
+          path: tests/e2e/visual/baselines/
+          retention-days: 90
+
+  # Performance Tests
+  performance-tests:
+    name: Performance Tests
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install Playwright browsers
+        run: npx playwright install chromium
+        
+      - name: Download performance baseline
+        if: github.event_name == 'pull_request'
+        uses: actions/download-artifact@v4
+        with:
+          name: performance-baseline
+          path: performance-baselines
+        continue-on-error: true
+        
+      - name: Run performance tests
+        run: npm run test:performance:ci
+        
+      - name: Upload performance results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-results
+          path: test-results/performance/
+          retention-days: 30
+          
+      - name: Comment PR with performance results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            try {
+              const reportPath = path.join('test-results', 'performance', 'performance-report.json');
+              if (fs.existsSync(reportPath)) {
+                const report = JSON.parse(fs.readFileSync(reportPath, 'utf-8'));
+                const summary = report.aggregated.summary;
+                
+                let comment = '## 🚀 Performance Test Results\n\n';
+                comment += '| Metric | Value | Status |\n';
+                comment += '|--------|-------|--------|\n';
+                comment += `| FCP | ${summary.averageMetrics.FCP}ms | ${summary.averageMetrics.FCP < 1800 ? '✅' : '❌'} |\n`;
+                comment += `| LCP | ${summary.averageMetrics.LCP}ms | ${summary.averageMetrics.LCP < 2500 ? '✅' : '❌'} |\n`;
+                comment += `| TTI | ${summary.averageMetrics.TTI}ms | ${summary.averageMetrics.TTI < 3800 ? '✅' : '❌'} |\n`;
+                comment += `| CLS | ${summary.averageMetrics.CLS} | ${summary.averageMetrics.CLS < 0.1 ? '✅' : '❌'} |\n`;
+                
+                await github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: comment
+                });
+              }
+            } catch (error) {
+              console.error('Failed to post performance results:', error);
+            }
+
+  # Fumadocs Tests
+  fumadocs-tests:
+    name: Fumadocs Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install Playwright browsers
+        run: npx playwright install chromium
+        
+      - name: Run Fumadocs tests
+        run: npm run test:fumadocs
+        
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fumadocs-test-results
+          path: test-results/
+          retention-days: 7
+
+  # Build Test
+  build:
+    name: Build Test
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build application
+        run: npm run build
+        
+      - name: Check build output
+        run: |
+          if [ ! -d "out" ]; then
+            echo "Build failed: 'out' directory not found"
+            exit 1
+          fi
+          
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: out/
+          retention-days: 1
+
+  # Summary Job
+  test-summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: [unit-tests, e2e-tests, visual-tests, performance-tests, fumadocs-tests, build]
+    if: always()
+    
+    steps:
+      - name: Check test results
+        run: |
+          if [ "${{ needs.unit-tests.result }}" != "success" ]; then
+            echo "❌ Unit tests failed"
+            exit 1
+          fi
+          
+          if [ "${{ needs.e2e-tests.result }}" != "success" ]; then
+            echo "❌ E2E tests failed"
+            exit 1
+          fi
+          
+          if [ "${{ needs.visual-tests.result }}" != "success" ]; then
+            echo "⚠️ Visual tests failed (non-blocking)"
+          fi
+          
+          if [ "${{ needs.performance-tests.result }}" != "success" ]; then
+            echo "⚠️ Performance tests failed (non-blocking)"
+          fi
+          
+          if [ "${{ needs.fumadocs-tests.result }}" != "success" ]; then
+            echo "❌ Fumadocs tests failed"
+            exit 1
+          fi
+          
+          if [ "${{ needs.build.result }}" != "success" ]; then
+            echo "❌ Build failed"
+            exit 1
+          fi
+          
+          echo "✅ All required tests passed!"

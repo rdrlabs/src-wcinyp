@@ -1,6 +1,13 @@
 // API client for Netlify Functions
+import Cookies from 'js-cookie'
 
 const API_BASE = '/.netlify/functions'
+
+// Helper to get auth headers
+function getAuthHeaders(): Record<string, string> {
+  const token = Cookies.get('sb-access-token')
+  return token ? { 'Authorization': `Bearer ${token}` } : {}
+}
 
 export interface FormSubmissionData {
   formType: string
@@ -22,6 +29,7 @@ export async function submitForm(data: FormSubmissionData): Promise<FormSubmissi
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      ...getAuthHeaders(),
     },
     body: JSON.stringify(data),
   })
@@ -45,7 +53,11 @@ export async function getDocumentStats(category?: string): Promise<DocumentsResp
   const params = new URLSearchParams()
   if (category) params.set('category', category)
 
-  const response = await fetch(`${API_BASE}/get-documents?${params}`)
+  const response = await fetch(`${API_BASE}/get-documents?${params}`, {
+    headers: {
+      ...getAuthHeaders(),
+    },
+  })
   
   if (!response.ok) {
     throw new Error('Failed to fetch document stats')

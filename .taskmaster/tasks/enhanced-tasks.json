@@ -1,0 +1,221 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 10,
+        "title": "Add Coverage Reporting",
+        "description": "Install and configure @vitest/coverage-v8 for comprehensive code coverage tracking with visual reports and CI integration",
+        "status": "pending",
+        "priority": "high",
+        "dependencies": [9],
+        "phase": "3",
+        "week": "3",
+        "commands": [
+          "npm install --save-dev @vitest/coverage-v8 @vitest/ui",
+          "mkdir -p coverage"
+        ],
+        "files": [
+          "vitest.config.ts",
+          "package.json",
+          ".gitignore"
+        ],
+        "implementation": {
+          "vitest.config.ts": "import { defineConfig } from 'vitest/config';\nimport react from '@vitejs/plugin-react';\nimport path from 'path';\n\nexport default defineConfig({\n  plugins: [react()],\n  test: {\n    coverage: {\n      provider: 'v8',\n      reporter: ['text', 'json', 'html', 'lcov'],\n      exclude: [\n        'node_modules/',\n        'tests/',\n        '**/*.d.ts',\n        '**/*.config.*',\n        '**/mockData.ts',\n        'src/test/**'\n      ],\n      thresholds: {\n        lines: 80,\n        functions: 80,\n        branches: 80,\n        statements: 80\n      },\n      reportsDirectory: './coverage'\n    }\n  }\n});",
+          "package.json.scripts": "\"test:coverage\": \"vitest run --coverage\",\n\"test:coverage:ui\": \"vitest --coverage --ui\"",
+          ".gitignore.additions": "# Coverage reports\ncoverage/\n*.lcov"
+        },
+        "validation": {
+          "commands": [
+            "npm run test:coverage",
+            "open coverage/index.html"
+          ],
+          "expectedOutput": "Coverage report should show at least 80% coverage across all metrics"
+        },
+        "acceptance": {
+          "criteria": [
+            "Coverage reporter installed and configured",
+            "Coverage thresholds set to 80% for lines, functions, branches, and statements",
+            "HTML reports generated in coverage/ directory",
+            "test:coverage script runs successfully",
+            "Coverage excluded for test files and configs",
+            "LCOV report generated for CI integration"
+          ]
+        }
+      },
+      {
+        "id": 11,
+        "title": "Create Performance Benchmarks",
+        "description": "Add comprehensive performance tests using Playwright's performance APIs to measure and track critical user paths",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [10],
+        "phase": "3",
+        "week": "3",
+        "files": [
+          "tests/e2e/performance/fumadocs-perf.spec.ts",
+          "tests/e2e/performance/utils/performance-helpers.ts",
+          "performance-budgets.json"
+        ],
+        "implementation": {
+          "performance-helpers.ts": "import { Page } from '@playwright/test';\n\nexport interface PerformanceMetrics {\n  FCP: number;  // First Contentful Paint\n  LCP: number;  // Largest Contentful Paint\n  TTI: number;  // Time to Interactive\n  TBT: number;  // Total Blocking Time\n  CLS: number;  // Cumulative Layout Shift\n}\n\nexport async function capturePerformanceMetrics(page: Page): Promise<PerformanceMetrics> {\n  const metrics = await page.evaluate(() => {\n    const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;\n    const paint = performance.getEntriesByType('paint');\n    \n    const fcp = paint.find(entry => entry.name === 'first-contentful-paint')?.startTime || 0;\n    \n    // Get LCP from PerformanceObserver\n    return new Promise<any>((resolve) => {\n      new PerformanceObserver((list) => {\n        const entries = list.getEntries();\n        const lastEntry = entries[entries.length - 1];\n        resolve({\n          FCP: Math.round(fcp),\n          LCP: Math.round(lastEntry.renderTime || lastEntry.loadTime),\n          TTI: Math.round(navigation.domInteractive - navigation.fetchStart),\n          TBT: 0, // Calculated separately\n          CLS: 0  // Calculated separately\n        });\n      }).observe({ entryTypes: ['largest-contentful-paint'] });\n    });\n  });\n  \n  return metrics as PerformanceMetrics;\n}\n\nexport function assertPerformanceBudget(metrics: PerformanceMetrics, budgets: PerformanceMetrics) {\n  Object.entries(budgets).forEach(([metric, budget]) => {\n    if (metrics[metric as keyof PerformanceMetrics] > budget) {\n      throw new Error(`${metric} exceeded budget: ${metrics[metric as keyof PerformanceMetrics]}ms > ${budget}ms`);\n    }\n  });\n}",
+          "fumadocs-perf.spec.ts": "import { test, expect } from '@playwright/test';\nimport { capturePerformanceMetrics, assertPerformanceBudget } from './utils/performance-helpers';\nimport performanceBudgets from '../../../performance-budgets.json';\n\ntest.describe('Performance Benchmarks', () => {\n  test.beforeEach(async ({ page }) => {\n    // Ensure clean state\n    await page.goto('/');\n    \n    // Handle authentication\n    const demoButton = page.locator('button:has-text(\"Continue with Demo Mode\")');\n    if (await demoButton.isVisible({ timeout: 5000 })) {\n      await demoButton.click();\n      await page.waitForLoadState('networkidle');\n    }\n  });\n\n  test('homepage performance', async ({ page }) => {\n    await page.goto('/');\n    await page.waitForLoadState('networkidle');\n    \n    const metrics = await capturePerformanceMetrics(page);\n    console.log('Homepage metrics:', metrics);\n    \n    assertPerformanceBudget(metrics, performanceBudgets.homepage);\n  });\n\n  test('documentation page performance', async ({ page }) => {\n    await page.goto('/knowledge');\n    await page.waitForLoadState('networkidle');\n    \n    const metrics = await capturePerformanceMetrics(page);\n    console.log('Documentation metrics:', metrics);\n    \n    assertPerformanceBudget(metrics, performanceBudgets.documentation);\n  });\n\n  test('search functionality performance', async ({ page }) => {\n    await page.goto('/');\n    \n    // Measure search open time\n    const startTime = Date.now();\n    await page.keyboard.press('Meta+K');\n    await page.waitForSelector('[data-cmdk-root]', { state: 'visible' });\n    const searchOpenTime = Date.now() - startTime;\n    \n    expect(searchOpenTime).toBeLessThan(300); // Should open within 300ms\n    \n    // Measure search results time\n    const searchStart = Date.now();\n    await page.keyboard.type('test');\n    await page.waitForTimeout(500); // Wait for debounce\n    const searchTime = Date.now() - searchStart;\n    \n    expect(searchTime).toBeLessThan(1000); // Results within 1s\n  });\n});",
+          "performance-budgets.json": "{\n  \"homepage\": {\n    \"FCP\": 1800,\n    \"LCP\": 2500,\n    \"TTI\": 3500,\n    \"TBT\": 300,\n    \"CLS\": 0.1\n  },\n  \"documentation\": {\n    \"FCP\": 2000,\n    \"LCP\": 3000,\n    \"TTI\": 4000,\n    \"TBT\": 500,\n    \"CLS\": 0.1\n  },\n  \"admin\": {\n    \"FCP\": 2500,\n    \"LCP\": 3500,\n    \"TTI\": 5000,\n    \"TBT\": 600,\n    \"CLS\": 0.15\n  }\n}"
+        },
+        "commands": [
+          "npm run test:e2e tests/e2e/performance"
+        ],
+        "validation": {
+          "commands": [
+            "npm run test:e2e tests/e2e/performance/fumadocs-perf.spec.ts",
+            "npm run test:e2e tests/e2e/performance -- --reporter=json > performance-report.json"
+          ],
+          "expectedOutput": "All performance tests should pass with metrics under budget"
+        },
+        "acceptance": {
+          "criteria": [
+            "Page load time tests created for homepage, docs, and admin pages",
+            "Search performance test measures open and result times",
+            "Performance budgets defined in JSON with specific thresholds",
+            "Tests provide actionable metrics (FCP, LCP, TTI, TBT, CLS)",
+            "Performance helper utilities are reusable",
+            "Console output shows actual metric values",
+            "Tests fail when budgets are exceeded"
+          ]
+        }
+      },
+      {
+        "id": 12,
+        "title": "Create CI Workflow",
+        "description": "Set up comprehensive GitHub Actions workflow for automated testing with caching, parallel execution, and result reporting",
+        "status": "pending",
+        "priority": "high",
+        "dependencies": [11],
+        "phase": "3",
+        "week": "3",
+        "files": [
+          ".github/workflows/test.yml",
+          ".github/workflows/visual-regression.yml"
+        ],
+        "implementation": {
+          ".github/workflows/test.yml": "name: Test Suite\n\non:\n  push:\n    branches: [main, develop]\n  pull_request:\n    branches: [main, develop]\n\njobs:\n  unit-tests:\n    runs-on: ubuntu-latest\n    \n    steps:\n    - uses: actions/checkout@v4\n    \n    - name: Setup Node.js\n      uses: actions/setup-node@v4\n      with:\n        node-version: '20'\n        cache: 'npm'\n    \n    - name: Cache dependencies\n      uses: actions/cache@v3\n      with:\n        path: ~/.npm\n        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}\n        restore-keys: |\n          ${{ runner.os }}-node-\n    \n    - name: Install dependencies\n      run: npm ci\n    \n    - name: Run unit tests\n      run: npm run test:ci\n    \n    - name: Run coverage\n      run: npm run test:coverage\n    \n    - name: Upload coverage reports\n      uses: codecov/codecov-action@v3\n      with:\n        file: ./coverage/lcov.info\n        flags: unittests\n        name: codecov-umbrella\n    \n  e2e-tests:\n    runs-on: ubuntu-latest\n    container:\n      image: mcr.microsoft.com/playwright:v1.40.0-jammy\n    \n    strategy:\n      fail-fast: false\n      matrix:\n        shardIndex: [1, 2, 3, 4]\n        shardTotal: [4]\n    \n    steps:\n    - uses: actions/checkout@v4\n    \n    - name: Setup Node.js\n      uses: actions/setup-node@v4\n      with:\n        node-version: '20'\n        cache: 'npm'\n    \n    - name: Cache Playwright browsers\n      uses: actions/cache@v3\n      with:\n        path: ~/.cache/ms-playwright\n        key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}\n        restore-keys: |\n          ${{ runner.os }}-playwright-\n    \n    - name: Install dependencies\n      run: npm ci\n    \n    - name: Install Playwright browsers\n      run: npx playwright install --with-deps\n    \n    - name: Run E2E tests\n      run: npm run test:e2e -- --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}\n    \n    - name: Upload test results\n      if: always()\n      uses: actions/upload-artifact@v3\n      with:\n        name: playwright-report-${{ matrix.shardIndex }}\n        path: playwright-report/\n        retention-days: 30\n\n  visual-tests:\n    runs-on: ubuntu-latest\n    \n    steps:\n    - uses: actions/checkout@v4\n    \n    - name: Setup Node.js\n      uses: actions/setup-node@v4\n      with:\n        node-version: '20'\n        cache: 'npm'\n    \n    - name: Install dependencies\n      run: npm ci\n    \n    - name: Install Playwright\n      run: npx playwright install chromium\n    \n    - name: Run visual tests\n      run: npm run test:visual -- --project=chromium\n    \n    - name: Upload visual diff artifacts\n      if: failure()\n      uses: actions/upload-artifact@v3\n      with:\n        name: visual-test-diffs\n        path: tests/visual/diff/\n        retention-days: 7",
+          ".github/workflows/visual-regression.yml": "name: Visual Regression Tests\n\non:\n  workflow_dispatch:\n    inputs:\n      update_baselines:\n        description: 'Update visual baselines'\n        required: false\n        type: boolean\n        default: false\n\njobs:\n  visual-regression:\n    runs-on: ubuntu-latest\n    \n    steps:\n    - uses: actions/checkout@v4\n    \n    - name: Setup Node.js\n      uses: actions/setup-node@v4\n      with:\n        node-version: '20'\n        cache: 'npm'\n    \n    - name: Install dependencies\n      run: npm ci\n    \n    - name: Install Playwright\n      run: npx playwright install chromium\n    \n    - name: Run visual tests\n      if: ${{ !inputs.update_baselines }}\n      run: npm run test:visual\n    \n    - name: Update baselines\n      if: ${{ inputs.update_baselines }}\n      run: npm run test:visual:update\n    \n    - name: Commit updated baselines\n      if: ${{ inputs.update_baselines }}\n      run: |\n        git config --global user.name 'github-actions[bot]'\n        git config --global user.email 'github-actions[bot]@users.noreply.github.com'\n        git add tests/visual/baseline/\n        git commit -m 'Update visual regression baselines'\n        git push"
+        },
+        "commands": [
+          "mkdir -p .github/workflows",
+          "git add .github/workflows/",
+          "git commit -m 'Add CI workflows for automated testing'"
+        ],
+        "validation": {
+          "commands": [
+            "gh workflow list",
+            "gh workflow run test.yml",
+            "gh run list --workflow=test.yml"
+          ],
+          "expectedOutput": "Workflows should appear in GitHub Actions tab and run on push/PR"
+        },
+        "acceptance": {
+          "criteria": [
+            "Workflow runs on PR and push to main/develop",
+            "Installs and caches Playwright browsers",
+            "Runs unit, E2E, and visual tests in parallel",
+            "Reports results clearly with artifacts",
+            "Implements test sharding for E2E tests",
+            "Caches npm dependencies and Playwright browsers",
+            "Uploads coverage to Codecov",
+            "Uploads test artifacts on failure",
+            "Separate workflow for visual baseline updates"
+          ]
+        }
+      },
+      {
+        "id": 13,
+        "title": "Optimize Test Execution",
+        "description": "Configure parallel execution, test sharding, and retry logic for optimal test performance and reliability",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [12],
+        "phase": "3",
+        "week": "3",
+        "files": [
+          "playwright.config.ts",
+          "vitest.config.ts",
+          "tests/e2e/global-setup.ts"
+        ],
+        "implementation": {
+          "playwright.config.ts.updates": "export default defineConfig({\n  // ... existing config ...\n  \n  // Parallel execution\n  fullyParallel: true,\n  workers: process.env.CI ? 2 : '50%', // Use 50% of CPUs locally\n  \n  // Retry configuration\n  retries: process.env.CI ? 2 : 1,\n  \n  // Global setup/teardown\n  globalSetup: require.resolve('./tests/e2e/global-setup.ts'),\n  \n  // Timeout optimizations\n  timeout: 30 * 1000,\n  expect: {\n    timeout: 10 * 1000,\n  },\n  \n  // Test output\n  reporter: [\n    ['list'],\n    ['html', { open: 'never' }],\n    ['json', { outputFile: 'test-results.json' }],\n    ['junit', { outputFile: 'junit.xml' }]\n  ],\n  \n  // Shard configuration\n  shard: process.env.CI ? {\n    total: parseInt(process.env.SHARD_TOTAL || '4'),\n    current: parseInt(process.env.SHARD_INDEX || '1')\n  } : null,\n});",
+          "global-setup.ts": "import { chromium } from '@playwright/test';\nimport type { FullConfig } from '@playwright/test';\n\nasync function globalSetup(config: FullConfig) {\n  // Start test server if needed\n  if (!process.env.CI) {\n    console.log('Starting development server...');\n    // Server startup logic here\n  }\n  \n  // Pre-warm browser for faster first test\n  const browser = await chromium.launch();\n  const context = await browser.newContext();\n  const page = await context.newPage();\n  \n  // Pre-authenticate to speed up tests\n  await page.goto(config.projects[0].use.baseURL!);\n  const demoButton = page.locator('button:has-text(\"Continue with Demo Mode\")');\n  if (await demoButton.isVisible({ timeout: 5000 })) {\n    await demoButton.click();\n    // Save auth state\n    await context.storageState({ path: 'auth-state.json' });\n  }\n  \n  await browser.close();\n  \n  return () => {\n    // Cleanup\n    console.log('Global teardown');\n  };\n}\n\nexport default globalSetup;",
+          "vitest.config.ts.updates": "export default defineConfig({\n  // ... existing config ...\n  \n  test: {\n    // Parallel execution\n    pool: 'threads',\n    poolOptions: {\n      threads: {\n        minThreads: 1,\n        maxThreads: process.env.CI ? 2 : 4\n      }\n    },\n    \n    // Test isolation\n    isolate: true,\n    \n    // Retry flaky tests\n    retry: process.env.CI ? 2 : 0,\n    \n    // Test timeout\n    testTimeout: 10000,\n    \n    // Reporter configuration\n    reporters: process.env.CI \n      ? ['verbose', 'junit'] \n      : ['verbose'],\n      \n    // Output file for CI\n    outputFile: {\n      junit: './junit.xml'\n    }\n  }\n});"
+        },
+        "commands": [
+          "npm run test:e2e -- --workers=4",
+          "npm run test -- --reporter=verbose"
+        ],
+        "validation": {
+          "commands": [
+            "time npm run test:e2e",
+            "npm run test:e2e -- --reporter=json | jq '.stats'",
+            "SHARD_INDEX=1 SHARD_TOTAL=4 npm run test:e2e"
+          ],
+          "expectedOutput": "Tests should complete faster with parallel execution, show retry attempts for flaky tests"
+        },
+        "acceptance": {
+          "criteria": [
+            "Tests run in parallel using available CPU cores",
+            "CI completes in < 5 minutes with sharding",
+            "Flaky tests identified through retry logs",
+            "Retry logic configured (2 retries in CI, 1 locally)",
+            "Global setup reduces repeated authentication",
+            "Test results exported in multiple formats",
+            "Sharding works with environment variables",
+            "Thread pool optimized for CI vs local"
+          ]
+        }
+      },
+      {
+        "id": 14,
+        "title": "Create Test Maintenance Documentation",
+        "description": "Document comprehensive daily, weekly, and monthly test maintenance tasks with automation scripts",
+        "status": "pending",
+        "priority": "low",
+        "dependencies": [13],
+        "phase": "3",
+        "week": "3",
+        "files": [
+          "docs/TEST_MAINTENANCE.md",
+          "scripts/test-maintenance.sh",
+          "scripts/flaky-test-detector.js"
+        ],
+        "implementation": {
+          "TEST_MAINTENANCE.md": "# Test Maintenance Guide\n\n## Daily Tasks (5-10 minutes)\n\n### 1. Check CI Status\n```bash\n# Check recent test runs\ngh run list --workflow=test.yml --limit=5\n\n# View failures\ngh run list --workflow=test.yml --status=failure\n```\n\n### 2. Review Test Failures\n- Check Slack/email for test failure notifications\n- Investigate any new failures\n- Create issues for persistent failures\n\n### 3. Quick Health Check\n```bash\n# Run smoke tests\nnpm run test:smoke\n```\n\n## Weekly Tasks (30-60 minutes)\n\n### 1. Flaky Test Review\n```bash\n# Run flaky test detector\nnode scripts/flaky-test-detector.js\n\n# Review flaky test report\ncat test-reports/flaky-tests.json\n```\n\n### 2. Performance Regression Check\n```bash\n# Compare performance metrics\nnpm run test:perf:compare\n\n# Review performance trends\nopen performance-reports/weekly-trend.html\n```\n\n### 3. Coverage Analysis\n```bash\n# Generate coverage report\nnpm run test:coverage\n\n# Check coverage trends\nnode scripts/coverage-trend.js\n```\n\n### 4. Update Visual Baselines\n```bash\n# Review visual changes\nnpm run test:visual\n\n# Update baselines if needed\nnpm run test:visual:update\n```\n\n## Monthly Tasks (2-4 hours)\n\n### 1. Comprehensive Test Audit\n\n#### Test Effectiveness\n- Review test failure vs bug detection rate\n- Identify gaps in test coverage\n- Remove redundant tests\n\n#### Performance Optimization\n```bash\n# Analyze test execution times\nnode scripts/test-performance-analyzer.js\n\n# Identify slow tests\ncat test-reports/slow-tests.json\n```\n\n### 2. Dependency Updates\n```bash\n# Check for updates\nnpm outdated | grep -E '(playwright|vitest|testing-library)'\n\n# Update test dependencies\nnpm update @playwright/test vitest @testing-library/react\n\n# Run full test suite\nnpm run test:all\n```\n\n### 3. Test Data Cleanup\n```bash\n# Clean old test artifacts\nfind test-results -mtime +30 -delete\nfind coverage -mtime +30 -delete\nfind tests/visual/diff -mtime +7 -delete\n\n# Archive important reports\ntar -czf test-archives/$(date +%Y-%m).tar.gz test-reports/\n```\n\n### 4. Documentation Update\n- Update test patterns documentation\n- Review and update this maintenance guide\n- Document any new testing practices\n\n## Troubleshooting Guide\n\n### Common Issues\n\n#### 1. Sudden Test Failures\n```mermaid\nflowchart TD\n    A[Test Failure] --> B{Recent changes?}\n    B -->|Yes| C[Check recent commits]\n    B -->|No| D[Check external dependencies]\n    C --> E[Revert and test]\n    D --> F[Check API/service status]\n    E --> G{Fixed?}\n    F --> H{Service issue?}\n    G -->|No| I[Debug locally]\n    H -->|Yes| J[Wait or mock service]\n    H -->|No| I\n```\n\n#### 2. Slow Test Execution\n1. Check for unnecessary waits\n2. Review parallel execution settings\n3. Analyze test isolation issues\n4. Consider test data optimization\n\n#### 3. Flaky Tests\n1. Add explicit waits\n2. Improve test isolation\n3. Mock external dependencies\n4. Use retry mechanisms\n\n## Automation Scripts\n\n### Weekly Report Generator\n```bash\n#!/bin/bash\n# scripts/weekly-test-report.sh\n\necho \"# Weekly Test Report - $(date +%Y-%m-%d)\"\necho \"\"\necho \"## Test Execution Summary\"\ngh run list --workflow=test.yml --limit=20 --json conclusion | \\\n  jq -r 'group_by(.conclusion) | map({conclusion: .[0].conclusion, count: length})'\n\necho \"\"\necho \"## Coverage Trend\"\ntail -5 coverage-history.log\n\necho \"\"\necho \"## Flaky Tests\"\njq -r '.[] | select(.flaky_rate > 0.1) | \"\\(.name): \\(.flaky_rate * 100)%\"' test-reports/flaky-tests.json\n```\n\n## Metrics to Track\n\n1. **Test Execution Time**: Target < 5 min for CI\n2. **Test Flakiness Rate**: Target < 1%\n3. **Code Coverage**: Maintain > 80%\n4. **Test Failure Rate**: Track weekly trends\n5. **Time to Fix**: Average time from failure to resolution",
+          "test-maintenance.sh": "#!/bin/bash\n\n# Test Maintenance Script\n# Run weekly to maintain test suite health\n\nset -e\n\necho \"🧹 Starting test maintenance...\"\n\n# 1. Clean old artifacts\necho \"Cleaning old test artifacts...\"\nfind test-results -type f -mtime +30 -delete 2>/dev/null || true\nfind coverage -type f -mtime +30 -delete 2>/dev/null || true\nfind tests/visual/diff -type f -mtime +7 -delete 2>/dev/null || true\n\n# 2. Run flaky test detection\necho \"Detecting flaky tests...\"\nnode scripts/flaky-test-detector.js\n\n# 3. Generate coverage report\necho \"Generating coverage report...\"\nnpm run test:coverage -- --reporter=json > coverage/coverage-summary.json\n\n# 4. Check for slow tests\necho \"Analyzing test performance...\"\nnpm run test:e2e -- --reporter=json > test-performance.json\nnode scripts/analyze-test-performance.js\n\n# 5. Update dependencies\necho \"Checking for dependency updates...\"\nnpm outdated | grep -E '(playwright|vitest|testing-library)' || true\n\n# 6. Generate summary report\necho \"Generating maintenance report...\"\ncat > test-maintenance-report.md << EOF\n# Test Maintenance Report - $(date +%Y-%m-%d)\n\n## Summary\n- Old artifacts cleaned: ✅\n- Flaky tests detected: $(jq '.length' test-reports/flaky-tests.json)\n- Current coverage: $(jq '.total.lines.pct' coverage/coverage-summary.json)%\n- Slow tests found: $(jq '.slowTests | length' test-performance-analysis.json)\n\n## Action Items\n$(jq -r '.[] | \"- Fix flaky test: \" + .name' test-reports/flaky-tests.json)\n$(jq -r '.slowTests[] | \"- Optimize slow test: \" + .name + \" (\" + (.duration/1000 | tostring) + \"s)\"' test-performance-analysis.json)\n\nEOF\n\necho \"✅ Test maintenance complete! Report saved to test-maintenance-report.md\"",
+          "flaky-test-detector.js": "const fs = require('fs');\nconst path = require('path');\n\n// Analyze test results from the last 7 days\nconst testResults = [];\nconst resultsDir = 'test-results';\n\n// Read all test result files\nif (fs.existsSync(resultsDir)) {\n  const files = fs.readdirSync(resultsDir)\n    .filter(f => f.endsWith('.json'))\n    .map(f => path.join(resultsDir, f));\n  \n  files.forEach(file => {\n    try {\n      const data = JSON.parse(fs.readFileSync(file, 'utf8'));\n      testResults.push(data);\n    } catch (e) {\n      console.error(`Error reading ${file}:`, e);\n    }\n  });\n}\n\n// Analyze flaky tests\nconst testRuns = {};\n\ntestResults.forEach(result => {\n  if (result.tests) {\n    result.tests.forEach(test => {\n      const key = test.fullName || test.title;\n      if (!testRuns[key]) {\n        testRuns[key] = { passes: 0, failures: 0 };\n      }\n      if (test.status === 'passed') {\n        testRuns[key].passes++;\n      } else if (test.status === 'failed') {\n        testRuns[key].failures++;\n      }\n    });\n  }\n});\n\n// Calculate flakiness\nconst flakyTests = [];\n\nObject.entries(testRuns).forEach(([name, stats]) => {\n  const total = stats.passes + stats.failures;\n  if (total > 1 && stats.failures > 0 && stats.passes > 0) {\n    const flakiness = stats.failures / total;\n    flakyTests.push({\n      name,\n      flaky_rate: flakiness,\n      passes: stats.passes,\n      failures: stats.failures,\n      total_runs: total\n    });\n  }\n});\n\n// Sort by flakiness\nflakyTests.sort((a, b) => b.flaky_rate - a.flaky_rate);\n\n// Save report\nconst reportDir = 'test-reports';\nif (!fs.existsSync(reportDir)) {\n  fs.mkdirSync(reportDir, { recursive: true });\n}\n\nfs.writeFileSync(\n  path.join(reportDir, 'flaky-tests.json'),\n  JSON.stringify(flakyTests, null, 2)\n);\n\nconsole.log(`Found ${flakyTests.length} flaky tests`);\nif (flakyTests.length > 0) {\n  console.log('\\nTop 5 flaky tests:');\n  flakyTests.slice(0, 5).forEach(test => {\n    console.log(`- ${test.name}: ${(test.flaky_rate * 100).toFixed(1)}% failure rate`);\n  });\n}"
+        },
+        "commands": [
+          "chmod +x scripts/test-maintenance.sh",
+          "chmod +x scripts/flaky-test-detector.js",
+          "./scripts/test-maintenance.sh"
+        ],
+        "validation": {
+          "commands": [
+            "cat test-maintenance-report.md",
+            "ls -la test-reports/",
+            "node scripts/flaky-test-detector.js"
+          ],
+          "expectedOutput": "Maintenance report generated with actionable insights"
+        },
+        "acceptance": {
+          "criteria": [
+            "Daily tasks documented with specific commands",
+            "Weekly review process defined with automation",
+            "Monthly audit checklist created with scripts",
+            "Troubleshooting guide includes decision trees",
+            "Automation scripts for report generation",
+            "Flaky test detection implemented",
+            "Performance analysis tooling included",
+            "Metrics tracking defined with targets"
+          ]
+        }
+      }
+    ]
+  }
+}

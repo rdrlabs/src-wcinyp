@@ -19,7 +19,7 @@ export function PageHeader({
   showComingSoon = false 
 }: PageHeaderProps) {
   return (
-    <div className="text-center pt-12 pb-6 bg-gradient-to-b from-muted-lighter to-transparent">
+    <div className="text-center pt-12 pb-6 bg-gradient-to-b from-muted to-transparent dark:from-transparent">
       {showComingSoon && (
         <div className="mb-6">
           <Icon className="h-16 w-16 mx-auto text-primary/30" strokeWidth={1.5} />

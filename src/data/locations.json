@@ -1,0 +1,166 @@
+{
+  "_comment": [
+    "WCI@NYP Location Data Structure",
+    "================================",
+    "This file contains the centralized location data for all WCI@NYP imaging centers and offices.",
+    "",
+    "Field Descriptions:",
+    "- id: Unique identifier in kebab-case format (e.g., '55th-street'). Used for programmatic references and URL slugs.",
+    "- code: Short abbreviation or code for the location (e.g., '55th', 'DHK'). Max 3-4 characters for use in contexts requiring brevity.",
+    "- name: The official display name shown to users throughout the application (e.g., '55th Street', 'York Avenue').",
+    "- type: Location category - either 'imaging' for clinical imaging centers or 'corporate' for administrative offices.",
+    "- address: Full street address including city, state, and ZIP code.",
+    "- phone: Main contact phone number for the location.",
+    "- services: Array of available services/modalities at this location (e.g., 'CT', 'MRI', 'Mammography').",
+    "",
+    "TODO: Modality Improvements Needed:",
+    "- Establish consistent sorting order for modalities (e.g., CT, MRI, X-Ray, Ultrasound, then specialized)",
+    "- Refine modality specifications:",
+    "  * MRI: Differentiate field strength (1.5T vs 3T)",
+    "  * Ultrasound: Specify types (General/Body, Pelvic, Vascular, Breast, Musculoskeletal)",
+    "  * CT: Note capabilities (Standard, Cardiac, Low-dose, Dual-energy)",
+    "  * Mammography: Digital vs 3D Tomosynthesis",
+    "  * Nuclear Medicine: PET/CT vs PET/MRI vs SPECT",
+    "- Consider adding equipment-specific capabilities for better form routing",
+    "- Future: Link modality details to specific questionnaire requirements",
+    "",
+    "TODO: JO Location Entrance Information:",
+    "- JO has two entrances that need to be documented:",
+    "  * Main hospital entrance - always accessible",
+    "  * Rear hospital entrance - closes at 7pm M-F, closed on weekends",
+    "- This information should be added to location metadata for patient guidance",
+    "",
+    "Usage in the Application:",
+    "- Document Management: Filters forms and documents by location (e.g., location-specific ABN forms)",
+    "- Provider Directory: Associates providers with their primary location",
+    "- Form Routing: Determines which forms are relevant for each location based on available services",
+    "- Future: User location preferences to show relevant content",
+    "- Future: Service-based filtering (only show MRI forms at locations with MRI services)",
+    "",
+    "Naming Conventions:",
+    "- Always use full street names (e.g., '55th Street' not '55th')",
+    "- Special locations: 'York Avenue' (not 'York'), '88 Pine' (corporate office)",
+    "- Maintain consistency with this naming across all features",
+    "",
+    "Note: When adding new locations, ensure the name matches exactly what's used in documents.json and providers.json"
+  ],
+  "locations": [
+    {
+      "id": "55th-street",
+      "code": "55th",
+      "name": "55th Street",
+      "type": "imaging",
+      "address": "416 E 55th St Ground Floor, New York, NY 10022",
+      "phone": "(000) 000-0000",
+      "services": ["MRI"]
+    },
+    {
+      "id": "61st-street",
+      "code": "61st",
+      "name": "61st Street",
+      "type": "imaging",
+      "address": "425 East 61st Street 9th Floor, New York, NY 10065",
+      "phone": "(646) 962-3330",
+      "services": ["CT", "X-Ray", "Ultrasound", "Breast Imaging"]
+    },
+    {
+      "id": "88-pine",
+      "code": "Pine",
+      "name": "88 Pine",
+      "type": "corporate",
+      "address": "88 Pine Street, New York, NY 10005",
+      "phone": "(000) 000-0000",
+      "services": ["Call Center", "Pre-Authorization", "Administration"]
+    },
+    {
+      "id": "beekman",
+      "code": "BKM",
+      "name": "Beekman",
+      "type": "imaging",
+      "address": "1320 York Avenue, New York, NY 10021",
+      "phone": "(212) 555-2201",
+      "services": ["CT", "MRI", "X-Ray", "Ultrasound", "Interventional Radiology"]
+    },
+    {
+      "id": "broadway",
+      "code": "BWY",
+      "name": "Broadway",
+      "type": "imaging",
+      "address": "2315 Broadway 4th Floor, New York, NY 10024",
+      "phone": "(000) 000-0000",
+      "services": ["CT", "MRI", "X-Ray", "Ultrasound", "Bone Density"]
+    },
+    {
+      "id": "dhk",
+      "code": "DHK",
+      "name": "DHK",
+      "type": "imaging",
+      "address": "1283 York Ave 7th Floor, New York, NY 10065",
+      "phone": "(646) 697-0477",
+      "services": ["CT", "MRI", "PET/CT", "PET/MRI", "X-Ray", "Ultrasound"]
+    },
+    {
+      "id": "jo",
+      "code": "JO",
+      "name": "JO",
+      "type": "imaging",
+      "address": "520 E 70th St Ground Floor, New York, NY 10021",
+      "phone": "(212) 746-6093",
+      "services": ["CT", "X-Ray", "Ultrasound", "Fluoroscopy"]
+    },
+    {
+      "id": "lic",
+      "code": "LIC",
+      "name": "LIC",
+      "type": "imaging",
+      "address": "28-07 Jackson Avenue, Long Island City, NY 11101",
+      "phone": "(718) 555-2801",
+      "services": ["CT", "MRI", "X-Ray", "Ultrasound", "Mammography"]
+    },
+    {
+      "id": "spiral",
+      "code": "Spiral",
+      "name": "Spiral",
+      "type": "imaging",
+      "address": "619 West 54th Street, New York, NY 10019",
+      "phone": "(212) 555-5401",
+      "services": ["CT", "MRI", "X-Ray", "Ultrasound", "Nuclear Medicine", "PET/MRI"]
+    },
+    {
+      "id": "starr",
+      "code": "STARR",
+      "name": "STARR",
+      "type": "imaging",
+      "address": "520 East 70th Street, New York, NY 10021",
+      "phone": "(212) 555-7001",
+      "services": ["MRI", "X-Ray", "Ultrasound"]
+    },
+    {
+      "id": "wgc",
+      "code": "WGC",
+      "name": "WGC",
+      "type": "imaging",
+      "address": "1011 First Avenue, New York, NY 10022",
+      "phone": "(212) 555-1101",
+      "services": ["CT", "MRI", "X-Ray", "Ultrasound"]
+    },
+    {
+      "id": "westside",
+      "code": "Westside",
+      "name": "Westside",
+      "type": "imaging",
+      "address": "2315 Broadway, New York, NY 10024",
+      "phone": "(000) 000-0000",
+      "services": ["CT", "MRI", "X-Ray", "Ultrasound", "Mammography"]
+    },
+    {
+      "id": "york",
+      "code": "WGC",
+      "name": "York Avenue",
+      "type": "imaging",
+      "address": "1305 York Ave 3rd Floor, New York, NY 10021",
+      "phone": "(646) 962-3330",
+      "services": ["MRI", "X-Ray", "PET/CT", "PET/MRI", "Bone Density"]
+    }
+  ]
+}

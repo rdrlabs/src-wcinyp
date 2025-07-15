@@ -12,6 +12,10 @@
 
 # testing
 /coverage
+*.lcov
+/test-results/
+/playwright-report/
+/playwright/.cache/
 
 # next.js
 /.next/
@@ -39,6 +43,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# fumadocs generated files
+.source/
 .node_modules_old_delete_me/
 .react-router/
 

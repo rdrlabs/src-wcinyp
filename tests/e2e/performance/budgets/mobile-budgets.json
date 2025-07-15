@@ -1,0 +1,228 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Mobile Performance Budgets",
+  "description": "Performance budgets for mobile devices with network-specific thresholds",
+  "type": "object",
+  "properties": {
+    "networkConditions": {
+      "3G": {
+        "description": "Budgets for 3G network conditions",
+        "webVitals": {
+          "FCP": 3600,
+          "LCP": 5000,
+          "TTI": 8000,
+          "TBT": 600,
+          "CLS": 0.25,
+          "INP": 500,
+          "TTFB": 2000
+        },
+        "resources": {
+          "totalSize": 1572864,
+          "scriptSize": 393216,
+          "styleSize": 196608,
+          "imageSize": 786432,
+          "fontSize": 196608
+        }
+      },
+      "4G": {
+        "description": "Budgets for 4G network conditions",
+        "webVitals": {
+          "FCP": 2400,
+          "LCP": 3500,
+          "TTI": 5000,
+          "TBT": 400,
+          "CLS": 0.15,
+          "INP": 300,
+          "TTFB": 1200
+        },
+        "resources": {
+          "totalSize": 2097152,
+          "scriptSize": 524288,
+          "styleSize": 262144,
+          "imageSize": 1048576,
+          "fontSize": 262144
+        }
+      },
+      "WiFi": {
+        "description": "Budgets for WiFi network conditions on mobile",
+        "webVitals": {
+          "FCP": 2000,
+          "LCP": 3000,
+          "TTI": 4000,
+          "TBT": 300,
+          "CLS": 0.1,
+          "INP": 250,
+          "TTFB": 1000
+        },
+        "resources": {
+          "totalSize": 2621440,
+          "scriptSize": 655360,
+          "styleSize": 327680,
+          "imageSize": 1310720,
+          "fontSize": 327680
+        }
+      }
+    },
+    "deviceProfiles": {
+      "low-end": {
+        "description": "Low-end mobile devices (e.g., budget Android phones)",
+        "cpuThrottling": 6,
+        "webVitals": {
+          "FCP": 4000,
+          "LCP": 6000,
+          "TTI": 10000,
+          "TBT": 800,
+          "CLS": 0.3,
+          "INP": 600,
+          "TTFB": 2500
+        }
+      },
+      "mid-tier": {
+        "description": "Mid-tier mobile devices (e.g., average smartphones)",
+        "cpuThrottling": 4,
+        "webVitals": {
+          "FCP": 2500,
+          "LCP": 4000,
+          "TTI": 6000,
+          "TBT": 500,
+          "CLS": 0.2,
+          "INP": 400,
+          "TTFB": 1500
+        }
+      },
+      "high-end": {
+        "description": "High-end mobile devices (e.g., flagship phones)",
+        "cpuThrottling": 2,
+        "webVitals": {
+          "FCP": 1800,
+          "LCP": 2800,
+          "TTI": 4000,
+          "TBT": 300,
+          "CLS": 0.1,
+          "INP": 250,
+          "TTFB": 1000
+        }
+      }
+    },
+    "pages": {
+      "homepage": {
+        "3G": {
+          "FCP": 3000,
+          "LCP": 4500,
+          "TTI": 7000,
+          "TBT": 500,
+          "CLS": 0.2,
+          "INP": 400,
+          "TTFB": 1800
+        },
+        "4G": {
+          "FCP": 2000,
+          "LCP": 3000,
+          "TTI": 4500,
+          "TBT": 300,
+          "CLS": 0.1,
+          "INP": 250,
+          "TTFB": 1000
+        }
+      },
+      "documents": {
+        "3G": {
+          "FCP": 3600,
+          "LCP": 5500,
+          "TTI": 8000,
+          "TBT": 600,
+          "CLS": 0.25,
+          "INP": 500,
+          "TTFB": 2200
+        },
+        "4G": {
+          "FCP": 2400,
+          "LCP": 3500,
+          "TTI": 5000,
+          "TBT": 400,
+          "CLS": 0.15,
+          "INP": 300,
+          "TTFB": 1200
+        }
+      },
+      "providers": {
+        "3G": {
+          "FCP": 4000,
+          "LCP": 6000,
+          "TTI": 9000,
+          "TBT": 800,
+          "CLS": 0.3,
+          "INP": 600,
+          "TTFB": 2500
+        },
+        "4G": {
+          "FCP": 2800,
+          "LCP": 4000,
+          "TTI": 5500,
+          "TBT": 500,
+          "CLS": 0.2,
+          "INP": 400,
+          "TTFB": 1500
+        }
+      },
+      "directory": {
+        "3G": {
+          "FCP": 4000,
+          "LCP": 6000,
+          "TTI": 9000,
+          "TBT": 800,
+          "CLS": 0.3,
+          "INP": 600,
+          "TTFB": 2500
+        },
+        "4G": {
+          "FCP": 2800,
+          "LCP": 4000,
+          "TTI": 5500,
+          "TBT": 500,
+          "CLS": 0.2,
+          "INP": 400,
+          "TTFB": 1500
+        }
+      },
+      "knowledge": {
+        "3G": {
+          "FCP": 3200,
+          "LCP": 4800,
+          "TTI": 7500,
+          "TBT": 550,
+          "CLS": 0.2,
+          "INP": 450,
+          "TTFB": 2000
+        },
+        "4G": {
+          "FCP": 2200,
+          "LCP": 3200,
+          "TTI": 4800,
+          "TBT": 350,
+          "CLS": 0.12,
+          "INP": 280,
+          "TTFB": 1100
+        }
+      }
+    },
+    "interactionBudgets": {
+      "description": "Mobile-specific interaction performance budgets",
+      "tap": {
+        "good": 100,
+        "needsImprovement": 300,
+        "poor": 500
+      },
+      "scroll": {
+        "good": 50,
+        "needsImprovement": 150,
+        "poor": 300
+      },
+      "swipe": {
+        "good": 100,
+        "needsImprovement": 300,
+        "poor": 500
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "hooks": {
+    "pre-commit": {
+      "description": "Run tests and linting before committing",
+      "command": "npm run lint && npm run type-check && npm test -- --run",
+      "blocking": true
+    },
+    "post-commit": {
+      "description": "Create a feature branch and draft PR for CodeRabbit review",
+      "command": "bash -c 'BRANCH=$(git rev-parse --abbrev-ref HEAD); if [[ \"$BRANCH\" != \"main\" ]] && [[ \"$BRANCH\" != \"master\" ]]; then git push -u origin HEAD 2>/dev/null || true; gh pr create --draft --title \"WIP: $BRANCH\" --body \"Getting CodeRabbit feedback on changes\" 2>/dev/null || echo \"PR already exists or gh CLI not configured\"; fi'",
+      "blocking": false
+    },
+    "pre-push": {
+      "description": "Ensure all tests pass before pushing",
+      "command": "npm test -- --run",
+      "blocking": true
+    }
+  }
+}

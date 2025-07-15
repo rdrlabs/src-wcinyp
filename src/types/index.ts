@@ -1,3 +1,18 @@
+// Location types
+export interface Location {
+  id: string;
+  code: string;
+  name: string;
+  type: 'imaging' | 'corporate';
+  address?: string;
+  phone?: string;
+  services: string[];
+}
+
+export interface LocationData {
+  locations: Location[];
+}
+
 // Document types
 export interface Document {
   name: string;
@@ -32,7 +47,7 @@ export interface Provider {
 export interface Contact {
   id: number;
   name: string;
-  type: 'Provider' | 'Facility' | 'Insurance' | 'Lab' | 'Vendor' | 'Government';
+  type: 'Provider' | 'Facility' | 'Insurance' | 'Lab' | 'Vendor' | 'Government' | 'Location';
   department: string;
   phone: string;
   email: string;

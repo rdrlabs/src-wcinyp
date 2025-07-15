@@ -15,6 +15,41 @@ export default defineConfig({
     isolate: true, // Isolate tests
     maxConcurrency: 1, // Run tests sequentially to avoid timeouts
     bail: 1, // Stop on first failure
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html', 'lcov'],
+      exclude: [
+        'node_modules/',
+        'tests/',
+        '**/*.d.ts',
+        '**/*.config.*',
+        '**/mockData.ts',
+        'src/test/**',
+        '**/*.test.*',
+        '**/*.spec.*',
+        '**/test-*',
+        '**/examples/**',
+        'scripts/**',
+        'content/**',
+        'public/**',
+        'out/**',
+        'coverage/**',
+        '.next/**',
+        'dist/**',
+        'build/**',
+        'playwright-report/**',
+        'test-results/**',
+        'archive/**',
+        'docs/**'
+      ],
+      thresholds: {
+        lines: 80,
+        functions: 80,
+        branches: 80,
+        statements: 80
+      },
+      reportsDirectory: './coverage'
+    }
   },
   resolve: {
     alias: {

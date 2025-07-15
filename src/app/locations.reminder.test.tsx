@@ -7,6 +7,6 @@ describe('Location Pages Reminder', () => {
     // - /locations/spiral
     // These pages are referenced in the navbar hover card
     expect(true).toBe(true);
-    console.warn('Remember to implement location pages for 61st and Spiral');
+    // TODO: Remember to implement location pages for 61st and Spiral
   });
 });

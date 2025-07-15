@@ -48,7 +48,15 @@ export const handler: Handler = async (event) => {
     const { category, search } = event.queryStringParameters || {}
 
     // In a real app, this would query a database
-    let response: any = {
+    interface DocumentResponse {
+      categories: typeof DOCUMENT_CATEGORIES
+      totalDocuments: number
+      timestamp: string
+      filteredCount?: number
+      searchResults?: number
+    }
+    
+    let response: DocumentResponse = {
       categories: DOCUMENT_CATEGORIES,
       totalDocuments: Object.values(DOCUMENT_CATEGORIES).reduce((a, b) => a + b, 0),
       timestamp: new Date().toISOString(),
