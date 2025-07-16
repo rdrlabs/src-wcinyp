@@ -6,6 +6,7 @@ import { AppProvider } from '@/contexts/app-context'
 import { FormProvider } from '@/contexts/form-context'
 import { DataProvider } from '@/contexts/data-context'
 import { SearchProvider } from '@/contexts/search-context'
+import { AuthProvider } from '@/contexts/auth-context'
 import { ErrorBoundary } from '@/components/error-boundary'
 import { GlobalLoading } from '@/components/global-loading'
 import { Notifications } from '@/components/notifications'
@@ -19,17 +20,19 @@ export function Providers({ children }: { children: React.ReactNode }) {
         enableSystem
         disableTransitionOnChange
       >
-        <AppProvider>
-          <DataProvider>
-            <SearchProvider>
-              <FormProvider>
-                {children}
-                <GlobalLoading />
-                <Notifications />
-              </FormProvider>
-            </SearchProvider>
-          </DataProvider>
-        </AppProvider>
+        <AuthProvider>
+          <AppProvider>
+            <DataProvider>
+              <SearchProvider>
+                <FormProvider>
+                  {children}
+                  <GlobalLoading />
+                  <Notifications />
+                </FormProvider>
+              </SearchProvider>
+            </DataProvider>
+          </AppProvider>
+        </AuthProvider>
       </ThemeProvider>
     </ErrorBoundary>
   )

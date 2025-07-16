@@ -38,8 +38,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isPollingForAuth, setIsPollingForAuth] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
   const router = useRouter()
-  const supabase = getSupabaseClient()
-  const pollingIntervalRef = useRef<NodeJS.Timeout | ReturnType<typeof supabase.channel> | null>(null)
+  const pollingIntervalRef = useRef<NodeJS.Timeout | any>(null)
 
   // Check for existing session on mount
   useEffect(() => {
@@ -56,6 +55,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     checkSession()
 
     // Listen for auth state changes
+    const supabase = getSupabaseClient()
+    if (!supabase) {
+      setLoading(false)
+      return
+    }
+    
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event: AuthChangeEvent, session: Session | null) => {
         if (event === 'SIGNED_IN') {
@@ -112,11 +117,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router, supabase.auth])
+  }, [router])
 
   // Start realtime subscription for authentication status
   const startRealtimeAuth = useCallback((sessionToken: string) => {
     setIsPollingForAuth(true)
+    
+    const supabase = getSupabaseClient()
+    if (!supabase) return
     
     // Create a realtime subscription to monitor authentication status
     const channel = supabase
@@ -139,6 +147,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             
             // Sign in the user on this device
             try {
+              const supabase = getSupabaseClient()
+              if (!supabase) return
+              
               const { error: signInError } = await supabase.auth.signInWithOtp({
                 email,
                 options: {
@@ -176,7 +187,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     
     // Store channel reference for cleanup
     pollingIntervalRef.current = channel
-  }, [supabase])
+  }, [])
   
   // Stop realtime subscription
   const stopRealtimeAuth = useCallback(() => {
@@ -195,6 +206,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       setLoading(true)
       setError(null)
+      
+      const supabase = getSupabaseClient()
+      if (!supabase) {
+        setLoading(false)
+        return
+      }
       
       const { data: { session }, error } = await retryWithBackoff<{
         data: { session: Session | null };
@@ -265,6 +282,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setRememberMe(rememberMeOption)
       }
 
+      const supabase = getSupabaseClient()
+      if (!supabase) {
+        throw new Error('Unable to initialize authentication')
+      }
+      
       // Send the magic link with the session token (with retry)
       const { error } = await retryWithBackoff<{ error: Error | null }>(
         () => supabase.auth.signInWithOtp({
@@ -308,6 +330,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       // Stop realtime subscription if active
       stopRealtimeAuth()
+      
+      const supabase = getSupabaseClient()
+      if (!supabase) {
+        setLoading(false)
+        return
+      }
       
       const { error } = await retryWithBackoff<{ error: Error | null }>(
         () => supabase.auth.signOut(),
