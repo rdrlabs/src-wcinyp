@@ -80,8 +80,10 @@ export function measure(pageOrName: any, nameOrStart?: string, startOrEnd?: stri
 export function assertPerformanceBudget(metrics: any, budget: any) {
   const failures: string[] = []
   for (const [key, value] of Object.entries(budget)) {
-    if (metrics[key] > value) {
-      failures.push(`${key}: ${metrics[key]}ms exceeded budget of ${value}ms`)
+    const metricValue = metrics[key]
+    const budgetValue = value as number
+    if (typeof metricValue === 'number' && typeof budgetValue === 'number' && metricValue > budgetValue) {
+      failures.push(`${key}: ${metricValue}ms exceeded budget of ${budgetValue}ms`)
     }
   }
   if (failures.length > 0) {
