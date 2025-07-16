@@ -87,10 +87,10 @@ export function SupabaseDebug() {
           <Button onClick={runDebugChecks} size="sm">
             Run Debug Checks
           </Button>
-          {user && <Badge variant="outline" className="bg-green-500/5">Authenticated</Badge>}
-          {!user && !loading && <Badge variant="outline" className="bg-red-500/5">Not Authenticated</Badge>}
-          {loading && <Badge variant="outline" className="bg-yellow-500/5">Loading...</Badge>}
-          {isPollingForAuth && <Badge variant="outline" className="bg-blue-500/5">Polling for Auth</Badge>}
+          {user && <Badge variant="secondary">Authenticated</Badge>}
+          {!user && !loading && <Badge variant="destructive">Not Authenticated</Badge>}
+          {loading && <Badge variant="outline">Loading...</Badge>}
+          {isPollingForAuth && <Badge variant="default">Polling for Auth</Badge>}
         </div>
 
         {debugInfo && (
