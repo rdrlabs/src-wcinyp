@@ -196,7 +196,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setLoading(true)
       setError(null)
       
-      const { data: { session }, error } = await retryWithBackoff(
+      const { data: { session }, error } = await retryWithBackoff<{
+        data: { session: Session | null };
+        error: Error | null;
+      }>(
         () => supabase.auth.getSession(),
         { maxRetries: 2, initialDelay: 500 }
       )
