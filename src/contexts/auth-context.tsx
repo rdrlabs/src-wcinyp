@@ -198,7 +198,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       const { data: { session } } = await retryWithBackoff(
         () => supabase.auth.getSession(),
-        { maxRetries: 2, baseDelay: 500 }
+        { maxRetries: 2, initialDelay: 500 }
       )
       
       if (session?.user) {
@@ -271,7 +271,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }),
         { 
           maxRetries: 3, 
-          baseDelay: 1000,
+          initialDelay: 1000,
           onRetry: (error, attempt) => {
             logger.info(`Retrying magic link send (attempt ${attempt})`, undefined, 'AuthContext')
           }
@@ -306,7 +306,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       const { error } = await retryWithBackoff(
         () => supabase.auth.signOut(),
-        { maxRetries: 2, baseDelay: 500 }
+        { maxRetries: 2, initialDelay: 500 }
       )
       
       if (error) {

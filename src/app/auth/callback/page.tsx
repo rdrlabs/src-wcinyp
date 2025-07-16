@@ -46,7 +46,7 @@ export default function AuthCallbackPage() {
           }, 2000)
         }
       } catch (error) {
-        logger.error('Auth callback error', error, 'AuthCallback')
+        logger.error('Auth callback error', { error, context: 'AuthCallback' })
         setStatus('error')
         setMessage('Authentication failed. Please try again.')
       }

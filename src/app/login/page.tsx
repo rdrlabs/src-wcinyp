@@ -53,7 +53,7 @@ export default function LoginPage() {
   })
   const [requestLoading, setRequestLoading] = useState(false)
   const { signInWithEmail, loading, error: authError, user, isPollingForAuth } = useAuth()
-  const { enterDemoMode } = useDemo()
+  const { setIsDemoMode } = useDemo()
   const router = useRouter()
 
   const error = localError || authError
@@ -382,7 +382,7 @@ export default function LoginPage() {
                   type="button"
                   variant="outline"
                   className="w-full"
-                  onClick={enterDemoMode}
+                  onClick={() => setIsDemoMode(true)}
                   disabled={loading}
                 >
                   <ArrowRight className="mr-2 h-4 w-4" />

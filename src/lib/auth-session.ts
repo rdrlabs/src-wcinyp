@@ -31,7 +31,7 @@ export class AuthSessionManager {
               expires_at: expiresAt,
             })
         },
-        { maxRetries: 2, baseDelay: 500 }
+        { maxRetries: 2, initialDelay: 500 }
       )
       
       if (error) throw error
@@ -60,7 +60,7 @@ export class AuthSessionManager {
             .eq('session_token', sessionToken)
             .single()
         },
-        { maxRetries: 2, baseDelay: 500 }
+        { maxRetries: 2, initialDelay: 500 }
       )
       
       if (error) throw error

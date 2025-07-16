@@ -94,7 +94,7 @@ export default function AccessRequestsPage() {
       
       setRequests(data || [])
     } catch (err) {
-      logger.error('Error fetching access requests', err, 'AdminAccessRequests')
+      logger.error('Error fetching access requests', { error: err, context: 'AdminAccessRequests' })
       setError('Failed to load access requests')
     } finally {
       setLoading(false)
@@ -112,7 +112,7 @@ export default function AccessRequestsPage() {
       
       setStats(data)
     } catch (err) {
-      logger.error('Error fetching stats', err, 'AdminAccessRequests')
+      logger.error('Error fetching stats', { error: err, context: 'AdminAccessRequests' })
     }
   }, [supabase])
 
@@ -161,7 +161,7 @@ export default function AccessRequestsPage() {
       setSelectedRequest(null)
       setReviewNotes('')
     } catch (err) {
-      logger.error('Error approving request', err, 'AdminAccessRequests')
+      logger.error('Error approving request', { error: err, context: 'AdminAccessRequests' })
       setError('Failed to approve request')
     } finally {
       setActionLoading(false)
@@ -188,7 +188,7 @@ export default function AccessRequestsPage() {
       setSelectedRequest(null)
       setReviewNotes('')
     } catch (err) {
-      logger.error('Error rejecting request', err, 'AdminAccessRequests')
+      logger.error('Error rejecting request', { error: err, context: 'AdminAccessRequests' })
       setError('Failed to reject request')
     } finally {
       setActionLoading(false)
