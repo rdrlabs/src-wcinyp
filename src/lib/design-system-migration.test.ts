@@ -55,7 +55,7 @@ describe('Design System Migration Helpers', () => {
 
     it('should map other colors to muted', () => {
       expect(migrateColor('bg-green-50')).toBe('bg-muted')
-      expect(migrateColor('bg-yellow-50')).toBe('bg-muted')
+      expect(migrateColor('bg-orange-50')).toBe('bg-muted')
       expect(migrateColor('bg-purple-50')).toBe('bg-muted')
     })
 

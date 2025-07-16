@@ -1,12 +1,11 @@
 'use client';
 
-import Link from "next/link";
-import { ExternalLink, MapPin, Mail } from "lucide-react";
-import { mainNavItems, footerLinks } from "@/config/navigation";
-import { TYPOGRAPHY } from "@/constants/typography";
-import { GAP } from "@/constants/spacing";
-import { cn } from "@/lib/utils";
-import { BrandName } from "@/components/brand-name";
+import Link from 'next/link';
+import { 
+  Brain, FileText, Bell, Users,
+  Calendar, LayoutGrid, Building, MessageSquare, 
+  Mail, Infinity, BookOpen, Cloud, ExternalLink
+} from 'lucide-react';
 import {
   HoverCard,
   HoverCardContent,
@@ -14,21 +13,82 @@ import {
 } from "@/components/ui/hover-card";
 
 export function Footer() {
+  const navigation = [
+    { name: 'Knowledge Base', href: '/knowledge', icon: Brain },
+    { name: 'Document Hub', href: '/documents', icon: FileText },
+    { name: 'Updates', href: '/updates', icon: Bell },
+    { name: 'Directory', href: '/directory', icon: Users },
+  ];
+
+  const quickLinks = [
+    { 
+      name: 'Schedulefly', 
+      href: 'https://app.schedulefly.com/login.aspx',
+      icon: Calendar,
+      description: 'Staff scheduling'
+    },
+    { 
+      name: 'WCM MyApps', 
+      href: 'http://myapps.med.cornell.edu/',
+      icon: LayoutGrid,
+      description: 'Application portal'
+    },
+    { 
+      name: 'Microsoft Office 365', 
+      href: 'https://m365.cloud.microsoft/',
+      icon: Building,
+      description: 'Microsoft 365 suite'
+    },
+    { 
+      name: 'Microsoft Teams', 
+      href: 'https://teams.microsoft.com/',
+      icon: MessageSquare,
+      description: 'Team collaboration'
+    },
+    { 
+      name: 'Microsoft Outlook', 
+      href: 'https://outlook.office.com/mail/',
+      icon: Mail,
+      description: 'Email & calendar'
+    },
+    { 
+      name: 'Microsoft Loop', 
+      href: 'https://loop.cloud.microsoft/',
+      icon: Infinity,
+      description: 'Collaborative workspace'
+    },
+    { 
+      name: 'WCINYP Manual', 
+      href: 'https://medcornell.sharepoint.com/:o:/r/sites/WCINYPScheduling2/Shared%20Documents/General/WCINYP%20Manuals?d=w5586d765a0454ddb88429ca08869de08&csf=1&web=1&e=dAGCMc',
+      icon: BookOpen,
+      description: 'OneNote manual'
+    },
+    { 
+      name: 'Public Drive', 
+      href: 'https://medcornell-my.sharepoint.com/:f:/r/personal/vip2008_med_cornell_edu/Documents/Public?csf=1&web=1&e=wfkQce',
+      icon: Cloud,
+      description: 'OneDrive shared folder'
+    },
+  ];
+
   return (
-    <footer className="bg-gradient-to-b from-muted-lighter to-muted border-t border-border-strong shadow-inner">
-      <div className={cn("container mx-auto px-4 py-12")}>
-        <div className={cn("grid grid-cols-1 md:grid-cols-2", GAP[4])}>
-          {/* Quick Links */}
+    <footer className="border-t bg-background">
+      <div className="container mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          {/* Navigation Section */}
           <div>
-            <h3 className={cn(TYPOGRAPHY.sectionTitle, "mb-4")}>Navigation</h3>
-            <ul className={cn("space-y-2", TYPOGRAPHY.labelText)}>
-              {mainNavItems.map((item) => {
+            <h3 className="font-semibold text-lg mb-4">Navigation</h3>
+            <ul className="space-y-3">
+              {navigation.map((item) => {
                 const Icon = item.icon;
                 return (
-                  <li key={item.href}>
-                    <Link href={item.href} className={cn("flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors")}>
+                  <li key={item.name}>
+                    <Link 
+                      href={item.href} 
+                      className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
+                    >
                       <Icon className="h-4 w-4" />
-                      {item.label === 'Documents' ? 'Documents & Forms' : item.label}
+                      <span className="text-sm font-medium">{item.name}</span>
                     </Link>
                   </li>
                 );
@@ -36,62 +96,63 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Resources */}
+          {/* Quick Links Section */}
           <div>
-            <h3 className={cn(TYPOGRAPHY.sectionTitle, "mb-4")}>Resources</h3>
-            <ul className={cn("space-y-2", TYPOGRAPHY.labelText)}>
-              {footerLinks.resources
-                .filter(link => link.label !== 'Privacy Policy' && link.label !== 'Patient Portal')
-                .map((link) => (
-                  <li key={link.label}>
+            <h3 className="font-semibold text-lg mb-4">Quick Links</h3>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {quickLinks.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <li key={item.name}>
                     <a 
-                      href={link.href} 
-                      target={link.external ? "_blank" : undefined}
-                      rel={link.external ? "noopener noreferrer" : undefined}
-                      className={cn("flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors")}
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={item.description}
+                      className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors group"
                     >
-                      {link.label}
-                      {link.external && <ExternalLink className="h-4 w-4" />}
+                      <Icon className="h-4 w-4" />
+                      <span className="text-sm font-medium">{item.name}</span>
+                      <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </a>
                   </li>
-                ))}
+                );
+              })}
             </ul>
           </div>
         </div>
 
-        <div className={cn("mt-8 pt-8 border-t border-border-strong text-center", TYPOGRAPHY.labelText, "text-muted-foreground")}>
-          <HoverCard>
-            <HoverCardTrigger asChild>
-              <p className="hover:text-primary/80 transition-colors cursor-help">
-                <BrandName /> is a project currently in development by @Ray for use as a centralized tool for SPCs and other admin staff
-              </p>
-            </HoverCardTrigger>
-            <HoverCardContent className="w-64">
-              <div className="space-y-2">
-                <div>
-                  <p className="text-sm font-medium">Ray</p>
-                  <p className="text-xs text-muted-foreground">Senior Patient Coordinator</p>
+        {/* Attribution */}
+        <div className="mt-12 pt-8 border-t">
+          <p className="text-center text-sm text-muted-foreground">
+            WCI<span className="text-primary">@</span>NYP is a project currently in development by{" "}
+            <HoverCard>
+              <HoverCardTrigger asChild>
+                <span className="cursor-pointer hover:text-primary transition-colors">
+                  <span className="text-primary">@</span>Ray
+                </span>
+              </HoverCardTrigger>
+              <HoverCardContent className="w-64">
+                <div className="space-y-1">
+                  <h4 className="text-sm font-semibold">Ray Contreras</h4>
+                  <p className="text-sm text-muted-foreground">Senior Patient Coordinator</p>
+                  <a 
+                    href="mailto:rco4001@med.cornell.edu" 
+                    className="text-sm text-primary hover:underline"
+                  >
+                    rco4001@med.cornell.edu
+                  </a>
                 </div>
-                
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center gap-2">
-                    <MapPin className="h-3 w-3 text-muted-foreground" />
-                    <span>
-                      <Link href="/locations/61st" className="hover:underline text-primary">61st</Link>
-                      <span className="text-muted-foreground"> & </span>
-                      <Link href="/locations/spiral" className="hover:underline text-primary">Spiral</Link>
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Mail className="h-3 w-3 text-muted-foreground" />
-                    <a href="mailto:rco4001@med.cornell.edu" className="hover:underline text-primary">
-                      rco4001@med.cornell.edu
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </HoverCardContent>
-          </HoverCard>
+              </HoverCardContent>
+            </HoverCard>
+          </p>
+          
+          {/* Temporary test link */}
+          <p className="text-center text-xs text-muted-foreground mt-4">
+            <Link href="/test-niivue-volumetric" className="hover:text-primary underline">
+              Test NiiVue Settings
+            </Link>
+          </p>
         </div>
       </div>
     </footer>

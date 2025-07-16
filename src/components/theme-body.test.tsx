@@ -106,7 +106,7 @@ describe('ThemeBody', () => {
     expect(localStorageMock.getItem).toHaveBeenCalledTimes(1)
     
     // Change localStorage value and re-render
-    localStorageMock.getItem.mockReturnValue('yellow')
+    localStorageMock.getItem.mockReturnValue('purple')
     
     rerender(
       <ThemeBody>
@@ -118,11 +118,11 @@ describe('ThemeBody', () => {
     expect(localStorageMock.getItem).toHaveBeenCalledTimes(1)
     // Should still have the original theme
     expect(document.body.classList.contains('theme-orange')).toBe(true)
-    expect(document.body.classList.contains('theme-yellow')).toBe(false)
+    expect(document.body.classList.contains('theme-purple')).toBe(false)
   })
 
   it('handles all theme variations', () => {
-    const themes = ['blue', 'red', 'orange', 'green', 'yellow', 'default']
+    const themes = ['blue', 'red', 'orange', 'green', 'pink', 'purple']
     
     themes.forEach(theme => {
       document.body.className = ''

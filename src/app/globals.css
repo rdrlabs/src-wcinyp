@@ -3,172 +3,262 @@
 /* Enable data-attribute-based dark mode for Tailwind v4 */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
+/* Fumadocs has its own isolated styling system imported in src/app/knowledge/docs/layout.tsx */
+/* This layer is kept empty to prevent any style conflicts */
 @layer fumadocs;
 
-/* Define theme tokens in @theme for Tailwind v4 with concrete OKLCH values */
+/* Define theme tokens in @theme for Tailwind v4 - shadcn 2025 approach */
 @theme {
   /* Design Tokens */
   --radius: 0.5rem;
   
-  /* Default colors (light mode, blue theme) with hex fallbacks */
-  --color-background: #ffffff;
-  --color-foreground: #0a0a0a;
-  --color-muted: #f5f5f5;
-  --color-muted-lighter: #fafafa;
-  --color-muted-darker: #e5e5e5;
-  --color-muted-foreground: #737373;
-  --color-card: #ffffff;
-  --color-card-foreground: #0a0a0a;
-  --color-popover: #ffffff;
-  --color-popover-foreground: #0a0a0a;
-  --color-border: #e5e5e5;
-  --color-border-strong: #d4d4d4;
-  --color-input: #e5e5e5;
-  --color-primary: #3b82f6;
-  --color-primary-foreground: #fafafa;
-  --color-accent: #f5f5f5;
-  --color-accent-foreground: #0a0a0a;
-  --color-secondary: #f5f5f5;
-  --color-secondary-foreground: #0a0a0a;
-  --color-destructive: #ef4444;
-  --color-destructive-foreground: #fafafa;
-  --color-ring: #3b82f6;
-  --color-success: #22c55e;
-  --color-success-foreground: #fafafa;
-  --color-warning: #f59e0b;
-  --color-warning-foreground: #0a0a0a;
-  --color-info: #3b82f6;
-  --color-info-foreground: #fafafa;
+  /* Light mode - zinc theme with OKLCH (shadcn 2025 format) */
+  --color-background: oklch(100% 0 0);              /* white */
+  --color-foreground: oklch(14.5% 0 0);            /* zinc-950 */
+  --color-card: oklch(100% 0 0);                   /* white */
+  --color-card-foreground: oklch(14.5% 0 0);       /* zinc-950 */
+  --color-popover: oklch(98.5% 0 0);               /* zinc-50 - slight elevation */
+  --color-popover-foreground: oklch(14.5% 0 0);    /* zinc-950 */
+  --color-primary: oklch(20.5% 0 0);               /* zinc-900 */
+  --color-primary-rgb: 24, 24, 27;                 /* zinc-900 RGB values */
+  --color-primary-foreground: oklch(98.5% 0 0);    /* zinc-50 */
+  --color-secondary: oklch(97% 0 0);               /* zinc-100 */
+  --color-secondary-foreground: oklch(20.5% 0 0);  /* zinc-900 */
+  --color-muted: oklch(92.2% 0 0);                 /* zinc-200 - better hover */
+  --color-muted-foreground: oklch(55.6% 0 0);      /* zinc-500 */
+  --color-accent: oklch(92.2% 0 0);                /* zinc-200 - better hover */
+  --color-accent-foreground: oklch(20.5% 0 0);     /* zinc-900 */
+  --color-destructive: oklch(57.7% 0.245 27.325);  /* red-500 */
+  --color-destructive-foreground: oklch(98.5% 0 0);
+  --color-border: oklch(92.2% 0 0);                /* zinc-200 */
+  --color-input: oklch(92.2% 0 0);                 /* zinc-200 */
+  --color-ring: oklch(70.8% 0 0);                  /* zinc-400 */
+  --color-success: oklch(60.8% 0.149 149.5);       /* green-500 */
+  --color-success-foreground: oklch(98.5% 0 0);
+  --color-warning: oklch(77.9% 0.152 95.8);        /* yellow-500 */
+  --color-warning-foreground: oklch(14.5% 0 0);
+  --color-info: oklch(69.8% 0.195 238.4);          /* blue-500 */
+  --color-info-foreground: oklch(98.5% 0 0);
+  
+  /* Additional utility colors */
+  --color-border-strong: oklch(84.7% 0 0);         /* zinc-300 */
+  --color-muted-darker: oklch(84.7% 0 0);          /* zinc-300 */
+  --color-muted-lighter: oklch(98.5% 0 0);         /* zinc-50 */
 }
 
 /* CSS overrides for dark mode and themes */
 @layer base {
-  /* Dark mode color overrides */
-  [data-theme="dark"] {
-    --color-background: oklch(10% 0 0);        /* Was 15%, darker background */
-    --color-foreground: oklch(95% 0 0);        /* Was 98%, slightly less bright */
-    --color-muted: oklch(17% 0 0);             /* Was 20%, better contrast */
-    --color-muted-lighter: oklch(14% 0 0);     /* Subtle background layering */
-    --color-muted-darker: oklch(25% 0 0);      /* Stronger dividers */
-    --color-muted-foreground: oklch(65% 0 0);  /* Was 70%, better hierarchy */
-    --color-card: oklch(13% 0 0);              /* Was 18%, more contrast from bg */
-    --color-card-foreground: oklch(95% 0 0);
-    --color-popover: oklch(13% 0 0);           /* Was 18% */
-    --color-popover-foreground: oklch(95% 0 0);
-    --color-border: oklch(30% 0 0);            /* Was 27%, more visible */
-    --color-border-strong: oklch(40% 0 0);     /* Strong borders for emphasis */
-    --color-input: oklch(18% 0 0);             /* Was 25%, darker inputs */
-    --color-primary: oklch(69.8% 0.195 238.4);
-    --color-primary-foreground: oklch(15% 0 0);
-    --color-accent: oklch(17% 0 0);            /* Was 25%, darker accent */
-    --color-accent-foreground: oklch(95% 0 0);
-    --color-secondary: oklch(17% 0 0);         /* Was 25%, darker secondary */
-    --color-secondary-foreground: oklch(95% 0 0);
-    --color-destructive: oklch(50% 0.25 27);
-    --color-destructive-foreground: oklch(95% 0 0);
-    --color-ring: oklch(69.8% 0.195 238.4);
-    --color-success: oklch(70% 0.15 150);
-    --color-success-foreground: oklch(15% 0 0);
-    --color-warning: oklch(80% 0.15 85);
-    --color-warning-foreground: oklch(15% 0 0);
-    --color-info: oklch(70% 0.15 235);
-    --color-info-foreground: oklch(15% 0 0);
+  /* DICOM-style animations */
+  @keyframes scanlines {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(10px);
+    }
   }
+  
+  /* Dark mode - modern 2025 with subtle blue tint */
+  [data-theme="dark"] {
+    --color-background: oklch(19% 0.005 250);       /* Lighter dark background */
+    --color-foreground: oklch(95% 0 0);             /* Brighter white */
+    --color-card: oklch(23% 0.005 250);             /* Lighter card background */
+    --color-card-foreground: oklch(95% 0 0);        /* Brighter white */
+    --color-popover: oklch(26% 0.005 250);          /* Lighter popover/dropdown */
+    --color-popover-foreground: oklch(95% 0 0);     /* Brighter white */
+    --color-primary: oklch(95% 0 0);                /* Brighter white */
+    --color-primary-rgb: 241, 241, 244;             /* Brighter RGB values */
+    --color-primary-foreground: oklch(20.5% 0 0);   /* zinc-900 */
+    --color-secondary: oklch(30% 0.003 250);        /* Lighter secondary */
+    --color-secondary-foreground: oklch(95% 0 0);   /* Brighter white */
+    --color-muted: oklch(30% 0.003 250);            /* Lighter muted */
+    --color-muted-foreground: oklch(75% 0 0);       /* Brighter muted text */
+    --color-accent: oklch(32% 0.003 250);           /* Lighter hover state */
+    --color-accent-foreground: oklch(95% 0 0);      /* Brighter white */
+    --color-destructive: oklch(45.1% 0.245 27.325); /* red-600 dark */
+    --color-destructive-foreground: oklch(95% 0 0);
+    --color-border: oklch(28% 0.003 250);           /* Lighter borders */
+    --color-input: oklch(28% 0.003 250);            /* Lighter inputs */
+    --color-ring: oklch(75% 0 0);                   /* Brighter ring */
+    --color-success: oklch(54.2% 0.129 149.5);      /* green-600 dark */
+    --color-success-foreground: oklch(95% 0 0);
+    --color-warning: oklch(72.4% 0.145 92.6);       /* yellow-600 dark */
+    --color-warning-foreground: oklch(14.5% 0 0);
+    --color-info: oklch(62.8% 0.195 238.4);         /* blue-600 dark */
+    --color-info-foreground: oklch(95% 0 0);
+    
+    /* Additional utility colors - dark mode */
+    --color-border-strong: oklch(40% 0.003 250);    /* Lighter strong border */
+    --color-muted-darker: oklch(21% 0.005 250);     /* Lighter muted darker */
+    --color-muted-lighter: oklch(35% 0.003 250);    /* Lighter muted lighter */
+  }
+}
+
+/* Animation Custom Properties */
+:root {
+  /* Default primary RGB values - blue theme as default */
+  /* These ensure scrollbar colors work before JavaScript loads */
+  --color-primary-rgb: 59, 130, 246; /* blue-500 */
+  
+  /* Durations */
+  --duration-instant: 150ms;
+  --duration-fast: 250ms;
+  --duration-base: 400ms;
+  --duration-slow: 600ms;
+  --duration-slower: 1000ms;
+
+  /* Easing Functions */
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-in-out-sine: cubic-bezier(0.37, 0, 0.63, 1);
+
+  /* Blur Values */
+  --blur-sm: 8px;
+  --blur-base: 16px;
+  --blur-lg: 24px;
+  --blur-xl: 40px;
+
+  /* Shadows - Ultra Modern */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-base: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  --shadow-glow: 0 0 40px rgba(var(--color-primary-rgb), 0.3);
+
+  /* Spacing Scale */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 4rem;
+  --space-3xl: 6rem;
+  --space-4xl: 8rem;
+}
+
+/* Ultra-Modern Color System Override */
+[data-theme="dark"] {
+  /* Core Colors */
+  --color-background: oklch(5% 0 0);                /* Near black #0A0A0B */
+  --color-foreground: oklch(98% 0 0);              /* Pure white-ish */
+  --color-card: oklch(10% 0.005 250);              /* Slightly elevated */
+  --color-card-foreground: oklch(98% 0 0);
+  --color-popover: oklch(12% 0.005 250);
+  --color-popover-foreground: oklch(98% 0 0);
+  
+  /* Glass Effect Colors */
+  --color-surface: rgba(255, 255, 255, 0.03);
+  --color-surface-hover: rgba(255, 255, 255, 0.05);
+  --color-border: rgba(255, 255, 255, 0.06);
+  --color-border-strong: rgba(255, 255, 255, 0.1);
+  
+  /* Glow effects use theme primary color */
+  --color-accent-glow: rgba(var(--color-primary-rgb), 0.5);
+  
+  /* Text Hierarchy */
+  --color-text-primary: oklch(98% 0 0);
+  --color-text-secondary: oklch(70% 0 0);
+  --color-text-tertiary: oklch(50% 0 0);
+  
+  /* Muted colors for ultra-thin design */
+  --color-muted: oklch(15% 0.005 250);
+  --color-muted-foreground: oklch(60% 0 0);
 }
 
 /* Color Theme Variations - Applied via class on HTML element */
 /* These are outside of any @layer to ensure proper specificity */
 
+
+/* Theme colors using :has() for proper inheritance to html element */
 /* Blue Theme (Default) */
-.theme-blue {
+:root:has(body.theme-blue) {
   --color-primary: oklch(69.8% 0.195 238.4);
+  --color-primary-rgb: 59, 130, 246; /* blue-500 RGB values */
   --color-ring: oklch(69.8% 0.195 238.4);
 }
-[data-theme="dark"] .theme-blue {
+:root:has([data-theme="dark"] body.theme-blue) {
   --color-primary: oklch(62.8% 0.195 238.4);
-  --color-primary-foreground: oklch(98% 0 0);
+  --color-primary-rgb: 96, 165, 250; /* blue-400 RGB values */
+  --color-primary-foreground: oklch(27.8% 0.005 250);  /* Match background */
   --color-ring: oklch(62.8% 0.195 238.4);
 }
 
 /* Red Theme */
-.theme-red {
+:root:has(body.theme-red) {
   --color-primary: oklch(69.5% 0.203 25.5);
+  --color-primary-rgb: 239, 68, 68; /* red-500 RGB values */
   --color-ring: oklch(69.5% 0.203 25.5);
 }
-[data-theme="dark"] .theme-red {
+:root:has([data-theme="dark"] body.theme-red) {
   --color-primary: oklch(59.2% 0.203 25.5);
-  --color-primary-foreground: oklch(98% 0 0);
+  --color-primary-rgb: 248, 113, 113; /* red-400 RGB values */
+  --color-primary-foreground: oklch(93% 0 0);  /* Dimmed white */
   --color-ring: oklch(59.2% 0.203 25.5);
 }
 
 /* Orange Theme */
-.theme-orange {
+:root:has(body.theme-orange) {
   --color-primary: oklch(70.1% 0.179 44.2);
+  --color-primary-rgb: 249, 115, 22; /* orange-500 RGB values */
   --color-ring: oklch(70.1% 0.179 44.2);
 }
-[data-theme="dark"] .theme-orange {
+:root:has([data-theme="dark"] body.theme-orange) {
   --color-primary: oklch(63.9% 0.172 41.7);
-  --color-primary-foreground: oklch(98% 0 0);
+  --color-primary-rgb: 251, 146, 60; /* orange-400 RGB values */
+  --color-primary-foreground: oklch(93% 0 0);  /* Dimmed white */
   --color-ring: oklch(63.9% 0.172 41.7);
 }
 
 /* Green Theme */
-.theme-green {
+:root:has(body.theme-green) {
   --color-primary: oklch(60.8% 0.149 149.5);
+  --color-primary-rgb: 34, 197, 94; /* green-500 RGB values */
   --color-ring: oklch(60.8% 0.149 149.5);
 }
-[data-theme="dark"] .theme-green {
+:root:has([data-theme="dark"] body.theme-green) {
   --color-primary: oklch(54.2% 0.129 149.5);
-  --color-primary-foreground: oklch(98% 0 0);
+  --color-primary-rgb: 74, 222, 128; /* green-400 RGB values */
+  --color-primary-foreground: oklch(93% 0 0);  /* Dimmed white */
   --color-ring: oklch(54.2% 0.129 149.5);
 }
 
-/* Yellow Theme */
-.theme-yellow {
-  --color-primary: oklch(77.9% 0.152 95.8);
-  --color-primary-foreground: oklch(20% 0 0);
-  --color-ring: oklch(77.9% 0.152 95.8);
-}
-[data-theme="dark"] .theme-yellow {
-  --color-primary: oklch(72.4% 0.145 92.6);
-  --color-primary-foreground: oklch(20% 0 0);
-  --color-ring: oklch(72.4% 0.145 92.6);
-}
-
 /* Pink Theme */
-.theme-pink {
+:root:has(body.theme-pink) {
   --color-primary: oklch(70% 0.25 350);
+  --color-primary-rgb: 236, 72, 153; /* pink-500 RGB values */
   --color-ring: oklch(70% 0.25 350);
 }
-[data-theme="dark"] .theme-pink {
+:root:has([data-theme="dark"] body.theme-pink) {
   --color-primary: oklch(60% 0.25 350);
-  --color-primary-foreground: oklch(98% 0 0);
+  --color-primary-rgb: 244, 114, 182; /* pink-400 RGB values */
+  --color-primary-foreground: oklch(93% 0 0);  /* Dimmed white */
   --color-ring: oklch(60% 0.25 350);
 }
 
 /* Purple Theme */
-.theme-purple {
+:root:has(body.theme-purple) {
   --color-primary: oklch(70% 0.25 280);
+  --color-primary-rgb: 168, 85, 247; /* purple-500 RGB values */
   --color-ring: oklch(70% 0.25 280);
 }
-[data-theme="dark"] .theme-purple {
+:root:has([data-theme="dark"] body.theme-purple) {
   --color-primary: oklch(60% 0.25 280);
-  --color-primary-foreground: oklch(98% 0 0);
+  --color-primary-rgb: 196, 181, 253; /* purple-400 RGB values */
+  --color-primary-foreground: oklch(93% 0 0);  /* Dimmed white */
   --color-ring: oklch(60% 0.25 280);
 }
 
-/* Neutral Theme (No color, adapts to light/dark) */
-.theme-neutral {
-  --color-primary: oklch(0% 0 0);  /* Pure black for light mode */
-  --color-primary-foreground: oklch(100% 0 0);
-  --color-ring: oklch(0% 0 0);
+/* Keep body theme classes for components that need them */
+body.theme-blue,
+body.theme-red,
+body.theme-orange,
+body.theme-green,
+body.theme-pink,
+body.theme-purple {
+  /* These are now just marker classes */
 }
 
-[data-theme="dark"] .theme-neutral {
-  --color-primary: oklch(100% 0 0);  /* Pure white for dark mode */
-  --color-primary-foreground: oklch(0% 0 0);
-  --color-ring: oklch(100% 0 0);
-}
 
 /* Base styles without @apply for Tailwind v4 */
 @layer base {
@@ -182,5 +272,53 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
       "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
       sans-serif;
+  }
+  
+  /* Theme-colored scrollbar */
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(var(--color-primary-rgb), 0.3) transparent;
+  }
+  
+  html::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  html::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  html::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--color-primary-rgb), 0.3);
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+  }
+  
+  html::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(var(--color-primary-rgb), 0.5);
+  }
+}
+
+/* Additional utility classes */
+@layer utilities {
+  .border-border-strong {
+    border-color: var(--color-border-strong);
+  }
+  
+  .bg-muted-darker {
+    background-color: var(--color-muted-darker);
+  }
+  
+  .bg-muted-lighter {
+    background-color: var(--color-muted-lighter);
+  }
+  
+  .hover\:bg-muted-lighter:hover {
+    background-color: var(--color-muted-lighter);
+  }
+  
+  .hover\:bg-muted-darker:hover {
+    background-color: var(--color-muted-darker);
   }
 }

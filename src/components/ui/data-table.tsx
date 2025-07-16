@@ -37,7 +37,7 @@ import {
 } from "@/components/ui/table"
 
 interface DataTableProps<TData> {
-  columns: ColumnDef<TData, any>[]
+  columns: ColumnDef<TData, unknown>[]
   data: TData[]
   onRowClick?: (row: TData) => void
   searchColumn?: string
@@ -48,6 +48,8 @@ interface DataTableProps<TData> {
   enableRowSelection?: boolean
   columnVisibility?: VisibilityState
   onColumnVisibilityChange?: (visibility: VisibilityState) => void
+  rowSelection?: Record<string, boolean>
+  onRowSelectionChange?: (selection: Record<string, boolean>) => void
 }
 
 export function DataTable<TData>({
@@ -62,11 +64,13 @@ export function DataTable<TData>({
   enableRowSelection = true,
   columnVisibility: externalColumnVisibility,
   onColumnVisibilityChange,
+  rowSelection: externalRowSelection,
+  onRowSelectionChange,
 }: DataTableProps<TData>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [internalColumnVisibility, setInternalColumnVisibility] = React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+  const [internalRowSelection, setInternalRowSelection] = React.useState({})
 
   // Use external column visibility if provided, otherwise use internal state
   const columnVisibility = externalColumnVisibility || internalColumnVisibility
@@ -80,6 +84,20 @@ export function DataTable<TData>({
       }
     },
     [columnVisibility, onColumnVisibilityChange]
+  )
+
+  // Use external row selection if provided, otherwise use internal state
+  const rowSelection = externalRowSelection || internalRowSelection
+  const setRowSelection = React.useCallback(
+    (updater: Record<string, boolean> | ((old: Record<string, boolean>) => Record<string, boolean>)) => {
+      if (onRowSelectionChange) {
+        const newValue = typeof updater === 'function' ? updater(rowSelection) : updater
+        onRowSelectionChange(newValue)
+      } else {
+        setInternalRowSelection(updater)
+      }
+    },
+    [rowSelection, onRowSelectionChange]
   )
 
   // Add selection column if not already present and if selection is enabled
@@ -96,7 +114,7 @@ export function DataTable<TData>({
       return userColumns
     }
 
-    const selectColumn: ColumnDef<TData, any> = {
+    const selectColumn: ColumnDef<TData, unknown> = {
       id: "select",
       header: ({ table }) => (
         <Checkbox
@@ -190,12 +208,12 @@ export function DataTable<TData>({
       </div>
       <div className="rounded-md border">
         <Table>
-          <TableHeader>
+          <TableHeader className="sticky top-0 z-10 bg-background">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} className="bg-background">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -215,6 +233,7 @@ export function DataTable<TData>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className={onRowClick ? "cursor-pointer" : ""}
+                  tabIndex={0}
                   onClick={(e) => {
                     // Don't trigger row click if clicking on checkbox
                     const target = e.target as HTMLElement
@@ -286,7 +305,7 @@ export function DataTable<TData>({
 import type { Column } from "@tanstack/react-table"
 
 export function createSortableHeader<TData>(
-  column: Column<TData, any>,
+  column: Column<TData, unknown>,
   title: string
 ): React.ReactNode {
   return (

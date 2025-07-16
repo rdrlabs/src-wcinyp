@@ -3,6 +3,7 @@
  */
 
 import { toast } from 'sonner'
+import { logger } from './logger'
 
 /**
  * Error types for consistent handling
@@ -96,7 +97,7 @@ export function logError(error: unknown, context?: string): void {
   }
   
   // In production, this would send to a logging service
-  console.error('[Error Log]', errorInfo)
+  logger.error('Error logged', errorInfo, 'ErrorHandling')
 }
 
 /**
