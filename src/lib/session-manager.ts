@@ -17,7 +17,14 @@ export interface UserSession {
 }
 
 export class SessionManager {
-  private supabase = getSupabaseClient()
+  private supabase: ReturnType<typeof getSupabaseClient> | null = null
+  
+  private getSupabase() {
+    if (!this.supabase) {
+      this.supabase = getSupabaseClient()
+    }
+    return this.supabase
+  }
 
   /**
    * Hash a token for secure storage using Web Crypto API
@@ -93,7 +100,8 @@ export class SessionManager {
       const expiresAt = new Date(Date.now() + expiresIn).toISOString()
       const deviceInfo = userAgent ? this.parseUserAgent(userAgent) : {}
 
-      const { data, error } = await this.supabase
+      const supabase = this.getSupabase()
+      const { data, error } = await supabase
         .from('user_sessions')
         .insert({
           user_id: userId,
@@ -120,7 +128,8 @@ export class SessionManager {
    */
   async getUserSessions(userId: string): Promise<UserSession[]> {
     try {
-      const { data, error } = await this.supabase
+      const supabase = this.getSupabase()
+      const { data, error } = await supabase
         .from('user_sessions')
         .select('*')
         .eq('user_id', userId)
@@ -141,7 +150,8 @@ export class SessionManager {
    */
   async revokeSession(sessionId: string, userId: string): Promise<boolean> {
     try {
-      const { error } = await this.supabase
+      const supabase = this.getSupabase()
+      const { error } = await supabase
         .from('user_sessions')
         .update({ is_active: false })
         .eq('id', sessionId)
@@ -161,7 +171,8 @@ export class SessionManager {
    */
   async revokeAllSessions(userId: string, exceptTokenHash?: string): Promise<boolean> {
     try {
-      let query = this.supabase
+      const supabase = this.getSupabase()
+      let query = supabase
         .from('user_sessions')
         .update({ is_active: false })
         .eq('user_id', userId)
@@ -189,7 +200,8 @@ export class SessionManager {
     try {
       const tokenHash = await this.hashToken(token)
       
-      const { error } = await this.supabase.rpc('update_session_activity', {
+      const supabase = this.getSupabase()
+      const { error } = await supabase.rpc('update_session_activity', {
         p_token_hash: tokenHash,
       })
 
@@ -206,7 +218,8 @@ export class SessionManager {
     try {
       const tokenHash = await this.hashToken(token)
 
-      const { data, error } = await this.supabase
+      const supabase = this.getSupabase()
+      const { data, error } = await supabase
         .from('user_sessions')
         .select('id, expires_at')
         .eq('token_hash', tokenHash)
@@ -224,5 +237,27 @@ export class SessionManager {
   }
 }
 
-// Export singleton instance
-export const sessionManager = new SessionManager()
+// Export singleton instance with lazy initialization
+let _sessionManager: SessionManager | null = null
+
+export function getSessionManager(): SessionManager {
+  if (!_sessionManager) {
+    _sessionManager = new SessionManager()
+  }
+  return _sessionManager
+}
+
+export const sessionManager = {
+  createSession: (userId: string, token: string, ipAddress?: string, userAgent?: string, expiresIn?: number) => 
+    getSessionManager().createSession(userId, token, ipAddress, userAgent, expiresIn),
+  getUserSessions: (userId: string) => 
+    getSessionManager().getUserSessions(userId),
+  revokeSession: (sessionId: string, userId: string) => 
+    getSessionManager().revokeSession(sessionId, userId),
+  revokeAllSessions: (userId: string, exceptTokenHash?: string) => 
+    getSessionManager().revokeAllSessions(userId, exceptTokenHash),
+  updateSessionActivity: (token: string) => 
+    getSessionManager().updateSessionActivity(token),
+  verifySession: (token: string) => 
+    getSessionManager().verifySession(token),
+}
