@@ -19,6 +19,11 @@ function createClient() {
 let client: ReturnType<typeof createClient> | null = null
 
 export function getSupabaseClient() {
+  // During build/prerendering, return null to avoid errors
+  if (typeof window === 'undefined') {
+    return null as any
+  }
+  
   if (!client) {
     client = createClient()
   }

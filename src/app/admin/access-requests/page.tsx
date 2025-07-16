@@ -119,7 +119,7 @@ export default function AccessRequestsPage() {
   // Fetch access requests and stats
   useEffect(() => {
     async function fetchData() {
-      if (isAdmin) {
+      if (isAdmin && supabase) {
         fetchAccessRequests()
         fetchStats()
       }
