@@ -200,9 +200,9 @@ export default function AccessRequestsPage() {
       case 'pending':
         return <Badge variant="default"><Clock className="w-3 h-3 mr-1" />Pending</Badge>
       case 'approved':
-        return <Badge variant="outline" className="text-green-600 border-green-600"><Check className="w-3 h-3 mr-1" />Approved</Badge>
+        return <Badge variant="outline" className="text-success border-success"><Check className="w-3 h-3 mr-1" />Approved</Badge>
       case 'rejected':
-        return <Badge variant="outline" className="text-red-600 border-red-600"><X className="w-3 h-3 mr-1" />Rejected</Badge>
+        return <Badge variant="outline" className="text-destructive border-destructive"><X className="w-3 h-3 mr-1" />Rejected</Badge>
       default:
         return null
     }
@@ -253,7 +253,7 @@ export default function AccessRequestsPage() {
               <CardTitle className="text-sm font-medium text-muted-foreground">Approved</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600">{stats.approved_count}</div>
+              <div className="text-2xl font-bold text-success">{stats.approved_count}</div>
             </CardContent>
           </Card>
           <Card>
@@ -261,7 +261,7 @@ export default function AccessRequestsPage() {
               <CardTitle className="text-sm font-medium text-muted-foreground">Rejected</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-red-600">{stats.rejected_count}</div>
+              <div className="text-2xl font-bold text-destructive">{stats.rejected_count}</div>
             </CardContent>
           </Card>
           <Card>

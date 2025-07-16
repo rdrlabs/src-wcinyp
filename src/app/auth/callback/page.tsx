@@ -76,7 +76,7 @@ export default function AuthCallbackPage() {
         {status === 'success' && (
           <div className="flex justify-center">
             <svg
-              className="h-16 w-16 text-green-600"
+              className="h-16 w-16 text-success"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -94,7 +94,7 @@ export default function AuthCallbackPage() {
         {status === 'error' && (
           <div className="flex justify-center">
             <svg
-              className="h-16 w-16 text-red-600"
+              className="h-16 w-16 text-destructive"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

@@ -205,8 +205,8 @@ export default function LoginPage() {
       <div className="min-h-screen flex flex-col items-center justify-center p-4">
         <Card className="w-full max-w-md shadow-lg">
           <CardHeader className="text-center">
-            <div className="mx-auto mb-4 h-12 w-12 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
-              <Mail className="h-6 w-6 text-green-600 dark:text-green-400" />
+            <div className="mx-auto mb-4 h-12 w-12 rounded-full bg-success/10 dark:bg-success/20 flex items-center justify-center">
+              <Mail className="h-6 w-6 text-success" />
             </div>
             <CardTitle>Check your email</CardTitle>
             <CardDescription className="mt-2">
@@ -427,8 +427,8 @@ export default function LoginPage() {
           
           {requestSubmitted ? (
             <div className="py-8 text-center">
-              <div className="mx-auto mb-4 h-12 w-12 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
-                <Mail className="h-6 w-6 text-green-600 dark:text-green-400" />
+              <div className="mx-auto mb-4 h-12 w-12 rounded-full bg-success/10 dark:bg-success/20 flex items-center justify-center">
+                <Mail className="h-6 w-6 text-success" />
               </div>
               <h3 className="text-lg font-medium mb-2">Request Submitted</h3>
               <p className="text-sm text-muted-foreground">
