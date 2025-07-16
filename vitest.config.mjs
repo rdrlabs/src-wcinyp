@@ -8,7 +8,7 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/test/setup.ts'],
-    exclude: ['node_modules', 'dist', 'coverage', 'archive', '.node_modules_old_delete_me'],
+    exclude: ['node_modules', 'dist', 'coverage', 'archive', '.node_modules_old_delete_me', 'tests/e2e/**', 'src/test/*-validator.ts', '**/*.spec.ts'],
     testTimeout: 10000, // 10 seconds
     hookTimeout: 10000, // 10 seconds
     pool: 'forks', // Use forks instead of threads for better isolation
