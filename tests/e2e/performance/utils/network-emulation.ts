@@ -16,6 +16,12 @@ export const networkProfiles = {
     downloadThroughput: 0,
     uploadThroughput: 0,
     latency: 0
+  },
+  'No throttling': {
+    offline: false,
+    downloadThroughput: -1,
+    uploadThroughput: -1,
+    latency: 0
   }
 }
 
@@ -32,8 +38,9 @@ export async function throttleNetwork(page: any, profile: keyof typeof networkPr
   return emulateNetwork(page, profile)
 }
 
-export async function throttleCPU(page: any, rate: number) {
+export async function throttleCPU(page: any, rate: number | string) {
   // CPU throttling is not directly available in Playwright
   // This is a placeholder for compatibility
-  console.log(`CPU throttling to ${rate}x is not implemented in Playwright`)
+  const throttleRate = typeof rate === 'string' ? rate : `${rate}x`
+  console.log(`CPU throttling to ${throttleRate} is not implemented in Playwright`)
 }

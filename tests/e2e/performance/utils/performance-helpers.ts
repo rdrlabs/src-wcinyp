@@ -30,23 +30,51 @@ export function formatMetrics(metrics: any): string {
   return JSON.stringify(metrics, null, 2)
 }
 
-export async function measureInteractionPerformance(page: any, selector: string) {
+export async function measureInteractionPerformance(page: any, interaction: string | (() => Promise<void>)): Promise<number> {
   const start = Date.now()
-  await page.click(selector)
+  
+  if (typeof interaction === 'string') {
+    await page.click(interaction)
+  } else {
+    await interaction()
+  }
+  
   const end = Date.now()
-  return { duration: end - start }
+  return end - start
 }
 
-export function mark(name: string) {
+export function mark(pageOrName: any, name?: string) {
+  // Handle both (page, name) and (name) signatures
+  const markName = name || pageOrName
   if (typeof performance !== 'undefined') {
-    performance.mark(name)
+    performance.mark(markName)
   }
 }
 
-export function measure(name: string, startMark: string, endMark: string) {
-  if (typeof performance !== 'undefined') {
-    performance.measure(name, startMark, endMark)
+export function measure(pageOrName: any, nameOrStart?: string, startOrEnd?: string, endMark?: string): number {
+  // Handle both (page, name, start, end) and (name, start, end) signatures
+  let name: string, start: string, end: string
+  
+  if (endMark) {
+    // Called with (page, name, start, end)
+    name = nameOrStart!
+    start = startOrEnd!
+    end = endMark
+  } else {
+    // Called with (name, start, end)
+    name = pageOrName
+    start = nameOrStart!
+    end = startOrEnd!
   }
+  
+  if (typeof performance !== 'undefined') {
+    performance.measure(name, start, end)
+    const entries = performance.getEntriesByName(name)
+    if (entries.length > 0) {
+      return entries[entries.length - 1].duration
+    }
+  }
+  return 0
 }
 
 export function assertPerformanceBudget(metrics: any, budget: any) {
