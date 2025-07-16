@@ -68,7 +68,9 @@ if (!global.crypto) {
   global.crypto = {} as any
 }
 if (!global.crypto.randomUUID) {
-  global.crypto.randomUUID = vi.fn(() => 'test-uuid-' + Math.random().toString(36).substr(2, 9))
+  global.crypto.randomUUID = vi.fn(() => 
+    `test-${Math.random().toString(36).substr(2, 4)}-${Math.random().toString(36).substr(2, 4)}-${Math.random().toString(36).substr(2, 4)}-${Math.random().toString(36).substr(2, 4)}-${Math.random().toString(36).substr(2, 4)}`
+  ) as any
 }
 
 // Mock pointer events for Radix UI components
