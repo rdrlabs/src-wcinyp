@@ -343,7 +343,7 @@ export default function LoginPage() {
                   <input
                     type="checkbox"
                     id="remember"
-                    className="rounded border-gray-300"
+                    className="rounded border-muted"
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
                   />

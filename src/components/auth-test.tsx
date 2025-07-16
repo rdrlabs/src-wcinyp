@@ -38,12 +38,12 @@ export function AuthTest() {
         <div className="flex items-center gap-2">
           {user ? (
             <>
-              <CheckCircle className="h-5 w-5 text-green-600" />
+              <CheckCircle className="h-5 w-5 text-success" />
               <span className="font-medium">Authenticated</span>
             </>
           ) : (
             <>
-              <XCircle className="h-5 w-5 text-red-600" />
+              <XCircle className="h-5 w-5 text-destructive" />
               <span className="font-medium">Not authenticated</span>
             </>
           )}
