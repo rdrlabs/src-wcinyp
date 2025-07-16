@@ -9,6 +9,7 @@ interface LogEntry {
 
 class Logger {
   private isDevelopment = process.env.NODE_ENV === 'development'
+  private isServer = typeof window === 'undefined'
 
   private log(level: LogLevel, message: string, data?: any) {
     const entry: LogEntry = {
@@ -21,6 +22,11 @@ class Logger {
     if (this.isDevelopment || level === 'error' || level === 'warn') {
       const method = level === 'error' ? 'error' : level === 'warn' ? 'warn' : 'log'
       console[method](`[${entry.level.toUpperCase()}] ${entry.message}`, data || '')
+      
+      // In production, send errors to tracking service (only in browser)
+      if (!this.isDevelopment && level === 'error' && !this.isServer) {
+        // TODO: Send to error tracking service like Sentry
+      }
     }
   }
 

@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useEffect, useState, useRef, useCallback } from 'react'
 import { getSupabaseClient } from '@/lib/supabase-client'
 import { isEmailAllowedToAuthenticate } from '@/lib/auth-validation'
-import type { User } from '@supabase/supabase-js'
+import type { User, Session, AuthChangeEvent } from '@supabase/supabase-js'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
 import { authSessionManager } from '@/lib/auth-session'
@@ -57,7 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     // Listen for auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      async (event: AuthChangeEvent, session: Session | null) => {
         if (event === 'SIGNED_IN') {
           setUser(session?.user ?? null)
           // Store session token in cookie for server-side verification
@@ -129,8 +129,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           table: 'pending_auth_sessions',
           filter: `session_token=eq.${sessionToken}`
         },
-        async (payload) => {
-          const { is_authenticated, email } = payload.new as { is_authenticated: boolean; email: string }
+        async (payload: { new: { is_authenticated: boolean; email: string } }) => {
+          const { is_authenticated, email } = payload.new
           
           if (is_authenticated && email) {
             // Stop listening
@@ -164,7 +164,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
         }
       )
-      .subscribe((status) => {
+      .subscribe((status: 'SUBSCRIBED' | 'TIMED_OUT' | 'CLOSED' | 'CHANNEL_ERROR') => {
         if (status === 'SUBSCRIBED') {
           logger.info('Realtime subscription active for session', { sessionToken, context: 'AuthContext' })
         } else if (status === 'CHANNEL_ERROR') {
@@ -196,10 +196,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setLoading(true)
       setError(null)
       
-      const { data: { session } } = await retryWithBackoff(
+      const { data: { session }, error } = await retryWithBackoff(
         () => supabase.auth.getSession(),
         { maxRetries: 2, initialDelay: 500 }
       )
+      
+      if (error) throw error
       
       if (session?.user) {
         // Verify email is allowed to authenticate
@@ -228,7 +230,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         Cookies.remove('sb-access-token')
       }
     } catch (err) {
-      setError(getAuthErrorMessage(err))
+      setError(getAuthErrorMessage(err as Error))
       logger.error('Auth check error', { error: err, context: 'AuthContext' })
     } finally {
       setLoading(false)
@@ -261,7 +263,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       // Send the magic link with the session token (with retry)
-      const { error } = await retryWithBackoff(
+      const { error } = await retryWithBackoff<{ error: Error | null }>(
         () => supabase.auth.signInWithOtp({
           email,
           options: {
@@ -304,7 +306,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Stop realtime subscription if active
       stopRealtimeAuth()
       
-      const { error } = await retryWithBackoff(
+      const { error } = await retryWithBackoff<{ error: Error | null }>(
         () => supabase.auth.signOut(),
         { maxRetries: 2, initialDelay: 500 }
       )
