@@ -119,9 +119,8 @@ export async function captureAndCompare(
       includeAA: mergedConfig.includeAA,
       alpha: mergedConfig.alpha,
       diffColor: mergedConfig.diffColor,
-      diffColorAlt: [0, 255, 0], // Green for anti-aliasing
       diffMask: false
-    }
+    } as any
   );
   
   // Calculate difference percentage
