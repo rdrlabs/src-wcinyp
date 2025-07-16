@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { getSupabaseClient } from '@/lib/supabase-client'
 import { authSessionManager } from '@/lib/auth-session'
 import { logger } from '@/lib/logger'
 
@@ -11,7 +10,6 @@ export default function AuthCallbackPage() {
   const searchParams = useSearchParams()
   const [status, setStatus] = useState<'processing' | 'success' | 'error'>('processing')
   const [message, setMessage] = useState('Authenticating...')
-  const supabase = getSupabaseClient()
 
   useEffect(() => {
     async function handleCallback() {
@@ -53,7 +51,7 @@ export default function AuthCallbackPage() {
     }
 
     handleCallback()
-  }, [searchParams, router, supabase])
+  }, [searchParams, router])
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">

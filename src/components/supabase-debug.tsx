@@ -11,7 +11,6 @@ import { authSessionManager } from '@/lib/auth-session'
 export function SupabaseDebug() {
   const { user, loading, error, pendingSessionToken, isPollingForAuth } = useAuth()
   const [debugInfo, setDebugInfo] = useState<any>(null)
-  const supabase = getSupabaseClient()
 
   const runDebugChecks = async () => {
     const info: any = {
@@ -34,11 +33,16 @@ export function SupabaseDebug() {
 
     // Check current session
     try {
-      const { data: { session } } = await supabase.auth.getSession()
-      info.session = session ? {
-        user: { id: session.user.id, email: session.user.email },
-        expiresAt: new Date(session.expires_at! * 1000).toISOString(),
-      } : null
+      const supabase = getSupabaseClient()
+      if (supabase) {
+        const { data: { session } } = await supabase.auth.getSession()
+        info.session = session ? {
+          user: { id: session.user.id, email: session.user.email },
+          expiresAt: new Date(session.expires_at! * 1000).toISOString(),
+        } : null
+      } else {
+        info.session = { error: 'Supabase client not initialized' }
+      }
     } catch (err) {
       info.session = { error: (err as Error).message }
     }

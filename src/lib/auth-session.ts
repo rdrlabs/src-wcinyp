@@ -3,7 +3,14 @@ import { retryWithBackoff } from './retry-utils'
 import { logger } from './logger'
 
 export class AuthSessionManager {
-  private supabase = getSupabaseClient()
+  private supabase: ReturnType<typeof getSupabaseClient> | null = null
+  
+  private getSupabase() {
+    if (!this.supabase) {
+      this.supabase = getSupabaseClient()
+    }
+    return this.supabase
+  }
   
   /**
    * Create a new pending auth session for cross-device authentication
@@ -19,9 +26,14 @@ export class AuthSessionManager {
       // Session expires in 15 minutes
       const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString()
       
+      const supabase = this.getSupabase()
+      if (!supabase) {
+        throw new Error('Unable to initialize authentication')
+      }
+      
       const { error } = await retryWithBackoff(
         async () => {
-          return await this.supabase
+          return await supabase
             .from('pending_auth_sessions')
             .insert({
               session_token: sessionToken,
@@ -52,9 +64,14 @@ export class AuthSessionManager {
     error: Error | null 
   }> {
     try {
+      const supabase = this.getSupabase()
+      if (!supabase) {
+        throw new Error('Unable to initialize authentication')
+      }
+      
       const { data, error } = await retryWithBackoff(
         async () => {
-          return await this.supabase
+          return await supabase
             .from('pending_auth_sessions')
             .select('is_authenticated, email, expires_at')
             .eq('session_token', sessionToken)
@@ -89,7 +106,12 @@ export class AuthSessionManager {
    */
   async authenticateSession(sessionToken: string): Promise<{ success: boolean; error: Error | null }> {
     try {
-      const { error } = await this.supabase
+      const supabase = this.getSupabase()
+      if (!supabase) {
+        throw new Error('Unable to initialize authentication')
+      }
+      
+      const { error } = await supabase
         .from('pending_auth_sessions')
         .update({ 
           is_authenticated: true,
@@ -111,7 +133,13 @@ export class AuthSessionManager {
    */
   async cleanupSession(sessionToken: string): Promise<void> {
     try {
-      await this.supabase
+      const supabase = this.getSupabase()
+      if (!supabase) {
+        logger.error('Unable to initialize authentication for cleanup', { context: 'AuthSessionManager' })
+        return
+      }
+      
+      await supabase
         .from('pending_auth_sessions')
         .delete()
         .eq('session_token', sessionToken)
@@ -149,5 +177,19 @@ export class AuthSessionManager {
   }
 }
 
-// Export singleton instance
-export const authSessionManager = new AuthSessionManager()
+// Export singleton instance with lazy initialization
+let _authSessionManager: AuthSessionManager | null = null
+
+export function getAuthSessionManager(): AuthSessionManager {
+  if (!_authSessionManager) {
+    _authSessionManager = new AuthSessionManager()
+  }
+  return _authSessionManager
+}
+
+export const authSessionManager = {
+  createPendingSession: (email: string) => getAuthSessionManager().createPendingSession(email),
+  checkSessionStatus: (sessionToken: string) => getAuthSessionManager().checkSessionStatus(sessionToken),
+  authenticateSession: (sessionToken: string) => getAuthSessionManager().authenticateSession(sessionToken),
+  cleanupSession: (sessionToken: string) => getAuthSessionManager().cleanupSession(sessionToken),
+}
