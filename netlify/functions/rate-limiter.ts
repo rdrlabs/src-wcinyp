@@ -14,15 +14,30 @@ export const ratelimit = new Ratelimit({
   analytics: true,
 })
 
-export async function checkRateLimit(identifier: string) {
-  const { success, limit, reset, remaining } = await ratelimit.limit(identifier)
-  
-  return {
-    success,
-    headers: {
-      'X-RateLimit-Limit': limit.toString(),
-      'X-RateLimit-Remaining': remaining.toString(),
-      'X-RateLimit-Reset': new Date(reset).toISOString(),
+export interface RateLimitResult {
+  allowed: boolean
+  remaining: number
+  reset: number
+  retryAfter?: number
+}
+
+export async function checkRateLimit(identifier: string): Promise<RateLimitResult> {
+  try {
+    const { success, limit, reset, remaining } = await ratelimit.limit(identifier)
+    
+    return {
+      allowed: success,
+      remaining,
+      reset,
+      retryAfter: success ? undefined : Math.round((reset - Date.now()) / 1000),
+    }
+  } catch (error) {
+    console.error('Rate limit check failed:', error)
+    // In case of Redis failure, allow the request but log the error
+    return {
+      allowed: true,
+      remaining: 10,
+      reset: Date.now() + 3600000,
     }
   }
 }

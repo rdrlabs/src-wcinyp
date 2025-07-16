@@ -39,6 +39,10 @@ class Logger {
   error(message: string, data?: any) {
     this.log('error', message, data)
   }
+
+  securityWarn(message: string, data?: any) {
+    this.log('warn', `[SECURITY] ${message}`, data)
+  }
 }
 
 export const logger = new Logger()

@@ -39,3 +39,6 @@ export function useDemoMode() {
   }
   return context
 }
+
+// Alias for backward compatibility
+export const useDemo = useDemoMode

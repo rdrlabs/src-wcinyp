@@ -42,3 +42,6 @@ export async function retry<T>(
 
   throw lastError
 }
+
+// Alias for backward compatibility
+export const retryWithBackoff = retry

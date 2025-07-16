@@ -2,6 +2,7 @@
 interface HandlerEvent {
   httpMethod: string;
   queryStringParameters: Record<string, string> | null;
+  headers: Record<string, string>;
 }
 
 interface HandlerResponse {
