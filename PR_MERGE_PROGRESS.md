@@ -19,9 +19,20 @@
 
 ## In Progress 🔄
 
-1. **Waiting for PR #9 approval**
-   - Comment added indicating readiness
+1. **PR #9 (Core Infrastructure)** - Awaiting approval
+   - CI passing
    - All technical issues resolved
+
+2. **PR #10 (Testing Infrastructure)** - Fixing issues
+   - Fixed TypeScript error in visual-validator.ts
+   - Fixed Vitest/Playwright conflict
+   - CI running after fixes
+
+3. **PR #14 (Auth & Access Control)** - Security fixes completed
+   - Removed detailed error messages from responses
+   - Restricted CORS to specific origins  
+   - Added comprehensive security headers (CSP, HSTS, etc.)
+   - CI running after fixes
 
 ## Next Steps 📋
 
@@ -62,9 +73,9 @@
 | #7 | Mega PR | ❌ Conflicts | Close after all merges |
 | #8 | Docstrings | ⚠️ Obsolete | Close |
 | #9 | Core Infrastructure | ✅ Ready | Await approval |
-| #10 | Testing | 🔧 Needs rebase | Rebase after #9 |
+| #10 | Testing | 🔄 CI Running | Monitor CI |
 | #13 | CI/CD | 🔧 Needs fixes | Fix workflows |
-| #14 | Auth | 🔧 Security fixes | Add CSRF, etc |
+| #14 | Auth | 🔄 CI Running | Monitor CI |
 | #15 | UI Components | 🔧 A11y fixes | Add ARIA |
 | #16 | Admin | 🔧 Needs work | Add RBAC |
 | #17 | Knowledge Base | 🔧 Import fixes | Fix MDX |
