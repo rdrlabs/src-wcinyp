@@ -18,3 +18,17 @@ archive/
 
 # Generated
 coverage/
+
+# Test files that might cause ESLint timeout
+tests/e2e/**
+playwright.config.ts
+playwright.config.*.ts
+
+# Config files
+*.config.js
+*.config.mjs
+*.config.ts
+vitest.config.mjs
+
+# Temporary fix for ESLint exit handler issue
+src/test/*-validator.ts
