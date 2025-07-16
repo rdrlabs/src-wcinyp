@@ -59,17 +59,22 @@ export function SupabaseDebug() {
 
     // Check tables
     try {
-      const { count: profileCount } = await supabase
-        .from('profiles')
-        .select('*', { count: 'exact', head: true })
+      const supabase = getSupabaseClient()
+      if (supabase) {
+        const { count: profileCount } = await supabase
+          .from('profiles')
+          .select('*', { count: 'exact', head: true })
+        
+        const { count: sessionCount } = await supabase
+          .from('pending_auth_sessions')
+          .select('*', { count: 'exact', head: true })
       
-      const { count: sessionCount } = await supabase
-        .from('pending_auth_sessions')
-        .select('*', { count: 'exact', head: true })
-      
-      info.tables = {
-        profiles: profileCount !== null ? `${profileCount} records` : 'Not accessible',
-        pending_auth_sessions: sessionCount !== null ? `${sessionCount} records` : 'Not accessible',
+        info.tables = {
+          profiles: profileCount !== null ? `${profileCount} records` : 'Not accessible',
+          pending_auth_sessions: sessionCount !== null ? `${sessionCount} records` : 'Not accessible',
+        }
+      } else {
+        info.tables = { error: 'Supabase client not initialized' }
       }
     } catch (err) {
       info.tables = { error: (err as Error).message }
