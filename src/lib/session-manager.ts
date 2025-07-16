@@ -110,7 +110,7 @@ export class SessionManager {
 
       return { sessionId: data.id, error: null }
     } catch (error) {
-      logger.error('Failed to create session', error, 'SessionManager')
+      logger.error('Failed to create session', { error, context: 'SessionManager' })
       return { sessionId: null, error: error as Error }
     }
   }
@@ -131,7 +131,7 @@ export class SessionManager {
 
       return data || []
     } catch (error) {
-      logger.error('Failed to get user sessions', error, 'SessionManager')
+      logger.error('Failed to get user sessions', { error, context: 'SessionManager' })
       return []
     }
   }
@@ -151,7 +151,7 @@ export class SessionManager {
 
       return true
     } catch (error) {
-      logger.error('Failed to revoke session', error, 'SessionManager')
+      logger.error('Failed to revoke session', { error, context: 'SessionManager' })
       return false
     }
   }
@@ -177,7 +177,7 @@ export class SessionManager {
 
       return true
     } catch (error) {
-      logger.error('Failed to revoke all sessions', error, 'SessionManager')
+      logger.error('Failed to revoke all sessions', { error, context: 'SessionManager' })
       return false
     }
   }
@@ -195,7 +195,7 @@ export class SessionManager {
 
       if (error) throw error
     } catch (error) {
-      logger.error('Failed to update session activity', error, 'SessionManager')
+      logger.error('Failed to update session activity', { error, context: 'SessionManager' })
     }
   }
 
@@ -218,7 +218,7 @@ export class SessionManager {
       // Check if session is expired
       return new Date(data.expires_at) > new Date()
     } catch (error) {
-      logger.error('Failed to verify session', error, 'SessionManager')
+      logger.error('Failed to verify session', { error, context: 'SessionManager' })
       return false
     }
   }

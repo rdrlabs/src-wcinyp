@@ -109,7 +109,7 @@ export default function LoginPage() {
       startCooldown()
     } catch (err) {
       // Error is already handled in the auth context
-      logger.error('Login error', err, 'LoginPage')
+      logger.error('Login error', { error: err, context: 'LoginPage' })
     }
   }
 
@@ -159,7 +159,7 @@ export default function LoginPage() {
         })
       }, 5000)
     } catch (err: unknown) {
-      logger.error('Access request error', err, 'LoginPage')
+      logger.error('Access request error', { error: err, context: 'LoginPage' })
       setLocalError((err as Error).message || 'Failed to submit access request. Please try again.')
     } finally {
       setRequestLoading(false)
@@ -196,7 +196,7 @@ export default function LoginPage() {
       setLastEmailSent(Date.now())
       startCooldown()
     } catch (err) {
-      logger.error('Resend error', err, 'LoginPage')
+      logger.error('Resend error', { error: err, context: 'LoginPage' })
     }
   }
 

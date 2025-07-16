@@ -158,7 +158,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               
               // The auth state change listener will handle the rest
             } catch (err) {
-              logger.error('Failed to complete authentication', err, 'AuthContext')
+              logger.error('Failed to complete authentication', { error: err, context: 'AuthContext' })
               setError(getAuthErrorMessage(err))
             }
           }
@@ -166,9 +166,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       )
       .subscribe((status) => {
         if (status === 'SUBSCRIBED') {
-          logger.info('Realtime subscription active for session', { sessionToken }, 'AuthContext')
+          logger.info('Realtime subscription active for session', { sessionToken, context: 'AuthContext' })
         } else if (status === 'CHANNEL_ERROR') {
-          logger.error('Realtime subscription error', undefined, 'AuthContext')
+          logger.error('Realtime subscription error', { context: 'AuthContext' })
           setError(getAuthErrorMessage('network_error'))
           setIsPollingForAuth(false)
         }
@@ -229,7 +229,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     } catch (err) {
       setError(getAuthErrorMessage(err))
-      logger.error('Auth check error', err, 'AuthContext')
+      logger.error('Auth check error', { error: err, context: 'AuthContext' })
     } finally {
       setLoading(false)
     }
@@ -273,7 +273,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           maxRetries: 3, 
           initialDelay: 1000,
           onRetry: (error, attempt) => {
-            logger.info(`Retrying magic link send (attempt ${attempt})`, undefined, 'AuthContext')
+            logger.info(`Retrying magic link send (attempt ${attempt})`, { context: 'AuthContext' })
           }
         }
       )
@@ -321,7 +321,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (err) {
       const message = getAuthErrorMessage(err)
       setError(message)
-      logger.error('Sign out error', err, 'AuthContext')
+      logger.error('Sign out error', { error: err, context: 'AuthContext' })
     } finally {
       setLoading(false)
     }

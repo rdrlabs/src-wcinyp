@@ -29,7 +29,7 @@ export default function SessionsPage() {
       setSessions(userSessions)
     } catch (err) {
       setError('Failed to load sessions')
-      logger.error('Load sessions error', err, 'SessionsPage')
+      logger.error('Load sessions error', { error: err, context: 'SessionsPage' })
     } finally {
       setLoading(false)
     }
@@ -63,7 +63,7 @@ export default function SessionsPage() {
       }
     } catch (err) {
       setError('Failed to revoke session')
-      logger.error('Revoke session error', err, 'SessionsPage')
+      logger.error('Revoke session error', { error: err, context: 'SessionsPage' })
     } finally {
       setRevoking(null)
     }
@@ -98,7 +98,7 @@ export default function SessionsPage() {
       }
     } catch (err) {
       setError('Failed to revoke sessions')
-      logger.error('Revoke all sessions error', err, 'SessionsPage')
+      logger.error('Revoke all sessions error', { error: err, context: 'SessionsPage' })
     } finally {
       setRevoking(null)
     }

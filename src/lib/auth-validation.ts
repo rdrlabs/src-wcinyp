@@ -97,13 +97,13 @@ export async function validateAndUseInvitationCode(
       })
 
     if (error) {
-      logger.error('Error using invitation code', error, 'AuthValidation')
+      logger.error('Error using invitation code', { error, context: 'AuthValidation' })
       return { success: false, error: 'Invalid or expired invitation code' }
     }
 
     return { success: data === true }
   } catch (err) {
-    logger.error('Error validating invitation code', err, 'AuthValidation')
+    logger.error('Error validating invitation code', { error: err, context: 'AuthValidation' })
     return { success: false, error: 'Failed to validate invitation code' }
   }
 }

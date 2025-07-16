@@ -38,7 +38,7 @@ export class AuthSessionManager {
       
       return { sessionToken, error: null }
     } catch (error) {
-      logger.error('Failed to create pending session', error, 'AuthSession')
+      logger.error('Failed to create pending session', { error, context: 'AuthSession' })
       return { sessionToken: '', error: error as Error }
     }
   }
@@ -116,7 +116,7 @@ export class AuthSessionManager {
         .delete()
         .eq('session_token', sessionToken)
     } catch (error) {
-      logger.error('Failed to cleanup session', error, 'AuthSession')
+      logger.error('Failed to cleanup session', { error, context: 'AuthSession' })
     }
   }
   
