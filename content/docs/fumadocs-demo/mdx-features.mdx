@@ -1,0 +1,310 @@
+---
+title: MDX Features
+description: Explore the powerful MDX capabilities in Fumadocs
+---
+
+# MDX Features in Fumadocs
+
+MDX allows you to use JSX in your markdown content. This means you can import and use React components directly in your documentation.
+
+## Basic Markdown
+
+All standard markdown features work out of the box:
+
+### Headings
+
+Headings from `h1` through `h6` are supported. The table of contents is automatically generated from these headings.
+
+### Text Formatting
+
+- **Bold text** using double asterisks
+- *Italic text* using single asterisks
+- ***Bold and italic*** using triple asterisks
+- ~~Strikethrough~~ using double tildes
+- `Inline code` using backticks
+
+### Lists
+
+Unordered lists:
+- First item
+- Second item
+  - Nested item
+  - Another nested item
+- Third item
+
+Ordered lists:
+1. First step
+2. Second step
+   1. Sub-step A
+   2. Sub-step B
+3. Third step
+
+Task lists:
+- [x] Completed task
+- [ ] Pending task
+- [ ] Another todo
+
+### Blockquotes
+
+> This is a blockquote. It can contain **formatted text** and even code:
+> ```js
+> console.log('Hello from a blockquote!');
+> ```
+
+### Links and Images
+
+[External Link](https://fumadocs.dev)
+[Internal Link](/knowledge/docs)
+
+![Alt text for image](/placeholder-image.svg)
+
+## Code Features
+
+### Basic Code Blocks
+
+```javascript
+// JavaScript code block
+function greet(name) {
+  return `Hello, ${name}!`;
+}
+
+const message = greet('Fumadocs');
+console.log(message);
+```
+
+```python
+# Python code block
+def greet(name):
+    return f"Hello, {name}!"
+
+message = greet("Fumadocs")
+print(message)
+```
+
+### Code Block with Title
+
+```typescript title="utils/formatter.ts"
+export function formatDate(date: Date): string {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }).format(date);
+}
+```
+
+### Line Highlighting
+
+```jsx {2,4-6}
+function MyComponent() {
+  const [count, setCount] = useState(0); // This line is highlighted
+  
+  // These lines are highlighted
+  const increment = () => setCount(count + 1);
+  const decrement = () => setCount(count - 1);
+  
+  return (
+    <div>
+      <button onClick={decrement}>-</button>
+      <span>{count}</span>
+      <button onClick={increment}>+</button>
+    </div>
+  );
+}
+```
+
+### Inline Code with Syntax Highlighting
+
+You can use `const name = "Fumadocs"` inline with syntax highlighting.
+
+## Tables
+
+Standard markdown tables with alignment:
+
+| Feature | Support | Notes |
+|:--------|:-------:|------:|
+| MDX | ✅ | Full support |
+| Components | ✅ | Import and use |
+| Dark Mode | ✅ | Automatic |
+| Search | ✅ | Built-in |
+| i18n | ✅ | Multiple languages |
+
+## Advanced MDX Features
+
+### Importing Components
+
+You can import React components in MDX:
+
+```mdx
+import { CustomComponent } from '@/components/custom';
+
+<CustomComponent prop="value" />
+```
+
+### Using JavaScript Expressions
+
+<Callout>
+  Today's date is: **{new Date().toLocaleDateString()}**
+</Callout>
+
+### Component Props in MDX
+
+<Tabs items={['String Props', 'Number Props', 'Boolean Props', 'Object Props']}>
+  <Tab value="String Props">
+    ```mdx
+    <Component name="John" message="Hello" />
+    ```
+  </Tab>
+  
+  <Tab value="Number Props">
+    ```mdx
+    <Component count={42} price={19.99} />
+    ```
+  </Tab>
+  
+  <Tab value="Boolean Props">
+    ```mdx
+    <Component isActive={true} disabled={false} />
+    <Component isActive disabled />
+    ```
+  </Tab>
+  
+  <Tab value="Object Props">
+    ```mdx
+    <Component 
+      user={{ name: 'John', age: 30 }}
+      config={{ theme: 'dark', lang: 'en' }}
+    />
+    ```
+  </Tab>
+</Tabs>
+
+## Frontmatter
+
+Every MDX file can include frontmatter for metadata:
+
+```yaml
+---
+title: Page Title
+description: SEO description
+date: 2024-01-15
+tags: [documentation, mdx, fumadocs]
+authors: [john-doe]
+---
+```
+
+### Available Frontmatter Fields
+
+| Field | Type | Description | Required | Default |
+|-------|------|-------------|----------|---------|
+| `title` | `string` | Page title shown in navigation and browser tab | ✅ | - |
+| `description` | `string` | SEO meta description | - | - |
+| `date` | `Date \| string` | Publication or last update date | - | - |
+| `tags` | `string[]` | Tags for categorization | - | - |
+| `draft` | `boolean` | Hide page from production | - | `false` |
+| `toc` | `boolean` | Show table of contents | - | `true` |
+
+## Math Support
+
+Fumadocs supports mathematical expressions using KaTeX:
+
+Inline math: $E = mc^2$
+
+Block math:
+
+$$
+\frac{n!}{k!(n-k)!} = \binom{n}{k}
+$$
+
+## Custom MDX Components
+
+You can extend MDX with custom components:
+
+```jsx title="mdx-components.tsx"
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Card, Cards } from 'fumadocs-ui/components/card';
+
+export function useMDXComponents(components) {
+  return {
+    ...components,
+    Callout,
+    Card,
+    Cards,
+    // Add your custom components here
+    MyCustomComponent: ({ children }) => (
+      <div className="custom-style">{children}</div>
+    ),
+  };
+}
+```
+
+## Embedding Content
+
+### YouTube Videos
+
+You can embed YouTube videos and other media:
+
+```mdx
+<iframe
+  width="560"
+  height="315"
+  src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+  title="YouTube video player"
+  frameBorder="0"
+  allowFullScreen
+/>
+```
+
+### CodeSandbox
+
+```mdx
+<iframe
+  src="https://codesandbox.io/embed/new"
+  style={{ width: '100%', height: '500px' }}
+  title="CodeSandbox"
+/>
+```
+
+## Best Practices
+
+<Steps>
+  <Step>
+    ### Use Semantic HTML
+    
+    Always use proper heading hierarchy and semantic elements
+  </Step>
+  
+  <Step>
+    ### Optimize Images
+    
+    Use Next.js Image component for better performance
+  </Step>
+  
+  <Step>
+    ### Keep It Simple
+    
+    Don't overuse components - sometimes plain markdown is best
+  </Step>
+  
+  <Step>
+    ### Test Dark Mode
+    
+    Always verify your content looks good in both themes
+  </Step>
+</Steps>
+
+<Callout type="tip">
+  **Pro Tip**: You can use all these MDX features together to create rich, interactive documentation that engages your users!
+</Callout>
+
+## Summary
+
+MDX in Fumadocs provides:
+- Full markdown support
+- React component integration
+- Syntax highlighting
+- Interactive elements
+- Custom extensions
+- Great developer experience
+
+Explore more features in the [styling guide](/knowledge/docs/fumadocs-demo/styling) →

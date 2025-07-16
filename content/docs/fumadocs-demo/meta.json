@@ -1,0 +1,12 @@
+{
+  "title": "Fumadocs Demo",
+  "description": "Out-of-the-box Fumadocs features",
+  "pages": [
+    "index",
+    "mdx-features",
+    "styling",
+    "api-reference",
+    "playground",
+    "advanced"
+  ]
+}

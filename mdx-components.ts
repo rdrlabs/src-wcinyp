@@ -11,35 +11,27 @@ import { Banner } from 'fumadocs-ui/components/banner';
 import { InlineTOC } from 'fumadocs-ui/components/inline-toc';
 import { ImageZoom } from 'fumadocs-ui/components/image-zoom';
 
-// Create the components object
-const components: MDXComponents = {
-  ...defaultMdxComponents,
-  // Fumadocs UI components
-  Callout,
-  Cards,
-  Card,
-  Steps,
-  Step,
-  Tabs,
-  Tab,
-  Accordion,
-  Accordions,
-  File,
-  Folder,
-  Files,
-  TypeTable,
-  InlineTOC,
-  Banner,
-  ImageZoom,
-};
-
-// Default export for static build process
-export default components;
-
-// Named export function for runtime compatibility
-export function useMDXComponents(overrides: MDXComponents = {}): MDXComponents {
+// This file ensures MDX components are available globally for all MDX files
+export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
+    ...defaultMdxComponents,
     ...components,
-    ...overrides,
+    // All Fumadocs UI components
+    Callout,
+    Cards,
+    Card,
+    Steps,
+    Step,
+    Tabs,
+    Tab,
+    Accordion,
+    Accordions,
+    File,
+    Folder,
+    Files,
+    TypeTable,
+    InlineTOC,
+    Banner,
+    ImageZoom,
   };
 }

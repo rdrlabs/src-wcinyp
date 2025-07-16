@@ -2,6 +2,9 @@
   "title": "WCINYP Documentation",
   "pages": [
     "index",
+    "fumadocs-demo",
+    "intro",
+    "requirements",
     "getting-started",
     "features",
     "guides"
