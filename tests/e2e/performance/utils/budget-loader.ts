@@ -25,3 +25,26 @@ export const performanceBudgets: Record<string, PerformanceBudget> = {
 export function loadBudget(page: string): PerformanceBudget {
   return performanceBudgets[page] || performanceBudgets.default
 }
+
+export function loadBudgetConfig(): Record<string, PerformanceBudget> {
+  return performanceBudgets
+}
+
+export function getBudgetForPage(page: string): PerformanceBudget {
+  return loadBudget(page)
+}
+
+export function generateBudgetReport(metrics: any, budget: PerformanceBudget): string {
+  const report: string[] = ['Performance Budget Report']
+  report.push('========================')
+  
+  for (const [key, budgetValue] of Object.entries(budget)) {
+    const actualValue = metrics[key]
+    if (actualValue !== undefined && budgetValue !== undefined) {
+      const status = actualValue <= budgetValue ? '✅' : '❌'
+      report.push(`${status} ${key}: ${actualValue} / ${budgetValue}`)
+    }
+  }
+  
+  return report.join('\n')
+}

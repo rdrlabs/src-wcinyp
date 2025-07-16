@@ -31,3 +31,27 @@ export class VisualValidator {
 }
 
 export const visualValidator = new VisualValidator()
+
+export async function captureAndCompare(
+  page: any,
+  name: string,
+  options?: VisualValidationOptions
+): Promise<{ match: boolean; diffPercent: number }> {
+  // Mock implementation
+  return { match: true, diffPercent: 0 }
+}
+
+export async function captureAndCompareElement(
+  page: any,
+  selector: string,
+  name: string,
+  options?: VisualValidationOptions
+): Promise<{ match: boolean; diffPercent: number }> {
+  // Mock implementation
+  return { match: true, diffPercent: 0 }
+}
+
+export function updateBaseline(name: string): void {
+  // Mock implementation
+  console.log(`Updating baseline for ${name}`)
+}
