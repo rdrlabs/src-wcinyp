@@ -23,9 +23,16 @@ const DOCUMENT_CATEGORIES = {
 }
 
 export const handler: Handler = async (event) => {
-  // Enable CORS
+  // Enable CORS with restricted origins
+  const allowedOrigins = [
+    'http://localhost:3000',
+    'https://wcinyp.netlify.app',
+    process.env.URL || 'https://wcinyp.netlify.app'
+  ]
+  
+  const origin = event.headers.origin || event.headers.Origin || ''
   const headers = {
-    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Origin': allowedOrigins.includes(origin) ? origin : allowedOrigins[2],
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'GET, OPTIONS',
   }
@@ -68,12 +75,13 @@ export const handler: Handler = async (event) => {
       body: JSON.stringify(response),
     }
   } catch (error) {
+    console.error('Error getting documents:', error)
     return {
       statusCode: 500,
       headers,
       body: JSON.stringify({ 
         error: 'Internal server error',
-        message: error instanceof Error ? error.message : 'Unknown error'
+        message: 'An error occurred while retrieving documents. Please try again later.'
       }),
     }
   }

@@ -131,9 +131,11 @@ export const handler: Handler = async (event) => {
     const { user, error } = await verifyAuthToken(token || null)
 
     if (error || !user) {
+      // Log the actual error for debugging
+      console.error('Auth verification failed:', error)
       return {
         statusCode: 401,
-        body: JSON.stringify({ error: error || 'Unauthorized' }),
+        body: JSON.stringify({ error: 'Unauthorized' }),
       }
     }
 
