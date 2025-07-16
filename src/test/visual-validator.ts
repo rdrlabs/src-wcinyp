@@ -249,7 +249,7 @@ export async function captureAndCompareElement(
       includeAA: mergedConfig.includeAA,
       alpha: mergedConfig.alpha,
       diffColor: mergedConfig.diffColor,
-      diffColorAlt: [0, 255, 0, 255],
+      diffColorAlt: [0, 255, 0],
       diffMask: false
     }
   );

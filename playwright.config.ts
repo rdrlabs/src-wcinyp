@@ -102,8 +102,6 @@ export default defineConfig({
         // Capture more detailed traces for performance tests
         trace: 'on',
         video: 'retain-on-failure',
-        // Performance timeline
-        recordHar: { path: 'test-results/performance.har', mode: 'full' },
       },
     },
 
