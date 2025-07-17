@@ -83,7 +83,7 @@ export const handler: Handler = async (event: HandlerEvent, context: HandlerCont
       statusCode: 500,
       body: JSON.stringify({ 
         error: 'Internal server error',
-        message: error instanceof Error ? error.message : 'Unknown error'
+        message: 'An error occurred while processing your request. Please try again later.'
       }),
     }
   }

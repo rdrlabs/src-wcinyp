@@ -49,7 +49,7 @@ graph LR
     F --> G[Create Session]
 ```
 
-### Step-by-Step Flow:
+### Step-by-Step Flow
 
 1. **User tries to login** → First stop: Redis
 2. **Redis checks**: "Has this IP tried too many times?"
@@ -77,7 +77,7 @@ graph LR
 
 ### 🏗️ Architecture Overview
 
-```
+```text
 ┌─────────────────────────────────────────────────────────┐
 │                    Your Application                      │
 ├─────────────────────┬───────────────────────────────────┤
@@ -99,14 +99,14 @@ graph LR
 
 You *could* use Supabase for rate limiting, but here's why Redis is better:
 
-### ❌ Problems with Supabase for Rate Limiting:
+### ❌ Problems with Supabase for Rate Limiting
 
 1. **No auto-expiration** - You'd need a cron job to clean old attempts
 2. **Slower for counting** - Database queries vs in-memory operations
 3. **Wastes resources** - Using permanent storage for temporary data
 4. **More complex** - Need to write cleanup functions
 
-### ✅ Why Redis is Perfect:
+### ✅ Why Redis is Perfect
 
 1. **Built for this** - Redis excels at temporary counters
 2. **Lightning fast** - Microsecond response times
@@ -162,13 +162,13 @@ if (!process.env.UPSTASH_REDIS_URL) {
 }
 ```
 
-### Without Redis:
+### Without Redis
 - ✅ App works perfectly
 - ✅ Users can log in
 - ❌ No protection from brute force attacks
 - ❌ Someone could try 1000s of passwords
 
-### With Redis:
+### With Redis
 - ✅ All features work
 - ✅ Protected from attacks
 - ✅ Email service won't get overwhelmed
@@ -210,19 +210,19 @@ if (!process.env.UPSTASH_REDIS_URL) {
 
 ## FAQ
 
-### Q: Can I use just Supabase?
+### Q Can I use just Supabase?
 **A:** Yes! The app works without Redis. You just lose rate limiting protection.
 
-### Q: Can I use a different Redis provider?
+### Q Can I use a different Redis provider?
 **A:** Yes! Any Redis-compatible service works (AWS ElastiCache, Redis Cloud, self-hosted).
 
-### Q: Why Upstash specifically?
+### Q Why Upstash specifically?
 **A:** It's serverless (like Netlify), has a generous free tier, and requires zero maintenance.
 
-### Q: What happens if Redis goes down?
+### Q What happens if Redis goes down?
 **A:** The app continues working normally, just without rate limiting.
 
-### Q: Do they share any data?
+### Q Do they share any data?
 **A:** No! Redis only knows IP addresses and attempt counts. Supabase handles all user data.
 
 ---
