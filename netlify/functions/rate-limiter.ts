@@ -10,8 +10,8 @@ export interface RateLimitResult {
 
 // Initialize Redis client
 const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_URL!,
-  token: process.env.UPSTASH_REDIS_TOKEN!,
+  url: process.env.UPSTASH_REDIS_REST_URL!,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
 })
 
 // Create rate limiter instance - 5 attempts per hour per IP
@@ -30,7 +30,7 @@ const ratelimit = new Ratelimit({
 export async function checkRateLimit(identifier: string): Promise<RateLimitResult> {
   try {
     // Skip rate limiting if not configured
-    if (!process.env.UPSTASH_REDIS_URL || !process.env.UPSTASH_REDIS_TOKEN) {
+    if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) {
       console.warn('Rate limiting is not configured. Skipping rate limit check.')
       return {
         allowed: true,

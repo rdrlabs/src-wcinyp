@@ -32,3 +32,8 @@ vitest.config.mjs
 
 # Temporary fix for ESLint exit handler issue
 src/test/*-validator.ts
+
+# Exclude all test files to fix TypeScript project reference errors
+**/*.test.ts
+**/*.test.tsx
+src/test/**
