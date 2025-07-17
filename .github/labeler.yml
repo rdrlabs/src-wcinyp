@@ -1,0 +1,76 @@
+# Configuration for GitHub labeler action
+
+# Component changes
+components:
+  - changed-files:
+    - any-glob-to-any-file: 'src/components/**/*'
+
+# UI/UX changes
+ui:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'src/components/ui/**/*'
+      - 'src/styles/**/*'
+      - '**/*.css'
+
+# Test changes
+tests:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'tests/**/*'
+      - '**/*.test.ts'
+      - '**/*.test.tsx'
+      - '**/*.spec.ts'
+
+# Documentation
+documentation:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'docs/**/*'
+      - '**/*.md'
+      - 'CLAUDE.md'
+
+# Performance
+performance:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'tests/e2e/performance/**/*'
+      - 'performance-budgets.json'
+
+# Dependencies
+dependencies:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'package.json'
+      - 'package-lock.json'
+
+# Configuration
+config:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '*.config.*'
+      - '.github/**/*'
+      - 'netlify.toml'
+
+# Type definitions
+types:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'src/types/**/*'
+      - '**/*.d.ts'
+
+# API/Backend
+api:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'netlify/functions/**/*'
+      - 'src/lib/api/**/*'
+
+# Accessibility
+accessibility:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'tests/e2e/accessibility/**/*'
+      - changed-files:
+        - any-glob-to-any-file: 'src/components/**/*'
+        - all-globs-to-all-files: ['aria-', 'role=']

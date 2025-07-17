@@ -1,0 +1,59 @@
+name: CodeRabbit AI Review
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  pull_request_review_comment:
+    types: [created]
+  issue_comment:
+    types: [created]
+
+# Prevent concurrent reviews on the same PR
+concurrency:
+  group: ${{ github.repository }}-${{ github.event.number || github.head_ref || github.sha }}-${{ github.workflow }}-${{ github.event_name == 'pull_request_review_comment' && 'pr_comment' || 'pr' }}
+  cancel-in-progress: ${{ github.event_name != 'pull_request_review_comment' }}
+
+jobs:
+  coderabbit:
+    runs-on: ubuntu-latest
+    name: CodeRabbit AI Review
+    
+    # Only run on PR-related events, not on issue comments
+    if: >
+      github.event_name == 'pull_request' ||
+      github.event_name == 'pull_request_review_comment' ||
+      (github.event_name == 'issue_comment' && github.event.issue.pull_request)
+    
+    steps:
+      - name: CodeRabbit AI Review
+        uses: coderabbitai/ai-pr-reviewer@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Optional: Add OpenAI API key for enhanced reviews
+          # OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        with:
+          # Enable debug mode for troubleshooting
+          debug: false
+          
+          # Review even when the PR is in draft
+          review_draft_pr: true
+          
+          # Enable various review features
+          review_comment_lgtm: true
+          
+          # Set the review level (info, warning, or error)
+          review_level: "warning"
+          
+          # Language for reviews
+          language: "en"
+          
+          # Custom system message for the AI
+          system_message: |
+            You are CodeRabbit, an AI-powered code reviewer for a healthcare administrative platform.
+            Focus on security, accessibility, performance, and code quality.
+            Be constructive and educational in your feedback.
