@@ -1,0 +1,351 @@
+---
+title: API Reference
+description: Comprehensive API documentation with Fumadocs
+---
+
+# API Reference
+
+This page demonstrates how to create comprehensive API documentation using Fumadocs components.
+
+## REST API Example
+
+<Tabs items={['cURL', 'JavaScript', 'Python', 'Go']}>
+  <Tab value="cURL">
+    ```bash
+    curl -X GET https://api.example.com/v1/users \
+      -H "Authorization: Bearer YOUR_API_KEY" \
+      -H "Content-Type: application/json"
+    ```
+  </Tab>
+  <Tab value="JavaScript">
+    ```javascript
+    const response = await fetch('https://api.example.com/v1/users', {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Bearer YOUR_API_KEY',
+        'Content-Type': 'application/json'
+      }
+    });
+    const data = await response.json();
+    ```
+  </Tab>
+  <Tab value="Python">
+    ```python
+    import requests
+    
+    response = requests.get(
+        'https://api.example.com/v1/users',
+        headers={
+            'Authorization': 'Bearer YOUR_API_KEY',
+            'Content-Type': 'application/json'
+        }
+    )
+    data = response.json()
+    ```
+  </Tab>
+  <Tab value="Go">
+    ```go
+    req, _ := http.NewRequest("GET", "https://api.example.com/v1/users", nil)
+    req.Header.Add("Authorization", "Bearer YOUR_API_KEY")
+    req.Header.Add("Content-Type", "application/json")
+    
+    res, _ := http.DefaultClient.Do(req)
+    defer res.Body.Close()
+    ```
+  </Tab>
+</Tabs>
+
+## API Response Format
+
+<Callout type="info">
+  All API responses follow a consistent JSON structure with metadata and data fields.
+</Callout>
+
+### Success Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "users": [
+      {
+        "id": "123",
+        "name": "John Doe",
+        "email": "john@example.com",
+        "created_at": "2024-01-15T10:00:00Z"
+      }
+    ]
+  },
+  "metadata": {
+    "page": 1,
+    "limit": 20,
+    "total": 100
+  }
+}
+```
+
+### Error Response
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "USER_NOT_FOUND",
+    "message": "The requested user does not exist",
+    "details": {
+      "user_id": "456"
+    }
+  }
+}
+```
+
+## Endpoints
+
+### User Management
+
+<Cards>
+  <Card title="GET /users">
+    List all users with pagination support
+  </Card>
+  <Card title="GET /users/:id">
+    Retrieve a specific user by ID
+  </Card>
+  <Card title="POST /users">
+    Create a new user account
+  </Card>
+  <Card title="PUT /users/:id">
+    Update an existing user
+  </Card>
+  <Card title="DELETE /users/:id">
+    Delete a user account
+  </Card>
+</Cards>
+
+## Authentication
+
+<Steps>
+  <Step>
+    ### Obtain API Key
+    
+    Register for an account and generate your API key from the dashboard:
+    ```
+    https://dashboard.example.com/api-keys
+    ```
+  </Step>
+  
+  <Step>
+    ### Include in Requests
+    
+    Add your API key to the Authorization header:
+    ```
+    Authorization: Bearer YOUR_API_KEY
+    ```
+  </Step>
+  
+  <Step>
+    ### Handle Token Expiry
+    
+    API keys expire after 90 days. Implement token refresh logic:
+    ```javascript
+    if (response.status === 401) {
+      await refreshApiKey();
+      // Retry request
+    }
+    ```
+  </Step>
+</Steps>
+
+## Rate Limiting
+
+<Banner>
+  API requests are limited to 1000 requests per hour per API key
+</Banner>
+
+### Rate Limit Headers
+
+| Header | Description | Example |
+|--------|-------------|---------|
+| `X-RateLimit-Limit` | Maximum requests per hour | `1000` |
+| `X-RateLimit-Remaining` | Requests remaining | `950` |
+| `X-RateLimit-Reset` | Reset timestamp (Unix) | `1642291200` |
+
+## Error Codes
+
+<TypeTable
+  type={{
+    INVALID_REQUEST: {
+      description: 'The request was malformed or missing required parameters',
+      type: '400',
+      required: false,
+    },
+    UNAUTHORIZED: {
+      description: 'Missing or invalid API key',
+      type: '401',
+      required: false,
+    },
+    FORBIDDEN: {
+      description: 'Access denied to the requested resource',
+      type: '403',
+      required: false,
+    },
+    NOT_FOUND: {
+      description: 'The requested resource does not exist',
+      type: '404',
+      required: false,
+    },
+    RATE_LIMITED: {
+      description: 'Too many requests, please retry later',
+      type: '429',
+      required: false,
+    },
+    SERVER_ERROR: {
+      description: 'Internal server error',
+      type: '500',
+      required: false,
+    },
+  }}
+/>
+
+## SDK Libraries
+
+<Accordions>
+  <Accordion title="JavaScript/TypeScript SDK">
+    ```bash
+    npm install @example/api-sdk
+    ```
+    
+    ```typescript
+    import { ExampleAPI } from '@example/api-sdk';
+    
+    const api = new ExampleAPI({
+      apiKey: process.env.API_KEY
+    });
+    
+    const users = await api.users.list({ 
+      page: 1, 
+      limit: 20 
+    });
+    ```
+  </Accordion>
+  
+  <Accordion title="Python SDK">
+    ```bash
+    pip install example-api-sdk
+    ```
+    
+    ```python
+    from example_api import Client
+    
+    client = Client(api_key=os.environ['API_KEY'])
+    users = client.users.list(page=1, limit=20)
+    ```
+  </Accordion>
+  
+  <Accordion title="Ruby SDK">
+    ```bash
+    gem install example-api
+    ```
+    
+    ```ruby
+    require 'example_api'
+    
+    client = ExampleAPI::Client.new(
+      api_key: ENV['API_KEY']
+    )
+    users = client.users.list(page: 1, limit: 20)
+    ```
+  </Accordion>
+</Accordions>
+
+## Webhooks
+
+Configure webhooks to receive real-time notifications:
+
+<Callout type="tip">
+  Webhooks are sent as POST requests with a JSON payload and HMAC signature for verification.
+</Callout>
+
+### Webhook Events
+
+<Files>
+  <Folder name="User Events" defaultOpen>
+    <File name="user.created" />
+    <File name="user.updated" />
+    <File name="user.deleted" />
+  </Folder>
+  <Folder name="Order Events">
+    <File name="order.created" />
+    <File name="order.completed" />
+    <File name="order.cancelled" />
+  </Folder>
+  <Folder name="Payment Events">
+    <File name="payment.succeeded" />
+    <File name="payment.failed" />
+    <File name="payment.refunded" />
+  </Folder>
+</Files>
+
+### Webhook Payload
+
+```json
+{
+  "event": "user.created",
+  "timestamp": "2024-01-15T10:00:00Z",
+  "data": {
+    "user": {
+      "id": "123",
+      "name": "John Doe",
+      "email": "john@example.com"
+    }
+  },
+  "signature": "sha256=..."
+}
+```
+
+## API Playground
+
+<Callout>
+  Try our interactive API playground to test endpoints directly in your browser!
+</Callout>
+
+<Cards>
+  <Card title="🚀 API Playground" href="/knowledge/docs/fumadocs-demo/playground">
+    Test API endpoints with live requests
+  </Card>
+  <Card title="📚 API Reference" href="#">
+    Complete endpoint documentation
+  </Card>
+</Cards>
+
+## Best Practices
+
+<Steps>
+  <Step>
+    ### Use Pagination
+    
+    Always paginate list endpoints to improve performance:
+    ```
+    GET /users?page=1&limit=20
+    ```
+  </Step>
+  
+  <Step>
+    ### Include Idempotency Keys
+    
+    For POST requests, include an idempotency key:
+    ```
+    Idempotency-Key: unique-request-id
+    ```
+  </Step>
+  
+  <Step>
+    ### Handle Errors Gracefully
+    
+    Implement exponential backoff for retries:
+    ```javascript
+    const backoff = Math.min(1000 * 2 ** attempt, 30000);
+    await sleep(backoff);
+    ```
+  </Step>
+</Steps>
+
