@@ -55,9 +55,9 @@ class Logger {
       case 'error':
         console.error(formattedMessage, data || '');
         // In production, you might want to send errors to a service like Sentry
-        // Check if running in browser environment (not Node.js/Netlify Functions)
-        if (!this.isDevelopment && typeof window !== 'undefined' && window.document) {
-          // TODO: Send to error tracking service
+        // Only send errors from browser environment
+        if (!this.isDevelopment && process.env.NODE_ENV === 'production' && typeof window !== 'undefined') {
+          // TODO: Implement Sentry integration - see issue #TODO
         }
         break;
     }

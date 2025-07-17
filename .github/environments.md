@@ -52,7 +52,7 @@ Since GitHub environments require specific repository settings, they need to be 
 
 ## Environment Variables
 
-### Required for all environments:
+### Required for all environments
 ```env
 # Supabase
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url

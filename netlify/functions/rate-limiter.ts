@@ -8,19 +8,24 @@ export interface RateLimitResult {
   retryAfter?: number
 }
 
-// Initialize Redis client
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL!,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-})
+// Initialize Redis client only if configured
+let redis: Redis | null = null
+let ratelimit: Ratelimit | null = null
 
-// Create rate limiter instance - 5 attempts per hour per IP
-const ratelimit = new Ratelimit({
-  redis,
-  limiter: Ratelimit.slidingWindow(5, '1 h'),
-  analytics: true,
-  prefix: 'auth_rate_limit',
-})
+if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+  redis = new Redis({
+    url: process.env.UPSTASH_REDIS_REST_URL,
+    token: process.env.UPSTASH_REDIS_REST_TOKEN,
+  })
+
+  // Create rate limiter instance - 5 attempts per hour per IP
+  ratelimit = new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(5, '1 h'),
+    analytics: true,
+    prefix: 'auth_rate_limit',
+  })
+}
 
 /**
  * Check rate limit for authentication attempts
@@ -30,8 +35,8 @@ const ratelimit = new Ratelimit({
 export async function checkRateLimit(identifier: string): Promise<RateLimitResult> {
   try {
     // Skip rate limiting if not configured
-    if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) {
-      console.warn('Rate limiting is not configured. Skipping rate limit check.')
+    if (!redis || !ratelimit) {
+      // Rate limiting not configured - allow the request
       return {
         allowed: true,
         remaining: 5,
@@ -48,8 +53,8 @@ export async function checkRateLimit(identifier: string): Promise<RateLimitResul
       retryAfter: result.success ? undefined : Math.round((result.reset - Date.now()) / 1000),
     }
   } catch (error) {
-    console.error('Rate limit check failed:', error)
-    // In case of Redis failure, allow the request but log the error
+    // In case of Redis failure, allow the request
+    // Error logging should be handled by the calling function
     return {
       allowed: true,
       remaining: 5,
@@ -69,6 +74,14 @@ export async function getRateLimitStatus(identifier: string): Promise<{
   reset: number
 }> {
   try {
+    if (!redis) {
+      return {
+        current: 0,
+        limit: 5,
+        reset: Date.now() + 3600000,
+      }
+    }
+
     const key = `auth_rate_limit:${identifier}`
     const current = await redis.get<number>(key) || 0
     const ttl = await redis.ttl(key)
@@ -79,7 +92,7 @@ export async function getRateLimitStatus(identifier: string): Promise<{
       reset: ttl > 0 ? Date.now() + (ttl * 1000) : Date.now() + 3600000,
     }
   } catch (error) {
-    console.error('Failed to get rate limit status:', error)
+    // Return default status on error
     return {
       current: 0,
       limit: 5,
