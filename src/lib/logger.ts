@@ -1,54 +1,92 @@
-export type LogLevel = 'debug' | 'info' | 'warn' | 'error'
+/**
+ * Production-safe logging utility
+ * Only logs in development mode unless explicitly enabled
+ */
+
+type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
 interface LogEntry {
-  level: LogLevel
-  message: string
-  data?: any
-  timestamp: string
+  level: LogLevel;
+  message: string;
+  data?: unknown;
+  timestamp: Date;
+  context?: string;
 }
 
 class Logger {
-  private isDevelopment = process.env.NODE_ENV === 'development'
-  private isServer = typeof window === 'undefined'
+  private isDevelopment = process.env.NODE_ENV === 'development';
+  private isLoggingEnabled = process.env.NEXT_PUBLIC_ENABLE_LOGGING === 'true';
 
-  private log(level: LogLevel, message: string, data?: any) {
+  private shouldLog(): boolean {
+    return this.isDevelopment || this.isLoggingEnabled;
+  }
+
+  private formatMessage(entry: LogEntry): string {
+    const timestamp = entry.timestamp.toISOString();
+    const context = entry.context ? `[${entry.context}]` : '';
+    return `${timestamp} ${context} ${entry.level.toUpperCase()}: ${entry.message}`;
+  }
+
+  private log(level: LogLevel, message: string, data?: unknown, context?: string): void {
+    if (!this.shouldLog()) return;
+
     const entry: LogEntry = {
       level,
       message,
       data,
-      timestamp: new Date().toISOString()
+      timestamp: new Date(),
+      context,
+    };
+
+    const formattedMessage = this.formatMessage(entry);
+
+    switch (level) {
+      case 'debug':
+        if (this.isDevelopment) {
+          console.log(formattedMessage, data || '');
+        }
+        break;
+      case 'info':
+        console.log(formattedMessage, data || '');
+        break;
+      case 'warn':
+        console.warn(formattedMessage, data || '');
+        break;
+      case 'error':
+        console.error(formattedMessage, data || '');
+        // In production, you might want to send errors to a service like Sentry
+        if (!this.isDevelopment && process.env.NODE_ENV === 'production') {
+          // TODO: Implement Sentry integration - see issue #TODO
+        }
+        break;
     }
-
-    if (this.isDevelopment || level === 'error' || level === 'warn') {
-      const method = level === 'error' ? 'error' : level === 'warn' ? 'warn' : 'log'
-      console[method](`[${entry.level.toUpperCase()}] ${entry.message}`, data || '')
-      
-      // In production, send errors to tracking service (only in browser)
-      if (!this.isDevelopment && level === 'error' && !this.isServer) {
-        // TODO: Send to error tracking service like Sentry
-      }
-    }
   }
 
-  debug(message: string, data?: any) {
-    this.log('debug', message, data)
+  debug(message: string, data?: unknown, context?: string): void {
+    this.log('debug', message, data, context);
   }
 
-  info(message: string, data?: any) {
-    this.log('info', message, data)
+  info(message: string, data?: unknown, context?: string): void {
+    this.log('info', message, data, context);
   }
 
-  warn(message: string, data?: any) {
-    this.log('warn', message, data)
+  warn(message: string, data?: unknown, context?: string): void {
+    this.log('warn', message, data, context);
   }
 
-  error(message: string, data?: any) {
-    this.log('error', message, data)
+  error(message: string, data?: unknown, context?: string): void {
+    this.log('error', message, data, context);
   }
 
-  securityWarn(message: string, data?: any) {
-    this.log('warn', `[SECURITY] ${message}`, data)
+  // Special method for security-related warnings
+  securityWarn(message: string, data?: unknown): void {
+    // Always log security warnings, even in production
+    console.warn(`[SECURITY] ${message}`, data || '');
   }
 }
 
-export const logger = new Logger()
+// Export singleton instance
+export const logger = new Logger();
+
+// Export for testing purposes
+export { Logger };
