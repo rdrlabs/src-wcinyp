@@ -63,6 +63,16 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 })
 
+// Mock crypto.randomUUID
+if (!global.crypto) {
+  global.crypto = {} as any
+}
+if (!global.crypto.randomUUID) {
+  global.crypto.randomUUID = vi.fn(() => 
+    `test-${Math.random().toString(36).substr(2, 4)}-${Math.random().toString(36).substr(2, 4)}-${Math.random().toString(36).substr(2, 4)}-${Math.random().toString(36).substr(2, 4)}-${Math.random().toString(36).substr(2, 4)}`
+  ) as any
+}
+
 // Mock pointer events for Radix UI components
 if (!Element.prototype.hasPointerCapture) {
   Element.prototype.hasPointerCapture = vi.fn()
@@ -88,6 +98,48 @@ global.ResizeObserver = vi.fn().mockImplementation(() => ({
   disconnect: vi.fn(),
 }))
 
+// Mock Supabase client
+vi.mock('@supabase/ssr', () => ({
+  createBrowserClient: vi.fn(() => ({
+    auth: {
+      getSession: vi.fn(() => Promise.resolve({ data: { session: null }, error: null })),
+      onAuthStateChange: vi.fn(() => ({
+        data: { subscription: { unsubscribe: vi.fn() } }
+      })),
+      signInWithOtp: vi.fn(() => Promise.resolve({ error: null })),
+      signOut: vi.fn(() => Promise.resolve({ error: null })),
+    },
+    from: vi.fn(() => ({
+      select: vi.fn(() => ({
+        eq: vi.fn(() => ({
+          single: vi.fn(() => Promise.resolve({ data: null, error: null }))
+        })),
+        single: vi.fn(() => Promise.resolve({ data: null, error: null }))
+      })),
+      insert: vi.fn(() => Promise.resolve({ error: null })),
+      update: vi.fn(() => ({
+        eq: vi.fn(() => Promise.resolve({ error: null }))
+      })),
+      delete: vi.fn(() => ({
+        eq: vi.fn(() => Promise.resolve({ error: null }))
+      })),
+    })),
+    channel: vi.fn(() => {
+      const channelObj = {
+        on: vi.fn().mockReturnThis(),
+        subscribe: vi.fn((callback) => {
+          if (typeof callback === 'function') {
+            callback('SUBSCRIBED')
+          }
+          return channelObj
+        }),
+        unsubscribe: vi.fn(),
+      }
+      return channelObj
+    }),
+  }))
+}))
+
 // Initialize feature flags for tests
 // By default, all feature flags are disabled to ensure backward compatibility
 global.process = {
@@ -97,5 +149,8 @@ global.process = {
     NEXT_PUBLIC_STRICT_DESIGN_SYSTEM: 'false',
     NEXT_PUBLIC_NEUTRAL_BADGES: 'false', 
     NEXT_PUBLIC_ENFORCE_TYPOGRAPHY: 'false',
+    // Mock Supabase environment variables for tests
+    NEXT_PUBLIC_SUPABASE_URL: 'https://test.supabase.co',
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: 'test-anon-key',
   }
 }
