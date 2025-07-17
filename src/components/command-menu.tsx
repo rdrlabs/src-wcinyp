@@ -8,7 +8,6 @@ import {
   Home,
   Settings,
   LogIn,
-  Stethoscope,
 } from "lucide-react";
 import {
   CommandDialog,
@@ -68,14 +67,6 @@ export function CommandMenu() {
               </CommandItem>
             );
           })}
-          {process.env.NODE_ENV === 'development' && (
-            <CommandItem
-              onSelect={() => runCommand(() => router.push('/diagnostics'))}
-            >
-              <Stethoscope className="mr-2 h-4 w-4" />
-              <span>Debug</span>
-            </CommandItem>
-          )}
         </CommandGroup>
         
         <CommandSeparator />

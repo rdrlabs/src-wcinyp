@@ -86,10 +86,10 @@ describe('useAppTheme', () => {
     const { result } = renderHook(() => useAppTheme())
 
     act(() => {
-      result.current.setColorTheme('yellow')
+      result.current.setColorTheme('purple')
     })
 
-    expect(document.body.className).toBe('dark some-other-class theme-yellow')
+    expect(document.body.className).toBe('dark some-other-class theme-purple')
   })
 
   it('removes old theme class when changing color theme', () => {
@@ -98,10 +98,10 @@ describe('useAppTheme', () => {
     const { result } = renderHook(() => useAppTheme())
 
     act(() => {
-      result.current.setColorTheme('neutral')
+      result.current.setColorTheme('red')
     })
 
-    expect(document.body.className).toBe('dark theme-neutral')
+    expect(document.body.className).toBe('dark theme-red')
     expect(document.body.className).not.toContain('theme-blue')
   })
 

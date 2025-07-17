@@ -1,4 +1,6 @@
-'use client';
+'use client'
+
+import { logger } from '@/lib/logger';
 
 import { useEffect } from 'react';
 import Link from 'next/link';
@@ -12,7 +14,7 @@ export default function UpdatesError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error('Updates page error:', error);
+    logger.error('Updates page error', error, 'UpdatesErrorPage');
   }, [error]);
 
   return (

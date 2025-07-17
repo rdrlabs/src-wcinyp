@@ -21,6 +21,14 @@ vi.mock('@/contexts/app-context', () => ({
   })
 }))
 
+// Mock TooltipProvider
+vi.mock('@/components/ui/tooltip', () => ({
+  TooltipProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  Tooltip: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  TooltipTrigger: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  TooltipContent: ({ children }: { children: React.ReactNode }) => <div role="tooltip">{children}</div>,
+}))
+
 describe('ThemeSelector', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -30,43 +38,47 @@ describe('ThemeSelector', () => {
   })
 
   describe('Dropdown variant (default)', () => {
-    it('renders dropdown theme selector', () => {
+    it('renders dropdown theme selector with system button', () => {
       render(<ThemeSelector />)
       
-      expect(screen.getByRole('button')).toBeInTheDocument()
+      // Should have 2 buttons: dropdown trigger and system button
+      const buttons = screen.getAllByRole('button')
+      expect(buttons).toHaveLength(2)
       expect(screen.getByText('Toggle theme')).toBeInTheDocument()
+      expect(screen.getByText('Apply system theme')).toBeInTheDocument()
     })
 
-    it('opens dropdown menu on hover', async () => {
+    it('opens dropdown menu on click', async () => {
       const user = userEvent.setup()
       render(<ThemeSelector />)
       
-      const button = screen.getByRole('button')
-      await user.hover(button)
+      // Get the first button (dropdown trigger)
+      const buttons = screen.getAllByRole('button')
+      await user.click(buttons[0])
       
-      // Wait for hover delay
-      await new Promise(resolve => setTimeout(resolve, 250))
+      // Check for dropdown content - mode buttons don't show text anymore
+      const dropdown = screen.getByRole('menu')
+      const modeButtons = dropdown.querySelectorAll('button')
+      expect(modeButtons.length).toBeGreaterThanOrEqual(2)
       
-      // Check for dropdown content
-      expect(screen.getByText('Appearance')).toBeInTheDocument()
-      expect(screen.getByText('Color')).toBeInTheDocument()
-      expect(screen.getByText('Light')).toBeInTheDocument()
-      expect(screen.getByText('Dark')).toBeInTheDocument()
-      expect(screen.getByText('System')).toBeInTheDocument()
+      // Check for color circles (by role and sr-only text)
+      expect(screen.getByText('Blue theme')).toBeInTheDocument()
+      expect(screen.getByText('Red theme')).toBeInTheDocument()
     })
 
     it('changes light/dark theme', async () => {
       const user = userEvent.setup()
       render(<ThemeSelector />)
       
-      const button = screen.getByRole('button')
-      await user.hover(button)
+      // Get the first button (dropdown trigger)
+      const buttons = screen.getAllByRole('button')
+      await user.click(buttons[0])
       
-      // Wait for hover delay
-      await new Promise(resolve => setTimeout(resolve, 250))
-      
-      const darkOption = screen.getByText('Dark')
-      await user.click(darkOption)
+      // Find all buttons in the dropdown (excluding the trigger)
+      const dropdown = screen.getByRole('menu')
+      const modeButtons = dropdown.querySelectorAll('button')
+      // Click the second mode button (Dark is at index 1)
+      await user.click(modeButtons[1])
       
       expect(mockSetTheme).toHaveBeenCalledWith('dark')
     })
@@ -75,16 +87,47 @@ describe('ThemeSelector', () => {
       const user = userEvent.setup()
       render(<ThemeSelector />)
       
-      const button = screen.getByRole('button')
-      await user.hover(button)
+      // Get the first button (dropdown trigger)
+      const buttons = screen.getAllByRole('button')
+      await user.click(buttons[0])
       
-      // Wait for hover delay
-      await new Promise(resolve => setTimeout(resolve, 250))
-      
-      const redOption = screen.getByText('Red')
-      await user.click(redOption)
+      // Click on the red color circle button (find by sr-only text)
+      const redButton = screen.getByText('Red theme').closest('button')
+      if (redButton) await user.click(redButton)
       
       expect(mockSetColorTheme).toHaveBeenCalledWith('red')
+    })
+    
+    it('toggles system theme with system button', async () => {
+      const user = userEvent.setup()
+      render(<ThemeSelector />)
+      
+      // Get the second button (system button)
+      const buttons = screen.getAllByRole('button')
+      const systemButton = buttons[1]
+      
+      // Click to enable system theme
+      await user.click(systemButton)
+      expect(mockSetTheme).toHaveBeenCalledWith('system')
+      
+      // Mock system theme active
+      mockTheme.mockReturnValue('system')
+      render(<ThemeSelector />)
+      
+      // Click again to disable system theme
+      const newButtons = screen.getAllByRole('button')
+      await user.click(newButtons[1])
+      expect(mockSetTheme).toHaveBeenCalledWith('light')
+    })
+    
+    it('grays out dropdown when system theme is active', () => {
+      mockTheme.mockReturnValue('system')
+      render(<ThemeSelector />)
+      
+      const buttons = screen.getAllByRole('button')
+      const dropdownButton = buttons[0]
+      
+      expect(dropdownButton).toHaveClass('opacity-50')
     })
   })
 
@@ -155,20 +198,20 @@ describe('ThemeSelector', () => {
       const user = userEvent.setup()
       render(<ThemeSelector />)
       
-      const button = screen.getByRole('button')
-      await user.hover(button)
+      // Get the first button (dropdown trigger)
+      const buttons = screen.getAllByRole('button')
+      await user.click(buttons[0])
       
-      // Wait for hover delay
-      await new Promise(resolve => setTimeout(resolve, 250))
+      // Check buttons in the dropdown menu only
+      const dropdown = screen.getByRole('menu')
+      const dropdownButtons = dropdown.querySelectorAll('button')
       
-      // Check that all theme options are buttons
-      const lightButton = screen.getByText('Light').closest('button')
-      const darkButton = screen.getByText('Dark').closest('button')
-      const systemButton = screen.getByText('System').closest('button')
+      // Should have: 2 mode buttons + 6 color buttons = 8 buttons in dropdown
+      expect(dropdownButtons.length).toBe(8)
       
-      expect(lightButton).toBeInTheDocument()
-      expect(darkButton).toBeInTheDocument()
-      expect(systemButton).toBeInTheDocument()
+      // The first 2 should be mode buttons
+      expect(dropdownButtons[0].tagName).toBe('BUTTON')
+      expect(dropdownButtons[1].tagName).toBe('BUTTON')
     })
   })
 })

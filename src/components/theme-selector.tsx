@@ -5,18 +5,30 @@ import { Moon, Sun, Monitor } from "lucide-react"
 import { useAppTheme, type ColorTheme } from "@/contexts/app-context"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import {
+  TooltipProvider,
+} from "@/components/ui/tooltip"
+import { motion } from "framer-motion"
 
-// Direct colors are intentionally used here for theme preview swatches
-// These show the actual theme colors, not the current theme's semantic tokens
-const themes = [
-  { name: "None", value: "neutral" as ColorTheme, color: "bg-gray-500 dark:bg-gray-400" },
-  { name: "Blue", value: "blue" as ColorTheme, color: "bg-blue-500" },
-  { name: "Red", value: "red" as ColorTheme, color: "bg-red-500" },
-  { name: "Orange", value: "orange" as ColorTheme, color: "bg-orange-500" },
-  { name: "Green", value: "green" as ColorTheme, color: "bg-green-500" },
-  { name: "Yellow", value: "yellow" as ColorTheme, color: "bg-yellow-500" },
-  { name: "Pink", value: "pink" as ColorTheme, color: "bg-pink-500" },
-  { name: "Purple", value: "purple" as ColorTheme, color: "bg-purple-500" },
+// Mode switcher options
+const modes = [
+  { id: "light", label: "Light", icon: Sun },
+  { id: "dark", label: "Dark", icon: Moon },
+]
+
+// Color themes in grid layout (2 rows of 3)
+const colorThemes = [
+  { name: "Blue", value: "blue" as ColorTheme, hex: "#3b82f6" },
+  { name: "Red", value: "red" as ColorTheme, hex: "#ef4444" },
+  { name: "Orange", value: "orange" as ColorTheme, hex: "#f97316" },
+  { name: "Green", value: "green" as ColorTheme, hex: "#22c55e" },
+  { name: "Pink", value: "pink" as ColorTheme, hex: "#ec4899" },
+  { name: "Purple", value: "purple" as ColorTheme, hex: "#a855f7" },
 ]
 
 interface ThemeSelectorProps {
@@ -25,12 +37,18 @@ interface ThemeSelectorProps {
 
 export function ThemeSelector({ variant = 'dropdown' }: ThemeSelectorProps) {
   const { setTheme, theme, colorTheme, setColorTheme, mounted } = useAppTheme()
+  const [previousTheme, setPreviousTheme] = React.useState<string>('light')
   
-  // All hooks must be called before any conditional returns
-  const [isOpen, setIsOpen] = React.useState(false)
-  const [openTimeout, setOpenTimeout] = React.useState<NodeJS.Timeout | null>(null)
-  const [closeTimeout, setCloseTimeout] = React.useState<NodeJS.Timeout | null>(null)
-
+  // Track if system theme is active
+  const isSystemTheme = theme === 'system'
+  
+  // Update previous theme when manually selecting light/dark
+  React.useEffect(() => {
+    if (theme !== 'system' && mounted) {
+      setPreviousTheme(theme)
+    }
+  }, [theme, mounted])
+  
   if (!mounted) {
     return null
   }
@@ -51,114 +69,146 @@ export function ThemeSelector({ variant = 'dropdown' }: ThemeSelectorProps) {
     )
   }
 
-  const handleMouseEnter = () => {
-    if (closeTimeout) {
-      clearTimeout(closeTimeout)
-      setCloseTimeout(null)
-    }
-    const timeout = setTimeout(() => {
-      setIsOpen(true)
-    }, 200)
-    setOpenTimeout(timeout)
-  }
-
-  const handleMouseLeave = () => {
-    if (openTimeout) {
-      clearTimeout(openTimeout)
-      setOpenTimeout(null)
-    }
-    const timeout = setTimeout(() => {
-      setIsOpen(false)
-    }, 100)
-    setCloseTimeout(timeout)
-  }
-
   return (
-    <div 
-      className="relative inline-block"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      <Button variant="outline" size="icon" className="h-9 w-9">
-        <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-        <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-        <span className="sr-only">Toggle theme</span>
-      </Button>
-      
-      {isOpen && (
-        <div 
-          className="absolute right-0 mt-1 w-[200px] rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-lg z-50"
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        >
-          <div className="px-2 py-1.5 text-sm font-semibold">Appearance</div>
-          <div className="h-px bg-border my-1" />
-          
-          {/* Light/Dark Mode Selection */}
-          <div className="py-1">
-            <button
-              onClick={() => setTheme('light')}
+    <TooltipProvider>
+      <div className="flex items-center gap-1">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button 
+              variant="outline" 
+              size="icon" 
               className={cn(
-                "flex w-full items-center rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground",
-                theme === 'light' && "bg-primary/10 text-primary"
+                "relative h-9 w-9 overflow-hidden transition-opacity",
+                isSystemTheme && "opacity-50"
               )}
             >
-              <Sun className="mr-2 h-4 w-4" />
-              Light
-            </button>
-            <button
-              onClick={() => setTheme('dark')}
-              className={cn(
-                "flex w-full items-center rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground",
-                theme === 'dark' && "bg-primary/10 text-primary"
-              )}
+              <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+              <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+              <span className="sr-only">Toggle theme</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="center" className="w-[240px] p-3">
+        <div className="space-y-3">
+          {/* Animated Mode Switcher with System button */}
+          <div className="relative flex items-center gap-2">
+            <div className="relative flex rounded-lg bg-muted p-1 flex-1">
+            {modes.map((mode) => {
+              const Icon = mode.icon
+              const isSelected = theme === mode.id
+              
+              return (
+                <motion.button
+                  key={mode.id}
+                  className={cn(
+                    "relative flex items-center justify-center h-8 w-full rounded-md text-xs font-medium transition-colors",
+                    isSelected 
+                      ? "text-foreground" 
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                  onClick={() => setTheme(mode.id)}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ duration: 0.1 }}
+                >
+                  {/* Sliding background */}
+                  {isSelected && mounted && (
+                    <motion.div
+                      layoutId="theme-mode-background"
+                      className="absolute inset-0 bg-background shadow-md rounded-md ring-2 ring-gray-300 dark:ring-gray-600"
+                      initial={false}
+                      transition={{
+                        type: "spring",
+                        stiffness: 260,
+                        damping: 20
+                      }}
+                    />
+                  )}
+                  
+                  {/* Icon only - no text */}
+                  <Icon className="w-4 h-4 relative z-10" />
+                </motion.button>
+              )
+            })}
+            </div>
+            
+            {/* System button next to mode switcher */}
+            <Button
+              variant={isSystemTheme ? "default" : "outline"}
+              size="icon"
+              className="h-10 w-10 shrink-0"
+              onClick={() => {
+                if (isSystemTheme) {
+                  setTheme(previousTheme)
+                } else {
+                  setTheme('system')
+                }
+              }}
             >
-              <Moon className="mr-2 h-4 w-4" />
-              Dark
-            </button>
-            <button
-              onClick={() => setTheme('system')}
-              className={cn(
-                "flex w-full items-center rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground",
-                theme === 'system' && "bg-primary/10 text-primary"
-              )}
-            >
-              <Monitor className="mr-2 h-4 w-4" />
-              System
-            </button>
+              <Monitor className="h-4 w-4" />
+              <span className="sr-only">Apply system theme</span>
+            </Button>
           </div>
 
-          <div className="h-px bg-border my-1" />
-          <div className="px-2 py-1.5 text-sm font-semibold">Color</div>
-          
-          {/* Color Theme Selection */}
-          <div className="py-1">
-            {themes.map((t) => (
-              <button
-                key={t.value}
-                onClick={() => setColorTheme(t.value)}
-                className={cn(
-                  "flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground",
-                  colorTheme === t.value && (
-                    t.value === "neutral" 
-                      ? "bg-accent text-accent-foreground" 
-                      : "bg-primary/10 text-primary"
-                  )
-                )}
-              >
-                <div 
+          {/* Color Grid - 3 columns with smooth transitions */}
+          <motion.div 
+            className="grid grid-cols-3 gap-1.5 relative"
+            layout
+            initial={false}
+            transition={{
+              layout: {
+                type: "spring",
+                stiffness: 260,
+                damping: 20
+              }
+            }}
+          >
+            {colorThemes.map((color) => {
+              const isSelected = colorTheme === color.value
+              
+              return (
+                <motion.button
+                  key={color.value}
                   className={cn(
-                    "h-4 w-4 rounded-full border border-border",
-                    t.color,
-                    colorTheme === t.value && "border-primary"
+                    "relative h-9 w-full rounded-md p-0 focus-visible:ring-2 focus-visible:ring-offset-2 transition-colors",
+                    isSelected 
+                      ? "bg-primary/10" 
+                      : "hover:bg-accent"
                   )}
-                />
-                <span className={cn(t.value === "neutral" && "italic")}>{t.name}</span>
-              </button>
-            ))}
-          </div>
+                  onClick={() => setColorTheme(color.value)}
+                  whileTap={{ scale: 0.95 }}
+                  initial={false}
+                >
+                  {/* Active selection background */}
+                  {isSelected && mounted && (
+                    <motion.div
+                      layoutId="color-theme-background"
+                      className="absolute inset-0 bg-primary/10 rounded-md"
+                      initial={false}
+                      transition={{
+                        type: "spring",
+                        stiffness: 260,
+                        damping: 20
+                      }}
+                    />
+                  )}
+                  
+                  <div 
+                    className={cn(
+                      "relative rounded-full mx-auto transition-all",
+                      isSelected 
+                        ? "w-6 h-6 shadow-lg" 
+                        : "w-5 h-5 shadow-sm"
+                    )}
+                    style={{ backgroundColor: color.hex }} 
+                  />
+                  <span className="sr-only">{color.name} theme</span>
+                </motion.button>
+              )
+            })}
+          </motion.div>
         </div>
-      )}
-    </div>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  </div>
+  </TooltipProvider>
   )
 }

@@ -130,7 +130,7 @@ export function FormBuilderUI() {
   return (
     <div className="space-y-6">
       {/* Form Settings */}
-      <Card className="border-border-strong bg-gradient-to-br from-background to-muted-lighter">
+      <Card className="border-border bg-gradient-to-br from-background to-muted dark:from-card dark:to-card">
         <CardHeader>
           <CardTitle>Form Settings</CardTitle>
         </CardHeader>
@@ -141,7 +141,7 @@ export function FormBuilderUI() {
               type="text"
               value={formName}
               onChange={(e) => setFormName(e.target.value)}
-              className="w-full px-3 py-2 border border-border rounded-md bg-muted-lighter/30 focus:bg-background transition-colors"
+              className="w-full px-3 py-2 border border-border rounded-md bg-muted/30 focus:bg-background transition-colors"
               placeholder="Enter form name"
             />
           </div>
@@ -150,7 +150,7 @@ export function FormBuilderUI() {
             <textarea
               value={formDescription}
               onChange={(e) => setFormDescription(e.target.value)}
-              className="w-full px-3 py-2 border border-border rounded-md bg-muted-lighter/30 focus:bg-background transition-colors"
+              className="w-full px-3 py-2 border border-border rounded-md bg-muted/30 focus:bg-background transition-colors"
               placeholder="Enter form description"
               rows={3}
             />
@@ -164,7 +164,7 @@ export function FormBuilderUI() {
           <CardTitle>Form Fields</CardTitle>
           <CardDescription>Add and configure form fields</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4 bg-muted-lighter/20">
+        <CardContent className="space-y-4 bg-muted/20">
           {fields.map((field, index) => (
             <Card key={field.id} className="p-4 shadow-sm hover:shadow-md transition-all duration-200 border-l-4 border-l-primary">
               <div className="space-y-3">

@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 interface ComingSoonSection {
-  icon: LucideIcon;
+  icon: LucideIcon | null;
   title: string;
   description: string;
   isPlaceholder?: boolean;
@@ -28,7 +28,7 @@ export function ComingSoonCard({
   const normalizedSections = [...sections];
   while (normalizedSections.length < 6) {
     normalizedSections.push({
-      icon: null as any, // Placeholder
+      icon: null, // Placeholder
       title: '',
       description: ''
     });
@@ -36,7 +36,7 @@ export function ComingSoonCard({
 
   return (
     <div className="container mx-auto py-8">
-      <div className="border border-border-strong rounded-lg bg-gradient-to-b from-muted-lighter to-background shadow-sm">
+      <div className="border border-border rounded-lg bg-gradient-to-b from-muted to-background shadow-sm dark:from-card dark:to-card">
         <div className="px-6 py-12">
           <div className="text-center mb-8">
             <Badge 
@@ -69,8 +69,8 @@ export function ComingSoonCard({
                   className={cn(
                     "p-6 border rounded-lg transition-all duration-200 relative flex flex-col",
                     section.isPlaceholder 
-                      ? "bg-muted-lighter opacity-60 shadow-sm border-border" 
-                      : "bg-gradient-to-b from-background to-muted-lighter/50 shadow-sm hover:shadow-md hover:border-border-strong border-border"
+                      ? "bg-muted opacity-60 shadow-sm border-border" 
+                      : "bg-gradient-to-b from-background to-muted/50 shadow-sm hover:shadow-md hover:border-border dark:from-card dark:to-card"
                   )}
                 >
                   <div className="flex flex-col items-center text-center flex-1">
@@ -78,10 +78,10 @@ export function ComingSoonCard({
                       "p-3 rounded-lg mb-4",
                       section.isPlaceholder ? "bg-muted" : "bg-primary/10"
                     )}>
-                      <Icon className={cn(
+                      {Icon && <Icon className={cn(
                         "h-8 w-8",
                         section.isPlaceholder ? "text-muted-foreground" : "text-primary"
-                      )} strokeWidth={1.5} />
+                      )} strokeWidth={1.5} />}
                     </div>
                     <h3 className="font-semibold mb-2">{section.title}</h3>
                     <p className="text-sm text-muted-foreground">
