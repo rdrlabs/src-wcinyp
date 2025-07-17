@@ -42,7 +42,7 @@ npm run validate:design # Validate design system compliance
 
 1. **Claude Task Master Integration** 🎯
    - All development work should be tracked in `.taskmaster/` directory
-   - Task Master v0.19.0 is installed and configured for Claude Code
+   - Task Master v0.20.0 is installed and configured for Claude Code
    - Use task templates in `tasks/templates/` for consistent development
    - Reference task IDs in commit messages
    - Tasks persist across Claude sessions for continuity

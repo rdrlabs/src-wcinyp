@@ -1,5 +1,6 @@
 import { Redis } from '@upstash/redis'
 import { Ratelimit } from '@upstash/ratelimit'
+import { logger } from '../../src/lib/logger'
 
 export interface RateLimitResult {
   allowed: boolean
@@ -36,7 +37,7 @@ export async function checkRateLimit(identifier: string): Promise<RateLimitResul
   try {
     // Skip rate limiting if not configured
     if (!redis || !ratelimit) {
-      // Rate limiting not configured - allow the request
+      logger.warn('Rate limiting is not configured. Skipping rate limit check.')
       return {
         allowed: true,
         remaining: 5,
@@ -53,8 +54,8 @@ export async function checkRateLimit(identifier: string): Promise<RateLimitResul
       retryAfter: result.success ? undefined : Math.round((result.reset - Date.now()) / 1000),
     }
   } catch (error) {
-    // In case of Redis failure, allow the request
-    // Error logging should be handled by the calling function
+    logger.error('Rate limit check failed:', error)
+    // In case of Redis failure, allow the request but log the error
     return {
       allowed: true,
       remaining: 5,
@@ -92,7 +93,7 @@ export async function getRateLimitStatus(identifier: string): Promise<{
       reset: ttl > 0 ? Date.now() + (ttl * 1000) : Date.now() + 3600000,
     }
   } catch (error) {
-    // Return default status on error
+    logger.error('Failed to get rate limit status:', error)
     return {
       current: 0,
       limit: 5,
