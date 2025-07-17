@@ -37,7 +37,7 @@
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-switch": "^1.2.5",
     "@radix-ui/react-tooltip": "^1.2.7",
-    "@supabase/ssr": "^0.5.2",
+    "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.47.3",
     "@tanstack/react-table": "^8.21.3",
     "@upstash/ratelimit": "^2.0.5",
