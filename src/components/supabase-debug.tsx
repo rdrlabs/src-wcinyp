@@ -39,36 +39,14 @@ export function SupabaseDebug() {
         user: { id: session.user.id, email: session.user.email },
         expiresAt: new Date(session.expires_at! * 1000).toISOString(),
       } : null
-    } catch (err) {
-      info.session = { error: (err as Error).message }
+    } catch (error) {
+      info.session = { error: String(error) }
     }
 
-    // Check pending session if token exists
+    // Check pending session
     if (pendingSessionToken) {
-      try {
-        const status = await authSessionManager.checkSessionStatus(pendingSessionToken)
-        info.pendingSession = status
-      } catch (err) {
-        info.pendingSession = { error: (err as Error).message }
-      }
-    }
-
-    // Check tables
-    try {
-      const { count: profileCount } = await supabase
-        .from('profiles')
-        .select('*', { count: 'exact', head: true })
-      
-      const { count: sessionCount } = await supabase
-        .from('pending_auth_sessions')
-        .select('*', { count: 'exact', head: true })
-      
-      info.tables = {
-        profiles: profileCount !== null ? `${profileCount} records` : 'Not accessible',
-        pending_auth_sessions: sessionCount !== null ? `${sessionCount} records` : 'Not accessible',
-      }
-    } catch (err) {
-      info.tables = { error: (err as Error).message }
+      const pendingSession = authSessionManager.getSession(pendingSessionToken)
+      info.pendingSession = pendingSession
     }
 
     setDebugInfo(info)
@@ -77,37 +55,35 @@ export function SupabaseDebug() {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Supabase Debug Panel</CardTitle>
+        <CardTitle>Supabase Auth Debug</CardTitle>
         <CardDescription>
-          Debug information for authentication and database connection
+          Current authentication state and configuration
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex items-center gap-2">
-          <Button onClick={runDebugChecks} size="sm">
-            Run Debug Checks
-          </Button>
-          {user && <Badge variant="outline" className="bg-green-50">Authenticated</Badge>}
-          {!user && !loading && <Badge variant="outline" className="bg-red-50">Not Authenticated</Badge>}
-          {loading && <Badge variant="outline" className="bg-yellow-50">Loading...</Badge>}
-          {isPollingForAuth && <Badge variant="outline" className="bg-blue-50">Polling for Auth</Badge>}
+          <span className="font-medium">Status:</span>
+          {loading && <Badge variant="secondary">Loading</Badge>}
+          {!loading && user && <Badge variant="default">Authenticated</Badge>}
+          {!loading && !user && <Badge variant="outline">Not Authenticated</Badge>}
+          {isPollingForAuth && <Badge variant="secondary">Polling for Auth</Badge>}
         </div>
 
+        {error && (
+          <div className="text-sm text-destructive">
+            Error: {error}
+          </div>
+        )}
+
+        <Button onClick={runDebugChecks} size="sm">
+          Run Debug Checks
+        </Button>
+
         {debugInfo && (
-          <pre className="overflow-auto rounded-lg bg-muted p-4 text-xs">
+          <pre className="text-xs bg-muted p-4 rounded-md overflow-auto max-h-96">
             {JSON.stringify(debugInfo, null, 2)}
           </pre>
         )}
-
-        <div className="space-y-2 text-sm">
-          <h3 className="font-medium">Quick Status:</h3>
-          <ul className="space-y-1 text-muted-foreground">
-            <li>• Supabase URL: {process.env.NEXT_PUBLIC_SUPABASE_URL ? '✅ Set' : '❌ Missing'}</li>
-            <li>• Auth State: {loading ? '⏳ Loading' : user ? '✅ Authenticated' : '❌ Not authenticated'}</li>
-            <li>• Polling: {isPollingForAuth ? '🔄 Active' : '⏸️ Inactive'}</li>
-            <li>• Session Token: {pendingSessionToken ? `🔑 ${pendingSessionToken.substring(0, 8)}...` : '❌ None'}</li>
-          </ul>
-        </div>
       </CardContent>
     </Card>
   )

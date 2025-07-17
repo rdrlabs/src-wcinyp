@@ -63,3 +63,5 @@ next-env.d.ts
 **/* 2/
 **/* 3/
 **/* 4/
+playwright-report/
+test-results/

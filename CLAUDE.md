@@ -1,17 +1,20 @@
 # WCINYP Next.js Application
 
 ## Overview
-This is a medical imaging center application built with Next.js 14, TypeScript, and Tailwind CSS. It provides document management, provider directory, form generation, and contact management features.
+This is a radiology administration application built with Next.js 15, React 19, TypeScript, and Tailwind CSS. It provides document management, provider directory, form generation, and contact management features.
 
 ## Tech Stack
-- **Framework**: Next.js 14 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS v4 (migrated from v3)
+- **Framework**: Next.js 15.3.5 (App Router with Turbopack)
+- **Runtime**: React 19.0.0
+- **Language**: TypeScript 5.x
+- **Styling**: Tailwind CSS v4.0.0
 - **UI Components**: shadcn/ui
 - **Theme System**: Dual-theme approach (next-themes for dark/light, custom for color themes)
-- **Documentation**: Fumadocs (MDX) - Properly isolated with its own styling context
-- **Testing**: Vitest, React Testing Library (387 tests, TDD approach)
-- **Deployment**: Netlify (static hosting)
+- **Documentation**: Fumadocs v15.6.1 (MDX) - Properly isolated with its own styling context
+- **Testing**: Vitest 2.0, React Testing Library (387 tests, TDD approach)
+- **Deployment**: Netlify (static export hosting)
+- **Authentication**: Supabase Auth
+- **Rate Limiting**: Upstash Redis
 
 ## Project Structure
 ```
@@ -74,6 +77,20 @@ npm run format
 - Fumadocs uses its own styling system and is isolated from main app styles
 - RootProvider is only used in the knowledge layout, not globally
 
+## Context7 MCP Integration
+**ALWAYS use Context7 for up-to-date documentation** when working with:
+- Next.js 15 App Router patterns and Turbopack features
+- React 19 new features and patterns
+- shadcn/ui component implementations
+- Tailwind CSS v4 syntax and utilities
+- Fumadocs v15 MDX configurations
+- Vitest 2.0 and React Testing Library patterns
+- Netlify static export and Functions
+- Supabase authentication patterns
+- Upstash Redis rate limiting
+
+Add "use context7" to prompts for current, accurate code examples.
+
 ## Testing
 Run the following commands before committing:
 ```bash
@@ -83,6 +100,29 @@ npm test -- --run  # Run tests once (avoid watch mode timeout in Claude Code)
 ```
 
 **Test Suite Status**: 387 tests, all passing ✅
+
+## Taskmaster Integration
+Common commands for the testing workflow:
+```bash
+# Task navigation
+task-master next                              # Get next task
+task-master show 2                            # Show Task 2 details
+task-master list --status=pending             # List pending tasks
+
+# Task management  
+task-master set-status --id=2 --status=in-progress  # Start task
+task-master set-status --id=2 --status=done         # Complete task
+
+# Testing workflow (after aliases setup)
+tmn    # Get next task
+tms 2  # Show task 2 (helper script)
+tmv    # Validate current task
+tmd 2  # Mark task 2 done
+```
+
+## Shortcuts
+When working with Claude Code, you can use these shortcuts:
+- `wcinyp` - Automatically switches to ~/Documents/src-wcinyp directory
 
 ## Deployment
 The application automatically deploys to Netlify on push to main branch. The `netlify.toml` configuration handles:
@@ -106,3 +146,6 @@ The application automatically deploys to Netlify on push to main branch. The `ne
    - Custom color themes (blue, red, orange, green, yellow, neutral) on `<body>` element
    - Uses OKLCH color space for perceptually uniform colors
    - ThemeBody component handles client-side theme application
+7. **Static Export**: Configured with `output: 'export'` for Netlify hosting
+8. **Authentication**: Supabase Auth with SSR support
+9. **Performance**: Turbopack enabled in development for faster builds

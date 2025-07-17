@@ -1,8 +1,18 @@
 # Claude App Handoff Document - WCINYP Project
 
+## Context7 Integration
+**IMPORTANT**: Always use Context7 MCP for up-to-date documentation by adding "use context7" to prompts when working with:
+- Next.js 15 (not 14!) App Router patterns
+- React 19 features
+- Tailwind CSS v4 syntax
+- shadcn/ui components
+- Fumadocs v15 MDX
+- Supabase authentication
+- Vitest 2.0 testing
+
 ## Current Situation
 
-We're refactoring the WCINYP medical imaging application to:
+We're refactoring the WCINYP radiology administration application to:
 1. Remove over-engineered features from the proof of concept
 2. Focus on core backend functionality (Phase 2)
 3. Implement a strict design system based on shadcn/ui + Tailwind v4 principles
@@ -142,6 +152,9 @@ task-master expand --id=1 --num=5  # For complex tasks
 
 ## Current Project State
 
+- **Next.js**: 15.3.5 (NOT 14!)
+- **React**: 19.0.0
+- **Tailwind CSS**: 4.0.0
 - **Tests**: 327 passing (some may need updates after UI changes)
 - **Build**: Successful
 - **TypeScript**: No errors

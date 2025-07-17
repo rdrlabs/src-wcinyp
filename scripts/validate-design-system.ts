@@ -32,7 +32,7 @@ async function findFiles(): Promise<string[]> {
   const files = await glob('src/**/*.{ts,tsx}', {
     ignore: ['**/node_modules/**', '**/archive/**', '**/*.test.*', '**/*.spec.*']
   });
-  return files;
+  return Array.isArray(files) ? files : [];
 }
 
 function checkFile(filePath: string): Violation[] {
