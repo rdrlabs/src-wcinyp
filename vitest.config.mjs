@@ -13,10 +13,12 @@ export default defineConfig({
       'dist', 
       'coverage', 
       'archive', 
-      '.node_modules_old_delete_me',
-      'tests/e2e/**', // Exclude e2e tests until PR #10 is merged
-      '**/*.spec.ts', // Exclude Playwright spec files
-      '**/*.spec.js'
+      '.node_modules_old_delete_me', 
+      'tests/**',  // Exclude all tests directory
+      'src/test/*-validator.ts', 
+      '**/*.spec.ts',
+      '**/*.spec.js',
+      '**/e2e/**'
     ],
     testTimeout: 10000, // 10 seconds
     hookTimeout: 10000, // 10 seconds
