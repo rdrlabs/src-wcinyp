@@ -1,7 +1,5 @@
 'use client';
 
-import { cn } from "@/lib/utils";
-
 export function Footer() {
   return (
     <footer className="border-t">
