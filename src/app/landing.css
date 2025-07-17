@@ -1,0 +1,174 @@
+/* Ultra-modern landing page styles */
+
+/* Smooth scrolling with reduced motion support */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Custom scrollbar - ultra thin for landing page */
+/* Using html selector to ensure it works */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(var(--color-primary-rgb), 0.3) transparent;
+}
+
+html::-webkit-scrollbar {
+  width: 6px;
+}
+
+html::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb {
+  background-color: rgba(var(--color-primary-rgb), 0.3);
+  border-radius: 3px;
+  transition: background-color 0.2s ease;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(var(--color-primary-rgb), 0.5);
+}
+
+/* Animated gradient background */
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 15s ease infinite;
+}
+
+/* Glass morphism support */
+@supports (backdrop-filter: blur(1px)) {
+  .glass {
+    backdrop-filter: blur(var(--blur-base));
+    -webkit-backdrop-filter: blur(var(--blur-base));
+  }
+}
+
+/* Glow effects */
+.glow-primary {
+  box-shadow: 0 0 40px rgba(var(--color-primary-rgb), 0.3);
+}
+
+.glow-primary-hover:hover {
+  box-shadow: 0 0 60px rgba(var(--color-primary-rgb), 0.5);
+}
+
+/* Text gradient animation */
+@keyframes text-gradient {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.text-gradient-animate {
+  background-size: 200% auto;
+  animation: text-gradient 4s ease-in-out infinite;
+}
+
+/* Micro-interactions */
+.hover-lift {
+  transition: transform var(--duration-base) var(--ease-out-expo);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+}
+
+/* Loading skeleton shimmer */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Pulse animation for icons */
+@keyframes pulse-subtle {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Focus states - ultra modern */
+*:focus-visible {
+  outline: 2px solid rgba(var(--color-primary-rgb), 0.5);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  /* Disable heavy animations on mobile */
+  .animate-gradient,
+  .text-gradient-animate {
+    animation: none;
+  }
+  
+  /* Reduce blur on mobile for performance */
+  .glass {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .glass {
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: none;
+  }
+  
+  .glow-primary,
+  .glow-primary-hover:hover {
+    box-shadow: 0 0 0 2px currentColor;
+  }
+}
+
+/* Print styles */
+@media print {
+  .glass {
+    background-color: white;
+    backdrop-filter: none;
+  }
+  
+  section {
+    page-break-inside: avoid;
+  }
+}

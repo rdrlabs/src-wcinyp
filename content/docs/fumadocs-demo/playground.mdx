@@ -1,0 +1,313 @@
+---
+title: Interactive Playground
+description: Experiment with Fumadocs components in real-time
+---
+
+# Interactive Component Playground
+
+Welcome to the Fumadocs interactive playground! Here you can experiment with different component configurations and see the results instantly.
+
+## Dynamic Component States
+
+<Tabs items={['Default', 'Custom Props', 'Advanced']}>
+  <Tab value="Default">
+    ### Basic Components
+    
+    <Callout>
+      This is a default callout with standard styling
+    </Callout>
+    
+    <Cards>
+      <Card title="Feature 1">
+        Basic card with title and content
+      </Card>
+      <Card title="Feature 2">
+        Another card in the grid layout
+      </Card>
+    </Cards>
+  </Tab>
+  
+  <Tab value="Custom Props">
+    ### Customized Components
+    
+    <Callout type="tip" title="Pro Tip">
+      Callouts can have custom titles and different types for various use cases
+    </Callout>
+    
+    <Cards>
+      <Card title="🚀 Performance" href="#">
+        Cards can include emojis and links
+      </Card>
+      <Card title="🎨 Design" href="#">
+        Click me to navigate!
+      </Card>
+    </Cards>
+  </Tab>
+  
+  <Tab value="Advanced">
+    ### Advanced Configurations
+    
+    <Callout type="error">
+      Critical errors should use the error type for maximum visibility
+    </Callout>
+    
+    <Banner>
+      Banners are perfect for site-wide announcements!
+    </Banner>
+  </Tab>
+</Tabs>
+
+## Component Combinations
+
+Try different component combinations to create rich documentation experiences:
+
+<Steps>
+  <Step>
+    ### Choose Your Layout
+    
+    <Cards>
+      <Card title="Single Column">
+        Traditional documentation layout
+      </Card>
+      <Card title="Two Column">
+        Side-by-side comparisons
+      </Card>
+      <Card title="Grid Layout">
+        Feature showcase style
+      </Card>
+    </Cards>
+  </Step>
+  
+  <Step>
+    ### Add Interactive Elements
+    
+    <Tabs items={['Tabs', 'Accordions', 'Steps']}>
+      <Tab value="Tabs">
+        Tabs are great for showing different code examples or approaches
+      </Tab>
+      <Tab value="Accordions">
+        Accordions help organize lengthy content into digestible sections
+      </Tab>
+      <Tab value="Steps">
+        Steps guide users through processes sequentially
+      </Tab>
+    </Tabs>
+  </Step>
+  
+  <Step>
+    ### Enhance with Visual Elements
+    
+    <Callout type="info">
+      Combine callouts, cards, and code blocks for comprehensive documentation
+    </Callout>
+  </Step>
+</Steps>
+
+## Live Code Examples
+
+### Component Props Explorer
+
+<TypeTable
+  type={{
+    type: {
+      description: 'The visual style of the callout',
+      type: '"default" | "info" | "tip" | "warning" | "error"',
+      required: false,
+      default: '"default"',
+    },
+    title: {
+      description: 'Optional title for the callout',
+      type: 'string',
+      required: false,
+    },
+    children: {
+      description: 'Content to display inside the callout',
+      type: 'ReactNode',
+      required: true,
+    },
+  }}
+/>
+
+### Try It Yourself
+
+<Accordions>
+  <Accordion title="Example: Info Callout">
+    ```jsx
+    <Callout type="info" title="Information">
+      This callout provides additional context to help users understand the feature better.
+    </Callout>
+    ```
+    
+    **Result:**
+    <Callout type="info" title="Information">
+      This callout provides additional context to help users understand the feature better.
+    </Callout>
+  </Accordion>
+  
+  <Accordion title="Example: Warning Callout">
+    ```jsx
+    <Callout type="warning">
+      Be careful! This action cannot be undone.
+    </Callout>
+    ```
+    
+    **Result:**
+    <Callout type="warning">
+      Be careful! This action cannot be undone.
+    </Callout>
+  </Accordion>
+  
+  <Accordion title="Example: Cards Grid">
+    ```jsx
+    <Cards>
+      <Card title="Quick Start" href="/docs/quickstart">
+        Get up and running in 5 minutes
+      </Card>
+      <Card title="API Reference" href="/docs/api">
+        Complete API documentation
+      </Card>
+      <Card title="Examples" href="/docs/examples">
+        Real-world implementation examples
+      </Card>
+    </Cards>
+    ```
+    
+    **Result:**
+    <Cards>
+      <Card title="Quick Start" href="/knowledge/docs/quickstart">
+        Get up and running in 5 minutes
+      </Card>
+      <Card title="API Reference" href="/knowledge/docs/fumadocs-demo/api-reference">
+        Complete API documentation
+      </Card>
+      <Card title="Examples" href="/knowledge/docs/guides/components-showcase">
+        Real-world implementation examples
+      </Card>
+    </Cards>
+  </Accordion>
+</Accordions>
+
+## Interactive File Explorer
+
+Explore a typical documentation structure:
+
+<Files>
+  <Folder name="docs" defaultOpen>
+    <Folder name="getting-started" defaultOpen>
+      <File name="introduction.mdx" />
+      <File name="installation.mdx" />
+      <File name="configuration.mdx" />
+    </Folder>
+    <Folder name="guides">
+      <File name="authentication.mdx" />
+      <File name="deployment.mdx" />
+      <File name="testing.mdx" />
+    </Folder>
+    <Folder name="api-reference">
+      <File name="endpoints.mdx" />
+      <File name="webhooks.mdx" />
+      <File name="errors.mdx" />
+    </Folder>
+    <File name="index.mdx" />
+    <File name="meta.json" />
+  </Folder>
+</Files>
+
+## Mix and Match Components
+
+Create rich documentation by combining multiple components:
+
+<Banner>
+  🎉 **New Feature:** Component playground now supports live editing!
+</Banner>
+
+<Tabs items={['Overview', 'Implementation', 'Examples']}>
+  <Tab value="Overview">
+    <Callout type="tip">
+      Combining components creates more engaging and informative documentation.
+    </Callout>
+    
+    Use different component types together:
+    - **Callouts** for important information
+    - **Cards** for navigation
+    - **Tabs** for code examples
+    - **Steps** for tutorials
+  </Tab>
+  
+  <Tab value="Implementation">
+    <Steps>
+      <Step>
+        Import the components you need
+        ```jsx
+        import { Callout, Cards, Card } from 'fumadocs-ui/components';
+        ```
+      </Step>
+      <Step>
+        Compose them in your MDX
+        ```jsx
+        <Callout>Important note</Callout>
+        <Cards>
+          <Card>Feature 1</Card>
+        </Cards>
+        ```
+      </Step>
+    </Steps>
+  </Tab>
+  
+  <Tab value="Examples">
+    <Cards>
+      <Card title="Example 1">
+        Basic component usage
+      </Card>
+      <Card title="Example 2">
+        Advanced patterns
+      </Card>
+    </Cards>
+  </Tab>
+</Tabs>
+
+## Component Gallery
+
+<InlineTOC />
+
+### All Available Components
+
+Here's a comprehensive showcase of every Fumadocs component:
+
+<Cards>
+  <Card title="Callout">
+    Highlight important information
+  </Card>
+  <Card title="Cards">
+    Grid layout for features
+  </Card>
+  <Card title="Tabs">
+    Organize content in tabs
+  </Card>
+  <Card title="Steps">
+    Sequential instructions
+  </Card>
+  <Card title="Accordion">
+    Collapsible content sections
+  </Card>
+  <Card title="TypeTable">
+    API documentation tables
+  </Card>
+  <Card title="Banner">
+    Site-wide announcements
+  </Card>
+  <Card title="Files">
+    File tree visualization
+  </Card>
+  <Card title="InlineTOC">
+    Inline table of contents
+  </Card>
+</Cards>
+
+## What's Next?
+
+---
+
+<Callout>
+  **Experiment freely!** This playground is designed for you to explore all the possibilities Fumadocs offers. Try different combinations and discover what works best for your documentation.
+</Callout>

@@ -1,0 +1,20 @@
+/* Fumadocs-specific styles - isolated from main app */
+@layer fumadocs {
+  /* Override any conflicting styles from the main app */
+  .fumadocs-layout {
+    /* Reset any global styles that might conflict */
+    font-family: var(--font-sans);
+  }
+  
+  /* Ensure Fumadocs components use their own styling */
+  .fumadocs-layout * {
+    box-sizing: border-box;
+  }
+  
+  /* Custom sidebar footer styling */
+  .fumadocs-sidebar-footer {
+    border-top: 1px solid var(--color-border);
+    padding-top: 1rem;
+    margin-top: 1rem;
+  }
+}

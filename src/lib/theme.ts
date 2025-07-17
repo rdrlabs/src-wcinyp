@@ -109,7 +109,7 @@ export function getThemeColor(color: string): string {
     blue: 'bg-primary/10 text-primary ring-primary/20',
     purple: 'bg-primary/10 text-primary ring-primary/20',
     green: 'bg-primary/10 text-primary ring-primary/20',
-    yellow: 'bg-muted text-muted-foreground ring-border',
+    pink: 'bg-primary/10 text-primary ring-primary/20',
     orange: 'bg-muted text-muted-foreground ring-border',
     red: 'bg-destructive/10 text-destructive ring-destructive/20',
     gray: 'bg-muted text-muted-foreground ring-border',

@@ -1,0 +1,426 @@
+---
+title: Advanced Features
+description: Explore advanced Fumadocs capabilities and integrations
+---
+
+# Advanced Fumadocs Features
+
+This page demonstrates advanced features and capabilities that showcase the full power of Fumadocs.
+
+## Search Configuration
+
+<Callout type="info">
+  Fumadocs supports multiple search providers including built-in Orama, Algolia, and custom implementations.
+</Callout>
+
+### Search Providers Comparison
+
+<TypeTable
+  type={{
+    Orama: {
+      description: 'Built-in client-side search, no external dependencies',
+      type: 'Client-side',
+      required: false,
+      default: 'true',
+    },
+    Algolia: {
+      description: 'Powerful hosted search with advanced features',
+      type: 'Cloud service',
+      required: false,
+    },
+    Custom: {
+      description: 'Implement your own search provider',
+      type: 'Custom',
+      required: false,
+    },
+  }}
+/>
+
+## Internationalization (i18n)
+
+Fumadocs provides comprehensive internationalization support:
+
+<Steps>
+  <Step>
+    ### Configure Languages
+    
+    ```typescript
+    export const i18n = {
+      defaultLanguage: 'en',
+      languages: ['en', 'es', 'fr', 'de', 'ja', 'zh']
+    };
+    ```
+  </Step>
+  
+  <Step>
+    ### Create Localized Content
+    
+    <Files>
+      <Folder name="content" defaultOpen>
+        <Folder name="docs" defaultOpen>
+          <Folder name="en" defaultOpen>
+            <File name="index.mdx" />
+            <File name="getting-started.mdx" />
+          </Folder>
+          <Folder name="es">
+            <File name="index.mdx" />
+            <File name="getting-started.mdx" />
+          </Folder>
+          <Folder name="ja">
+            <File name="index.mdx" />
+            <File name="getting-started.mdx" />
+          </Folder>
+        </Folder>
+      </Folder>
+    </Files>
+  </Step>
+  
+  <Step>
+    ### Add Language Switcher
+    
+    The language switcher automatically appears in the navigation when i18n is configured.
+  </Step>
+</Steps>
+
+## OpenAPI Integration
+
+Generate documentation from OpenAPI/Swagger specifications:
+
+<Tabs items={['OpenAPI Schema', 'Generated Docs']}>
+  <Tab value="OpenAPI Schema">
+    ```yaml
+    openapi: 3.0.0
+    info:
+      title: Sample API
+      version: 1.0.0
+    paths:
+      /users:
+        get:
+          summary: List users
+          responses:
+            '200':
+              description: Successful response
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+    ```
+  </Tab>
+  
+  <Tab value="Generated Docs">
+    <Cards>
+      <Card title="GET /users">
+        **List users**
+        
+        Returns an array of user objects
+        
+        Response: `200 OK`
+      </Card>
+    </Cards>
+  </Tab>
+</Tabs>
+
+## Custom MDX Components
+
+Create custom components for specialized documentation needs:
+
+<Accordions>
+  <Accordion title="Custom API Endpoint Component">
+    ```tsx
+    export function APIEndpoint({ 
+      method, 
+      path, 
+      description 
+    }: {
+      method: 'GET' | 'POST' | 'PUT' | 'DELETE';
+      path: string;
+      description: string;
+    }) {
+      const colors = {
+        GET: 'text-green-600',
+        POST: 'text-blue-600',
+        PUT: 'text-yellow-600',
+        DELETE: 'text-red-600'
+      };
+      
+      return (
+        <div className="flex items-center gap-3 p-4 border rounded-lg">
+          <span className={`font-mono font-bold ${colors[method]}`}>
+            {method}
+          </span>
+          <code className="flex-1">{path}</code>
+          <span className="text-muted-foreground">{description}</span>
+        </div>
+      );
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Custom Code Runner">
+    ```tsx
+    export function CodeRunner({ 
+      code, 
+      language 
+    }: {
+      code: string;
+      language: string;
+    }) {
+      const [output, setOutput] = useState('');
+      
+      const runCode = async () => {
+        // Implementation for running code
+        setOutput('Hello, World!');
+      };
+      
+      return (
+        <div className="space-y-2">
+          <pre className="p-4 bg-muted rounded">
+            <code>{code}</code>
+          </pre>
+          <button onClick={runCode}>Run Code</button>
+          {output && <div>Output: {output}</div>}
+        </div>
+      );
+    }
+    ```
+  </Accordion>
+</Accordions>
+
+## GitHub Integration Features
+
+<Banner>
+  🔗 This page demonstrates GitHub integration with edit links and contributors
+</Banner>
+
+### Available GitHub Features
+
+<Cards>
+  <Card title="Edit on GitHub">
+    Automatic "Edit this page" links for each documentation page
+  </Card>
+  <Card title="Last Updated">
+    Shows when the page was last modified based on git history
+  </Card>
+  <Card title="Contributors">
+    Display page contributors from git commit history
+  </Card>
+  <Card title="Issue Templates">
+    Link to GitHub issues for documentation feedback
+  </Card>
+</Cards>
+
+## Advanced Search Features
+
+### Search Filters
+
+Configure advanced search filters:
+
+```typescript
+search: {
+  enabled: true,
+  provider: 'orama',
+  filters: [
+    {
+      name: 'category',
+      label: 'Category',
+      options: ['guides', 'api', 'components']
+    },
+    {
+      name: 'tags',
+      label: 'Tags',
+      options: ['react', 'typescript', 'nextjs']
+    }
+  ]
+}
+```
+
+### Keyboard Shortcuts
+
+<TypeTable
+  type={{
+    'Cmd/Ctrl + K': {
+      description: 'Open search',
+      type: 'Global',
+      required: false,
+    },
+    'Cmd/Ctrl + Shift + P': {
+      description: 'Open command palette',
+      type: 'Global',
+      required: false,
+    },
+    'Alt + ↑/↓': {
+      description: 'Navigate search results',
+      type: 'Search',
+      required: false,
+    },
+    'Enter': {
+      description: 'Select search result',
+      type: 'Search',
+      required: false,
+    },
+    'Escape': {
+      description: 'Close search',
+      type: 'Search',
+      required: false,
+    },
+  }}
+/>
+
+## Performance Optimizations
+
+<Callout type="tip">
+  Fumadocs is optimized for performance with static generation, code splitting, and lazy loading.
+</Callout>
+
+### Optimization Techniques
+
+<Steps>
+  <Step>
+    ### Static Generation
+    
+    All documentation pages are pre-rendered at build time for instant loading
+  </Step>
+  
+  <Step>
+    ### Code Splitting
+    
+    JavaScript bundles are automatically split by route for optimal loading
+  </Step>
+  
+  <Step>
+    ### Image Optimization
+    
+    Images are automatically optimized with Next.js Image component
+  </Step>
+  
+  <Step>
+    ### Search Index
+    
+    Search index is pre-built at compile time for instant search results
+  </Step>
+</Steps>
+
+## Custom Themes
+
+Create completely custom themes beyond the default light/dark modes:
+
+<Tabs items={['Theme Config', 'CSS Variables', 'Result']}>
+  <Tab value="Theme Config">
+    ```typescript
+    export const themes = {
+      ocean: {
+        name: 'Ocean',
+        colors: {
+          background: '200 50% 98%',
+          foreground: '200 95% 10%',
+          primary: '200 80% 50%',
+        }
+      },
+      forest: {
+        name: 'Forest',
+        colors: {
+          background: '120 40% 98%',
+          foreground: '120 95% 10%',
+          primary: '120 60% 40%',
+        }
+      }
+    };
+    ```
+  </Tab>
+  
+  <Tab value="CSS Variables">
+    ```css
+    [data-theme="ocean"] {
+      --background: 200 50% 98%;
+      --foreground: 200 95% 10%;
+      --primary: 200 80% 50%;
+      --primary-foreground: 200 10% 98%;
+    }
+    ```
+  </Tab>
+  
+  <Tab value="Result">
+    <Callout>
+      Custom themes allow you to match your brand identity perfectly!
+    </Callout>
+  </Tab>
+</Tabs>
+
+## Analytics Integration
+
+Track documentation usage with analytics:
+
+<Accordions>
+  <Accordion title="Google Analytics">
+    ```typescript
+    import { GoogleAnalytics } from '@next/third-parties/google';
+    
+    export default function RootLayout({ children }) {
+      return (
+        <html>
+          <body>
+            {children}
+            <GoogleAnalytics gaId="G-XXXXXXXXXX" />
+          </body>
+        </html>
+      );
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Vercel Analytics">
+    ```typescript
+    import { Analytics } from '@vercel/analytics/react';
+    
+    export default function RootLayout({ children }) {
+      return (
+        <html>
+          <body>
+            {children}
+            <Analytics />
+          </body>
+        </html>
+      );
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Custom Analytics">
+    ```typescript
+    export function trackPageView(url: string) {
+      // Send to your analytics provider
+      window.analytics?.page({
+        path: url,
+        title: document.title,
+      });
+    }
+    ```
+  </Accordion>
+</Accordions>
+
+## SEO Optimization
+
+Fumadocs automatically handles SEO optimization:
+
+<Files>
+  <File name="Automatic sitemap.xml generation" />
+  <File name="robots.txt configuration" />
+  <File name="Open Graph meta tags" />
+  <File name="Twitter Card meta tags" />
+  <File name="Structured data (JSON-LD)" />
+  <File name="Canonical URLs" />
+</Files>
+
+## Conclusion
+
+<Banner>
+  🚀 You've explored the advanced features of Fumadocs!
+</Banner>
+
+These advanced features enable you to create professional, scalable documentation sites that can grow with your project. From internationalization to custom themes, search optimization to analytics, Fumadocs provides everything you need.
+
+---
+
+<InlineTOC />

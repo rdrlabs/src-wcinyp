@@ -21,7 +21,7 @@ export default function TestNeutralThemePage() {
         primaryForeground: computed.getPropertyValue('--color-primary-foreground').trim(),
         backgroundColor: bodyComputed.backgroundColor,
         color: bodyComputed.color,
-        dataTheme: root.getAttribute('data-theme') || 'none',
+        dataTheme: root.getAttribute('data-theme') || 'not set',
         bodyClasses: body.className,
         htmlClasses: root.className,
       })
@@ -32,7 +32,7 @@ export default function TestNeutralThemePage() {
 
   return (
     <div className="container mx-auto p-8 space-y-8">
-      <h1 className="text-4xl font-bold">Neutral Theme Test</h1>
+      <h1 className="text-4xl font-bold">Theme Test</h1>
       
       <div className="grid gap-6">
         {/* Current State */}
@@ -64,7 +64,7 @@ export default function TestNeutralThemePage() {
           <div>
             <h3 className="font-medium mb-2">Color Theme</h3>
             <div className="flex gap-2 flex-wrap">
-              {['blue', 'red', 'orange', 'green', 'yellow', 'pink', 'purple', 'neutral'].map((t) => (
+              {['blue', 'red', 'orange', 'green', 'pink', 'purple'].map((t) => (
                 <Button
                   key={t}
                   variant={colorTheme === t ? 'default' : 'outline'}
@@ -100,7 +100,7 @@ export default function TestNeutralThemePage() {
           <div className="grid gap-4">
             <div className="p-4 bg-primary text-primary-foreground rounded">
               <p className="font-medium">Primary Color Box</p>
-              <p className="text-sm opacity-80">This should be pure black in light mode and pure white in dark mode when neutral theme is selected.</p>
+              <p className="text-sm opacity-80">This shows the primary color for the selected theme.</p>
             </div>
             
             <div className="grid grid-cols-2 gap-4">
@@ -121,22 +121,6 @@ export default function TestNeutralThemePage() {
           </div>
         </div>
 
-        {/* Expected Values */}
-        <div className="border rounded-lg p-6 space-y-4">
-          <h2 className="text-2xl font-semibold">Expected Values for Neutral Theme</h2>
-          <div className="grid gap-2 text-sm">
-            <p><strong>Light Mode:</strong></p>
-            <ul className="list-disc list-inside ml-4">
-              <li>Primary: oklch(0% 0 0) - Pure Black</li>
-              <li>Primary Foreground: oklch(100% 0 0) - Pure White</li>
-            </ul>
-            <p className="mt-2"><strong>Dark Mode:</strong></p>
-            <ul className="list-disc list-inside ml-4">
-              <li>Primary: oklch(100% 0 0) - Pure White</li>
-              <li>Primary Foreground: oklch(0% 0 0) - Pure Black</li>
-            </ul>
-          </div>
-        </div>
       </div>
     </div>
   )
