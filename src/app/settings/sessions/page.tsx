@@ -41,7 +41,7 @@ export default function SessionsPage() {
       return
     }
 
-    loadSessions()
+    void loadSessions()
   }, [user, router, loadSessions])
 
   const handleRevokeSession = async (sessionId: string) => {

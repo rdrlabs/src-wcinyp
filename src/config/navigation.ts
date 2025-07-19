@@ -5,6 +5,7 @@ export interface NavItem {
   href: string;
   label: string;
   icon: LucideIcon;
+  items?: NavItem[];
 }
 
 export const mainNavItems: NavItem[] = [

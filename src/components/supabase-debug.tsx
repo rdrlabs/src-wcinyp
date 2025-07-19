@@ -45,8 +45,9 @@ export function SupabaseDebug() {
 
     // Check pending session
     if (pendingSessionToken) {
-      const pendingSession = authSessionManager.getSession(pendingSessionToken)
-      info.pendingSession = pendingSession
+      // TODO: getSession method needs to be implemented
+      // const pendingSession = authSessionManager.getSession(pendingSessionToken)
+      info.pendingSession = { token: pendingSessionToken }
     }
 
     setDebugInfo(info)

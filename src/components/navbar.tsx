@@ -60,7 +60,7 @@ export function NavBar() {
         setIsAdmin(false);
       }
     }
-    checkAdminStatus();
+    void checkAdminStatus();
   }, [user, isDemoMode]);
 
   return (
