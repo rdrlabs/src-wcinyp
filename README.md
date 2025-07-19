@@ -4,6 +4,16 @@
 
 A modern Next.js 15 application for radiology administration, featuring document management, provider directories, and automated form generation.
 
+## Development Milestones 🏗️
+
+This repository maintains proof-of-concept branches as timestamps of our development journey:
+
+### Proof of Concepts (Development Snapshots)
+- **`proof-of-concept/july-2025`** - Initial Next.js 15 migration and core setup
+- **`proof-of-concept/july-2025-v1.1`** - Enhanced with UI components and authentication
+
+These branches serve as historical references and showcase the evolution of WCINYP's architecture. They are preserved intentionally to document our development decisions and progress.
+
 ## Features
 
 - **Knowledge Base** - Full Fumadocs-powered documentation with sidebar navigation ✨
