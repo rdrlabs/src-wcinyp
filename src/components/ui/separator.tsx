@@ -28,10 +28,54 @@ const separatorVariants = cva(
   }
 )
 
+/**
+ * Separator component properties
+ * @interface SeparatorProps
+ * @extends {Omit<React.ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root>, 'orientation'>}
+ * @extends {VariantProps<typeof separatorVariants>}
+ * 
+ * @property {string} [variant="default"] - Visual style variant (default | strong | muted | gradient)
+ * @property {string} [orientation="horizontal"] - Separator orientation (horizontal | vertical)
+ * @property {boolean} [decorative=true] - Whether the separator is decorative (no semantic meaning)
+ * @property {string} [className] - Additional CSS classes
+ * 
+ * @example
+ * ```tsx
+ * // Horizontal separator (default)
+ * <Separator />
+ * 
+ * // Vertical separator
+ * <div className="flex h-5 items-center space-x-4">
+ *   <span>Item 1</span>
+ *   <Separator orientation="vertical" />
+ *   <span>Item 2</span>
+ * </div>
+ * 
+ * // Strong variant
+ * <Separator variant="strong" />
+ * 
+ * // Gradient variant
+ * <Separator variant="gradient" className="my-4" />
+ * 
+ * // In a card
+ * <Card>
+ *   <CardHeader>Title</CardHeader>
+ *   <Separator />
+ *   <CardContent>Content</CardContent>
+ * </Card>
+ * ```
+ */
 export interface SeparatorProps
   extends Omit<React.ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root>, 'orientation'>,
     VariantProps<typeof separatorVariants> {}
 
+/**
+ * Separator component for visually dividing content
+ * 
+ * @component
+ * @param {SeparatorProps} props - Component props
+ * @returns {React.ReactElement} Separator element
+ */
 const Separator = React.forwardRef<
   React.ElementRef<typeof SeparatorPrimitive.Root>,
   SeparatorProps
@@ -45,10 +89,11 @@ const Separator = React.forwardRef<
       decorative={decorative}
       orientation={orientation as "horizontal" | "vertical" | undefined}
       className={cn(separatorVariants({ variant, orientation }), className)}
+      data-testid="separator"
       {...props}
     />
   )
 )
 Separator.displayName = SeparatorPrimitive.Root.displayName
 
-export { Separator }
+export { Separator, type SeparatorProps, separatorVariants }

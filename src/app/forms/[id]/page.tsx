@@ -29,7 +29,7 @@ export default async function FormBuilderPage({ params }: PageProps) {
 }
 
 // Generate static params for all form templates
-export async function generateStaticParams() {
+export function generateStaticParams() {
   return formTemplatesData.templates.map((template) => ({
     id: template.id.toString(),
   }));

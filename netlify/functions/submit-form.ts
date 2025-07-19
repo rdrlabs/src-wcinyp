@@ -1,7 +1,11 @@
+import { createLogger } from './utils/logger';
+
 // Netlify Function types
 interface HandlerEvent {
   httpMethod: string;
   body: string | null;
+  headers: Record<string, string>;
+  path: string;
 }
 
 interface HandlerContext {
@@ -25,7 +29,10 @@ interface FormSubmission {
   submittedAt: string
 }
 
+const logger = createLogger('submit-form');
+
 export const handler: Handler = async (event: HandlerEvent, context: HandlerContext) => {
+  const log = logger.withRequest(event);
   // Only allow POST
   if (event.httpMethod !== 'POST') {
     return {
@@ -59,7 +66,13 @@ export const handler: Handler = async (event: HandlerEvent, context: HandlerCont
     // 4. Notify staff
     
     // For now, just log and return success
-    console.log('Form submission received:', submission)
+    log.info('Form submission received', { 
+      formType: submission.formType,
+      patientName: submission.patientName,
+      hasEmail: !!submission.email,
+      hasPhone: !!submission.phone,
+      submittedAt: submission.submittedAt
+    })
 
     // Simulate processing delay
     await new Promise(resolve => setTimeout(resolve, 500))
@@ -77,7 +90,7 @@ export const handler: Handler = async (event: HandlerEvent, context: HandlerCont
       }),
     }
   } catch (error) {
-    console.error('Form submission error:', error)
+    log.error('Form submission error', { error })
     
     return {
       statusCode: 500,

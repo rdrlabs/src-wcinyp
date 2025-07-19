@@ -2,25 +2,27 @@
  * External URLs and API endpoints
  */
 
+import { urlConfig } from '@/config/app.config'
+
 export const EXTERNAL_URLS = {
   // Partner sites
-  wcm: 'https://weillcornell.org',
-  nyp: 'https://nyp.org',
+  wcm: urlConfig.wcm,
+  nyp: urlConfig.nyp,
   
   // Microsoft services
-  teams: 'https://teams.microsoft.com',
-  outlook: 'https://outlook.office.com',
-  myApps: 'https://myapps.microsoft.com',
+  teams: urlConfig.microsoft.teams,
+  outlook: urlConfig.microsoft.outlook,
+  myApps: urlConfig.microsoft.myApps,
   
   // Social media
-  facebook: 'https://facebook.com/weillcornell',
-  twitter: 'https://twitter.com/WeillCornell',
-  linkedin: 'https://linkedin.com/school/weill-cornell-medicine',
-  youtube: 'https://youtube.com/weillcornellmedicine',
+  facebook: urlConfig.social.facebook,
+  twitter: urlConfig.social.twitter,
+  linkedin: urlConfig.social.linkedin,
+  youtube: urlConfig.social.youtube,
   
   // Patient resources
-  patientPortal: 'https://myquest.org',
-  insuranceInfo: 'https://www.weillcornell.org/patients',
+  patientPortal: urlConfig.patientPortal,
+  insuranceInfo: urlConfig.insuranceInfo,
   privacyPolicy: '/privacy',
   hipaaNotice: '/hipaa',
   help: '/help',

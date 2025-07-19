@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 import type { FormTemplate, FormField, FormSubmission } from '@/types';
+import { logger } from '@/lib/logger-v2';
 
 interface FormValidationError {
   field: string;
@@ -74,7 +75,7 @@ export function FormProvider({ children }: { children: ReactNode }) {
         setSavedTemplates(JSON.parse(saved));
       }
     } catch (error) {
-      console.error('Failed to load form templates:', error);
+      logger.error('Failed to load form templates', { error });
     }
   }, []);
   

@@ -4,7 +4,6 @@
       "Bash(mv:*)",
       "WebFetch(domain:docs.anthropic.com)",
       "Bash(git add:*)",
-      "Bash(mv:*)",
       "Bash(cp:*)",
       "Bash(npm run lint)",
       "Bash(# Clean up duplicate files with \"\" 2\"\" suffix\nfind . -name \"\"* 2.*\"\" -type f | head -20)",
@@ -23,9 +22,6 @@
       "Bash(gh repo create:*)",
       "Bash(cat:*)",
       "Bash(npx react-router:*)",
-      "Bash(for module in documents providers forms reports)",
-      "Bash(do touch:*)",
-      "Bash(done)",
       "Bash(tree:*)",
       "Bash(node:*)",
       "Bash(sudo rm:*)",
@@ -80,7 +76,11 @@
       "Bash(task-master init:*)",
       "Bash(task-master list:*)",
       "Bash(task-master:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(gh api:*)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs",
+      "Bash(diff:*)"
     ],
     "deny": []
   }

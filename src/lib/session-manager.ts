@@ -1,6 +1,8 @@
 import { getSupabaseClient } from './supabase-client'
-import { logger } from './logger'
+import { logger } from './logger-v2'
+import { authConfig } from '@/config/app.config'
 import type { UserAgentInfo } from '@/types/auth'
+import { getGeolocation, type GeolocationData } from './geolocation'
 
 export interface UserSession {
   id: string
@@ -10,6 +12,10 @@ export interface UserSession {
   browser_name?: string
   os_name?: string
   ip_address?: string
+  location_city?: string
+  location_region?: string
+  location_country?: string
+  location_isp?: string
   is_active: boolean
   created_at: string
   last_activity: string
@@ -93,12 +99,20 @@ export class SessionManager {
     token: string,
     ipAddress?: string,
     userAgent?: string,
-    expiresIn: number = 7 * 24 * 60 * 60 * 1000 // 7 days default
+    expiresIn?: number
   ): Promise<{ sessionId: string | null; error: Error | null }> {
     try {
       const tokenHash = await this.hashToken(token)
-      const expiresAt = new Date(Date.now() + expiresIn).toISOString()
+      // Use configured default session duration if not specified
+      const duration = expiresIn || (authConfig.sessionDuration.default * 24 * 60 * 60 * 1000)
+      const expiresAt = new Date(Date.now() + duration).toISOString()
       const deviceInfo = userAgent ? this.parseUserAgent(userAgent) : {}
+      
+      // Get geolocation data if IP address is provided
+      let geoData: GeolocationData | null = null
+      if (ipAddress) {
+        geoData = await getGeolocation(ipAddress)
+      }
 
       const supabase = this.getSupabase()
       const { data, error } = await supabase
@@ -110,6 +124,12 @@ export class SessionManager {
           user_agent: userAgent,
           expires_at: expiresAt,
           ...deviceInfo,
+          ...(geoData && geoData.status === 'success' ? {
+            location_city: geoData.city,
+            location_region: geoData.regionName,
+            location_country: geoData.country,
+            location_isp: geoData.isp || geoData.org
+          } : {}),
         })
         .select('id')
         .single()

@@ -86,8 +86,8 @@ export default function Home() {
     <>
       <div className={LAYOUT_SPACING.pageContainer}>
         <div className="mb-8">
-          <h1 className="text-4xl font-semibold">WCINYP Dashboard</h1>
-          <p className={cn("text-xl text-muted-foreground", "mt-2")}>
+          <h1 className="text-4xl font-semibold" data-testid="dashboard-title">WCINYP Dashboard</h1>
+          <p className={cn("text-xl text-muted-foreground", "mt-2")} data-testid="dashboard-subtitle">
             Weill Cornell Imaging at NewYork-Presbyterian
           </p>
         </div>
@@ -96,14 +96,14 @@ export default function Home() {
           {features.map((feature) => {
             const Icon = feature.icon;
             return (
-              <Link key={feature.href} href={feature.href} className="no-underline">
-                <Card className="h-full transition-all duration-200 hover:shadow-lg hover:bg-accent/5 border-border-strong">
+              <Link key={feature.href} href={feature.href} className="no-underline" data-testid={`feature-link-${feature.href.slice(1)}`}>
+                <Card className="h-full transition-all duration-200 hover:shadow-lg hover:bg-accent/5 border-border-strong" data-testid={`feature-card-${feature.href.slice(1)}`}>
                   <CardHeader className={LAYOUT_SPACING.cardPadding}>
                     <div className="flex items-start gap-4">
                       <Icon className="h-8 w-8 text-primary flex-shrink-0 mt-1" strokeWidth={1.5} />
                       <div className="flex-1">
-                        <CardTitle className={TYPOGRAPHY.cardTitle}>{feature.title}</CardTitle>
-                        <CardDescription className={cn(TYPOGRAPHY.cardDescription, "leading-relaxed mt-2")}>
+                        <CardTitle className={TYPOGRAPHY.cardTitle} data-testid={`feature-title-${feature.href.slice(1)}`}>{feature.title}</CardTitle>
+                        <CardDescription className={cn(TYPOGRAPHY.cardDescription, "leading-relaxed mt-2")} data-testid={`feature-description-${feature.href.slice(1)}`}>
                           {feature.description}
                         </CardDescription>
                       </div>

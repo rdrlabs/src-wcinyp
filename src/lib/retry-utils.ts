@@ -1,3 +1,26 @@
+/**
+ * Configuration options for retry behavior
+ * @interface RetryOptions
+ * 
+ * @property {number} [maxRetries=3] - Maximum number of retry attempts
+ * @property {number} [initialDelay=1000] - Initial delay in milliseconds before first retry
+ * @property {number} [maxDelay=10000] - Maximum delay between retries in milliseconds
+ * @property {number} [backoffFactor=2] - Multiplier for exponential backoff
+ * @property {Function} [onRetry] - Callback function called on each retry attempt
+ * 
+ * @example
+ * ```ts
+ * const options: RetryOptions = {
+ *   maxRetries: 5,
+ *   initialDelay: 500,
+ *   maxDelay: 30000,
+ *   backoffFactor: 1.5,
+ *   onRetry: (error, attempt) => {
+ *     console.log(`Retry attempt ${attempt} after error:`, error.message);
+ *   }
+ * };
+ * ```
+ */
 export interface RetryOptions {
   maxRetries?: number
   initialDelay?: number

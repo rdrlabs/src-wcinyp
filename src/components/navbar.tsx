@@ -14,7 +14,7 @@ import { useSearchContext } from "@/contexts/search-context";
 import { BrandName } from "@/components/brand-name";
 import { useAuth } from "@/contexts/auth-context";
 import { useDemo } from "@/contexts/demo-context";
-import { getUserRole, isHardcodedAdmin } from "@/lib/auth-validation";
+import { checkIsAdmin } from "@/lib/auth-validation";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -51,11 +51,9 @@ export function NavBar() {
   // Check if user is admin
   useEffect(() => {
     async function checkAdminStatus() {
-      if (user && !isDemoMode) {
-        // HARDCODED: Double-check both role and email
-        const role = await getUserRole(user.id);
-        const isAuthorizedAdmin = isHardcodedAdmin(user.email || '');
-        setIsAdmin(role === 'admin' && isAuthorizedAdmin);
+      if (user && user.email && !isDemoMode) {
+        const adminStatus = await checkIsAdmin(user.email, user.id);
+        setIsAdmin(adminStatus);
       } else {
         setIsAdmin(false);
       }

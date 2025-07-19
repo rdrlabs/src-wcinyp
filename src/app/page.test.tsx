@@ -12,22 +12,22 @@ vi.mock('next/link', () => ({
 describe('Home Page', () => {
   it('renders the dashboard title', () => {
     render(<Home />)
-    expect(screen.getByText('WCINYP Dashboard')).toBeInTheDocument()
+    expect(screen.getByTestId('dashboard-title')).toHaveTextContent('WCINYP Dashboard')
   })
 
   it('renders the subtitle', () => {
     render(<Home />)
-    expect(screen.getByText('Weill Cornell Imaging at NewYork-Presbyterian')).toBeInTheDocument()
+    expect(screen.getByTestId('dashboard-subtitle')).toHaveTextContent('Weill Cornell Imaging at NewYork-Presbyterian')
   })
 
   it('displays all feature cards', () => {
     render(<Home />)
     
     // Check all feature cards are present
-    expect(screen.getByText('Knowledge Base')).toBeInTheDocument()
-    expect(screen.getByText('Document Hub')).toBeInTheDocument()
-    expect(screen.getByText('Updates')).toBeInTheDocument()
-    expect(screen.getByText('Directory')).toBeInTheDocument()
+    expect(screen.getByTestId('feature-title-knowledge')).toHaveTextContent('Knowledge Base')
+    expect(screen.getByTestId('feature-title-documents')).toHaveTextContent('Document Hub')
+    expect(screen.getByTestId('feature-title-updates')).toHaveTextContent('Updates')
+    expect(screen.getByTestId('feature-title-directory')).toHaveTextContent('Directory')
   })
 
   it('does not display statistics', () => {
@@ -43,25 +43,30 @@ describe('Home Page', () => {
   it('displays feature descriptions', () => {
     render(<Home />)
     
-    expect(screen.getByText('Technical documentation, user guides, and best practices for staff reference and training materials')).toBeInTheDocument()
-    expect(screen.getByText('Centralized repository for patient forms, medical documents, and administrative paperwork with version control')).toBeInTheDocument()
-    expect(screen.getByText('Latest news, operational updates, departmental communications, and important announcements from leadership')).toBeInTheDocument()
-    expect(screen.getByText('Complete contact database for internal staff, external partners, facilities, vendors, and referring providers')).toBeInTheDocument()
+    expect(screen.getByTestId('feature-description-knowledge')).toHaveTextContent('Technical documentation, user guides, and best practices for staff reference and training materials')
+    expect(screen.getByTestId('feature-description-documents')).toHaveTextContent('Centralized repository for patient forms, medical documents, and administrative paperwork with version control')
+    expect(screen.getByTestId('feature-description-updates')).toHaveTextContent('Latest news, operational updates, departmental communications, and important announcements from leadership')
+    expect(screen.getByTestId('feature-description-directory')).toHaveTextContent('Complete contact database for internal staff, external partners, facilities, vendors, and referring providers')
   })
 
   it('links to correct pages', () => {
     render(<Home />)
     
-    const knowledgeLink = screen.getByRole('link', { name: /Knowledge Base/i })
+    // Find links by their card content since Next.js Link doesn't pass data-testid to <a>
+    const knowledgeCard = screen.getByTestId('feature-card-knowledge')
+    const knowledgeLink = knowledgeCard.closest('a')
     expect(knowledgeLink).toHaveAttribute('href', '/knowledge')
     
-    const documentLink = screen.getByRole('link', { name: /Document Hub/i })
-    expect(documentLink).toHaveAttribute('href', '/documents')
+    const documentsCard = screen.getByTestId('feature-card-documents')
+    const documentsLink = documentsCard.closest('a')
+    expect(documentsLink).toHaveAttribute('href', '/documents')
     
-    const updatesLink = screen.getByRole('link', { name: /Updates/i })
+    const updatesCard = screen.getByTestId('feature-card-updates')
+    const updatesLink = updatesCard.closest('a')
     expect(updatesLink).toHaveAttribute('href', '/updates')
     
-    const directoryLink = screen.getByRole('link', { name: /Directory/i })
+    const directoryCard = screen.getByTestId('feature-card-directory')
+    const directoryLink = directoryCard.closest('a')
     expect(directoryLink).toHaveAttribute('href', '/directory')
   })
 

@@ -7,6 +7,7 @@ import { Footer } from "@/components/footer";
 import { NavBar } from "@/components/navbar";
 import { ThemeBody } from "@/components/theme-body";
 import { CommandMenu } from "@/components/command-menu";
+import { ErrorBoundary } from "@/components/error-boundary";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -43,20 +44,26 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <Providers>
-          <ThemeBody>
-            <div className="min-h-screen bg-background flex flex-col">
-              <NavBar />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </div>
-            <Toaster 
-              position="top-right"
-              richColors
-              closeButton
-              theme="system"
-            />
-            <CommandMenu />
-          </ThemeBody>
+          <ErrorBoundary level="page" showDetails={process.env.NODE_ENV === 'development'}>
+            <ThemeBody>
+              <div className="min-h-screen bg-background flex flex-col">
+                <NavBar />
+                <main className="flex-1">
+                  <ErrorBoundary level="section">
+                    {children}
+                  </ErrorBoundary>
+                </main>
+                <Footer />
+              </div>
+              <Toaster 
+                position="top-right"
+                richColors
+                closeButton
+                theme="system"
+              />
+              <CommandMenu />
+            </ThemeBody>
+          </ErrorBoundary>
         </Providers>
       </body>
     </html>

@@ -1,7 +1,7 @@
 'use client'
 
 import { MDXRemote, type MDXRemoteSerializeResult } from 'next-mdx-remote'
-import { useMDXComponents } from '../../mdx-components'
+import { useMDXComponents } from '../mdx-components'
 
 interface MDXContentProps {
   code: React.ComponentType<{ components?: Record<string, React.ComponentType> }> | MDXRemoteSerializeResult

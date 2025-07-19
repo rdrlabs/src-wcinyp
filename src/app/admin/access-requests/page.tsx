@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { useAuth } from '@/contexts/auth-context'
 import { useRouter } from 'next/navigation'
 import { getSupabaseClient } from '@/lib/supabase-client'
-import { getUserRole, isHardcodedAdmin } from '@/lib/auth-validation'
+import { checkIsAdmin } from '@/lib/auth-validation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -17,6 +17,8 @@ import { Textarea } from '@/components/ui/textarea'
 import { Loader2, Check, X, Clock, Search } from 'lucide-react'
 import { format } from 'date-fns'
 import { logger } from '@/lib/logger'
+import { ListLoadingBoundary, CardLoadingBoundary } from '@/components/loading-boundary'
+import { formatLocation } from '@/lib/geolocation'
 
 interface AccessRequest {
   id: string
@@ -30,6 +32,10 @@ interface AccessRequest {
   reviewed_at?: string
   review_notes?: string
   ip_address?: string
+  location_city?: string
+  location_region?: string
+  location_country?: string
+  location_isp?: string
 }
 
 interface AccessRequestStats {
@@ -61,13 +67,11 @@ export default function AccessRequestsPage() {
   // Check if user is admin
   useEffect(() => {
     async function checkAdminStatus() {
-      if (!user) return
+      if (!user || !user.email) return
       
-      // HARDCODED: Double-check both role and email
-      const role = await getUserRole(user.id)
-      const isAuthorizedAdmin = isHardcodedAdmin(user.email || '')
+      const adminStatus = await checkIsAdmin(user.email, user.id)
       
-      if (role !== 'admin' || !isAuthorizedAdmin) {
+      if (!adminStatus) {
         logger.securityWarn(`Unauthorized admin access attempt by ${user.email}`)
         router.push('/')
       } else {
@@ -76,7 +80,7 @@ export default function AccessRequestsPage() {
     }
     
     if (!authLoading) {
-      checkAdminStatus()
+      void checkAdminStatus()
     }
   }, [user, authLoading, router])
 
@@ -118,13 +122,10 @@ export default function AccessRequestsPage() {
 
   // Fetch access requests and stats
   useEffect(() => {
-    async function fetchData() {
-      if (isAdmin && supabase) {
-        fetchAccessRequests()
-        fetchStats()
-      }
+    if (isAdmin && supabase) {
+      void fetchAccessRequests()
+      void fetchStats()
     }
-    fetchData()
   }, [isAdmin, supabase, fetchAccessRequests, fetchStats])
 
   // Filter requests based on search query
@@ -225,7 +226,7 @@ export default function AccessRequestsPage() {
   if (authLoading || !isAdmin) {
     return (
       <div className="container mx-auto p-6 flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="h-8 w-8 animate-spin" />
+        <Loader2 className="h-8 w-8 animate-spin" role="status" aria-label="Loading" />
       </div>
     )
   }
@@ -238,57 +239,61 @@ export default function AccessRequestsPage() {
       </div>
 
       {/* Stats Cards */}
-      {stats && (
+      {stats ? (
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Pending</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.pending_count}</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Approved</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-success">{stats.approved_count}</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Rejected</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-destructive">{stats.rejected_count}</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Total</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.total_count}</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Last Week</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.last_week_count}</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Last Month</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.last_month_count}</div>
-            </CardContent>
-          </Card>
-        </div>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">Pending</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{stats.pending_count}</div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">Approved</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-success">{stats.approved_count}</div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">Rejected</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-destructive">{stats.rejected_count}</div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">Total</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{stats.total_count}</div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">Last Week</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{stats.last_week_count}</div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">Last Month</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{stats.last_month_count}</div>
+              </CardContent>
+            </Card>
+          </div>
+      ) : (
+        <CardLoadingBoundary count={6}>
+          <div />
+        </CardLoadingBoundary>
       )}
 
       {error && (
@@ -321,9 +326,9 @@ export default function AccessRequestsPage() {
 
         <TabsContent value={activeTab}>
           {loading ? (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin" />
-            </div>
+            <ListLoadingBoundary>
+              <div />
+            </ListLoadingBoundary>
           ) : getFilteredRequestsByTab().length === 0 ? (
             <Card>
               <CardContent className="text-center py-12">
@@ -333,50 +338,67 @@ export default function AccessRequestsPage() {
           ) : (
             <div className="space-y-4">
               {getFilteredRequestsByTab().map((request) => (
-                <Card key={request.id} className="hover:shadow-lg transition-shadow">
-                  <CardContent className="pt-6">
-                    <div className="flex items-start justify-between">
-                      <div className="space-y-2 flex-1">
-                        <div className="flex items-center gap-3">
-                          <h3 className="text-lg font-semibold">{request.full_name}</h3>
-                          {getStatusBadge(request.status)}
-                        </div>
-                        <div className="text-sm text-muted-foreground space-y-1">
-                          <p><strong>Email:</strong> {request.email}</p>
-                          <p><strong>Organization:</strong> {request.organization}</p>
-                          <p><strong>Role:</strong> {request.role}</p>
-                          <p><strong>Requested:</strong> {format(new Date(request.requested_at), 'PPp')}</p>
-                          {request.reviewed_at && (
-                            <p><strong>Reviewed:</strong> {format(new Date(request.reviewed_at), 'PPp')}</p>
+                  <Card key={request.id} className="hover:shadow-lg transition-shadow">
+                    <CardContent className="pt-6">
+                      <div className="flex items-start justify-between">
+                        <div className="space-y-2 flex-1">
+                          <div className="flex items-center gap-3">
+                            <h3 className="text-lg font-semibold">{request.full_name}</h3>
+                            {getStatusBadge(request.status)}
+                          </div>
+                          <div className="text-sm text-muted-foreground space-y-1">
+                            <p><strong>Email:</strong> {request.email}</p>
+                            <p><strong>Organization:</strong> {request.organization}</p>
+                            <p><strong>Role:</strong> {request.role}</p>
+                            <p><strong>Requested:</strong> {format(new Date(request.requested_at), 'PPp')}</p>
+                            {request.reviewed_at && (
+                              <p><strong>Reviewed:</strong> {format(new Date(request.reviewed_at), 'PPp')}</p>
+                            )}
+                            {request.ip_address && (
+                              <p><strong>IP Address:</strong> {request.ip_address}
+                                {(request.location_city || request.location_country) && (
+                                  <span className="text-muted-foreground">
+                                    {' - '}
+                                    {formatLocation({
+                                      city: request.location_city,
+                                      regionName: request.location_region,
+                                      country: request.location_country,
+                                      status: 'success',
+                                      query: request.ip_address
+                                    })}
+                                    {request.location_isp && ` (${request.location_isp})`}
+                                  </span>
+                                )}
+                              </p>
+                            )}
+                          </div>
+                          <div className="mt-3">
+                            <p className="text-sm"><strong>Reason:</strong></p>
+                            <p className="text-sm text-muted-foreground mt-1">{request.reason}</p>
+                          </div>
+                          {request.review_notes && (
+                            <div className="mt-3 p-3 bg-muted rounded-md">
+                              <p className="text-sm font-medium">Review Notes:</p>
+                              <p className="text-sm text-muted-foreground mt-1">{request.review_notes}</p>
+                            </div>
                           )}
                         </div>
-                        <div className="mt-3">
-                          <p className="text-sm"><strong>Reason:</strong></p>
-                          <p className="text-sm text-muted-foreground mt-1">{request.reason}</p>
-                        </div>
-                        {request.review_notes && (
-                          <div className="mt-3 p-3 bg-muted rounded-md">
-                            <p className="text-sm font-medium">Review Notes:</p>
-                            <p className="text-sm text-muted-foreground mt-1">{request.review_notes}</p>
+                        {request.status === 'pending' && (
+                          <div className="ml-4 space-x-2">
+                            <Button
+                              size="sm"
+                              onClick={() => setSelectedRequest(request)}
+                            >
+                              Review
+                            </Button>
                           </div>
                         )}
                       </div>
-                      {request.status === 'pending' && (
-                        <div className="ml-4 space-x-2">
-                          <Button
-                            size="sm"
-                            onClick={() => setSelectedRequest(request)}
-                          >
-                            Review
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
         </TabsContent>
       </Tabs>
 
@@ -397,6 +419,23 @@ export default function AccessRequestsPage() {
                 <p><strong>Organization:</strong> {selectedRequest.organization}</p>
                 <p><strong>Role:</strong> {selectedRequest.role}</p>
                 <p><strong>Reason:</strong> {selectedRequest.reason}</p>
+                {selectedRequest.ip_address && (
+                  <p><strong>IP Address:</strong> {selectedRequest.ip_address}
+                    {(selectedRequest.location_city || selectedRequest.location_country) && (
+                      <span className="text-muted-foreground">
+                        {' - '}
+                        {formatLocation({
+                          city: selectedRequest.location_city,
+                          regionName: selectedRequest.location_region,
+                          country: selectedRequest.location_country,
+                          status: 'success',
+                          query: selectedRequest.ip_address
+                        })}
+                        {selectedRequest.location_isp && ` (${selectedRequest.location_isp})`}
+                      </span>
+                    )}
+                  </p>
+                )}
               </div>
               
               <div className="space-y-2">

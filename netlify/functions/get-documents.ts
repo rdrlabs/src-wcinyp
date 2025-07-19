@@ -1,8 +1,11 @@
+import { createLogger } from './utils/logger';
+
 // Netlify Function types
 interface HandlerEvent {
   httpMethod: string;
   queryStringParameters: Record<string, string> | null;
   headers: Record<string, string>;
+  path: string;
 }
 
 interface HandlerResponse {
@@ -23,13 +26,18 @@ const DOCUMENT_CATEGORIES = {
   "Invoice Forms": 8,
 }
 
+const logger = createLogger('get-documents');
+
 export const handler: Handler = async (event) => {
-  // Enable CORS with restricted origins
-  const allowedOrigins = [
-    'http://localhost:3000',
-    'https://wcinyp.netlify.app',
-    process.env.URL || 'https://wcinyp.netlify.app'
-  ]
+  const log = logger.withRequest(event);
+  // Enable CORS with restricted origins from environment
+  const allowedOrigins = process.env.CORS_ALLOWED_ORIGINS 
+    ? process.env.CORS_ALLOWED_ORIGINS.split(',').map(origin => origin.trim())
+    : [
+        'http://localhost:3000',
+        'https://wcinyp.netlify.app',
+        process.env.URL || 'https://wcinyp.netlify.app'
+      ]
   
   const origin = event.headers.origin || event.headers.Origin || ''
   const headers = {
@@ -67,6 +75,13 @@ export const handler: Handler = async (event) => {
       response.filteredCount = DOCUMENT_CATEGORIES[category as keyof typeof DOCUMENT_CATEGORIES]
     }
 
+    log.info('Documents retrieved', { 
+      category, 
+      search, 
+      totalDocuments: response.totalDocuments,
+      filteredCount: response.filteredCount 
+    });
+
     return {
       statusCode: 200,
       headers: {
@@ -76,7 +91,7 @@ export const handler: Handler = async (event) => {
       body: JSON.stringify(response),
     }
   } catch (error) {
-    console.error('Error getting documents:', error)
+    log.error('Error getting documents', { error })
     return {
       statusCode: 500,
       headers,

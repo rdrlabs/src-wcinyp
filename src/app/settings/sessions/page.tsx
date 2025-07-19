@@ -10,6 +10,7 @@ import { Loader2, Monitor, Smartphone, Globe, Clock, MapPin, AlertCircle } from 
 import { formatDistanceToNow } from 'date-fns'
 import { useRouter } from 'next/navigation'
 import { logger } from '@/lib/logger'
+import { ListLoadingBoundary } from '@/components/loading-boundary'
 
 export default function SessionsPage() {
   const { user } = useAuth()
@@ -116,13 +117,78 @@ export default function SessionsPage() {
     return ipAddress || 'Unknown location'
   }
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    )
-  }
+  const sessionsContent = loading ? (
+    <ListLoadingBoundary>
+      <div />
+    </ListLoadingBoundary>
+  ) : sessions.length === 0 ? (
+    <Card>
+      <CardContent className="py-8 text-center">
+        <p className="text-muted-foreground">No active sessions found</p>
+      </CardContent>
+    </Card>
+  ) : (
+    sessions.map((session) => (
+      <Card key={session.id}>
+        <CardHeader>
+          <div className="flex items-start justify-between">
+            <div className="flex items-start space-x-3">
+              {getDeviceIcon(session.device_type)}
+              <div>
+                <CardTitle className="text-lg">
+                  {session.browser_name || 'Unknown Browser'} on {session.os_name || 'Unknown OS'}
+                </CardTitle>
+                <CardDescription>
+                  {session.device_name || session.device_type || 'Unknown Device'}
+                </CardDescription>
+              </div>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handleRevokeSession(session.id)}
+              disabled={revoking === session.id}
+            >
+              {revoking === session.id ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Revoking...
+                </>
+              ) : (
+                'Revoke'
+              )}
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div className="flex items-center space-x-2 text-muted-foreground">
+              <Clock className="h-4 w-4" />
+              <span>
+                Last active: {formatDistanceToNow(new Date(session.last_activity), { addSuffix: true })}
+              </span>
+            </div>
+            <div className="flex items-center space-x-2 text-muted-foreground">
+              <MapPin className="h-4 w-4" />
+              <span>{formatLocation(session.ip_address)}</span>
+            </div>
+            <div className="flex items-center space-x-2 text-muted-foreground">
+              <Globe className="h-4 w-4" />
+              <span>
+                Created: {formatDistanceToNow(new Date(session.created_at), { addSuffix: true })}
+              </span>
+            </div>
+            <div className="flex items-center space-x-2 text-muted-foreground">
+              <Clock className="h-4 w-4" />
+              <span>
+                Expires: {formatDistanceToNow(new Date(session.expires_at), { addSuffix: true })}
+              </span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    ))
+  )
 
   return (
     <div className="container max-w-4xl mx-auto py-8 px-4">
@@ -164,74 +230,7 @@ export default function SessionsPage() {
       </div>
 
       <div className="space-y-4">
-        {sessions.length === 0 ? (
-          <Card>
-            <CardContent className="py-8 text-center">
-              <p className="text-muted-foreground">No active sessions found</p>
-            </CardContent>
-          </Card>
-        ) : (
-          sessions.map((session) => (
-            <Card key={session.id}>
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start space-x-3">
-                    {getDeviceIcon(session.device_type)}
-                    <div>
-                      <CardTitle className="text-lg">
-                        {session.browser_name || 'Unknown Browser'} on {session.os_name || 'Unknown OS'}
-                      </CardTitle>
-                      <CardDescription>
-                        {session.device_name || session.device_type || 'Unknown Device'}
-                      </CardDescription>
-                    </div>
-                  </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleRevokeSession(session.id)}
-                    disabled={revoking === session.id}
-                  >
-                    {revoking === session.id ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Revoking...
-                      </>
-                    ) : (
-                      'Revoke'
-                    )}
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                  <div className="flex items-center space-x-2 text-muted-foreground">
-                    <Clock className="h-4 w-4" />
-                    <span>
-                      Last active: {formatDistanceToNow(new Date(session.last_activity), { addSuffix: true })}
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-muted-foreground">
-                    <MapPin className="h-4 w-4" />
-                    <span>{formatLocation(session.ip_address)}</span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-muted-foreground">
-                    <Globe className="h-4 w-4" />
-                    <span>
-                      Created: {formatDistanceToNow(new Date(session.created_at), { addSuffix: true })}
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-muted-foreground">
-                    <Clock className="h-4 w-4" />
-                    <span>
-                      Expires: {formatDistanceToNow(new Date(session.expires_at), { addSuffix: true })}
-                    </span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))
-        )}
+        {sessionsContent}
       </div>
     </div>
   )

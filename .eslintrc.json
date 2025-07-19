@@ -2,6 +2,7 @@
   "extends": [
     "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-type-checked",
     "prettier"
   ],
   "parser": "@typescript-eslint/parser",
@@ -17,6 +18,15 @@
     "es2022": true,
     "node": true
   },
+  "ignorePatterns": [
+    "*.config.js",
+    "*.config.ts",
+    "scripts/**/*",
+    "*.mjs",
+    "*.cjs",
+    "src/test/mocks/**/*",
+    "src/test/fixtures/**/*"
+  ],
   "rules": {
     "@typescript-eslint/no-unused-vars": [
       "error",
@@ -31,6 +41,32 @@
       {
         "ts-expect-error": "allow-with-description",
         "ts-ignore": "allow-with-description"
+      }
+    ],
+    "@typescript-eslint/no-floating-promises": "error",
+    "@typescript-eslint/no-misused-promises": [
+      "error",
+      {
+        "checksVoidReturn": {
+          "attributes": false
+        }
+      }
+    ],
+    "@typescript-eslint/await-thenable": "error",
+    "@typescript-eslint/no-unnecessary-type-assertion": "error",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
+    "@typescript-eslint/no-unsafe-return": "off",
+    "@typescript-eslint/no-unsafe-argument": "off",
+    "@typescript-eslint/require-await": "error",
+    "@typescript-eslint/no-unnecessary-condition": "off",
+    "@typescript-eslint/prefer-promise-reject-errors": "warn",
+    "@typescript-eslint/no-base-to-string": "error",
+    "@typescript-eslint/unbound-method": [
+      "error",
+      {
+        "ignoreStatic": true
       }
     ]
   }

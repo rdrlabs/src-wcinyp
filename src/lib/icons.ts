@@ -119,7 +119,7 @@ export function getFlagInfo(flag: string): FlagInfo {
     'multilingual': { icon: Languages, tooltip: 'Multilingual', color: 'text-primary' },
   };
   
-  return flags[flag as keyof typeof flags] || { 
+  return flags[flag] || { 
     icon: AlertCircle, 
     tooltip: flag, 
     color: 'text-muted-foreground' 

@@ -5,23 +5,42 @@ import { useAuth } from '@/contexts/auth-context'
 import { useRouter } from 'next/navigation'
 import { Loader2, Shield } from 'lucide-react'
 import Link from 'next/link'
-import { cn } from '@/lib/utils'
+// import { cn } from '@/lib/utils' // Unused import
+import { checkIsAdmin } from '@/lib/auth-validation'
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const { user, loading, isAdmin } = useAuth()
+  const { user, loading } = useAuth()
+  const [isAdmin, setIsAdmin] = React.useState(false)
+  const [checkingAdmin, setCheckingAdmin] = React.useState(true)
   const router = useRouter()
 
   React.useEffect(() => {
-    if (!loading && (!user || !isAdmin)) {
+    async function checkAdminStatus() {
+      if (user && user.email) {
+        const adminStatus = await checkIsAdmin(user.email, user.id)
+        setIsAdmin(adminStatus)
+      } else {
+        setIsAdmin(false)
+      }
+      setCheckingAdmin(false)
+    }
+
+    if (!loading) {
+      void checkAdminStatus()
+    }
+  }, [user, loading])
+
+  React.useEffect(() => {
+    if (!loading && !checkingAdmin && (!user || !isAdmin)) {
       router.push('/login')
     }
-  }, [user, loading, isAdmin, router])
+  }, [user, loading, isAdmin, checkingAdmin, router])
 
-  if (loading) {
+  if (loading || checkingAdmin) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />

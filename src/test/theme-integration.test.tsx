@@ -102,9 +102,10 @@ describe('Theme Integration Tests', () => {
       const themeButton = screen.getByRole('button', { name: /toggle theme/i })
       await user.click(themeButton)
 
-      // Select red theme
-      const redOption = screen.getByText('Red')
-      await user.click(redOption)
+      // Select red theme (using screen reader text since color names are sr-only)
+      const redOption = screen.getByText('Red theme').closest('button')
+      expect(redOption).toBeInTheDocument()
+      if (redOption) await user.click(redOption)
 
       // Check that theme class was updated
       await waitFor(() => {
@@ -140,9 +141,11 @@ describe('Theme Integration Tests', () => {
       const themeButton = screen.getByRole('button', { name: /toggle theme/i })
       await user.click(themeButton)
 
-      // Switch to dark mode
-      const darkOption = screen.getByText('Dark')
-      await user.click(darkOption)
+      // Switch to dark mode - dark mode button is inside the mode switcher
+      const dropdown = screen.getByRole('menu')
+      const modeButtons = dropdown.querySelectorAll('button')
+      // Dark mode is the second button in the mode switcher (index 1)
+      await user.click(modeButtons[1])
 
       // Theme class should still be present
       await waitFor(() => {
@@ -225,7 +228,8 @@ describe('Theme Integration Tests', () => {
 
       // Open and select orange theme
       await user.click(screen.getByRole('button', { name: /toggle theme/i }))
-      await user.click(screen.getByText('Orange'))
+      const orangeOption = screen.getByText('Orange theme').closest('button')
+      if (orangeOption) await user.click(orangeOption)
 
       // Verify localStorage was updated
       expect(localStorageMock.setItem).toHaveBeenCalledWith('color-theme', 'orange')
@@ -311,7 +315,8 @@ describe('Theme Integration Tests', () => {
 
       // Change theme
       await user.click(screen.getByRole('button', { name: /toggle theme/i }))
-      await user.click(screen.getByText('Purple'))
+      const purpleOption = screen.getByText('Purple theme').closest('button')
+      if (purpleOption) await user.click(purpleOption)
 
       // Component should not re-render just because theme changed
       // (unless it's using the theme context directly)

@@ -1,0 +1,99 @@
+import * as React from "react"
+import { cva, type VariantProps } from "class-variance-authority"
+import { cn } from "@/lib/utils"
+
+// TODO: Replace "componentName" with your actual component name (in camelCase)
+// TODO: Replace "ComponentName" with your actual component name (in PascalCase)
+// TODO: Update the HTML element type (HTMLDivElement, HTMLButtonElement, etc.)
+
+const componentNameVariants = cva(
+  // TODO: Add base classes that always apply
+  "base-classes-here",
+  {
+    variants: {
+      variant: {
+        default: "default-variant-classes",
+        // TODO: Add more variants as needed
+      },
+      size: {
+        default: "h-10 px-4 py-2",
+        sm: "h-9 px-3",
+        lg: "h-11 px-8",
+        // TODO: Adjust sizes as needed
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+)
+
+/**
+ * TODO: Add component description
+ * @interface ComponentNameProps
+ * @extends {React.HTMLAttributes<HTMLDivElement>}
+ * @extends {VariantProps<typeof componentNameVariants>}
+ * 
+ * @property {string} [variant="default"] - Visual style variant
+ * @property {string} [size="default"] - Size variant
+ * @property {string} [className] - Additional CSS classes
+ * @property {boolean} [asChild=false] - Render as Radix UI Slot
+ * 
+ * @example
+ * ```tsx
+ * // Default usage
+ * <ComponentName>Content</ComponentName>
+ * 
+ * // With variants
+ * <ComponentName variant="secondary" size="lg">
+ *   Large secondary variant
+ * </ComponentName>
+ * ```
+ */
+export interface ComponentNameProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof componentNameVariants> {
+  asChild?: boolean
+  // TODO: Add any additional props specific to your component
+}
+
+/**
+ * TODO: Add component description for JSDoc
+ * 
+ * @component
+ */
+const ComponentName = React.forwardRef<HTMLDivElement, ComponentNameProps>(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    // TODO: Add any hooks or state management here
+    
+    // TODO: If using asChild pattern with Radix UI
+    // const Comp = asChild ? Slot : "div"
+    
+    return (
+      <div
+        ref={ref}
+        className={cn(componentNameVariants({ variant, size, className }))}
+        data-testid="component-name"
+        {...props}
+      />
+    )
+  }
+)
+ComponentName.displayName = "ComponentName"
+
+export { ComponentName, type ComponentNameProps, componentNameVariants }
+
+/* 
+CHECKLIST before using this template:
+- [ ] Replace all instances of "componentName" and "ComponentName"
+- [ ] Update the HTML element type in the interface and forwardRef
+- [ ] Define appropriate base classes in the cva() call
+- [ ] Add necessary variants (visual styles, sizes, states)
+- [ ] Add component-specific props to the interface
+- [ ] Write comprehensive JSDoc documentation
+- [ ] Add data-testid attribute
+- [ ] Ensure all classes use semantic colors (bg-background, text-foreground, etc.)
+- [ ] Remove any unused imports or code
+- [ ] Create a corresponding test file: ComponentName.test.tsx
+*/

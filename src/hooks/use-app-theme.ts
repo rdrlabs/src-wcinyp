@@ -23,6 +23,37 @@ interface UseAppThemeReturn {
 const COLOR_THEME_KEY = 'color-theme'
 const DEFAULT_COLOR_THEME: ColorTheme = 'blue'
 
+/**
+ * Hook for managing application themes including dark/light mode and color themes.
+ * Combines next-themes functionality with custom color theme management.
+ * 
+ * @returns Object containing theme state and control functions
+ * @returns theme - Current theme mode ('light', 'dark', or 'system')
+ * @returns setTheme - Function to set the theme mode
+ * @returns systemTheme - The system's preferred theme
+ * @returns resolvedTheme - The resolved theme after considering system preference
+ * @returns colorTheme - Current color theme
+ * @returns setColorTheme - Function to set the color theme
+ * @returns mounted - Whether the component has mounted (useful for SSR)
+ * 
+ * @example
+ * ```tsx
+ * const { theme, setTheme, colorTheme, setColorTheme, mounted } = useAppTheme();
+ * 
+ * if (!mounted) {
+ *   return null; // Avoid hydration mismatch
+ * }
+ * 
+ * return (
+ *   <div>
+ *     <button onClick={() => setTheme('dark')}>Dark Mode</button>
+ *     <button onClick={() => setColorTheme('purple')}>Purple Theme</button>
+ *     <p>Current theme: {theme}</p>
+ *     <p>Current color: {colorTheme}</p>
+ *   </div>
+ * );
+ * ```
+ */
 export function useAppTheme(): UseAppThemeReturn {
   const nextThemes = useTheme()
   const [colorTheme, setColorThemeState] = useState<ColorTheme>(DEFAULT_COLOR_THEME)

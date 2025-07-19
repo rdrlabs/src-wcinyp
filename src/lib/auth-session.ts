@@ -1,10 +1,33 @@
 import { getSupabaseClient } from './supabase-client'
 import { retryWithBackoff } from './retry-utils'
-import { logger } from './logger'
+import { logger } from './logger-v2'
+import { authConfig } from '@/config/app.config'
 
+/**
+ * Manages cross-device authentication sessions
+ * Handles creation, validation, and cleanup of pending authentication sessions
+ * 
+ * @class AuthSessionManager
+ * 
+ * @remarks
+ * This class implements a secure cross-device authentication flow:
+ * 1. User initiates login on Device A
+ * 2. Pending session is created with unique token
+ * 3. Magic link is sent with embedded session token
+ * 4. User clicks link on Device B
+ * 5. Session is marked as authenticated
+ * 6. Device A detects authentication and completes login
+ */
 export class AuthSessionManager {
   private supabase: ReturnType<typeof getSupabaseClient> | null = null
   
+  /**
+   * Get or initialize Supabase client instance
+   * Uses lazy initialization pattern for efficiency
+   * 
+   * @private
+   * @returns {ReturnType<typeof getSupabaseClient> | null} Supabase client instance
+   */
   private getSupabase() {
     if (!this.supabase) {
       this.supabase = getSupabaseClient()
@@ -14,6 +37,26 @@ export class AuthSessionManager {
   
   /**
    * Create a new pending auth session for cross-device authentication
+   * 
+   * @async
+   * @param {string} email - User's email address for authentication
+   * @returns {Promise<{sessionToken: string; error: Error | null}>} Session token and error state
+   * 
+   * @remarks
+   * - Generates cryptographically secure session token using crypto.randomUUID()
+   * - Creates device fingerprint for additional security
+   * - Session expires after configured minutes for security
+   * - Implements retry logic for database resilience
+   * 
+   * @example
+   * ```typescript
+   * const { sessionToken, error } = await authSessionManager.createPendingSession('user@example.com');
+   * if (error) {
+   *   console.error('Failed to create session:', error);
+   * } else {
+   *   // Use sessionToken in magic link URL
+   * }
+   * ```
    */
   async createPendingSession(email: string): Promise<{ sessionToken: string; error: Error | null }> {
     try {
@@ -23,8 +66,8 @@ export class AuthSessionManager {
       // Generate device fingerprint
       const deviceFingerprint = await this.generateDeviceFingerprint()
       
-      // Session expires in 15 minutes
-      const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString()
+      // Session expires based on configuration
+      const expiresAt = new Date(Date.now() + authConfig.magicLink.expiryMinutes * 60 * 1000).toISOString()
       
       const supabase = this.getSupabase()
       if (!supabase) {
@@ -57,6 +100,25 @@ export class AuthSessionManager {
   
   /**
    * Check if a pending session has been authenticated
+   * Used by the initiating device to poll for authentication completion
+   * 
+   * @async
+   * @param {string} sessionToken - Unique session token to check
+   * @returns {Promise<{isAuthenticated: boolean; email: string | null; error: Error | null}>} Authentication status
+   * 
+   * @remarks
+   * - Verifies session exists and hasn't expired
+   * - Returns authentication status and associated email
+   * - Implements retry logic for network resilience
+   * - Automatically handles expired sessions
+   * 
+   * @example
+   * ```typescript
+   * const { isAuthenticated, email, error } = await authSessionManager.checkSessionStatus(token);
+   * if (isAuthenticated && email) {
+   *   // Complete login on this device
+   * }
+   * ```
    */
   async checkSessionStatus(sessionToken: string): Promise<{ 
     isAuthenticated: boolean
@@ -103,6 +165,28 @@ export class AuthSessionManager {
   
   /**
    * Mark a session as authenticated (called from the device that clicked the magic link)
+   * 
+   * @async
+   * @param {string} sessionToken - Session token from magic link URL
+   * @returns {Promise<{success: boolean; error: Error | null}>} Operation result
+   * 
+   * @remarks
+   * - Updates pending session to authenticated state
+   * - Records authentication timestamp
+   * - Prevents re-authentication of already authenticated sessions
+   * - Triggers realtime update for cross-device synchronization
+   * 
+   * @example
+   * ```typescript
+   * // In auth callback handler
+   * const sessionToken = new URLSearchParams(window.location.search).get('session');
+   * if (sessionToken) {
+   *   const { success, error } = await authSessionManager.authenticateSession(sessionToken);
+   *   if (success) {
+   *     // Session authenticated, original device will complete login
+   *   }
+   * }
+   * ```
    */
   async authenticateSession(sessionToken: string): Promise<{ success: boolean; error: Error | null }> {
     try {
@@ -130,6 +214,22 @@ export class AuthSessionManager {
   
   /**
    * Clean up a pending session after successful authentication
+   * Removes session data to prevent replay attacks
+   * 
+   * @async
+   * @param {string} sessionToken - Session token to clean up
+   * @returns {Promise<void>}
+   * 
+   * @remarks
+   * - Should be called after successful authentication on initiating device
+   * - Prevents session token reuse
+   * - Errors are logged but not thrown (best-effort cleanup)
+   * 
+   * @example
+   * ```typescript
+   * // After successful authentication
+   * await authSessionManager.cleanupSession(sessionToken);
+   * ```
    */
   async cleanupSession(sessionToken: string): Promise<void> {
     try {
@@ -150,6 +250,17 @@ export class AuthSessionManager {
   
   /**
    * Generate a device fingerprint for additional security
+   * Creates a unique identifier based on device characteristics
+   * 
+   * @private
+   * @async
+   * @returns {Promise<string>} Device fingerprint hash
+   * 
+   * @remarks
+   * - Combines multiple device attributes for uniqueness
+   * - Includes random UUID for additional entropy
+   * - Uses simple hash function to create compact identifier
+   * - Not meant for cryptographic security, only device identification
    */
   private async generateDeviceFingerprint(): Promise<string> {
     const components = [
@@ -177,9 +288,24 @@ export class AuthSessionManager {
   }
 }
 
-// Export singleton instance with lazy initialization
+/**
+ * Singleton instance management for AuthSessionManager
+ * @private
+ */
 let _authSessionManager: AuthSessionManager | null = null
 
+/**
+ * Get or create AuthSessionManager singleton instance
+ * Ensures only one instance exists throughout the application
+ * 
+ * @returns {AuthSessionManager} Singleton instance
+ * 
+ * @example
+ * ```typescript
+ * const manager = getAuthSessionManager();
+ * await manager.createPendingSession(email);
+ * ```
+ */
 export function getAuthSessionManager(): AuthSessionManager {
   if (!_authSessionManager) {
     _authSessionManager = new AuthSessionManager()
@@ -187,6 +313,29 @@ export function getAuthSessionManager(): AuthSessionManager {
   return _authSessionManager
 }
 
+/**
+ * Convenient API for auth session management
+ * Provides a simple interface to AuthSessionManager methods
+ * 
+ * @namespace authSessionManager
+ * 
+ * @example
+ * ```typescript
+ * import { authSessionManager } from '@/lib/auth-session';
+ * 
+ * // Create pending session
+ * const { sessionToken } = await authSessionManager.createPendingSession(email);
+ * 
+ * // Check status
+ * const { isAuthenticated } = await authSessionManager.checkSessionStatus(sessionToken);
+ * 
+ * // Authenticate (on magic link device)
+ * await authSessionManager.authenticateSession(sessionToken);
+ * 
+ * // Cleanup
+ * await authSessionManager.cleanupSession(sessionToken);
+ * ```
+ */
 export const authSessionManager = {
   createPendingSession: (email: string) => getAuthSessionManager().createPendingSession(email),
   checkSessionStatus: (sessionToken: string) => getAuthSessionManager().checkSessionStatus(sessionToken),

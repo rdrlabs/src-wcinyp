@@ -34,6 +34,44 @@ const buttonVariants = cva(
   }
 )
 
+/**
+ * Button component properties
+ * @interface ButtonProps
+ * @extends {React.ButtonHTMLAttributes<HTMLButtonElement>}
+ * @extends {VariantProps<typeof buttonVariants>}
+ * 
+ * @property {boolean} [asChild=false] - Render as a child component using Radix UI Slot
+ * @property {string} [variant="default"] - Visual style variant
+ * @property {string} [size="default"] - Size variant
+ * @property {string} [className] - Additional CSS classes
+ * 
+ * @example
+ * ```tsx
+ * // Basic button
+ * <Button onClick={() => console.log('clicked')}>
+ *   Click me
+ * </Button>
+ * 
+ * // Different variants
+ * <Button variant="destructive">Delete</Button>
+ * <Button variant="outline">Cancel</Button>
+ * <Button variant="ghost">Learn more</Button>
+ * 
+ * // Different sizes
+ * <Button size="sm">Small</Button>
+ * <Button size="lg">Large</Button>
+ * 
+ * // Icon button
+ * <Button size="icon" variant="outline">
+ *   <Settings className="h-4 w-4" />
+ * </Button>
+ * 
+ * // As child (composable)
+ * <Button asChild>
+ *   <Link href="/home">Go Home</Link>
+ * </Button>
+ * ```
+ */
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {

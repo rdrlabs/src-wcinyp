@@ -95,8 +95,8 @@ Successfully upgraded the WCINYP authentication system from development to produ
 ## Environment Variables Required
 ```bash
 # Rate Limiting (Required for production)
-UPSTASH_REDIS_URL=your_redis_url
-UPSTASH_REDIS_TOKEN=your_redis_token
+UPSTASH_REDIS_URL=redis://example.upstash.io:33999
+UPSTASH_REDIS_TOKEN=AXx0ACQgODExZmE4NzEtYmE5Yi00MGI2LWFlNGItZDE5NWQ2MGM5MTYw_example
 
 # Optional Configuration
 RATE_LIMIT_ENABLED=true

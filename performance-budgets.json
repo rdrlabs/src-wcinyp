@@ -1,0 +1,86 @@
+{
+  "global": [
+    {
+      "metric": "FCP",
+      "budget": 1800,
+      "unit": "ms"
+    },
+    {
+      "metric": "LCP",
+      "budget": 2500,
+      "unit": "ms"
+    },
+    {
+      "metric": "CLS",
+      "budget": 0.1,
+      "unit": "cls"
+    },
+    {
+      "metric": "TTFB",
+      "budget": 800,
+      "unit": "ms"
+    },
+    {
+      "metric": "totalBlockingTime",
+      "budget": 300,
+      "unit": "ms"
+    },
+    {
+      "metric": "bundleSize",
+      "budget": 300,
+      "unit": "kb"
+    },
+    {
+      "metric": "requestCount",
+      "budget": 50,
+      "unit": "count"
+    }
+  ],
+  "pages": [
+    {
+      "path": "/",
+      "budgets": [
+        {
+          "metric": "LCP",
+          "budget": 1500,
+          "unit": "ms"
+        }
+      ]
+    },
+    {
+      "path": "/documents",
+      "budgets": [
+        {
+          "metric": "FCP",
+          "budget": 2000,
+          "unit": "ms"
+        },
+        {
+          "metric": "requestCount",
+          "budget": 70,
+          "unit": "count"
+        }
+      ]
+    },
+    {
+      "path": "/providers",
+      "budgets": [
+        {
+          "metric": "LCP",
+          "budget": 3000,
+          "unit": "ms"
+        }
+      ]
+    },
+    {
+      "path": "/knowledge",
+      "budgets": [
+        {
+          "metric": "bundleSize",
+          "budget": 500,
+          "unit": "kb"
+        }
+      ]
+    }
+  ]
+}

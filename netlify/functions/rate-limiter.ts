@@ -1,6 +1,6 @@
 import { Redis } from '@upstash/redis'
 import { Ratelimit } from '@upstash/ratelimit'
-import { logger } from '../../src/lib/logger'
+import { logger } from '../../src/lib/logger-v2'
 
 export interface RateLimitResult {
   allowed: boolean
@@ -19,10 +19,13 @@ if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) 
     token: process.env.UPSTASH_REDIS_REST_TOKEN,
   })
 
-  // Create rate limiter instance - 5 attempts per hour per IP
+  // Create rate limiter instance with configurable limits
+  const maxAttempts = parseInt(process.env.RATE_LIMIT_MAX_ATTEMPTS || '5', 10)
+  const windowSeconds = parseInt(process.env.RATE_LIMIT_WINDOW || '3600', 10)
+  
   ratelimit = new Ratelimit({
     redis,
-    limiter: Ratelimit.slidingWindow(5, '1 h'),
+    limiter: Ratelimit.slidingWindow(maxAttempts, `${windowSeconds} s`),
     analytics: true,
     prefix: 'auth_rate_limit',
   })
@@ -38,10 +41,13 @@ export async function checkRateLimit(identifier: string): Promise<RateLimitResul
     // Skip rate limiting if not configured
     if (!redis || !ratelimit) {
       logger.warn('Rate limiting is not configured. Skipping rate limit check.')
+      const maxAttempts = parseInt(process.env.RATE_LIMIT_MAX_ATTEMPTS || '5', 10)
+      const windowSeconds = parseInt(process.env.RATE_LIMIT_WINDOW || '3600', 10)
+      
       return {
         allowed: true,
-        remaining: 5,
-        reset: Date.now() + 3600000, // 1 hour from now
+        remaining: maxAttempts,
+        reset: Date.now() + (windowSeconds * 1000),
       }
     }
 
@@ -93,7 +99,7 @@ export async function getRateLimitStatus(identifier: string): Promise<{
       reset: ttl > 0 ? Date.now() + (ttl * 1000) : Date.now() + 3600000,
     }
   } catch (error) {
-    logger.error('Failed to get rate limit status:', error)
+    logger.error('Failed to get rate limit status:', { error })
     return {
       current: 0,
       limit: 5,

@@ -1,24 +1,40 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import { NavBar } from './navbar'
-import { vi } from 'vitest'
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { AppProvider } from '@/contexts/app-context'
 import { ThemeProvider } from 'next-themes'
 import { SearchProvider } from '@/contexts/search-context'
+import { AuthProvider } from '@/contexts/auth-context'
+import { DemoProvider } from '@/contexts/demo-context'
+import { createAuthenticatedSupabaseMock, createAdminSupabaseMock, createUnauthenticatedSupabaseMock } from '@/test/mocks/supabase-factory'
+import { setSupabaseMock, resetSupabaseMock } from '@/test/setup'
 
 // Mock Next.js navigation
 vi.mock('next/navigation', () => ({
   usePathname: () => '/',
+  useRouter: () => ({
+    push: vi.fn(),
+    replace: vi.fn(),
+    refresh: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+    prefetch: vi.fn(),
+  }),
 }))
 
 // Helper function to render with providers
 const renderWithProviders = (component: React.ReactElement) => {
   return render(
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <AppProvider>
-        <SearchProvider>
-          {component}
-        </SearchProvider>
-      </AppProvider>
+      <AuthProvider>
+        <DemoProvider>
+          <AppProvider>
+            <SearchProvider>
+              {component}
+            </SearchProvider>
+          </AppProvider>
+        </DemoProvider>
+      </AuthProvider>
     </ThemeProvider>
   )
 }
@@ -27,6 +43,10 @@ describe('NavBar', () => {
   beforeEach(() => {
     // Clear any previous mock calls
     vi.clearAllMocks()
+  })
+
+  afterEach(() => {
+    resetSupabaseMock()
   })
 
   it('renders WCI@NYP branding', () => {

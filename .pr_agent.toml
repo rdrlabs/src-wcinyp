@@ -1,0 +1,119 @@
+# Qodo Merge Configuration - Optimized for Free Tier (75 PRs/month)
+# This config maximizes learning and code quality while staying within limits
+
+[github]
+# Only process PRs that need review (saves quota)
+handle_pr_actions = ["opened", "reopened", "synchronize"]
+# Skip draft PRs to save quota
+skip_draft_prs = true
+
+[pr_description]
+# Auto-generate helpful PR descriptions
+publish_description_as_comment = false  # Inline is cleaner
+add_original_user_description = true    # Keep your context
+generate_ai_title = true                # Better PR titles
+ai_title_prefix = ""                    # Clean titles, no prefixes
+include_generated_by_header = true      # Transparency
+
+# Learning-focused description
+extra_instructions = """
+Focus on:
+1. What the code does and why it matters
+2. Potential impacts or breaking changes
+3. Testing considerations
+4. Performance implications
+Remember: I'm learning, so explain technical decisions
+"""
+
+[pr_reviewer]
+# In-depth code review for learning
+ask_and_reflect = true                  # Deeper analysis
+remove_previous_review_comment = true   # Keep PRs clean
+persistent_comment = true               # Pin important feedback
+inline_code_comments = true             # Line-by-line learning
+require_tests_review = true             # Emphasize testing
+require_security_review = true          # Security first
+enable_review_labels = true             # Auto-labeling
+
+# Learning-optimized review instructions
+extra_instructions = """
+Act as a senior developer mentor teaching best practices:
+1. Explain WHY patterns matter, not just what to change
+2. Show modern React 18/Next.js 15 patterns
+3. Point out Supabase security considerations
+4. Teach TypeScript best practices
+5. Suggest learning resources when relevant
+6. Highlight accessibility (WCAG 2.1) issues
+7. Consider serverless/edge runtime constraints
+
+Always explain the reasoning behind suggestions so I learn.
+Focus on teaching, not just fixing.
+"""
+
+[pr_code_suggestions]
+# Actionable improvements with explanations
+num_code_suggestions = 5                # Balanced amount
+summarize_suggestions = true            # Overview first
+focus_on_important_suggestions = true   # Quality over quantity
+provide_explanation = true              # Always explain why
+
+# Prioritize learning opportunities
+extra_instructions = """
+For each suggestion:
+1. Explain the current issue
+2. Show the better approach
+3. Explain why it's better
+4. Link to docs/resources if helpful
+Focus on patterns I can reuse across the codebase.
+"""
+
+[pr_custom_labels]
+# Smart labeling for organization
+enable_custom_labels = true
+labels = [
+    "bug",
+    "feature",
+    "enhancement",
+    "documentation",
+    "test",
+    "refactor",
+    "security",
+    "performance",
+    "accessibility",
+    "dependencies",
+    "breaking-change"
+]
+
+[pr_similar_issue]
+# Learn from past issues
+skip_comments = false
+max_issues = 3
+
+[pr_test]
+# Test suggestions (when using /test command)
+extra_instructions = """
+Suggest tests that:
+1. Cover edge cases
+2. Test accessibility
+3. Verify error handling
+4. Check performance implications
+Use React Testing Library best practices.
+"""
+
+[pr_help]
+# Make help accessible
+enable_help = true
+show_command_list = true
+
+[cli]
+# Disable CLI features (using GitHub App)
+enable_cli = false
+
+# Free Tier Optimization Settings
+[optimization]
+# These aren't real Qodo settings but reminders for you:
+# 1. Skip draft PRs
+# 2. Batch small changes together
+# 3. Use commands selectively on complex PRs
+# 4. Save quota for feature/bug fix PRs
+# 5. Skip pure documentation PRs

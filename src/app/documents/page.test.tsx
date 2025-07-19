@@ -26,24 +26,24 @@ describe('Documents Page', () => {
   })
 
   it('renders the page title and description', () => {
-    expect(screen.getByText('Documents & Forms')).toBeInTheDocument()
-    expect(screen.getByText('Access medical forms, documents, and create custom forms')).toBeInTheDocument()
+    expect(screen.getByTestId('page-title')).toHaveTextContent('Documents & Forms')
+    expect(screen.getByTestId('page-description')).toHaveTextContent('Access medical forms, documents, and create custom forms')
   })
 
   it('shows documents view by default', () => {
     // Check that tabs are visible and 'all' tab is selected by default
-    expect(screen.getByRole('tab', { name: /All/i })).toBeInTheDocument()
-    expect(screen.getByText('Name')).toBeInTheDocument()
+    expect(screen.getByTestId('tab-all')).toBeInTheDocument()
+    expect(screen.getByTestId('tab-all')).toHaveAttribute('data-state', 'active')
   })
 
   it('toggles between documents and forms view', async () => {
     const user = userEvent.setup()
     
     // Should show all items initially
-    expect(screen.getByRole('tab', { name: /All/i })).toHaveAttribute('data-state', 'active')
+    expect(screen.getByTestId('tab-all')).toHaveAttribute('data-state', 'active')
     
-    // Click on Forms tab - be specific to avoid matching "ABN Forms", etc.
-    const formsTab = screen.getByRole('tab', { name: /^Forms \(\d+\)$/ })
+    // Click on Forms tab
+    const formsTab = screen.getByTestId('tab-forms')
     fireEvent.click(formsTab)
     
     // Close the details sheet if it opened
@@ -59,7 +59,7 @@ describe('Documents Page', () => {
     expect(screen.getByText('Create New Form')).toBeInTheDocument()
     
     // Click on Documents tab
-    const documentsTab = screen.getByRole('tab', { name: /^Documents \(\d+\)$/ })
+    const documentsTab = screen.getByTestId('tab-documents')
     fireEvent.click(documentsTab)
     
     // Close the details sheet if it opened again
@@ -75,13 +75,13 @@ describe('Documents Page', () => {
   })
 
   it('shows correct tabs', () => {
-    expect(screen.getByRole('tab', { name: /^Documents \(\d+\)$/ })).toBeInTheDocument()
-    expect(screen.getByRole('tab', { name: /^Forms \(\d+\)$/ })).toBeInTheDocument()
+    expect(screen.getByTestId('tab-documents')).toBeInTheDocument()
+    expect(screen.getByTestId('tab-forms')).toBeInTheDocument()
   })
 
   it('displays form action buttons in forms view', async () => {
     const user = userEvent.setup()
-    const formsTab = screen.getByRole('tab', { name: /^Forms \(\d+\)$/ })
+    const formsTab = screen.getByTestId('tab-forms')
     fireEvent.click(formsTab)
     
     // Close the details sheet if it opened
@@ -90,10 +90,10 @@ describe('Documents Page', () => {
       await user.click(closeButton)
     }
     
-    expect(screen.getByText('Create New Form')).toBeInTheDocument()
-    expect(screen.getByText('Import Template')).toBeInTheDocument()
-    expect(screen.getByText('Bulk Export')).toBeInTheDocument()
-    expect(screen.getByText('Print Batch')).toBeInTheDocument()
+    expect(screen.getByTestId('create-new-form-button')).toHaveTextContent('Create New Form')
+    expect(screen.getByTestId('import-template-button')).toHaveTextContent('Import Template')
+    expect(screen.getByTestId('bulk-export-button')).toHaveTextContent('Bulk Export')
+    expect(screen.getByTestId('print-batch-button')).toHaveTextContent('Print Batch')
   })
 
   it('shows self-pay form automation section in forms view', async () => {

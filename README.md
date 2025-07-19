@@ -2,6 +2,8 @@
 
 **Developer Master Reference** - This README serves as the single source of truth for project status, architecture, and development progress.
 
+<!-- Qodo Merge Pro: AI-Powered Code Review Active -->
+
 A modern Next.js 15 application for radiology administration, featuring document management, provider directories, and automated form generation.
 
 ## Features

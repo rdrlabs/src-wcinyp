@@ -1,11 +1,16 @@
 import type { Handler } from '@netlify/functions'
 import { createClient } from '@supabase/supabase-js'
 import { checkRateLimit } from './rate-limiter'
+import { createLogger } from './utils/logger'
+import { getGeolocation } from './utils/geolocation'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 
+const logger = createLogger('submit-access-request');
+
 export const handler: Handler = async (event, context) => {
+  const log = logger.withRequest(event);
   // Only allow POST
   if (event.httpMethod !== 'POST') {
     return {
@@ -67,11 +72,13 @@ export const handler: Handler = async (event, context) => {
 
     if (existingRequest) {
       if (existingRequest.status === 'pending') {
+        log.info('Duplicate pending access request attempt', { email: email.toLowerCase() });
         return {
           statusCode: 409,
           body: JSON.stringify({ error: 'An access request for this email is already pending.' }),
         }
       } else if (existingRequest.status === 'approved') {
+        log.info('Access request for already approved email', { email: email.toLowerCase() });
         return {
           statusCode: 409,
           body: JSON.stringify({ error: 'This email has already been approved for access.' }),
@@ -79,6 +86,9 @@ export const handler: Handler = async (event, context) => {
       }
     }
 
+    // Get geolocation data for the IP
+    const geoData = await getGeolocation(clientIp)
+    
     // Insert new access request
     const { data, error } = await supabase
       .from('access_requests')
@@ -89,13 +99,19 @@ export const handler: Handler = async (event, context) => {
         role,
         reason,
         ip_address: clientIp,
-        user_agent: event.headers['user-agent'] || 'unknown'
+        user_agent: event.headers['user-agent'] || 'unknown',
+        ...(geoData && geoData.status === 'success' ? {
+          location_city: geoData.city,
+          location_region: geoData.regionName,
+          location_country: geoData.country,
+          location_isp: geoData.isp || geoData.org
+        } : {})
       }])
       .select()
       .single()
 
     if (error) {
-      console.error('Error inserting access request:', error)
+      log.error('Error inserting access request', { error, email: email.toLowerCase() })
       return {
         statusCode: 500,
         body: JSON.stringify({ error: 'Failed to submit access request' }),
@@ -104,6 +120,13 @@ export const handler: Handler = async (event, context) => {
 
     // TODO: Send email notification to admins about new request
     // This would be implemented when email service is configured
+
+    log.info('Access request submitted successfully', { 
+      requestId: data.id,
+      email: email.toLowerCase(),
+      organization,
+      role
+    });
 
     return {
       statusCode: 200,
@@ -119,7 +142,7 @@ export const handler: Handler = async (event, context) => {
       }),
     }
   } catch (error) {
-    console.error('Error processing access request:', error)
+    log.error('Error processing access request', { error })
     return {
       statusCode: 500,
       body: JSON.stringify({ error: 'Internal server error' }),

@@ -81,6 +81,7 @@ export function ThemeSelector({ variant = 'dropdown' }: ThemeSelectorProps) {
                 "relative h-9 w-9 overflow-hidden transition-opacity",
                 isSystemTheme && "opacity-50"
               )}
+              data-testid="theme-selector-trigger"
             >
               <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
               <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
@@ -108,6 +109,7 @@ export function ThemeSelector({ variant = 'dropdown' }: ThemeSelectorProps) {
                   onClick={() => setTheme(mode.id)}
                   whileTap={{ scale: 0.95 }}
                   transition={{ duration: 0.1 }}
+                  data-testid={`theme-mode-${mode.id}`}
                 >
                   {/* Sliding background */}
                   {isSelected && mounted && (
@@ -142,6 +144,7 @@ export function ThemeSelector({ variant = 'dropdown' }: ThemeSelectorProps) {
                   setTheme('system')
                 }
               }}
+              data-testid="theme-system-button"
             >
               <Monitor className="h-4 w-4" />
               <span className="sr-only">Apply system theme</span>
@@ -176,6 +179,7 @@ export function ThemeSelector({ variant = 'dropdown' }: ThemeSelectorProps) {
                   onClick={() => setColorTheme(color.value)}
                   whileTap={{ scale: 0.95 }}
                   initial={false}
+                  data-testid={`theme-color-${color.value}`}
                 >
                   {/* Active selection background */}
                   {isSelected && mounted && (

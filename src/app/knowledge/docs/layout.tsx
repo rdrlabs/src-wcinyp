@@ -1,3 +1,5 @@
+'use client';
+
 import { DocsLayout } from 'fumadocs-ui/layouts/docs';
 import { RootProvider } from 'fumadocs-ui/provider';
 import { pageTree } from '@/app/source';

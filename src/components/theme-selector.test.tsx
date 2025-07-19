@@ -38,13 +38,18 @@ describe('ThemeSelector', () => {
   })
 
   describe('Dropdown variant (default)', () => {
-    it('renders dropdown theme selector with system button', () => {
+    it('renders dropdown theme selector with system button', async () => {
+      const user = userEvent.setup()
       render(<ThemeSelector />)
       
-      // Should have 2 buttons: dropdown trigger and system button
-      const buttons = screen.getAllByRole('button')
-      expect(buttons).toHaveLength(2)
+      // Should have 1 button initially (dropdown trigger)
+      const dropdownTrigger = screen.getByRole('button')
       expect(screen.getByText('Toggle theme')).toBeInTheDocument()
+      
+      // Open dropdown to see system button
+      await user.click(dropdownTrigger)
+      
+      // Now system button should be visible inside dropdown
       expect(screen.getByText('Apply system theme')).toBeInTheDocument()
     })
 
@@ -52,33 +57,27 @@ describe('ThemeSelector', () => {
       const user = userEvent.setup()
       render(<ThemeSelector />)
       
-      // Get the first button (dropdown trigger)
-      const buttons = screen.getAllByRole('button')
-      await user.click(buttons[0])
+      // Click the dropdown trigger
+      await user.click(screen.getByTestId('theme-selector-trigger'))
       
-      // Check for dropdown content - mode buttons don't show text anymore
-      const dropdown = screen.getByRole('menu')
-      const modeButtons = dropdown.querySelectorAll('button')
-      expect(modeButtons.length).toBeGreaterThanOrEqual(2)
+      // Check for theme mode buttons
+      expect(screen.getByTestId('theme-mode-light')).toBeInTheDocument()
+      expect(screen.getByTestId('theme-mode-dark')).toBeInTheDocument()
       
-      // Check for color circles (by role and sr-only text)
-      expect(screen.getByText('Blue theme')).toBeInTheDocument()
-      expect(screen.getByText('Red theme')).toBeInTheDocument()
+      // Check for color theme buttons
+      expect(screen.getByTestId('theme-color-blue')).toBeInTheDocument()
+      expect(screen.getByTestId('theme-color-red')).toBeInTheDocument()
     })
 
     it('changes light/dark theme', async () => {
       const user = userEvent.setup()
       render(<ThemeSelector />)
       
-      // Get the first button (dropdown trigger)
-      const buttons = screen.getAllByRole('button')
-      await user.click(buttons[0])
+      // Open dropdown
+      await user.click(screen.getByTestId('theme-selector-trigger'))
       
-      // Find all buttons in the dropdown (excluding the trigger)
-      const dropdown = screen.getByRole('menu')
-      const modeButtons = dropdown.querySelectorAll('button')
-      // Click the second mode button (Dark is at index 1)
-      await user.click(modeButtons[1])
+      // Click dark mode button
+      await user.click(screen.getByTestId('theme-mode-dark'))
       
       expect(mockSetTheme).toHaveBeenCalledWith('dark')
     })
@@ -87,36 +86,38 @@ describe('ThemeSelector', () => {
       const user = userEvent.setup()
       render(<ThemeSelector />)
       
-      // Get the first button (dropdown trigger)
-      const buttons = screen.getAllByRole('button')
-      await user.click(buttons[0])
+      // Open dropdown
+      await user.click(screen.getByTestId('theme-selector-trigger'))
       
-      // Click on the red color circle button (find by sr-only text)
-      const redButton = screen.getByText('Red theme').closest('button')
-      if (redButton) await user.click(redButton)
+      // Click on the red color button
+      await user.click(screen.getByTestId('theme-color-red'))
       
       expect(mockSetColorTheme).toHaveBeenCalledWith('red')
     })
     
-    it('toggles system theme with system button', async () => {
+    it('enables system theme with system button', async () => {
       const user = userEvent.setup()
       render(<ThemeSelector />)
       
-      // Get the second button (system button)
-      const buttons = screen.getAllByRole('button')
-      const systemButton = buttons[1]
+      // Open dropdown
+      await user.click(screen.getByTestId('theme-selector-trigger'))
       
-      // Click to enable system theme
-      await user.click(systemButton)
+      // Click system button to enable system theme
+      await user.click(screen.getByTestId('theme-system-button'))
       expect(mockSetTheme).toHaveBeenCalledWith('system')
-      
-      // Mock system theme active
+    })
+    
+    it('disables system theme and restores previous theme', async () => {
+      const user = userEvent.setup()
       mockTheme.mockReturnValue('system')
       render(<ThemeSelector />)
       
-      // Click again to disable system theme
-      const newButtons = screen.getAllByRole('button')
-      await user.click(newButtons[1])
+      // Open dropdown
+      await user.click(screen.getByTestId('theme-selector-trigger'))
+      
+      // Click system button to disable system theme
+      await user.click(screen.getByTestId('theme-system-button'))
+      // Should restore previous theme (light is default)
       expect(mockSetTheme).toHaveBeenCalledWith('light')
     })
     
@@ -124,9 +125,7 @@ describe('ThemeSelector', () => {
       mockTheme.mockReturnValue('system')
       render(<ThemeSelector />)
       
-      const buttons = screen.getAllByRole('button')
-      const dropdownButton = buttons[0]
-      
+      const dropdownButton = screen.getByTestId('theme-selector-trigger')
       expect(dropdownButton).toHaveClass('opacity-50')
     })
   })
@@ -206,8 +205,8 @@ describe('ThemeSelector', () => {
       const dropdown = screen.getByRole('menu')
       const dropdownButtons = dropdown.querySelectorAll('button')
       
-      // Should have: 2 mode buttons + 6 color buttons = 8 buttons in dropdown
-      expect(dropdownButtons.length).toBe(8)
+      // Should have: 2 mode buttons + 1 system button + 6 color buttons = 9 buttons in dropdown
+      expect(dropdownButtons.length).toBe(9)
       
       // The first 2 should be mode buttons
       expect(dropdownButtons[0].tagName).toBe('BUTTON')

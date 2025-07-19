@@ -10,15 +10,15 @@ describe('Directory Page', () => {
     it('renders page title and description', () => {
       render(<DirectoryPage />)
       
-      expect(screen.getByText('Contact Directory')).toBeInTheDocument()
-      expect(screen.getByText('Comprehensive database of contacts and referring providers')).toBeInTheDocument()
+      expect(screen.getByTestId('page-title')).toHaveTextContent('Contact Directory')
+      expect(screen.getByTestId('page-description')).toHaveTextContent('Comprehensive database of contacts and referring providers')
     })
 
     it('displays all contacts by default', () => {
       render(<DirectoryPage />)
       
       // Should show 'All' tab as active
-      const allTab = screen.getByRole('tab', { name: /All/i })
+      const allTab = screen.getByTestId('tab-all')
       expect(allTab).toHaveAttribute('data-state', 'active')
     })
 
@@ -38,9 +38,9 @@ describe('Directory Page', () => {
       render(<DirectoryPage />)
       
       // Check we have tabs for different views
-      expect(screen.getByRole('tab', { name: /All/i })).toBeInTheDocument()
-      expect(screen.getByRole('tab', { name: /Providers/i })).toBeInTheDocument()
-      expect(screen.getByRole('tab', { name: /Facilities/i })).toBeInTheDocument()
+      expect(screen.getByTestId('tab-all')).toBeInTheDocument()
+      expect(screen.getByTestId('tab-providers')).toBeInTheDocument()
+      expect(screen.getByTestId('tab-facilities')).toBeInTheDocument()
     })
   })
 

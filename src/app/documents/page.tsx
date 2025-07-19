@@ -40,12 +40,14 @@ import { DataTable, createSortableHeader, createActionsColumn } from "@/componen
 import { DetailsSheet, type CategoryData } from "@/components/shared";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { logger } from "@/lib/logger-v2";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DataLoadingBoundary } from "@/components/loading-boundary";
 
 export default function DocumentsPage() {
   const [selectedTab, setSelectedTab] = useState<string>('all');
@@ -190,7 +192,7 @@ export default function DocumentsPage() {
       accessorKey: 'category',
       header: ({ column }) => createSortableHeader(column, 'Category'),
       cell: ({ row }) => {
-        const category = row.getValue('category') as string;
+        const category = row.getValue('category');
         const Icon = getCategoryIcon(category);
         return (
           <span className={`inline-flex items-center gap-2 rounded-md px-2 py-2 text-sm font-semibold ring-1 ring-inset ${getThemeColor('blue')}`}>
@@ -228,7 +230,7 @@ export default function DocumentsPage() {
       header: ({ column }) => createSortableHeader(column, 'Updated'),
       accessorFn: (row) => row.itemType === 'document' ? row.lastUpdated : row.lastUsed,
       cell: ({ row }) => {
-        const value = row.getValue('updated') as string;
+        const value = row.getValue('updated');
         return (
           <div className="flex items-center gap-2">
             <Calendar className="h-4 w-4 text-muted-foreground" />
@@ -261,19 +263,19 @@ export default function DocumentsPage() {
           if (item.itemType === 'form') {
             handleFormSelect(typeof item.id === 'string' ? parseInt(item.id) : item.id);
           } else {
-            console.log('Preview document', item);
+            logger.info('Preview document', { document: item });
           }
         },
         icon: <Eye className="h-4 w-4" />
       },
       {
         label: 'Download',
-        onClick: (item) => console.log('Download', item),
+        onClick: (item) => logger.info('Download requested', { document: item }),
         icon: <Download className="h-4 w-4" />
       },
       {
         label: 'Clone',
-        onClick: (item) => console.log('Clone', item),
+        onClick: (item) => logger.info('Clone requested', { document: item }),
         icon: <Copy className="h-4 w-4" />
       }
     ])
@@ -302,8 +304,8 @@ export default function DocumentsPage() {
       <div className="container mx-auto py-8 space-y-6">
         {/* Page Header */}
         <div className="space-y-1 mb-6">
-          <h1 className={TYPOGRAPHY.pageTitle}>Documents & Forms</h1>
-          <p className={cn(TYPOGRAPHY.pageDescription)}>
+          <h1 className={TYPOGRAPHY.pageTitle} data-testid="page-title">Documents & Forms</h1>
+          <p className={cn(TYPOGRAPHY.pageDescription)} data-testid="page-description">
             Access medical forms, documents, and create custom forms
           </p>
         </div>
@@ -340,10 +342,10 @@ export default function DocumentsPage() {
               {/* Tabs */}
               <Tabs value={selectedTab} onValueChange={setSelectedTab} className="flex-1 overflow-hidden">
                 <TabsList className="inline-flex h-10 items-center justify-start rounded-md bg-muted p-1 text-muted-foreground w-max overflow-x-auto">
-                  <TabsTrigger value="all" onClick={() => handleCategoryClick('all')} className="whitespace-nowrap">
+                  <TabsTrigger value="all" onClick={() => handleCategoryClick('all')} className="whitespace-nowrap" data-testid="tab-all">
                     All ({allDocuments.length + templates.length})
                   </TabsTrigger>
-                  <TabsTrigger value="documents" onClick={() => handleCategoryClick('documents')} className="whitespace-nowrap">
+                  <TabsTrigger value="documents" onClick={() => handleCategoryClick('documents')} className="whitespace-nowrap" data-testid="tab-documents">
                     Documents ({allDocuments.length})
                   </TabsTrigger>
                   {categories.map((category) => (
@@ -351,7 +353,7 @@ export default function DocumentsPage() {
                       {category} ({documentCategories[category as keyof typeof documentCategories].length})
                     </TabsTrigger>
                   ))}
-                  <TabsTrigger value="forms" onClick={() => handleCategoryClick('forms')} className="whitespace-nowrap">
+                  <TabsTrigger value="forms" onClick={() => handleCategoryClick('forms')} className="whitespace-nowrap" data-testid="tab-forms">
                     Forms ({templates.length})
                   </TabsTrigger>
                 </TabsList>
@@ -383,18 +385,18 @@ export default function DocumentsPage() {
             {/* Action Buttons for Forms */}
             {selectedTab === 'forms' && (
               <div className="mb-6 flex gap-4">
-                <Button className="flex items-center gap-2">
+                <Button className="flex items-center gap-2" data-testid="create-new-form-button">
                   <Plus className="h-4 w-4" />
                   Create New Form
                 </Button>
-                <Button variant="outline" className="flex items-center gap-2">
+                <Button variant="outline" className="flex items-center gap-2" data-testid="import-template-button">
                   <Upload className="h-4 w-4" />
                   Import Template
                 </Button>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <span>
-                      <Button variant="outline" className="flex items-center gap-2" disabled>
+                      <Button variant="outline" className="flex items-center gap-2" disabled data-testid="bulk-export-button">
                         <Download className="h-4 w-4" />
                         Bulk Export
                       </Button>
@@ -407,7 +409,7 @@ export default function DocumentsPage() {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <span>
-                      <Button variant="outline" className="flex items-center gap-2" disabled>
+                      <Button variant="outline" className="flex items-center gap-2" disabled data-testid="print-batch-button">
                         <Printer className="h-4 w-4" />
                         Print Batch
                       </Button>
@@ -423,40 +425,42 @@ export default function DocumentsPage() {
             {/* Table */}
             <Card className="border-0 shadow-sm">
               <CardContent className="p-0">
-                <DataTable
-                  columns={columns}
-                  data={filteredItems}
-                  showColumnVisibility={false}
-                  showPagination={true}
-                  pageSize={20}
-                  columnVisibility={columnVisibility}
-                  onColumnVisibilityChange={setColumnVisibility}
-                  onRowClick={(item) => {
-                    if (item.itemType === 'form' && item.id) {
-                      handleFormSelect(typeof item.id === 'string' ? parseInt(item.id) : item.id);
-                    } else if (item.itemType === 'document') {
-                      // Open details sheet for document
-                      const category = item.category;
-                      
-                      setSelectedCategoryDetails({
-                        name: `${item.name}`,
-                        type: 'documents',
-                        description: `Document in ${category} category`,
-                        count: 1,
-                        totalSize: item.size,
-                        lastUpdated: item.lastUpdated || '2025-01-04',
-                        items: [{
-                          id: '0',
-                          name: item.name,
-                          size: item.size,
-                          date: item.lastUpdated || '2025-01-04'
-                        }]
-                      });
-                      
-                      setIsDetailsOpen(true);
-                    }
-                  }}
-                />
+                <DataLoadingBoundary>
+                  <DataTable
+                    columns={columns}
+                    data={filteredItems}
+                    showColumnVisibility={false}
+                    showPagination={true}
+                    pageSize={20}
+                    columnVisibility={columnVisibility}
+                    onColumnVisibilityChange={setColumnVisibility}
+                    onRowClick={(item) => {
+                      if (item.itemType === 'form' && item.id) {
+                        handleFormSelect(typeof item.id === 'string' ? parseInt(item.id) : item.id);
+                      } else if (item.itemType === 'document') {
+                        // Open details sheet for document
+                        const category = item.category;
+                        
+                        setSelectedCategoryDetails({
+                          name: `${item.name}`,
+                          type: 'documents',
+                          description: `Document in ${category} category`,
+                          count: 1,
+                          totalSize: item.size,
+                          lastUpdated: item.lastUpdated || '2025-01-04',
+                          items: [{
+                            id: '0',
+                            name: item.name,
+                            size: item.size,
+                            date: item.lastUpdated || '2025-01-04'
+                          }]
+                        });
+                        
+                        setIsDetailsOpen(true);
+                      }
+                    }}
+                  />
+                </DataLoadingBoundary>
               </CardContent>
             </Card>
             

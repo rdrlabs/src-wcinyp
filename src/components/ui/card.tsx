@@ -21,10 +21,60 @@ const cardVariants = cva(
   }
 )
 
+/**
+ * Card component properties
+ * @interface CardProps
+ * @extends {React.HTMLAttributes<HTMLDivElement>}
+ * @extends {VariantProps<typeof cardVariants>}
+ * 
+ * @property {string} [variant="default"] - Visual style variant
+ * @property {string} [className] - Additional CSS classes
+ * 
+ * @example
+ * ```tsx
+ * // Basic card
+ * <Card>
+ *   <CardHeader>
+ *     <CardTitle>Card Title</CardTitle>
+ *     <CardDescription>Card description goes here</CardDescription>
+ *   </CardHeader>
+ *   <CardContent>
+ *     <p>Card content</p>
+ *   </CardContent>
+ *   <CardFooter>
+ *     <Button>Action</Button>
+ *   </CardFooter>
+ * </Card>
+ * 
+ * // Different variants
+ * <Card variant="primary">
+ *   <CardHeader>
+ *     <CardTitle>Primary Card</CardTitle>
+ *   </CardHeader>
+ * </Card>
+ * 
+ * <Card variant="primaryGradient">
+ *   <CardContent>Gradient background</CardContent>
+ * </Card>
+ * 
+ * <Card variant="elevated">
+ *   <CardContent>Elevated with shadow</CardContent>
+ * </Card>
+ * 
+ * // Interactive card
+ * <Card className="cursor-pointer" onClick={handleClick}>
+ *   <CardContent>Clickable card</CardContent>
+ * </Card>
+ * ```
+ */
 export interface CardProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof cardVariants> {}
 
+/**
+ * Card container component
+ * A versatile container with multiple style variants
+ */
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, variant, ...props }, ref) => (
     <div
@@ -37,6 +87,18 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
 )
 Card.displayName = "Card"
 
+/**
+ * Card header section
+ * Contains title and description with proper spacing
+ * 
+ * @example
+ * ```tsx
+ * <CardHeader>
+ *   <CardTitle>Settings</CardTitle>
+ *   <CardDescription>Manage your account settings</CardDescription>
+ * </CardHeader>
+ * ```
+ */
 const CardHeader = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -50,6 +112,16 @@ const CardHeader = React.forwardRef<
 ))
 CardHeader.displayName = "CardHeader"
 
+/**
+ * Card title component
+ * Displays the main heading of the card
+ * 
+ * @example
+ * ```tsx
+ * <CardTitle>Welcome Back</CardTitle>
+ * <CardTitle className="text-2xl">Large Title</CardTitle>
+ * ```
+ */
 const CardTitle = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -63,6 +135,17 @@ const CardTitle = React.forwardRef<
 ))
 CardTitle.displayName = "CardTitle"
 
+/**
+ * Card description component
+ * Displays supplementary text below the title
+ * 
+ * @example
+ * ```tsx
+ * <CardDescription>
+ *   Fill out the form below to create your account
+ * </CardDescription>
+ * ```
+ */
 const CardDescription = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -76,6 +159,20 @@ const CardDescription = React.forwardRef<
 ))
 CardDescription.displayName = "CardDescription"
 
+/**
+ * Card content section
+ * Main body area of the card
+ * 
+ * @example
+ * ```tsx
+ * <CardContent>
+ *   <form>
+ *     <Input placeholder="Email" />
+ *     <Input type="password" placeholder="Password" />
+ *   </form>
+ * </CardContent>
+ * ```
+ */
 const CardContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -84,6 +181,23 @@ const CardContent = React.forwardRef<
 ))
 CardContent.displayName = "CardContent"
 
+/**
+ * Card footer section
+ * Typically contains actions or additional information
+ * 
+ * @example
+ * ```tsx
+ * <CardFooter>
+ *   <Button variant="outline">Cancel</Button>
+ *   <Button className="ml-auto">Save Changes</Button>
+ * </CardFooter>
+ * 
+ * <CardFooter className="justify-between">
+ *   <p className="text-sm text-muted-foreground">Last updated: Today</p>
+ *   <Button size="sm">Edit</Button>
+ * </CardFooter>
+ * ```
+ */
 const CardFooter = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>

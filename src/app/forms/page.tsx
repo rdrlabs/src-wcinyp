@@ -12,7 +12,7 @@ export default function FormsRedirectPage() {
 
   return (
     <div className="container mx-auto py-8">
-      <p className="text-center text-muted-foreground">Redirecting to Documents & Forms...</p>
+      <p className="text-center text-muted-foreground" data-testid="redirect-message">Redirecting to Documents & Forms...</p>
     </div>
   );
 }

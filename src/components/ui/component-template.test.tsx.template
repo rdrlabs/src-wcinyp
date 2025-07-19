@@ -1,0 +1,173 @@
+import React from 'react'
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { axe, toHaveNoViolations } from 'jest-axe'
+import { ComponentName, type ComponentNameProps } from './ComponentName'
+import { renderWithTheme, renderInBothThemes, expectSemanticColors } from '@/test/theme-test-utils'
+
+// Add jest-axe matchers
+expect.extend(toHaveNoViolations)
+
+// TODO: Replace ComponentName with your actual component name
+
+describe('ComponentName', () => {
+  // Default props for testing
+  const defaultProps: ComponentNameProps = {
+    children: 'Test Content',
+  }
+
+  describe('Basic Functionality', () => {
+    it('renders without crashing', () => {
+      render(<ComponentName {...defaultProps} />)
+      expect(screen.getByTestId('component-name')).toBeInTheDocument()
+    })
+
+    it('renders children correctly', () => {
+      render(<ComponentName>Custom content</ComponentName>)
+      expect(screen.getByText('Custom content')).toBeInTheDocument()
+    })
+
+    it('forwards ref correctly', () => {
+      const ref = React.createRef<HTMLDivElement>()
+      render(<ComponentName ref={ref} {...defaultProps} />)
+      expect(ref.current).toBeInstanceOf(HTMLDivElement)
+    })
+
+    it('applies custom className', () => {
+      render(<ComponentName className="custom-class" {...defaultProps} />)
+      expect(screen.getByTestId('component-name')).toHaveClass('custom-class')
+    })
+  })
+
+  describe('Variants', () => {
+    it('applies default variant classes', () => {
+      render(<ComponentName {...defaultProps} />)
+      const element = screen.getByTestId('component-name')
+      // TODO: Update with actual default variant classes
+      expect(element).toHaveClass('default-variant-classes')
+    })
+
+    it('applies variant classes correctly', () => {
+      const { rerender } = render(<ComponentName variant="secondary" {...defaultProps} />)
+      let element = screen.getByTestId('component-name')
+      // TODO: Update with actual variant classes
+      expect(element).toHaveClass('secondary-variant-classes')
+
+      // Test another variant
+      rerender(<ComponentName variant="default" {...defaultProps} />)
+      element = screen.getByTestId('component-name')
+      expect(element).toHaveClass('default-variant-classes')
+    })
+
+    it('applies size classes correctly', () => {
+      const { rerender } = render(<ComponentName size="sm" {...defaultProps} />)
+      let element = screen.getByTestId('component-name')
+      expect(element).toHaveClass('h-9', 'px-3')
+
+      rerender(<ComponentName size="lg" {...defaultProps} />)
+      element = screen.getByTestId('component-name')
+      expect(element).toHaveClass('h-11', 'px-8')
+    })
+  })
+
+  describe('Interactions', () => {
+    it('handles click events', async () => {
+      const user = userEvent.setup()
+      const handleClick = jest.fn()
+      
+      render(<ComponentName onClick={handleClick} {...defaultProps} />)
+      const element = screen.getByTestId('component-name')
+      
+      await user.click(element)
+      expect(handleClick).toHaveBeenCalledTimes(1)
+    })
+
+    // TODO: Add more interaction tests as needed (hover, focus, keyboard, etc.)
+  })
+
+  describe('Theme Tests', () => {
+    it('renders correctly in light mode', () => {
+      const { container } = renderWithTheme(
+        <ComponentName {...defaultProps} />,
+        { theme: 'light' }
+      )
+      
+      const element = screen.getByTestId('component-name')
+      expectSemanticColors(element)
+    })
+
+    it('renders correctly in dark mode', () => {
+      const { container } = renderWithTheme(
+        <ComponentName {...defaultProps} />,
+        { theme: 'dark' }
+      )
+      
+      const element = screen.getByTestId('component-name')
+      expectSemanticColors(element)
+    })
+
+    it('maintains structure in both themes', () => {
+      const { light, dark } = renderInBothThemes(
+        <ComponentName {...defaultProps} />
+      )
+      
+      expect(light.container.innerHTML).toContain('Test Content')
+      expect(dark.container.innerHTML).toContain('Test Content')
+    })
+  })
+
+  describe('Accessibility', () => {
+    it('meets WCAG accessibility standards', async () => {
+      const { container } = render(<ComponentName {...defaultProps} />)
+      const results = await axe(container)
+      expect(results).toHaveNoViolations()
+    })
+
+    it('supports keyboard navigation', async () => {
+      const user = userEvent.setup()
+      const handleClick = jest.fn()
+      
+      render(
+        <ComponentName onClick={handleClick} tabIndex={0} {...defaultProps} />
+      )
+      
+      // Tab to focus the element
+      await user.tab()
+      const element = screen.getByTestId('component-name')
+      expect(element).toHaveFocus()
+      
+      // TODO: Add keyboard interaction tests (Enter, Space, Arrow keys, etc.)
+    })
+
+    // TODO: Add ARIA label tests if applicable
+  })
+
+  describe('Edge Cases', () => {
+    it('renders without children', () => {
+      render(<ComponentName />)
+      expect(screen.getByTestId('component-name')).toBeInTheDocument()
+    })
+
+    it('handles disabled state', () => {
+      // TODO: If component supports disabled state
+      // render(<ComponentName disabled {...defaultProps} />)
+      // const element = screen.getByTestId('component-name')
+      // expect(element).toHaveClass('disabled:opacity-50')
+      // expect(element).toHaveAttribute('aria-disabled', 'true')
+    })
+
+    // TODO: Add more edge cases specific to your component
+  })
+})
+
+/* 
+CHECKLIST for test file:
+- [ ] Replace all instances of "ComponentName" with actual component name
+- [ ] Update data-testid to match component
+- [ ] Update variant class expectations
+- [ ] Add component-specific interaction tests
+- [ ] Add tests for all props
+- [ ] Add tests for error states if applicable
+- [ ] Add performance tests if component is complex
+- [ ] Ensure 100% code coverage
+*/

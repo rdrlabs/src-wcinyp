@@ -36,6 +36,17 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 // Types
+
+/**
+ * Properties for TableSearch component
+ * @interface TableSearchProps
+ * @property {string} value - Current search value
+ * @property {Function} onChange - Callback when search value changes
+ * @property {string} [placeholder="Search..."] - Input placeholder text
+ * @property {string} [className] - Additional CSS classes
+ * @property {Function} [onClear] - Callback when clear button is clicked
+ * @property {number} [debounceMs=300] - Debounce delay in milliseconds
+ */
 export interface TableSearchProps {
   value: string
   onChange: (value: string) => void
@@ -45,11 +56,26 @@ export interface TableSearchProps {
   debounceMs?: number
 }
 
+/**
+ * Date range value object
+ * @interface DateRange
+ * @property {Date | undefined} from - Start date of range
+ * @property {Date | undefined} to - End date of range
+ */
 export interface DateRange {
   from: Date | undefined
   to: Date | undefined
 }
 
+/**
+ * Properties for DateRangePicker component
+ * @interface DateRangePickerProps
+ * @property {DateRange} value - Current date range selection
+ * @property {Function} onChange - Callback when date range changes
+ * @property {Array} [presets] - Quick selection presets
+ * @property {string} [className] - Additional CSS classes
+ * @property {string} [placeholder="Select date range"] - Placeholder text
+ */
 export interface DateRangePickerProps {
   value: DateRange
   onChange: (range: DateRange) => void
@@ -61,12 +87,29 @@ export interface DateRangePickerProps {
   placeholder?: string
 }
 
+/**
+ * Option configuration for multi-select components
+ * @interface MultiSelectOption
+ * @property {string} value - Unique value identifier
+ * @property {string} label - Display label
+ * @property {React.ReactNode} [icon] - Optional icon element
+ */
 export interface MultiSelectOption {
   value: string
   label: string
   icon?: React.ReactNode
 }
 
+/**
+ * Properties for MultiSelect component
+ * @interface MultiSelectProps
+ * @property {MultiSelectOption[]} options - Available options to select from
+ * @property {string[]} value - Currently selected values
+ * @property {Function} onChange - Callback when selection changes
+ * @property {string} [placeholder="Select items..."] - Placeholder text
+ * @property {string} [className] - Additional CSS classes
+ * @property {number} [maxHeight=300] - Maximum height of dropdown in pixels
+ */
 export interface MultiSelectProps {
   options: MultiSelectOption[]
   value: string[]
@@ -76,12 +119,27 @@ export interface MultiSelectProps {
   maxHeight?: number
 }
 
+/**
+ * Column configuration for visibility toggle
+ * @interface ColumnVisibilityOption
+ * @property {string} id - Unique column identifier
+ * @property {string} label - Display name for column
+ * @property {string} [group] - Optional group name for organization
+ */
 export interface ColumnVisibilityOption {
   id: string
   label: string
   group?: string
 }
 
+/**
+ * Properties for ColumnVisibilityMenu component
+ * @interface ColumnVisibilityMenuProps
+ * @property {ColumnVisibilityOption[]} columns - Available columns to toggle
+ * @property {Record<string, boolean>} visibility - Current visibility state
+ * @property {Function} onChange - Callback when visibility changes
+ * @property {string} [className] - Additional CSS classes
+ */
 export interface ColumnVisibilityMenuProps {
   columns: ColumnVisibilityOption[]
   visibility: Record<string, boolean>
@@ -89,6 +147,16 @@ export interface ColumnVisibilityMenuProps {
   className?: string
 }
 
+/**
+ * Filter configuration object
+ * @interface FilterConfig
+ * @property {'search' | 'date-range' | 'multi-select' | 'select'} type - Type of filter component
+ * @property {string} key - Unique identifier for filter state
+ * @property {string} label - Display label for filter
+ * @property {string} [placeholder] - Custom placeholder text
+ * @property {MultiSelectOption[]} [options] - Options for select/multi-select filters
+ * @property {any} [value] - Initial/default value
+ */
 export interface FilterConfig {
   type: 'search' | 'date-range' | 'multi-select' | 'select'
   key: string
@@ -98,6 +166,15 @@ export interface FilterConfig {
   value?: any
 }
 
+/**
+ * Properties for TableFilters component
+ * @interface TableFiltersProps
+ * @property {FilterConfig[]} filters - Array of filter configurations
+ * @property {Record<string, any>} values - Current filter values keyed by filter key
+ * @property {Function} onChange - Callback when any filter value changes
+ * @property {Function} [onClearAll] - Custom clear all handler (defaults to clearing all values)
+ * @property {string} [className] - Additional CSS classes
+ */
 export interface TableFiltersProps {
   filters: FilterConfig[]
   values: Record<string, any>
@@ -106,7 +183,25 @@ export interface TableFiltersProps {
   className?: string
 }
 
-// Utility: Debounce hook
+/**
+ * Custom hook for debouncing values
+ * Delays updating the returned value until after the specified delay
+ * 
+ * @template T - Type of the value being debounced
+ * @param {T} value - Value to debounce
+ * @param {number} delay - Delay in milliseconds
+ * @returns {T} Debounced value
+ * 
+ * @example
+ * ```tsx
+ * const [searchTerm, setSearchTerm] = useState('');
+ * const debouncedSearch = useDebounce(searchTerm, 300);
+ * 
+ * useEffect(() => {
+ *   // API call with debouncedSearch
+ * }, [debouncedSearch]);
+ * ```
+ */
 function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = React.useState<T>(value)
 
@@ -123,7 +218,29 @@ function useDebounce<T>(value: T, delay: number): T {
   return debouncedValue
 }
 
-// Component: TableSearch
+/**
+ * Search input with debouncing and clear button
+ * 
+ * @component
+ * @param {TableSearchProps} props - Component properties
+ * @returns {JSX.Element} Search input with icon and clear button
+ * 
+ * @example
+ * ```tsx
+ * <TableSearch
+ *   value={searchValue}
+ *   onChange={setSearchValue}
+ *   placeholder="Search by name..."
+ *   debounceMs={500}
+ * />
+ * ```
+ * 
+ * @remarks
+ * - Includes search icon on left
+ * - Shows clear button when value is present
+ * - Debounces onChange calls to reduce re-renders
+ * - Maintains local state for immediate UI feedback
+ */
 export function TableSearch({
   value,
   onChange,
@@ -176,7 +293,10 @@ export function TableSearch({
   )
 }
 
-// Component: DateRangePicker
+/**
+ * Default date range presets for quick selection
+ * @const {Array<{label: string, getValue: () => DateRange}>}
+ */
 const defaultPresets = [
   {
     label: "Today",
@@ -232,6 +352,36 @@ const defaultPresets = [
   },
 ]
 
+/**
+ * Date range picker with calendar and preset options
+ * 
+ * @component
+ * @param {DateRangePickerProps} props - Component properties
+ * @returns {JSX.Element} Date range picker button with popover
+ * 
+ * @example
+ * ```tsx
+ * <DateRangePicker
+ *   value={dateRange}
+ *   onChange={setDateRange}
+ *   presets={[
+ *     {
+ *       label: "Last week",
+ *       getValue: () => ({ 
+ *         from: subWeeks(new Date(), 1), 
+ *         to: new Date() 
+ *       })
+ *     }
+ *   ]}
+ * />
+ * ```
+ * 
+ * @remarks
+ * - Shows formatted date range in button
+ * - Includes preset buttons for quick selection
+ * - Displays dual month calendar for range selection
+ * - Clear button appears when range is selected
+ */
 export function DateRangePicker({
   value,
   onChange,
@@ -312,7 +462,33 @@ export function DateRangePicker({
   )
 }
 
-// Component: MultiSelect
+/**
+ * Multi-select dropdown with search and bulk actions
+ * 
+ * @component
+ * @param {MultiSelectProps} props - Component properties
+ * @returns {JSX.Element} Multi-select dropdown
+ * 
+ * @example
+ * ```tsx
+ * <MultiSelect
+ *   options={[
+ *     { value: "1", label: "Option 1", icon: <Icon1 /> },
+ *     { value: "2", label: "Option 2", icon: <Icon2 /> },
+ *   ]}
+ *   value={selectedValues}
+ *   onChange={setSelectedValues}
+ *   placeholder="Select categories..."
+ * />
+ * ```
+ * 
+ * @remarks
+ * - Searchable options list
+ * - Select all / Clear all buttons
+ * - Shows count badge when items selected
+ * - Displays "X selected" for multiple selections
+ * - Supports optional icons for each option
+ */
 export function MultiSelect({
   options,
   value = [],
@@ -435,7 +611,33 @@ export function MultiSelect({
   )
 }
 
-// Component: ColumnVisibilityMenu
+/**
+ * Dropdown menu for toggling table column visibility
+ * 
+ * @component
+ * @param {ColumnVisibilityMenuProps} props - Component properties
+ * @returns {JSX.Element} Column visibility dropdown menu
+ * 
+ * @example
+ * ```tsx
+ * <ColumnVisibilityMenu
+ *   columns={[
+ *     { id: "name", label: "Name" },
+ *     { id: "email", label: "Email", group: "Contact" },
+ *     { id: "phone", label: "Phone", group: "Contact" },
+ *   ]}
+ *   visibility={columnVisibility}
+ *   onChange={setColumnVisibility}
+ * />
+ * ```
+ * 
+ * @remarks
+ * - Searchable column list
+ * - Grouped columns display with separators
+ * - Show all / Hide all / Reset bulk actions
+ * - Shows visible count badge (e.g., "8/10")
+ * - Maintains scroll position during interactions
+ */
 export function ColumnVisibilityMenu({
   columns,
   visibility,
@@ -584,7 +786,41 @@ export function ColumnVisibilityMenu({
   )
 }
 
-// Component: TableFilters
+/**
+ * Composite filter bar for tables
+ * Renders multiple filter types based on configuration
+ * 
+ * @component
+ * @param {TableFiltersProps} props - Component properties
+ * @returns {JSX.Element} Filter components with clear button
+ * 
+ * @example
+ * ```tsx
+ * <TableFilters
+ *   filters={[
+ *     { type: 'search', key: 'name', label: 'Search names' },
+ *     { type: 'date-range', key: 'created', label: 'Created date' },
+ *     { 
+ *       type: 'multi-select', 
+ *       key: 'status', 
+ *       label: 'Status',
+ *       options: [
+ *         { value: 'active', label: 'Active' },
+ *         { value: 'inactive', label: 'Inactive' }
+ *       ]
+ *     }
+ *   ]}
+ *   values={filterValues}
+ *   onChange={handleFilterChange}
+ * />
+ * ```
+ * 
+ * @remarks
+ * - Dynamically renders filters based on type
+ * - Shows active filter count in clear button
+ * - Wraps filters on smaller screens
+ * - Clear button only appears when filters are active
+ */
 export function TableFilters({
   filters,
   values,
@@ -677,7 +913,44 @@ export function TableFilters({
   )
 }
 
-// Export a hook for managing filter state
+/**
+ * Custom hook for managing table filter state
+ * 
+ * @template T - Type of the filter values object
+ * @param {T} initialValues - Initial filter values
+ * @returns {Object} Filter state and handlers
+ * @returns {T} values - Current filter values
+ * @returns {Function} setFilter - Update individual filter
+ * @returns {Function} clearFilters - Reset all filters
+ * @returns {number} activeCount - Number of active filters
+ * 
+ * @example
+ * ```tsx
+ * const filters = useTableFilters({
+ *   search: '',
+ *   status: [],
+ *   dateRange: { from: undefined, to: undefined }
+ * });
+ * 
+ * // Use in component
+ * <TableFilters
+ *   filters={filterConfig}
+ *   values={filters.values}
+ *   onChange={filters.setFilter}
+ *   onClearAll={filters.clearFilters}
+ * />
+ * 
+ * // Check if filters are active
+ * {filters.activeCount > 0 && (
+ *   <Badge>{filters.activeCount} filters active</Badge>
+ * )}
+ * ```
+ * 
+ * @remarks
+ * - Tracks active filter count automatically
+ * - Considers empty arrays and objects as inactive
+ * - Preserves initial values for reset functionality
+ */
 export function useTableFilters<T extends Record<string, any>>(
   initialValues: T
 ): {

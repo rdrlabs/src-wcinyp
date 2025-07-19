@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Niivue } from '@niivue/niivue'
 import { cn } from '@/lib/utils'
 import { logger } from '@/lib/logger'
+import { config } from '@/config/app.config'
 
 interface NiivueBrainGridProps {
   className?: string
@@ -12,10 +13,10 @@ interface NiivueBrainGridProps {
 
 // High-quality brain scans with good contrast
 const BRAIN_SCANS = [
-  { id: 'mni152', url: 'https://niivue.github.io/niivue-demo-images/mni152.nii.gz', name: 'MNI152' },
-  { id: 'chris_t1', url: 'https://niivue.github.io/niivue-demo-images/chris_t1.nii.gz', name: 'CHRIS T1' },
-  { id: 'chris_t2', url: 'https://niivue.github.io/niivue-demo-images/chris_t2.nii.gz', name: 'CHRIS T2' },
-  { id: 'spm152', url: 'https://niivue.github.io/niivue-demo-images/spm152.nii.gz', name: 'SPM152' },
+  { id: 'mni152', url: config.brainViewer.imageUrls.mni152, name: 'MNI152' },
+  { id: 'chris_t1', url: config.brainViewer.imageUrls.chrisT1, name: 'CHRIS T1' },
+  { id: 'chris_t2', url: config.brainViewer.imageUrls.chrisT2, name: 'CHRIS T2' },
+  { id: 'spm152', url: config.brainViewer.imageUrls.spm152, name: 'SPM152' },
 ]
 
 const COLORMAPS = ['gray', 'hot', 'cool', 'winter', 'copper'] // Variety of medical colormaps
@@ -43,9 +44,9 @@ const RENDER_FPS = 30
 const RENDER_INTERVAL = 1000 / RENDER_FPS
 
 // Animation constants
-const TRANSITION_DURATION = 1000 // Faster transitions
-const SCAN_DURATIONS = [8000, 12000, 15000, 10000] // Different durations per quadrant
-const PRELOAD_TIME = 2000
+const TRANSITION_DURATION = config.ui.animations.transitionDurationMs
+const SCAN_DURATIONS = config.brainViewer.scanDurations
+const PRELOAD_TIME = config.ui.animations.preloadTimeMs
 
 // Pre-allocated arrays to reduce garbage collection
 const SHARED_POSITION = new Float32Array([0.5, 0.5, 0.5])

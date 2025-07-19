@@ -1,9 +1,44 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { logger } from '@/lib/logger-v2';
 
 type SetValue<T> = (value: T | ((prev: T) => T)) => void;
 
+/**
+ * Hook for syncing state with localStorage, with SSR support and cross-tab synchronization.
+ * Includes error handling and custom serialization options.
+ * 
+ * @template T - The type of value to store
+ * @param key - The localStorage key
+ * @param initialValue - The initial value if nothing is in localStorage
+ * @param options - Configuration options
+ * @param options.serialize - Custom serialization function (default: JSON.stringify)
+ * @param options.deserialize - Custom deserialization function (default: JSON.parse)
+ * @returns Tuple of [storedValue, setValue, removeValue]
+ * 
+ * @example
+ * ```tsx
+ * // Basic usage
+ * const [user, setUser, removeUser] = useLocalStorage('user', null);
+ * 
+ * // With custom serialization
+ * const [settings, setSettings] = useLocalStorage(
+ *   'settings',
+ *   { theme: 'dark', fontSize: 16 },
+ *   {
+ *     serialize: (value) => btoa(JSON.stringify(value)),
+ *     deserialize: (value) => JSON.parse(atob(value))
+ *   }
+ * );
+ * 
+ * // Update value
+ * setSettings({ ...settings, theme: 'light' });
+ * 
+ * // Remove from storage
+ * removeUser();
+ * ```
+ */
 export function useLocalStorage<T>(
   key: string,
   initialValue: T,
@@ -26,7 +61,7 @@ export function useLocalStorage<T>(
       const item = window.localStorage.getItem(key);
       return item ? deserialize(item) : initialValue;
     } catch (error) {
-      console.warn(`Error reading localStorage key "${key}":`, error);
+      logger.warn(`Error reading localStorage key "${key}"`, { key, error });
       return initialValue;
     }
   }, [initialValue, key, deserialize]);
@@ -37,7 +72,7 @@ export function useLocalStorage<T>(
   const setValue: SetValue<T> = useCallback((value) => {
     // Prevent build error "window is undefined" but keep functionality
     if (typeof window === 'undefined') {
-      console.warn(`Tried setting localStorage key "${key}" during SSG. Ignoring.`);
+      logger.warn(`Tried setting localStorage key "${key}" during SSG. Ignoring.`, { key });
       return;
     }
 
@@ -54,7 +89,7 @@ export function useLocalStorage<T>(
       // We dispatch a custom event so every useLocalStorage hook are notified
       window.dispatchEvent(new Event('local-storage'));
     } catch (error) {
-      console.warn(`Error setting localStorage key "${key}":`, error);
+      logger.warn(`Error setting localStorage key "${key}"`, { key, error });
     }
   }, [key, serialize, storedValue]);
 
@@ -69,7 +104,7 @@ export function useLocalStorage<T>(
       setStoredValue(initialValue);
       window.dispatchEvent(new Event('local-storage'));
     } catch (error) {
-      console.warn(`Error removing localStorage key "${key}":`, error);
+      logger.warn(`Error removing localStorage key "${key}"`, { key, error });
     }
   }, [key, initialValue]);
 

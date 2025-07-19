@@ -23,10 +23,47 @@ const badgeVariants = cva(
   }
 )
 
+/**
+ * Badge component properties
+ * @interface BadgeProps
+ * @extends {React.HTMLAttributes<HTMLDivElement>}
+ * @extends {VariantProps<typeof badgeVariants>}
+ * 
+ * @property {string} [variant="default"] - Visual style variant (default | secondary | destructive | outline)
+ * @property {string} [className] - Additional CSS classes
+ * @property {React.ReactNode} [children] - Badge content
+ * 
+ * @example
+ * ```tsx
+ * // Default badge
+ * <Badge>New</Badge>
+ * 
+ * // Secondary variant
+ * <Badge variant="secondary">Beta</Badge>
+ * 
+ * // Destructive variant
+ * <Badge variant="destructive">Urgent</Badge>
+ * 
+ * // Outline variant
+ * <Badge variant="outline">v2.0</Badge>
+ * 
+ * // With custom styling
+ * <Badge className="ml-2" variant="secondary">
+ *   Coming Soon
+ * </Badge>
+ * ```
+ */
 export interface BadgeProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof badgeVariants> {}
 
+/**
+ * Badge component for displaying labels, statuses, or counts
+ * 
+ * @component
+ * @param {BadgeProps} props - Component props
+ * @returns {React.ReactElement} Badge element
+ */
 function Badge({ className, variant, ...props }: BadgeProps) {
   return (
     <div className={cn(badgeVariants({ variant }), className)} {...props} />

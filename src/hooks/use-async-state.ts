@@ -14,6 +14,33 @@ interface UseAsyncStateOptions {
   onError?: (error: Error) => void;
 }
 
+/**
+ * Hook for managing asynchronous state with loading, error, and data states.
+ * Provides manual execution control and automatic cleanup on unmount.
+ * 
+ * @template T - The type of data returned by the async function
+ * @param asyncFunction - The async function to execute
+ * @param options - Configuration options
+ * @param options.immediate - Whether to execute immediately on mount (default: true)
+ * @param options.onSuccess - Callback fired when the async operation succeeds
+ * @param options.onError - Callback fired when the async operation fails
+ * @returns Object containing state (data, loading, error) and control functions (execute, reset)
+ * 
+ * @example
+ * ```tsx
+ * const { data, loading, error, execute, reset } = useAsyncState(
+ *   async () => {
+ *     const response = await fetch('/api/data');
+ *     return response.json();
+ *   },
+ *   {
+ *     immediate: false,
+ *     onSuccess: (data) => console.log('Data loaded:', data),
+ *     onError: (error) => console.error('Failed to load:', error)
+ *   }
+ * );
+ * ```
+ */
 export function useAsyncState<T>(
   asyncFunction: () => Promise<T>,
   options: UseAsyncStateOptions = {}
@@ -71,7 +98,32 @@ export function useAsyncState<T>(
   };
 }
 
-// Version with dependencies for re-execution
+/**
+ * Hook for managing asynchronous effects that re-execute when dependencies change.
+ * Similar to useEffect but designed for async operations with proper cleanup.
+ * 
+ * @template T - The type of data returned by the async function
+ * @param asyncFunction - The async function to execute
+ * @param deps - Dependency array that triggers re-execution when values change
+ * @param options - Configuration options
+ * @param options.onSuccess - Callback fired when the async operation succeeds
+ * @param options.onError - Callback fired when the async operation fails
+ * @returns Object containing current state (data, loading, error)
+ * 
+ * @example
+ * ```tsx
+ * const { data, loading, error } = useAsyncEffect(
+ *   async () => {
+ *     const response = await fetch(`/api/user/${userId}`);
+ *     return response.json();
+ *   },
+ *   [userId], // Re-fetch when userId changes
+ *   {
+ *     onSuccess: (user) => console.log('User loaded:', user)
+ *   }
+ * );
+ * ```
+ */
 export function useAsyncEffect<T>(
   asyncFunction: () => Promise<T>,
   deps: React.DependencyList,

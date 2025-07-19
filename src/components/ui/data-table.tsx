@@ -17,6 +17,7 @@ import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
+import { ErrorBoundary } from "@/components/error-boundary"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -227,45 +228,64 @@ export function DataTable<TData>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  className={onRowClick ? "cursor-pointer" : ""}
-                  tabIndex={0}
-                  onClick={(e) => {
-                    // Don't trigger row click if clicking on checkbox
-                    const target = e.target as HTMLElement
-                    if (
-                      target.closest('[role="checkbox"]') ||
-                      target.closest('button')
-                    ) {
-                      return
-                    }
-                    onRowClick?.(row.original)
-                  }}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+            <ErrorBoundary 
+              level="component" 
+              isolate
+              fallback={(error) => (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    <div className="text-destructive">
+                      Error loading table data: {error.message}
+                    </div>
+                  </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
+              )}
+            >
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                    className={onRowClick ? "cursor-pointer" : ""}
+                    tabIndex={0}
+                    onClick={(e) => {
+                      // Don't trigger row click if clicking on checkbox
+                      const target = e.target as HTMLElement
+                      if (
+                        target.closest('[role="checkbox"]') ||
+                        target.closest('button')
+                      ) {
+                        return
+                      }
+                      onRowClick?.(row.original)
+                    }}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        <ErrorBoundary level="component" isolate>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </ErrorBoundary>
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </ErrorBoundary>
           </TableBody>
         </Table>
       </div>

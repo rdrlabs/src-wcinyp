@@ -3,7 +3,7 @@
  */
 
 import { toast } from 'sonner'
-import { logger } from './logger'
+import { logger } from './logger-v2'
 
 /**
  * Error types for consistent handling

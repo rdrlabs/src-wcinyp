@@ -17,6 +17,60 @@ const inputVariants = cva(
   }
 )
 
+/**
+ * Input component properties
+ * @interface InputProps
+ * @extends {React.InputHTMLAttributes<HTMLInputElement>}
+ * @extends {VariantProps<typeof inputVariants>}
+ * 
+ * @property {string} [variant="default"] - Visual style variant (default | primary)
+ * @property {string} [type="text"] - HTML input type
+ * @property {string} [className] - Additional CSS classes
+ * @property {string} [placeholder] - Placeholder text
+ * @property {boolean} [disabled] - Disabled state
+ * @property {string} [value] - Controlled value
+ * @property {Function} [onChange] - Change event handler
+ * 
+ * @example
+ * ```tsx
+ * // Basic text input
+ * <Input 
+ *   type="text" 
+ *   placeholder="Enter your name" 
+ * />
+ * 
+ * // Email input with variant
+ * <Input 
+ *   type="email" 
+ *   variant="primary"
+ *   placeholder="email@example.com" 
+ * />
+ * 
+ * // Controlled input
+ * <Input 
+ *   value={inputValue}
+ *   onChange={(e) => setInputValue(e.target.value)}
+ * />
+ * 
+ * // Password input
+ * <Input 
+ *   type="password" 
+ *   placeholder="Enter password"
+ * />
+ * 
+ * // File input
+ * <Input 
+ *   type="file" 
+ *   accept="image/*"
+ * />
+ * 
+ * // Disabled input
+ * <Input 
+ *   disabled 
+ *   value="Cannot edit this"
+ * />
+ * ```
+ */
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement>,
     VariantProps<typeof inputVariants> {}
@@ -28,6 +82,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         type={type}
         className={cn(inputVariants({ variant, className }))}
         ref={ref}
+        data-testid="input"
         {...props}
       />
     )

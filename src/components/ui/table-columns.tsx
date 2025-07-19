@@ -44,14 +44,34 @@ import {
 } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
+import { logger } from "@/lib/logger-v2"
 
 // Types
+
+/**
+ * Properties for SortableHeader component
+ * @interface SortableHeaderProps
+ * @property {Column<any, any>} column - TanStack Table column instance for sorting operations
+ * @property {string} title - Display title for the column header
+ * @property {string} [className] - Optional CSS classes for styling
+ */
 export interface SortableHeaderProps {
   column: Column<any, any>
   title: string
   className?: string
 }
 
+/**
+ * Configuration for action menu items
+ * @interface ActionItem
+ * @template TData - Type of the row data
+ * @property {string} label - Display text for the action
+ * @property {Function} onClick - Handler called when action is clicked
+ * @property {React.ReactNode} [icon] - Optional icon to display with the action
+ * @property {boolean} [destructive] - If true, styles action as destructive (red)
+ * @property {boolean | Function} [disabled] - Static or dynamic disable state
+ * @property {boolean | Function} [hidden] - Static or dynamic visibility state
+ */
 export interface ActionItem<TData = any> {
   label: string
   onClick: (row: TData) => void
@@ -61,12 +81,29 @@ export interface ActionItem<TData = any> {
   hidden?: boolean | ((row: TData) => boolean)
 }
 
+/**
+ * Properties for ActionsColumn component
+ * @interface ActionsColumnProps
+ * @template TData - Type of the row data
+ * @property {ActionItem<TData>[]} actions - Array of actions to display in dropdown
+ * @property {TData} row - Current row data
+ * @property {"start" | "center" | "end"} [align="end"] - Dropdown menu alignment
+ */
 export interface ActionsColumnProps<TData = any> {
   actions: ActionItem<TData>[]
   row: TData
   align?: "start" | "center" | "end"
 }
 
+/**
+ * Properties for StatusBadge component
+ * @interface StatusBadgeProps
+ * @property {string} status - Status text to display
+ * @property {string} [variant="default"] - Visual style variant
+ * @property {React.ReactNode} [icon] - Custom icon (auto-detected if not provided)
+ * @property {"sm" | "md" | "lg"} [size="md"] - Badge size
+ * @property {string} [className] - Additional CSS classes
+ */
 export interface StatusBadgeProps {
   status: string
   variant?: "default" | "success" | "warning" | "error" | "info" | "secondary"
@@ -75,6 +112,16 @@ export interface StatusBadgeProps {
   className?: string
 }
 
+/**
+ * Properties for ContactInfo component
+ * @interface ContactInfoProps
+ * @property {string} [email] - Email address to display
+ * @property {string} [phone] - Phone number to display
+ * @property {string} [name] - Contact name to display
+ * @property {boolean} [compact=false] - Use compact layout with icons
+ * @property {boolean} [showCopyButton=false] - Show copy to clipboard buttons
+ * @property {string} [className] - Additional CSS classes
+ */
 export interface ContactInfoProps {
   email?: string
   phone?: string
@@ -84,6 +131,15 @@ export interface ContactInfoProps {
   className?: string
 }
 
+/**
+ * Properties for DateDisplay component
+ * @interface DateDisplayProps
+ * @property {string | Date | null | undefined} date - Date value to display
+ * @property {string} [format="MMM d, yyyy"] - date-fns format string
+ * @property {boolean} [relative=false] - Show relative time (e.g., "2 hours ago")
+ * @property {boolean} [showTime=false] - Include time in display
+ * @property {string} [className] - Additional CSS classes
+ */
 export interface DateDisplayProps {
   date: string | Date | null | undefined
   format?: string
@@ -92,6 +148,17 @@ export interface DateDisplayProps {
   className?: string
 }
 
+/**
+ * Properties for FileInfo component
+ * @interface FileInfoProps
+ * @property {string} filename - Name of the file
+ * @property {number} [size] - File size in bytes
+ * @property {string} [type] - File extension/type (auto-detected from filename if not provided)
+ * @property {Function} [onDownload] - Download click handler
+ * @property {Function} [onPreview] - Preview click handler
+ * @property {boolean} [truncate=true] - Truncate long filenames with tooltip
+ * @property {string} [className] - Additional CSS classes
+ */
 export interface FileInfoProps {
   filename: string
   size?: number
@@ -102,7 +169,29 @@ export interface FileInfoProps {
   className?: string
 }
 
-// Component: SortableHeader
+/**
+ * Sortable table header with visual indicators
+ * 
+ * @component
+ * @param {SortableHeaderProps} props - Component properties
+ * @returns {JSX.Element} Sortable header button
+ * 
+ * @example
+ * ```tsx
+ * // In your column definition
+ * {
+ *   accessorKey: "name",
+ *   header: ({ column }) => (
+ *     <SortableHeader column={column} title="Name" />
+ *   ),
+ * }
+ * ```
+ * 
+ * @remarks
+ * - Shows arrow up/down icons for sorted state
+ * - Shows bi-directional arrow when not sorted
+ * - Toggles between asc/desc/no sort on click
+ */
 export function SortableHeader({ column, title, className }: SortableHeaderProps) {
   const sorted = column.getIsSorted()
   
@@ -126,7 +215,46 @@ export function SortableHeader({ column, title, className }: SortableHeaderProps
   )
 }
 
-// Component: ActionsColumn
+/**
+ * Dropdown menu for row actions in tables
+ * 
+ * @component
+ * @template TData - Type of the row data
+ * @param {ActionsColumnProps<TData>} props - Component properties
+ * @returns {JSX.Element | null} Actions dropdown or null if no visible actions
+ * 
+ * @example
+ * ```tsx
+ * // In your column definition
+ * {
+ *   id: "actions",
+ *   cell: ({ row }) => (
+ *     <ActionsColumn
+ *       row={row.original}
+ *       actions={[
+ *         {
+ *           label: "Edit",
+ *           onClick: (data) => handleEdit(data),
+ *           icon: <Edit className="h-4 w-4" />
+ *         },
+ *         {
+ *           label: "Delete",
+ *           onClick: (data) => handleDelete(data),
+ *           icon: <Trash className="h-4 w-4" />,
+ *           destructive: true,
+ *           disabled: (data) => !data.canDelete
+ *         }
+ *       ]}
+ *     />
+ *   ),
+ * }
+ * ```
+ * 
+ * @remarks
+ * - Filters out hidden actions dynamically
+ * - Supports conditional disable/hide based on row data
+ * - Stops event propagation to prevent row click handlers
+ */
 export function ActionsColumn<TData = any>({ 
   actions, 
   row, 
@@ -208,6 +336,34 @@ const statusIcons = {
   processing: <RefreshCw className="h-3 w-3 animate-spin" />,
 }
 
+/**
+ * Status indicator badge with automatic icon detection
+ * 
+ * @component
+ * @param {StatusBadgeProps} props - Component properties
+ * @returns {JSX.Element} Styled status badge
+ * 
+ * @example
+ * ```tsx
+ * // Basic usage
+ * <StatusBadge status="Active" variant="success" />
+ * 
+ * // With custom icon
+ * <StatusBadge 
+ *   status="Processing" 
+ *   variant="info"
+ *   icon={<Loader className="h-3 w-3 animate-spin" />}
+ * />
+ * 
+ * // Different sizes
+ * <StatusBadge status="Error" variant="error" size="sm" />
+ * ```
+ * 
+ * @remarks
+ * - Auto-detects icons based on status text keywords
+ * - Keywords: success/complete/active, error/fail, warning/pending, processing/loading
+ * - Uses theme-aware colors for light/dark mode
+ */
 export function StatusBadge({ 
   status, 
   variant = "default", 
@@ -252,7 +408,37 @@ export function StatusBadge({
   )
 }
 
-// Component: ContactInfo
+/**
+ * Display contact information with optional copy functionality
+ * 
+ * @component
+ * @param {ContactInfoProps} props - Component properties
+ * @returns {JSX.Element} Contact information display
+ * 
+ * @example
+ * ```tsx
+ * // Full display
+ * <ContactInfo
+ *   name="John Doe"
+ *   email="john@example.com"
+ *   phone="(555) 123-4567"
+ *   showCopyButton
+ * />
+ * 
+ * // Compact display with icons
+ * <ContactInfo
+ *   email="jane@example.com"
+ *   phone="(555) 987-6543"
+ *   compact
+ * />
+ * ```
+ * 
+ * @remarks
+ * - Shows em dash (—) when all fields are empty
+ * - Compact mode uses inline layout with icons
+ * - Copy buttons show confirmation checkmark briefly
+ * - Email addresses truncate in compact mode with tooltip
+ */
 export function ContactInfo({ 
   email, 
   phone, 
@@ -269,7 +455,7 @@ export function ContactInfo({
       setCopiedField(field)
       setTimeout(() => setCopiedField(null), 2000)
     } catch (err) {
-      console.error("Failed to copy:", err)
+      logger.error("Failed to copy to clipboard", { error: err })
     }
   }
 
@@ -371,7 +557,36 @@ export function ContactInfo({
   )
 }
 
-// Component: DateDisplay
+/**
+ * Flexible date display with formatting and relative time options
+ * 
+ * @component
+ * @param {DateDisplayProps} props - Component properties
+ * @returns {JSX.Element} Formatted date display
+ * 
+ * @example
+ * ```tsx
+ * // Basic date
+ * <DateDisplay date={new Date()} />
+ * 
+ * // With custom format and time
+ * <DateDisplay 
+ *   date="2024-01-15T14:30:00Z" 
+ *   format="MMMM d, yyyy"
+ *   showTime 
+ * />
+ * 
+ * // Relative time with tooltip
+ * <DateDisplay date={someDate} relative />
+ * ```
+ * 
+ * @remarks
+ * - Handles Date objects and ISO date strings
+ * - Shows em dash (—) for null/undefined dates
+ * - Shows "Invalid date" for unparseable values
+ * - Relative mode shows tooltip with absolute date on hover
+ * - Uses date-fns for formatting and relative time
+ */
 export function DateDisplay({ 
   date, 
   format: dateFormat = "MMM d, yyyy",
@@ -413,7 +628,10 @@ export function DateDisplay({
   return <span className={className}>{formatted}</span>
 }
 
-// Component: FileInfo
+/**
+ * File type to icon mapping for common extensions
+ * @const {Record<string, React.ReactNode>}
+ */
 const fileIcons: Record<string, React.ReactNode> = {
   pdf: <FileText className="h-4 w-4 text-red-600" />,
   doc: <FileText className="h-4 w-4 text-blue-600" />,
@@ -439,6 +657,41 @@ const fileIcons: Record<string, React.ReactNode> = {
   tsx: <FileCode className="h-4 w-4 text-cyan-500" />,
 }
 
+/**
+ * File information display with type-specific icons and actions
+ * 
+ * @component
+ * @param {FileInfoProps} props - Component properties
+ * @returns {JSX.Element} File info with icon and actions
+ * 
+ * @example
+ * ```tsx
+ * // Basic file display
+ * <FileInfo filename="document.pdf" size={1024000} />
+ * 
+ * // With actions
+ * <FileInfo
+ *   filename="report.xlsx"
+ *   size={2048000}
+ *   onDownload={() => downloadFile("report.xlsx")}
+ *   onPreview={() => previewFile("report.xlsx")}
+ * />
+ * 
+ * // Custom type override
+ * <FileInfo
+ *   filename="data.custom"
+ *   type="csv"
+ *   size={512000}
+ * />
+ * ```
+ * 
+ * @remarks
+ * - Auto-detects file type from extension
+ * - Shows appropriate icon for common file types
+ * - Formats file size (Bytes, KB, MB, GB)
+ * - Truncates long filenames with full name in tooltip
+ * - Action buttons stop event propagation
+ */
 export function FileInfo({ 
   filename, 
   size,
@@ -451,6 +704,11 @@ export function FileInfo({
   const extension = type || filename.split('.').pop()?.toLowerCase() || ''
   const icon = fileIcons[extension] || <File className="h-4 w-4 text-gray-500" />
   
+  /**
+   * Format file size in human-readable format
+   * @param {number} bytes - Size in bytes
+   * @returns {string} Formatted size string
+   */
   const formatFileSize = (bytes: number): string => {
     if (bytes === 0) return '0 Bytes'
     const k = 1024
@@ -519,7 +777,15 @@ export function FileInfo({
   )
 }
 
-// Additional utility component for progress bars in tables
+/**
+ * Properties for ProgressBar component
+ * @interface ProgressBarProps
+ * @property {number} value - Current progress value
+ * @property {number} [max=100] - Maximum value for percentage calculation
+ * @property {boolean} [showLabel=true] - Show percentage label
+ * @property {string} [variant="default"] - Visual style variant
+ * @property {string} [className] - Additional CSS classes
+ */
 export interface ProgressBarProps {
   value: number
   max?: number
@@ -528,6 +794,35 @@ export interface ProgressBarProps {
   className?: string
 }
 
+/**
+ * Progress bar for displaying completion status in tables
+ * 
+ * @component
+ * @param {ProgressBarProps} props - Component properties
+ * @returns {JSX.Element} Progress bar with optional label
+ * 
+ * @example
+ * ```tsx
+ * // Basic progress
+ * <ProgressBar value={75} />
+ * 
+ * // Custom max value
+ * <ProgressBar value={3} max={5} />
+ * 
+ * // Different variants
+ * <ProgressBar value={90} variant="success" />
+ * <ProgressBar value={30} variant="warning" />
+ * 
+ * // Without label
+ * <ProgressBar value={50} showLabel={false} />
+ * ```
+ * 
+ * @remarks
+ * - Calculates percentage based on value/max
+ * - Smooth transitions on value changes
+ * - Theme-aware color variants
+ * - Tabular number formatting for consistent width
+ */
 export function ProgressBar({ 
   value, 
   max = 100,

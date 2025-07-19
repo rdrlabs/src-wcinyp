@@ -15,6 +15,20 @@ import { logger } from '@/lib/logger'
 // Authentication is now enabled with access request system
 const AUTHENTICATION_DISABLED = false
 
+/**
+ * Authentication context type definition
+ * @interface AuthContextType
+ * @property {User | null} user - Current authenticated user object or null if not authenticated
+ * @property {boolean} loading - Loading state for authentication operations
+ * @property {string | null} error - Error message from last authentication operation
+ * @property {Function} signInWithEmail - Initiate email magic link authentication
+ * @property {Function} signOut - Sign out the current user and clear session
+ * @property {Function} checkSession - Verify current session validity and refresh if needed
+ * @property {string | null} pendingSessionToken - Token for cross-device authentication flow
+ * @property {boolean} isPollingForAuth - Whether realtime auth status polling is active
+ * @property {boolean} rememberMe - User preference for extended session duration
+ * @property {Function} setRememberMe - Update remember me preference
+ */
 interface AuthContextType {
   user: User | null
   loading: boolean
@@ -30,6 +44,28 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
+/**
+ * Authentication Provider Component
+ * Manages authentication state, session persistence, and cross-device authentication
+ * 
+ * @component
+ * @param {Object} props - Component props
+ * @param {React.ReactNode} props.children - Child components to wrap with auth context
+ * 
+ * @example
+ * ```tsx
+ * <AuthProvider>
+ *   <App />
+ * </AuthProvider>
+ * ```
+ * 
+ * @remarks
+ * - Handles magic link authentication flow
+ * - Supports cross-device authentication via session tokens
+ * - Manages session persistence with configurable remember me option
+ * - Implements realtime authentication status monitoring
+ * - Automatically refreshes tokens and maintains session cookies
+ */
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(!AUTHENTICATION_DISABLED) // Skip loading if auth disabled
@@ -119,7 +155,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router])
 
-  // Start realtime subscription for authentication status
+  /**
+   * Start realtime subscription for cross-device authentication status
+   * Monitors pending_auth_sessions table for authentication completion on another device
+   * 
+   * @param {string} sessionToken - Unique session token for cross-device auth flow
+   * @returns {void}
+   * 
+   * @remarks
+   * - Creates Supabase realtime channel subscription
+   * - Listens for authentication status updates
+   * - Automatically signs in user when authentication is completed on another device
+   * - Cleans up pending session after successful authentication
+   */
   const startRealtimeAuth = useCallback((sessionToken: string) => {
     setIsPollingForAuth(true)
     
@@ -189,7 +237,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     pollingIntervalRef.current = channel
   }, [])
   
-  // Stop realtime subscription
+  /**
+   * Stop realtime authentication subscription and cleanup resources
+   * 
+   * @returns {void}
+   * 
+   * @remarks
+   * - Unsubscribes from Supabase realtime channel
+   * - Clears polling interval if using fallback polling
+   * - Resets polling state flag
+   */
   const stopRealtimeAuth = useCallback(() => {
     if (pollingIntervalRef.current) {
       if ('unsubscribe' in pollingIntervalRef.current && typeof pollingIntervalRef.current.unsubscribe === 'function') {
@@ -202,6 +259,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsPollingForAuth(false)
   }, [])
 
+  /**
+   * Check and validate current authentication session
+   * Verifies user authorization and updates authentication state
+   * 
+   * @async
+   * @returns {Promise<void>}
+   * 
+   * @remarks
+   * - Retrieves current session from Supabase
+   * - Validates user email against authorization rules
+   * - Updates session cookies based on remember me preference
+   * - Signs out unauthorized users automatically
+   * - Implements retry logic for network resilience
+   */
   const checkSession = async () => {
     try {
       setLoading(true)
@@ -257,6 +328,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  /**
+   * Initiate email magic link authentication with cross-device support
+   * 
+   * @async
+   * @param {string} email - User's email address for authentication
+   * @param {boolean} [rememberMeOption] - Whether to extend session duration (30 days vs 7 days)
+   * @returns {Promise<void>}
+   * @throws {Error} If email is not authorized or authentication fails
+   * 
+   * @remarks
+   * - Validates email authorization before sending magic link
+   * - Creates pending session for cross-device authentication
+   * - Sends magic link with embedded session token
+   * - Starts realtime monitoring for authentication completion
+   * - Implements retry logic for email delivery resilience
+   * 
+   * @example
+   * ```tsx
+   * try {
+   *   await signInWithEmail('user@example.com', true);
+   *   // Show success message
+   * } catch (error) {
+   *   // Handle authentication error
+   * }
+   * ```
+   */
   const signInWithEmail = async (email: string, rememberMeOption?: boolean) => {
     try {
       setLoading(true)
@@ -323,6 +420,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  /**
+   * Sign out current user and cleanup authentication state
+   * 
+   * @async
+   * @returns {Promise<void>}
+   * @throws {Error} If sign out operation fails
+   * 
+   * @remarks
+   * - Stops any active realtime subscriptions
+   * - Clears Supabase authentication session
+   * - Removes session cookies and local storage data
+   * - Redirects to login page after successful sign out
+   * - Implements retry logic for sign out resilience
+   */
   const signOut = async () => {
     try {
       setLoading(true)
@@ -376,6 +487,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
+/**
+ * Custom hook to access authentication context
+ * 
+ * @returns {AuthContextType} Authentication context value
+ * @throws {Error} If used outside of AuthProvider
+ * 
+ * @example
+ * ```tsx
+ * function MyComponent() {
+ *   const { user, signInWithEmail, signOut } = useAuth();
+ *   
+ *   if (!user) {
+ *     return <LoginForm onSubmit={signInWithEmail} />;
+ *   }
+ *   
+ *   return <Dashboard user={user} onLogout={signOut} />;
+ * }
+ * ```
+ */
 export function useAuth() {
   const context = useContext(AuthContext)
   if (context === undefined) {

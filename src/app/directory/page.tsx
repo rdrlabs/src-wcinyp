@@ -26,6 +26,7 @@ import {
 import { DataTable, createSortableHeader, createActionsColumn } from "@/components/ui/data-table";
 import { DetailsSheet, type ContactTypeData } from "@/components/shared";
 import type { ColumnDef } from "@tanstack/react-table";
+import { logger } from "@/lib/logger-v2";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   DropdownMenu,
@@ -33,6 +34,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DataLoadingBoundary } from "@/components/loading-boundary";
 
 export default function DirectoryPage() {
   const [selectedTab, setSelectedTab] = useState<string>('all');
@@ -169,7 +171,7 @@ export default function DirectoryPage() {
       accessorKey: 'type',
       header: ({ column }) => createSortableHeader(column, 'Type'),
       cell: ({ row }) => {
-        const type = row.getValue('type') as string;
+        const type = row.getValue('type');
         return (
           <Badge 
             variant="secondary"
@@ -214,15 +216,15 @@ export default function DirectoryPage() {
     createActionsColumn<UnifiedItem>([
       {
         label: 'View Details',
-        onClick: (item) => console.log('View', item),
+        onClick: (item) => logger.info('View contact details', { contact: item }),
       },
       {
         label: 'Edit',
-        onClick: (item) => console.log('Edit', item),
+        onClick: (item) => logger.info('Edit contact', { contact: item }),
       },
       {
         label: 'Export',
-        onClick: (item) => console.log('Export', item),
+        onClick: (item) => logger.info('Export contact', { contact: item }),
         icon: <Download className="h-4 w-4" />
       }
     ])
@@ -247,8 +249,8 @@ export default function DirectoryPage() {
     <div className="container mx-auto py-8 space-y-6">
       {/* Page Header */}
       <div className="space-y-1 mb-6">
-        <h1 className={TYPOGRAPHY.pageTitle}>Contact Directory</h1>
-        <p className={cn(TYPOGRAPHY.pageDescription)}>
+        <h1 className={TYPOGRAPHY.pageTitle} data-testid="page-title">Contact Directory</h1>
+        <p className={cn(TYPOGRAPHY.pageDescription)} data-testid="page-description">
           Comprehensive database of contacts and referring providers
         </p>
       </div>
@@ -270,13 +272,13 @@ export default function DirectoryPage() {
         {/* Tabs */}
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="flex-1 overflow-hidden">
           <TabsList className="inline-flex h-10 items-center justify-start rounded-md bg-muted p-1 text-muted-foreground w-max overflow-x-auto">
-            <TabsTrigger value="all" onClick={() => handleTabClick('all')} className="whitespace-nowrap">
+            <TabsTrigger value="all" onClick={() => handleTabClick('all')} className="whitespace-nowrap" data-testid="tab-all">
               All ({totalContacts + providers.length})
             </TabsTrigger>
-            <TabsTrigger value="Provider" onClick={() => handleTabClick('Provider')} className="whitespace-nowrap">
+            <TabsTrigger value="Provider" onClick={() => handleTabClick('Provider')} className="whitespace-nowrap" data-testid="tab-providers">
               Providers ({providerCount})
             </TabsTrigger>
-            <TabsTrigger value="Facility" onClick={() => handleTabClick('Facility')} className="whitespace-nowrap">
+            <TabsTrigger value="Facility" onClick={() => handleTabClick('Facility')} className="whitespace-nowrap" data-testid="tab-facilities">
               Facilities ({facilityCount})
             </TabsTrigger>
             <TabsTrigger value="Insurance" onClick={() => handleTabClick('Insurance')} className="whitespace-nowrap">
@@ -323,7 +325,8 @@ export default function DirectoryPage() {
       {/* Table */}
       <Card className="border-0 shadow-sm">
         <CardContent className="p-0">
-          <DataTable
+          <DataLoadingBoundary>
+            <DataTable
             columns={columns}
             data={filteredItems}
             showColumnVisibility={false}
@@ -357,8 +360,9 @@ export default function DirectoryPage() {
               setIsDetailsOpen(true);
             }}
           />
-        </CardContent>
-      </Card>
+        </DataLoadingBoundary>
+      </CardContent>
+    </Card>
       
       {/* Details Sheet */}
       {selectedTypeDetails && (

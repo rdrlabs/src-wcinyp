@@ -1,7 +1,10 @@
 import type { Handler } from '@netlify/functions'
+import { createLogger } from './utils/logger'
 
 // Import the server client code directly since Netlify Functions don't support path aliases
 const { createClient } = require('@supabase/supabase-js')
+
+const logger = createLogger('auth-callback');
 
 function createServerClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -114,6 +117,7 @@ async function verifyAuthToken(token: string | null) {
 }
 
 export const handler: Handler = async (event) => {
+  const log = logger.withRequest(event);
   // Only allow POST requests
   if (event.httpMethod !== 'POST') {
     return {
@@ -132,7 +136,7 @@ export const handler: Handler = async (event) => {
 
     if (error || !user) {
       // Log the actual error for debugging
-      console.error('Auth verification failed:', error)
+      log.error('Auth verification failed', { error, hasUser: !!user })
       return {
         statusCode: 401,
         body: JSON.stringify({ error: 'Unauthorized' }),
@@ -140,6 +144,12 @@ export const handler: Handler = async (event) => {
     }
 
     // Return user data
+    log.info('Auth verification successful', { 
+      userId: user.id,
+      email: user.email,
+      hasNetId: !!user.email?.includes('@')
+    });
+    
     return {
       statusCode: 200,
       body: JSON.stringify({ 
@@ -151,7 +161,7 @@ export const handler: Handler = async (event) => {
       }),
     }
   } catch (error) {
-    console.error('Auth callback error:', error)
+    log.error('Auth callback error', { error })
     return {
       statusCode: 500,
       body: JSON.stringify({ error: 'Internal server error' }),

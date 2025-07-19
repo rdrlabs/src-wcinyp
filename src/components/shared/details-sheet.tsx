@@ -140,25 +140,25 @@ export function DetailsSheet({ isOpen, onClose, type, data }: DetailsSheetProps)
                   <p className="text-2xl font-bold">{data.count}</p>
                 </div>
                 
-                {isDocumentCategory && (data as CategoryData).totalSize && (
+                {isDocumentCategory && (data).totalSize && (
                   <div className="space-y-1">
                     <p className="text-sm text-muted-foreground">Total Size</p>
-                    <p className="text-2xl font-bold">{(data as CategoryData).totalSize}</p>
+                    <p className="text-2xl font-bold">{(data).totalSize}</p>
                   </div>
                 )}
                 
-                {isContactType && (data as ContactTypeData).statistics && (
+                {isContactType && (data).statistics && (
                   <>
                     <div className="space-y-1">
                       <p className="text-sm text-muted-foreground">Active</p>
                       <p className="text-2xl font-bold text-primary">
-                        {(data as ContactTypeData).statistics!.active}
+                        {(data).statistics.active}
                       </p>
                     </div>
                     <div className="space-y-1">
                       <p className="text-sm text-muted-foreground">New This Month</p>
                       <p className="text-2xl font-bold text-primary">
-                        {(data as ContactTypeData).statistics!.newThisMonth}
+                        {(data).statistics.newThisMonth}
                       </p>
                     </div>
                   </>
@@ -212,13 +212,13 @@ export function DetailsSheet({ isOpen, onClose, type, data }: DetailsSheetProps)
           <Separator />
 
           {/* Recent Items */}
-          {isDocumentCategory && (data as CategoryData).items && (
+          {isDocumentCategory && (data).items && (
             <div className="space-y-3">
               <h3 className="text-sm font-medium text-muted-foreground">
-                Recent {(data as CategoryData).type === 'documents' ? 'Documents' : 'Forms'}
+                Recent {(data).type === 'documents' ? 'Documents' : 'Forms'}
               </h3>
               <div className="space-y-2">
-                {(data as CategoryData).items!.slice(0, 5).map((item) => (
+                {(data).items.slice(0, 5).map((item) => (
                   <Card key={item.id} className="p-3">
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1 min-w-0">
@@ -258,11 +258,11 @@ export function DetailsSheet({ isOpen, onClose, type, data }: DetailsSheetProps)
           )}
 
           {/* Recent Contacts */}
-          {isContactType && (data as ContactTypeData).recentContacts && (
+          {isContactType && (data).recentContacts && (
             <div className="space-y-3">
               <h3 className="text-sm font-medium text-muted-foreground">Recent Contacts</h3>
               <div className="space-y-2">
-                {(data as ContactTypeData).recentContacts!.slice(0, 5).map((contact) => (
+                {(data).recentContacts.slice(0, 5).map((contact) => (
                   <Card key={contact.id} className="p-3">
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1 min-w-0">

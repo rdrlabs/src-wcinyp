@@ -7,6 +7,73 @@ export interface UsePaginationOptions {
   initialPage?: number;
 }
 
+/**
+ * Hook for paginating data arrays with navigation controls.
+ * Provides page navigation, page size control, and pagination metadata.
+ * 
+ * @template T - The type of items in the data array
+ * @param data - The array of data to paginate
+ * @param options - Configuration options
+ * @param options.pageSize - Number of items per page (default: 10)
+ * @param options.initialPage - Starting page number (default: 1)
+ * @returns Object containing paginated data and pagination controls
+ * 
+ * @example
+ * ```tsx
+ * const items = Array.from({ length: 100 }, (_, i) => ({ id: i, name: `Item ${i}` }));
+ * 
+ * const {
+ *   paginatedData,
+ *   pageInfo,
+ *   goToPage,
+ *   nextPage,
+ *   previousPage,
+ *   changePageSize
+ * } = usePagination(items, {
+ *   pageSize: 20,
+ *   initialPage: 1
+ * });
+ * 
+ * return (
+ *   <div>
+ *     <ul>
+ *       {paginatedData.map(item => (
+ *         <li key={item.id}>{item.name}</li>
+ *       ))}
+ *     </ul>
+ *     
+ *     <div className="pagination">
+ *       <button
+ *         onClick={previousPage}
+ *         disabled={!pageInfo.hasPreviousPage}
+ *       >
+ *         Previous
+ *       </button>
+ *       
+ *       <span>
+ *         Page {pageInfo.currentPage} of {pageInfo.totalPages}
+ *       </span>
+ *       
+ *       <button
+ *         onClick={nextPage}
+ *         disabled={!pageInfo.hasNextPage}
+ *       >
+ *         Next
+ *       </button>
+ *       
+ *       <select
+ *         value={pageInfo.itemsPerPage}
+ *         onChange={(e) => changePageSize(Number(e.target.value))}
+ *       >
+ *         <option value={10}>10 per page</option>
+ *         <option value={20}>20 per page</option>
+ *         <option value={50}>50 per page</option>
+ *       </select>
+ *     </div>
+ *   </div>
+ * );
+ * ```
+ */
 export function usePagination<T>(
   data: T[],
   options: UsePaginationOptions = {}

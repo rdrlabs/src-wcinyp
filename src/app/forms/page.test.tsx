@@ -18,7 +18,7 @@ describe('Forms Redirect Page', () => {
   it('displays redirect message', () => {
     render(<FormsRedirectPage />)
     
-    expect(screen.getByText('Redirecting to Documents & Forms...')).toBeInTheDocument()
+    expect(screen.getByTestId('redirect-message')).toHaveTextContent('Redirecting to Documents & Forms...')
   })
 
   it('calls router.replace with /documents on mount', () => {

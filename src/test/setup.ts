@@ -98,47 +98,67 @@ global.ResizeObserver = vi.fn().mockImplementation(() => ({
   disconnect: vi.fn(),
 }))
 
-// Mock Supabase client
+// Import Supabase mocks
+import { createSupabaseMock } from './mocks/supabase'
+import { createUnauthenticatedSupabaseMock } from './mocks/supabase-factory'
+
+// Default Supabase mock for tests
+let defaultSupabaseMock = createUnauthenticatedSupabaseMock()
+
+// Mock Supabase client module
 vi.mock('@supabase/ssr', () => ({
-  createBrowserClient: vi.fn(() => ({
-    auth: {
-      getSession: vi.fn(() => Promise.resolve({ data: { session: null }, error: null })),
-      onAuthStateChange: vi.fn(() => ({
-        data: { subscription: { unsubscribe: vi.fn() } }
-      })),
-      signInWithOtp: vi.fn(() => Promise.resolve({ error: null })),
-      signOut: vi.fn(() => Promise.resolve({ error: null })),
-    },
-    from: vi.fn(() => ({
-      select: vi.fn(() => ({
-        eq: vi.fn(() => ({
-          single: vi.fn(() => Promise.resolve({ data: null, error: null }))
-        })),
-        single: vi.fn(() => Promise.resolve({ data: null, error: null }))
-      })),
-      insert: vi.fn(() => Promise.resolve({ error: null })),
-      update: vi.fn(() => ({
-        eq: vi.fn(() => Promise.resolve({ error: null }))
-      })),
-      delete: vi.fn(() => ({
-        eq: vi.fn(() => Promise.resolve({ error: null }))
-      })),
-    })),
-    channel: vi.fn(() => {
-      const channelObj = {
-        on: vi.fn().mockReturnThis(),
-        subscribe: vi.fn((callback) => {
-          if (typeof callback === 'function') {
-            callback('SUBSCRIBED')
-          }
-          return channelObj
-        }),
-        unsubscribe: vi.fn(),
-      }
-      return channelObj
-    }),
-  }))
+  createBrowserClient: vi.fn(() => defaultSupabaseMock)
 }))
+
+// Mock the getSupabaseClient function
+vi.mock('@/lib/supabase-client', () => ({
+  getSupabaseClient: vi.fn(() => defaultSupabaseMock),
+  isValidCWIDFormat: vi.fn((cwid: string) => /^[a-zA-Z]{3}\d{4}$/.test(cwid)),
+  isValidCornellEmail: vi.fn((email: string) => {
+    const emailLower = email.toLowerCase()
+    const match = emailLower.match(/^([^@]+)@med\.cornell\.edu$/)
+    if (!match) return false
+    const cwid = match[1]
+    return /^[a-zA-Z]{3}\d{4}$/.test(cwid)
+  }),
+  getNetIdFromEmail: vi.fn((email: string) => {
+    const match = email.toLowerCase().match(/^([^@]+)@med\.cornell\.edu$/)
+    return match ? match[1] : null
+  }),
+}))
+
+// Helper to set the Supabase mock for a specific test
+export function setSupabaseMock(mock: ReturnType<typeof createSupabaseMock>) {
+  defaultSupabaseMock = mock
+}
+
+// Reset Supabase mock to default
+export function resetSupabaseMock() {
+  defaultSupabaseMock = createUnauthenticatedSupabaseMock()
+}
+
+// Mock global fetch for Netlify Functions
+global.fetch = vi.fn((url: string, options?: any) => {
+  // Mock admin check endpoint
+  if (url === '/.netlify/functions/check-admin-status') {
+    const body = JSON.parse(options?.body || '{}')
+    const adminEmails = ['admin123@med.cornell.edu', 'superadmin@med.cornell.edu', 'dept.admin@med.cornell.edu']
+    const isAdmin = adminEmails.includes(body.email?.toLowerCase())
+    
+    return Promise.resolve({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve({ isAdmin }),
+    } as Response)
+  }
+  
+  // Default response for other endpoints
+  return Promise.resolve({
+    ok: false,
+    status: 404,
+    json: () => Promise.resolve({ error: 'Not found' }),
+  } as Response)
+}) as any
 
 // Initialize feature flags for tests
 // By default, all feature flags are disabled to ensure backward compatibility

@@ -2,6 +2,8 @@
  * UI/UX related constants
  */
 
+import { uiConfig } from '@/config/app.config'
+
 export const KEYBOARD_SHORTCUTS = {
   search: '⌘K',
   searchKey: 'k',
@@ -88,5 +90,5 @@ export const Z_INDEX = {
 
 export const TOASTER_CONFIG = {
   position: 'top-right' as const,
-  duration: 5000,
+  duration: uiConfig.notifications.durationMs,
 } as const

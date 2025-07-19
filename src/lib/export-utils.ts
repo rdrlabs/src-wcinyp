@@ -1,4 +1,4 @@
-import { logger } from './logger';
+import { logger } from './logger-v2';
 
 /**
  * Export Utility Functions for WCI@NYP Application

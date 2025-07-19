@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
 import { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from './card'
+import { renderWithTheme } from '@/test/theme-test-utils'
 
 describe('Card Components', () => {
   describe('Card', () => {
@@ -132,6 +133,69 @@ describe('Card Components', () => {
       expect(screen.getByText('This is a complete card example')).toBeInTheDocument()
       expect(screen.getByText('Card body content goes here')).toBeInTheDocument()
       expect(screen.getByText('Action')).toBeInTheDocument()
+    })
+  })
+
+  describe('Theme Tests', () => {
+    it('renders correctly in light mode', () => {
+      renderWithTheme(
+        <Card>
+          <CardHeader>
+            <CardTitle>Light Theme Card</CardTitle>
+            <CardDescription>Testing in light mode</CardDescription>
+          </CardHeader>
+          <CardContent>Content</CardContent>
+        </Card>,
+        { theme: 'light' }
+      )
+      
+      const card = screen.getByText('Light Theme Card').closest('[data-slot="card"]')
+      expect(card).toBeInTheDocument()
+      
+      // Card should use semantic bg-card color
+      expect(card?.className).toContain('bg-card')
+    })
+
+    it('renders correctly in dark mode', () => {
+      renderWithTheme(
+        <Card>
+          <CardHeader>
+            <CardTitle>Dark Theme Card</CardTitle>
+            <CardDescription>Testing in dark mode</CardDescription>
+          </CardHeader>
+          <CardContent>Content</CardContent>
+        </Card>,
+        { theme: 'dark' }
+      )
+      
+      const card = screen.getByText('Dark Theme Card').closest('[data-slot="card"]')
+      expect(card).toBeInTheDocument()
+      
+      // Card should use semantic bg-card color
+      expect(card?.className).toContain('bg-card')
+    })
+
+    it('maintains semantic colors for all card components', () => {
+      const { container } = renderWithTheme(
+        <Card>
+          <CardHeader>
+            <CardTitle>Semantic Colors</CardTitle>
+            <CardDescription>Description text</CardDescription>
+          </CardHeader>
+          <CardContent>Content here</CardContent>
+          <CardFooter>Footer content</CardFooter>
+        </Card>,
+        { theme: 'dark' }
+      )
+      
+      // Check Card uses semantic colors
+      const card = container.querySelector('[data-slot="card"]')
+      expect(card?.className).toContain('bg-card')
+      expect(card?.className).toContain('text-card-foreground')
+      
+      // Check CardDescription uses semantic colors
+      const description = screen.getByText('Description text')
+      expect(description.className).toContain('text-muted-foreground')
     })
   })
 })

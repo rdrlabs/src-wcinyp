@@ -1,5 +1,6 @@
 import { Brain, Users, FileText, Bell } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import { urlConfig } from '@/config/app.config';
 
 export interface NavItem {
   href: string;
@@ -16,17 +17,17 @@ export const mainNavItems: NavItem[] = [
 
 export const quickLinks = [
   { 
-    href: 'https://teams.microsoft.com', 
+    href: urlConfig.microsoft.teams, 
     label: 'Teams',
     external: true 
   },
   { 
-    href: 'https://outlook.office.com', 
+    href: urlConfig.microsoft.outlook, 
     label: 'Outlook',
     external: true 
   },
   { 
-    href: 'https://myapps.microsoft.com', 
+    href: urlConfig.microsoft.myApps, 
     label: 'MyApps',
     external: true 
   },
@@ -35,31 +36,31 @@ export const quickLinks = [
 export const footerLinks = {
   resources: [
     {
-      href: 'https://weillcornell.org',
+      href: urlConfig.wcm,
       label: 'Weill Cornell Medicine',
       external: true,
     },
     {
-      href: 'https://nyp.org',
+      href: urlConfig.nyp,
       label: 'NewYork-Presbyterian',
       external: true,
     },
     {
-      href: '#',
+      href: '/privacy',
       label: 'Privacy Policy',
       external: false,
     },
     {
-      href: '#',
+      href: urlConfig.patientPortal,
       label: 'Patient Portal',
-      external: false,
+      external: true,
     },
   ],
   social: [
-    { platform: 'Facebook', href: '#' },
-    { platform: 'Twitter', href: '#' },
-    { platform: 'LinkedIn', href: '#' },
-    { platform: 'YouTube', href: '#' },
+    { platform: 'Facebook', href: urlConfig.social.facebook },
+    { platform: 'Twitter', href: urlConfig.social.twitter },
+    { platform: 'LinkedIn', href: urlConfig.social.linkedin },
+    { platform: 'YouTube', href: urlConfig.social.youtube },
   ],
 };
 

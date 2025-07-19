@@ -581,9 +581,9 @@ CREATE INDEX idx_sessions_expires ON user_sessions(expires_at);
 ### Environment Variables
 ```bash
 # Add to .env.local and Netlify
-UPSTASH_REDIS_URL=your_redis_url
-UPSTASH_REDIS_TOKEN=your_redis_token
-NEXT_PUBLIC_SENTRY_DSN=your_sentry_dsn
+UPSTASH_REDIS_URL=redis://example.upstash.io:33999
+UPSTASH_REDIS_TOKEN=AXx0ACQgODExZmE4NzEtYmE5Yi00MGI2LWFlNGItZDE5NWQ2MGM5MTYw_example
+NEXT_PUBLIC_SENTRY_DSN=https://example1234567890@o123456.ingest.sentry.io/1234567
 RATE_LIMIT_ENABLED=true
 RATE_LIMIT_WINDOW=3600
 RATE_LIMIT_MAX_ATTEMPTS=5

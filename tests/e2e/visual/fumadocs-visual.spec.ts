@@ -3,7 +3,7 @@ import {
   captureAndCompare,
   captureAndCompareElement,
   updateBaseline
-} from '@/test/visual-validator';
+} from '@/test/fumadocs-validator';
 
 // Disable animations for stable screenshots
 test.use({

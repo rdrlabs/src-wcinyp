@@ -2,6 +2,8 @@
 
 import React, { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react';
 import { useTheme } from 'next-themes';
+import { logger } from '@/lib/logger-v2';
+import { uiConfig } from '@/config/app.config';
 
 export type ColorTheme = 'blue' | 'red' | 'orange' | 'green' | 'yellow' | 'pink' | 'purple' | 'neutral';
 
@@ -72,10 +74,27 @@ export function AppProvider({ children }: { children: ReactNode }) {
   // Mounted state
   const [mounted, setMounted] = useState(false);
   
+  // Helper function to safely access localStorage
+  const getLocalStorageItem = (key: string): string | null => {
+    try {
+      return localStorage?.getItem(key) || null;
+    } catch {
+      return null;
+    }
+  };
+
+  const setLocalStorageItem = (key: string, value: string): void => {
+    try {
+      localStorage?.setItem(key, value);
+    } catch {
+      // Silently fail if localStorage is not available
+    }
+  };
+
   // Initialize color theme from localStorage
   useEffect(() => {
     try {
-      const savedTheme = localStorage.getItem(COLOR_THEME_KEY) as ColorTheme;
+      const savedTheme = getLocalStorageItem(COLOR_THEME_KEY) as ColorTheme;
       
       // Remove any existing theme classes first
       if (document.body) {
@@ -106,12 +125,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
   // Initialize preferences from localStorage
   useEffect(() => {
     try {
-      const savedPrefs = localStorage.getItem(PREFERENCES_KEY);
+      const savedPrefs = getLocalStorageItem(PREFERENCES_KEY);
       if (savedPrefs) {
         setPreferences(JSON.parse(savedPrefs));
       }
     } catch (error) {
-      console.error('Failed to load preferences:', error);
+      logger.error('Failed to load preferences', { error });
     }
   }, []);
   
@@ -120,11 +139,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const oldTheme = colorTheme;
     setColorThemeState(theme);
     
-    try {
-      localStorage.setItem(COLOR_THEME_KEY, theme);
-    } catch (error) {
-      console.warn('Failed to save theme preference:', error);
-    }
+    setLocalStorageItem(COLOR_THEME_KEY, theme);
     
     // Update document classes
     if (document.body) {
@@ -149,7 +164,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (notification.duration !== 0) {
       setTimeout(() => {
         setNotifications(prev => prev.filter(n => n.id !== id));
-      }, notification.duration || 5000);
+      }, notification.duration || uiConfig.notifications.durationMs);
     }
   }, []);
   
@@ -161,7 +176,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const setPreference = useCallback((key: string, value: unknown) => {
     setPreferences(prev => {
       const updated = { ...prev, [key]: value };
-      localStorage.setItem(PREFERENCES_KEY, JSON.stringify(updated));
+      setLocalStorageItem(PREFERENCES_KEY, JSON.stringify(updated));
       return updated;
     });
   }, []);
