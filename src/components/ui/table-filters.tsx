@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { format, subDays, startOfDay, endOfDay, startOfMonth, endOfMonth, startOfYear, endOfYear } from "date-fns"
-import { Calendar as CalendarIcon, Check, ChevronsUpDown, X, Search, Filter, RotateCcw } from "lucide-react"
+import { Calendar as CalendarIcon, ChevronsUpDown, X, Search, Filter, RotateCcw } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -27,7 +27,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -301,7 +300,11 @@ export function DateRangePicker({
             <Calendar
               mode="range"
               selected={value}
-              onSelect={onChange}
+              onSelect={(selected) => {
+                if (selected) {
+                  onChange(selected as DateRange)
+                }
+              }}
               numberOfMonths={2}
               initialFocus
             />

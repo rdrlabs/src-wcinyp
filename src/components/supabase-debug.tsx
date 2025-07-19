@@ -6,7 +6,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { getSupabaseClient } from '@/lib/supabase-client'
-import { authSessionManager } from '@/lib/auth-session'
 
 export function SupabaseDebug() {
   const { user, loading, error, pendingSessionToken, isPollingForAuth } = useAuth()
