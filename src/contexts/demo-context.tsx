@@ -5,6 +5,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react'
 interface DemoContextType {
   isDemoMode: boolean
   setIsDemoMode: (value: boolean) => void
+  exitDemoMode: () => void
 }
 
 const DemoContext = createContext<DemoContextType | undefined>(undefined)
@@ -25,8 +26,12 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('isDemoMode', isDemoMode.toString())
   }, [isDemoMode])
 
+  const exitDemoMode = () => {
+    setIsDemoMode(false)
+  }
+
   return (
-    <DemoContext.Provider value={{ isDemoMode, setIsDemoMode }}>
+    <DemoContext.Provider value={{ isDemoMode, setIsDemoMode, exitDemoMode }}>
       {children}
     </DemoContext.Provider>
   )

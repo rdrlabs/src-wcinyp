@@ -1,4 +1,27 @@
-export async function measurePerformance(page: any, name: string) {
+import { Page } from '@playwright/test'
+
+export interface PerformanceMetrics {
+  FCP: number
+  LCP: number
+  CLS: number
+  FID: number
+  TTFB: number
+  domContentLoaded: number
+  loadComplete: number
+  [key: string]: number
+}
+
+interface PerformanceBudget {
+  FCP?: number
+  LCP?: number
+  CLS?: number
+  FID?: number
+  TTFB?: number
+  totalSize?: number
+  resourceCount?: number
+}
+
+export async function measurePerformance(page: Page, name: string) {
   const metrics = await page.evaluate(() => {
     const navigation = performance.getEntriesByType('navigation')[0] as any
     const paint = performance.getEntriesByType('paint')
@@ -22,15 +45,43 @@ export function formatBytes(bytes: number): string {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
 }
 
-export async function capturePerformanceMetrics(page: any) {
-  return measurePerformance(page, 'page')
+export async function capturePerformanceMetrics(page: Page): Promise<PerformanceMetrics> {
+  const metrics = await page.evaluate(() => {
+    const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming
+    const paint = performance.getEntriesByType('paint')
+    const largestContentfulPaint = performance.getEntriesByType('largest-contentful-paint')[0] as any
+    
+    // Calculate CLS
+    let cls = 0
+    const entries = performance.getEntriesByType('layout-shift') as any[]
+    entries.forEach(entry => {
+      if (!entry.hadRecentInput) {
+        cls += entry.value
+      }
+    })
+    
+    // Calculate FID (simulated)
+    const firstInput = performance.getEntriesByType('first-input')[0] as any
+    
+    return {
+      FCP: paint.find(p => p.name === 'first-contentful-paint')?.startTime || 0,
+      LCP: largestContentfulPaint?.startTime || 0,
+      CLS: cls,
+      FID: firstInput?.processingStart - firstInput?.startTime || 0,
+      TTFB: navigation?.responseStart - navigation?.requestStart || 0,
+      domContentLoaded: navigation?.domContentLoadedEventEnd - navigation?.domContentLoadedEventStart || 0,
+      loadComplete: navigation?.loadEventEnd - navigation?.loadEventStart || 0
+    }
+  })
+  
+  return metrics
 }
 
-export function formatMetrics(metrics: any): string {
+export function formatMetrics(metrics: PerformanceMetrics | Record<string, number>): string {
   return JSON.stringify(metrics, null, 2)
 }
 
-export async function measureInteractionPerformance(page: any, interaction: string | (() => Promise<void>)): Promise<number> {
+export async function measureInteractionPerformance(page: Page, interaction: string | (() => Promise<void>)): Promise<number> {
   const start = Date.now()
   
   if (typeof interaction === 'string') {
@@ -43,64 +94,73 @@ export async function measureInteractionPerformance(page: any, interaction: stri
   return end - start
 }
 
-export function mark(pageOrName: any, name?: string) {
-  // Handle both (page, name) and (name) signatures
-  const markName = name || pageOrName
-  if (typeof performance !== 'undefined') {
+export async function mark(page: Page, name: string) {
+  await page.evaluate((markName) => {
     performance.mark(markName)
-  }
+  }, name)
 }
 
-export function measure(pageOrName: any, nameOrStart?: string, startOrEnd?: string, endMark?: string): number {
-  // Handle both (page, name, start, end) and (name, start, end) signatures
-  let name: string, start: string, end: string
-  
-  if (endMark) {
-    // Called with (page, name, start, end)
-    name = nameOrStart!
-    start = startOrEnd!
-    end = endMark
-  } else {
-    // Called with (name, start, end)
-    name = pageOrName
-    start = nameOrStart!
-    end = startOrEnd!
-  }
-  
-  if (typeof performance !== 'undefined') {
-    performance.measure(name, start, end)
-    const entries = performance.getEntriesByName(name)
+export async function measure(page: Page, name: string, startMark: string, endMark: string): Promise<number> {
+  return await page.evaluate(({ measureName, start, end }) => {
+    performance.measure(measureName, start, end)
+    const entries = performance.getEntriesByName(measureName)
     if (entries.length > 0) {
       return entries[entries.length - 1].duration
     }
-  }
-  return 0
+    return 0
+  }, { measureName: name, start: startMark, end: endMark })
 }
 
-export function assertPerformanceBudget(metrics: any, budget: any) {
+export function assertPerformanceBudget(metrics: PerformanceMetrics | Record<string, number>, budget: PerformanceBudget) {
   const failures: string[] = []
+  const results: { metric: string; actual: number; budget: number; passed: boolean }[] = []
+  
   for (const [key, value] of Object.entries(budget)) {
-    const metricValue = metrics[key]
+    const metricValue = (metrics as any)[key]
     const budgetValue = value as number
-    if (typeof metricValue === 'number' && typeof budgetValue === 'number' && metricValue > budgetValue) {
-      failures.push(`${key}: ${metricValue}ms exceeded budget of ${budgetValue}ms`)
+    
+    if (typeof metricValue === 'number' && typeof budgetValue === 'number') {
+      const passed = metricValue <= budgetValue
+      results.push({
+        metric: key,
+        actual: metricValue,
+        budget: budgetValue,
+        passed
+      })
+      
+      if (!passed) {
+        failures.push(`${key}: ${metricValue}ms exceeded budget of ${budgetValue}ms`)
+      }
     }
   }
-  if (failures.length > 0) {
-    throw new Error(`Performance budget exceeded:\n${failures.join('\n')}`)
+  
+  return {
+    passed: failures.length === 0,
+    failures,
+    results
   }
 }
 
-export async function waitForPageLoad(page: any) {
+export async function waitForPageLoad(page: Page) {
   await page.waitForLoadState('networkidle')
 }
 
-export async function getResourceTimings(page: any) {
-  return page.evaluate(() => {
+export async function getResourceTimings(page: Page) {
+  const resources = await page.evaluate(() => {
     return performance.getEntriesByType('resource').map(r => ({
       name: r.name,
       duration: r.duration,
-      size: (r as any).transferSize || 0
+      size: (r as any).transferSize || 0,
+      initiatorType: (r as any).initiatorType || 'other'
     }))
   })
+  
+  const totalSize = resources.reduce((sum, r) => sum + r.size, 0)
+  const totalDuration = Math.max(...resources.map(r => r.duration), 0)
+  
+  return {
+    resources,
+    totalSize,
+    totalDuration
+  }
 }

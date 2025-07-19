@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 // Type definitions
-export interface TableColumn<TData> extends ColumnDef<TData> {
+export type TableColumn<TData> = ColumnDef<TData> & {
   meta?: {
     filterType?: 'text' | 'number' | 'date' | 'select' | 'multiselect';
     filterOptions?: Array<{ label: string; value: string }>;

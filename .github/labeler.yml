@@ -71,6 +71,5 @@ accessibility:
   - changed-files:
     - any-glob-to-any-file:
       - 'tests/e2e/accessibility/**/*'
-      - changed-files:
-        - any-glob-to-any-file: 'src/components/**/*'
-        - all-globs-to-all-files: ['aria-', 'role=']
+      - '**/*accessibility*'
+      - '**/*a11y*'

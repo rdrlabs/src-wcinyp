@@ -286,7 +286,7 @@ export function NiivueBrainGrid({ className, enableBlur = true }: NiivueBrainGri
       }
     }
     
-    initializeQuadrants()
+    void initializeQuadrants()
     
     return () => {
       animationState.current.forEach(state => {

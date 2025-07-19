@@ -26,6 +26,7 @@ interface AuthContextType {
   isPollingForAuth: boolean
   rememberMe: boolean
   setRememberMe: (remember: boolean) => void
+  isAdmin: boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -37,6 +38,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [pendingSessionToken, setPendingSessionToken] = useState<string | null>(null)
   const [isPollingForAuth, setIsPollingForAuth] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
   const router = useRouter()
   const pollingIntervalRef = useRef<NodeJS.Timeout | any>(null)
 
@@ -234,6 +236,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setUser(null)
         } else {
           setUser(session.user)
+          // Check if user is admin (temporary check - should be server-side)
+          setIsAdmin(userEmail === 'tr1288@gmail.com')
           // Update cookie
           if (session.access_token) {
             const storedRememberMe = localStorage.getItem('auth_remember_me') === 'true'
@@ -371,6 +375,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     isPollingForAuth,
     rememberMe,
     setRememberMe,
+    isAdmin,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

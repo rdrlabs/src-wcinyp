@@ -7,7 +7,8 @@ import {
   assertPerformanceBudget,
   waitForPageLoad,
   mark,
-  measure
+  measure,
+  type PerformanceMetrics
 } from './utils/performance-helpers';
 import {
   throttleNetwork,

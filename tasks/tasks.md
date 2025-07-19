@@ -33,6 +33,14 @@
 - [ ] Document API patterns
 - [ ] Add architecture diagrams
 
+#### Code Review Tool Migration 🔄
+- [ ] Cancel CodeRabbit subscription
+- [ ] Research and evaluate Qodo Merge capabilities
+- [ ] Set up Qodo Merge for the repository
+- [ ] Configure Qodo policies and rules
+- [ ] Test Qodo integration with sample PRs
+- [ ] Document Qodo workflow for team
+
 ## Completed Tasks ✅
 
 ### Phase 1 UI/UX (Jan 2025)

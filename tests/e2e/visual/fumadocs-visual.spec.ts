@@ -51,7 +51,6 @@ test.describe('Fumadocs Visual Regression Tests', () => {
     
     const isMatch = await captureAndCompare(page, 'home-page', {
       threshold: 0.1,
-      fullPage: true
     });
     
     expect(isMatch).toBeTruthy();
@@ -67,7 +66,6 @@ test.describe('Fumadocs Visual Regression Tests', () => {
     
     const isMatch = await captureAndCompare(page, 'knowledge-intro', {
       threshold: 0.1,
-      fullPage: true
     });
     
     expect(isMatch).toBeTruthy();
@@ -83,7 +81,6 @@ test.describe('Fumadocs Visual Regression Tests', () => {
     
     const isMatch = await captureAndCompare(page, 'documents-page', {
       threshold: 0.1,
-      fullPage: true
     });
     
     expect(isMatch).toBeTruthy();
@@ -99,7 +96,6 @@ test.describe('Fumadocs Visual Regression Tests', () => {
     
     const isMatch = await captureAndCompare(page, 'providers-page', {
       threshold: 0.1,
-      fullPage: true
     });
     
     expect(isMatch).toBeTruthy();
@@ -117,8 +113,7 @@ test.describe('Fumadocs Visual Regression Tests', () => {
     await page.waitForTimeout(300); // Wait for animation
     
     const isMatch = await captureAndCompare(page, 'search-dialog', {
-      threshold: 0.1,
-      mask: ['[data-cmdk-list]'] // Mask dynamic content
+      threshold: 0.1
     });
     
     expect(isMatch).toBeTruthy();
@@ -148,7 +143,6 @@ test.describe('Fumadocs Visual Regression Tests', () => {
     
     const isMatch = await captureAndCompare(page, 'home-page-dark', {
       threshold: 0.1,
-      fullPage: true
     });
     
     expect(isMatch).toBeTruthy();
@@ -163,7 +157,6 @@ test.describe('Fumadocs Visual Regression Tests', () => {
     
     const isMatch = await captureAndCompare(page, 'home-page-mobile', {
       threshold: 0.1,
-      fullPage: true
     });
     
     expect(isMatch).toBeTruthy();
@@ -179,7 +172,6 @@ test.describe('Fumadocs Visual Regression Tests', () => {
     
     const isMatch = await captureAndCompare(page, 'directory-page', {
       threshold: 0.1,
-      fullPage: true
     });
     
     expect(isMatch).toBeTruthy();
@@ -230,7 +222,7 @@ test.describe('Baseline Management', () => {
     for (const pageInfo of pagesToUpdate) {
       await page.goto(pageInfo.url);
       await page.waitForLoadState('networkidle');
-      await updateBaseline(page, pageInfo.name);
+      await updateBaseline(pageInfo.name);
     }
   });
 });

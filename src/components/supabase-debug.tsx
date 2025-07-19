@@ -6,7 +6,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { getSupabaseClient } from '@/lib/supabase-client'
-import { authSessionManager } from '@/lib/auth-session'
 
 export function SupabaseDebug() {
   const { user, loading, error, pendingSessionToken, isPollingForAuth } = useAuth()
@@ -45,8 +44,9 @@ export function SupabaseDebug() {
 
     // Check pending session
     if (pendingSessionToken) {
-      const pendingSession = authSessionManager.getSession(pendingSessionToken)
-      info.pendingSession = pendingSession
+      // TODO: getSession method needs to be implemented
+      // const pendingSession = authSessionManager.getSession(pendingSessionToken)
+      info.pendingSession = { token: pendingSessionToken }
     }
 
     setDebugInfo(info)

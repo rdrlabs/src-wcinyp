@@ -5,7 +5,6 @@ import { useAuth } from '@/contexts/auth-context'
 import { useRouter } from 'next/navigation'
 import { Loader2, Shield } from 'lucide-react'
 import Link from 'next/link'
-import { cn } from '@/lib/utils'
 
 export default function AdminLayout({
   children,
